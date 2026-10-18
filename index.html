@@ -92,6 +92,16 @@ h2{font-family:var(--display);font-weight:400;font-size:19px;margin:0}
 textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);border-radius:18px;background:var(--card);color:var(--ink);padding:10px 14px;margin-top:10px;resize:vertical}
 .msg{font-size:14px;color:var(--soft);margin:8px 0 0;min-height:20px}
 .hintcard p{margin:0 0 10px}
+.stat,.unlockhd,.msg,.hintcard p,.big .st,.sub,.notice{word-break:keep-all}
+.nums{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.nums div{background:color-mix(in srgb,var(--pink) 14%,transparent);border-radius:18px;padding:10px 6px;text-align:center}
+.nums b{display:block;font-family:var(--display);font-weight:400;font-size:28px;line-height:1.2;font-variant-numeric:tabular-nums}
+.nums span{font-size:13px;color:var(--soft)}
+.unlockhd{margin:14px 0 6px;font-size:15px}
+.pips{display:flex;gap:6px;flex-wrap:wrap}
+.pip{width:22px;height:22px;border-radius:50%;border:2px solid var(--pink);display:inline-grid;place-items:center;font-size:12px;line-height:1}
+.pip.on{background:var(--pink)}
+.pip.gift{background:var(--sun-bg);border-color:var(--sun-bg)}
 .fall{position:fixed;top:-40px;font-size:28px;pointer-events:none;z-index:99;animation:fall linear forwards}
 @keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.9}}
 @media (prefers-reduced-motion:reduce){.pop .stamp,.banner{animation:none}.fall{display:none}.bar>i{transition:none}}
@@ -108,10 +118,22 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
   <section class="card hintcard" id="hint" hidden>
     <p>계획표는 안 짜도 돼요. 오늘 한 일은 칸을 눌러 도장을 찍어요.</p>
     <p>한 번 누르면 진한 도장(다 했어요), 두 번 누르면 연한 도장(조금만 했어요)이에요. 연한 도장도 오늘은 한 걸로 쳐요.</p>
+    <p id="giftNote" hidden>🎁 처음 열어 줘서 고마워요. 새 칸 열기에 하루를 미리 채워 뒀어요.</p>
     <button class="btn main" id="hintOk" type="button">알겠어요</button>
   </section>
 
   <section class="card" id="today"></section>
+
+  <section class="card" id="piled">
+    <h2>쌓인 것</h2>
+    <div class="nums">
+      <div><b id="nDays">0</b><span>이어간 날</span></div>
+      <div><b id="nWeek">0</b><span>최근 7일</span></div>
+      <div><b id="nStamps">0</b><span>도장</span></div>
+    </div>
+    <p class="stat" id="pileNote"></p>
+    <div id="unlock"></div>
+  </section>
 
   <section class="card">
     <h2>이번 주</h2>
@@ -323,17 +345,22 @@ let store={get(k){return localStorage.getItem(k)},set(k,v){localStorage.setItem(
 let persists=true, editOpen=false, pickFor=-1, pendingDel=null, lastPop=null;
 
 function load(){
+  let fresh=true;
   try{
     const j=store.get(KEY);
-    if(j){const o=JSON.parse(j);if(o&&Array.isArray(o.slots)&&o.slots.length&&o.log&&typeof o.log==='object')S=Object.assign(S,o)}
+    if(j){const o=JSON.parse(j);if(o&&Array.isArray(o.slots)&&o.slots.length&&o.log&&typeof o.log==='object'){S=Object.assign(S,o);fresh=false}}
   }catch(e){}
+  if(fresh){S.gift=true;save()}
 }
 function save(){try{store.set(KEY,JSON.stringify(S));return true}catch(e){return false}}
 function probe(){try{store.set('__p','1');return store.get('__p')==='1'}catch(e){return false}}
 
 const get=(date,id)=>(S.log[date]||{})[id]||0;
 const ids=()=>S.slots.map(s=>s.id);
-function stampDays(){let n=0;const have=new Set(ids());for(const d in S.log){if(Object.keys(S.log[d]).some(k=>have.has(k)&&S.log[d][k]>0))n++}return n}
+function hasStamp(date){const have=new Set(ids());const d=S.log[date];return !!d&&Object.keys(d).some(k=>have.has(k)&&d[k]>0)}
+function realDays(){let n=0;for(const d in S.log)if(hasStamp(d))n++;return n}
+function stampDays(){return realDays()+(S.gift?1:0)}
+function weekCount(){let n=0;for(let i=0;i<7;i++){const dt=new Date();dt.setDate(dt.getDate()-i);if(hasStamp(fmt(dt)))n++}return n}
 function stampCount(){let n=0;const have=new Set(ids());for(const d in S.log)for(const k in S.log[d])if(have.has(k)&&S.log[d][k]>0)n++;return n}
 function capacity(){const d=stampDays();return Math.min(MAX_SLOTS,3+(d>=3?1:0)+(d>=7?1:0)+(d>=14?1:0))}
 function dayStatus(date){
@@ -397,8 +424,25 @@ function renderWeek(){
   $('week').querySelectorAll('.dot').forEach(b=>b.onclick=()=>toggle(b.dataset.d,b.dataset.id));
   const ym=todayStr.slice(0,7);
   let kept=0;
-  for(const d in S.log) if(d.startsWith(ym)&&dayStatus(d)!=='none') kept++;
-  $('stat').textContent=`이번 달 ${kept}일 이어갔어요. 하루 빠져도 처음으로 돌아가지 않아요.`;
+  for(const d in S.log) if(d.startsWith(ym)&&hasStamp(d)) kept++;
+  $('stat').textContent=`이번 달 ${kept}일 이어갔어요.`;
+}
+
+function renderPiled(){
+  const real=realDays(),total=stampDays();
+  $('nDays').textContent=real;
+  $('nWeek').textContent=weekCount();
+  $('nStamps').textContent=stampCount();
+  $('pileNote').textContent='쌓이기만 하고 줄어들지 않아요. 하루 빠져도 그대로예요.';
+  const next=[3,7,14].find(t=>total<t);
+  let h='';
+  if(S.slots.length<capacity()) h+=`<p class="unlockhd">새 칸이 열렸어요. 아래 "칸 바꾸기"에서 더해요.</p>`;
+  if(next){
+    const pips=Array.from({length:next},(_,i)=>`<i class="pip ${i<total?'on':''} ${S.gift&&i===0?'gift':''}">${S.gift&&i===0?'🎁':''}</i>`).join('');
+    h+=`<p class="unlockhd">새 칸까지 ${next-total}일 남았어요</p><div class="pips" aria-hidden="true">${pips}</div>`;
+    if(S.gift) h+=`<p class="stat">첫 칸은 선물이에요. 처음 열어 줘서 미리 채워 뒀어요.</p>`;
+  }else if(!h) h='<p class="unlockhd">새 칸이 다 열렸어요.</p>';
+  $('unlock').innerHTML=h;
 }
 
 function renderEdit(){
@@ -421,7 +465,7 @@ function renderEdit(){
   const cap=capacity(),days=stampDays();
   const can=S.slots.length<cap;
   $('addSlot').hidden=!can;
-  $('slotMsg').textContent=can?'':(S.slots.length>=MAX_SLOTS?'칸은 여섯 개까지예요.':`도장을 찍은 날이 ${days<3?3:days<7?7:14}일이 되면 칸이 하나 더 열려요. 지금 ${days}일이에요.`);
+  $('slotMsg').textContent=can?'':(S.slots.length>=MAX_SLOTS?'칸은 여섯 개까지예요.':`도장을 찍은 날이 ${days<3?3:days<7?7:14}일이 되면 칸이 하나 더 열려요. 지금 ${days}일이에요${S.gift?' (첫 칸 선물 1일 포함)':''}.`);
 }
 
 function renderFeedback(){
@@ -429,7 +473,7 @@ function renderFeedback(){
   $('fbHow').textContent='복사할 때 쓴 날수와 도장 수가 글 끝에 같이 붙어요. '+CONTACT_HINT;
 }
 function statsLine(){
-  return `[자동 입력] 처음 연 날 ${S.first} · 도장 찍은 날 ${stampDays()}일 · 도장 ${stampCount()}개 · 칸 ${S.slots.length}개`;
+  return `[자동 입력] 처음 연 날 ${S.first} · 이어간 날 ${realDays()}일(선물 ${S.gift?1:0}일 별도) · 최근 7일 ${weekCount()}일 · 도장 ${stampCount()}개 · 칸 ${S.slots.length}개`;
 }
 $('copyBtn').onclick=async()=>{
   const full=($('fb').value.trim()?$('fb').value.trim()+'\n\n':'')+statsLine();
@@ -451,7 +495,8 @@ $('addSlot').onclick=()=>{
 
 function render(){
   $('hint').hidden=!S.hint;
-  renderToday();renderWeek();renderEdit();
+  $('giftNote').hidden=!S.gift;
+  renderToday();renderPiled();renderWeek();renderEdit();
   lastPop=null;
 }
 function confetti(){
