@@ -12,7 +12,7 @@
 <title>도장판 체험판</title>
 <link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
 <style>
-/* 레이아웃: 오늘 칸(큰 도장) → 이번 주 점 → 칸 바꾸기(접힘) → 의견 보내기. 폰 한 열 기준 */
+/* 레이아웃: 오늘 칸(큰 도장) → 이번 주 점 → 할 일 칸 바꾸기(접힘) → 의견 보내기. 폰 한 열 기준 */
 :root{
   --bg:#fff6f0; --card:#ffffff; --ink:#4f3f48; --soft:#85727c; --line:#f3dfe0;
   --pink:#ff8fae; --pink-ink:#7a1f3d; --sun-bg:#ffe08a; --sun-ink:#6b4f00; --shadow:0 6px 18px rgba(255,159,183,.22);
@@ -142,7 +142,8 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
   </section>
 
   <section class="card">
-    <div class="row"><h2>칸 바꾸기</h2><button class="btn" id="editBtn" type="button">열기</button></div>
+    <div class="row"><h2>할 일 칸 바꾸기</h2><button class="btn" id="editBtn" type="button">열기</button></div>
+    <p class="stat" style="margin-top:6px">할 일 이름과 그림을 바꾸고, 새 칸을 더해요.</p>
     <div id="edit" hidden>
       <div id="slots"></div>
       <div class="picker" id="picker"></div>
@@ -436,7 +437,7 @@ function renderPiled(){
   $('pileNote').textContent='쌓이기만 하고 줄어들지 않아요. 하루 빠져도 그대로예요.';
   const next=[3,7,14].find(t=>total<t);
   let h='';
-  if(S.slots.length<capacity()) h+=`<p class="unlockhd">새 칸이 열렸어요. 아래 "칸 바꾸기"에서 더해요.</p>`;
+  if(S.slots.length<capacity()) h+=`<p class="unlockhd">새 칸이 열렸어요. 아래 "할 일 칸 바꾸기"에서 더해요.</p>`;
   if(next){
     const pips=Array.from({length:next},(_,i)=>`<i class="pip ${i<total?'on':''} ${S.gift&&i===0?'gift':''}">${S.gift&&i===0?'🎁':''}</i>`).join('');
     h+=`<p class="unlockhd">새 칸까지 ${next-total}일 남았어요</p><div class="pips" aria-hidden="true">${pips}</div>`;
