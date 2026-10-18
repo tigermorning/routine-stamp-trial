@@ -12,7 +12,7 @@
 <title>도장판 체험판</title>
 <link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
 <style>
-/* 레이아웃: 오늘 칸(큰 도장) → 이번 주 점 → 할 일 칸 바꾸기(접힘) → 의견 보내기. 폰 한 열 기준 */
+/* 레이아웃: 언어 선택 → 오늘 칸(큰 도장) → 쌓인 것 → 이번 주 점 → 내 칸 바꾸기(접힘) → 의견 보내기. 폰 한 열 기준 */
 :root{
   --bg:#fff6f0; --card:#ffffff; --ink:#4f3f48; --soft:#85727c; --line:#f3dfe0;
   --pink:#ff8fae; --pink-ink:#7a1f3d; --sun-bg:#ffe08a; --sun-ink:#6b4f00; --shadow:0 6px 18px rgba(255,159,183,.22);
@@ -20,6 +20,9 @@
   --display:"Jua","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   --body:"Gowun Dodum","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
 }
+:root[lang="en"]{--body:"Gowun Dodum",system-ui,"Segoe UI",sans-serif}
+:root[lang="zh-Hans"]{--display:"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif;--body:"PingFang SC","Microsoft YaHei","Noto Sans SC",sans-serif}
+:root[lang="zh-Hant"]{--display:"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif;--body:"PingFang TC","Microsoft JhengHei","Noto Sans TC",sans-serif}
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
     --bg:#2b2230; --card:#382d3e; --ink:#f6e9ee; --soft:#c4b1bd; --line:#4d3f56; --pink:#ff9fb7; --pink-ink:#3a1020;
@@ -38,6 +41,11 @@ body{margin:0;background-color:var(--bg);color:var(--ink);font-family:var(--body
 button{font-family:inherit;color:var(--ink)}
 h1{font-family:var(--display);font-weight:400;font-size:27px;margin:6px 0 2px;text-align:center}
 h2{font-family:var(--display);font-weight:400;font-size:19px;margin:0}
+:root[lang="zh-Hans"] h1,:root[lang="zh-Hans"] h2,:root[lang="zh-Hans"] .nums b,:root[lang="zh-Hant"] h1,:root[lang="zh-Hant"] h2,:root[lang="zh-Hant"] .nums b{font-weight:700}
+.langs{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;margin-bottom:2px}
+.langs button{font-size:14px;background:var(--card);border:2px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer}
+.langs button[aria-pressed="true"]{border-color:var(--pink);background:color-mix(in srgb,var(--pink) 22%,var(--card))}
+.langs button:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
 .sub{text-align:center;color:var(--soft);margin:0 0 14px;font-size:15px;text-wrap:balance}
 .notice{background:var(--sun-bg);color:var(--sun-ink);border-radius:14px;padding:8px 12px;font-size:14px;margin:0 0 14px}
 .card{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:18px;margin-bottom:16px;border:2px solid var(--line)}
@@ -92,7 +100,7 @@ h2{font-family:var(--display);font-weight:400;font-size:19px;margin:0}
 textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);border-radius:18px;background:var(--card);color:var(--ink);padding:10px 14px;margin-top:10px;resize:vertical}
 .msg{font-size:14px;color:var(--soft);margin:8px 0 0;min-height:20px}
 .hintcard p{margin:0 0 10px}
-.stat,.unlockhd,.msg,.hintcard p,.big .st,.sub,.notice{word-break:keep-all}
+:root[lang="ko"] :is(.stat,.unlockhd,.msg,.hintcard p,.big .st,.sub,.notice){word-break:keep-all}
 .nums{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
 .nums div{background:color-mix(in srgb,var(--pink) 14%,transparent);border-radius:18px;padding:10px 6px;text-align:center}
 .nums b{display:block;font-family:var(--display);font-weight:400;font-size:28px;line-height:1.2;font-variant-numeric:tabular-nums}
@@ -109,56 +117,63 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 </head>
 <body>
 <div class="wrap">
+  <div class="langs" id="langs" role="group" aria-label="Language">
+    <button type="button" data-l="ko">한국어</button>
+    <button type="button" data-l="en">English</button>
+    <button type="button" data-l="zh-Hans">简体中文</button>
+    <button type="button" data-l="zh-Hant">繁體中文</button>
+  </div>
+
   <header>
-    <h1>🌸 도장판 체험판 🌸</h1>
+    <h1 id="h1"></h1>
     <p class="sub" id="sub"></p>
     <p class="notice" id="notice" hidden></p>
   </header>
 
   <section class="card hintcard" id="hint" hidden>
-    <p>계획표는 안 짜도 돼요. 오늘 한 일은 칸을 눌러 도장을 찍어요.</p>
-    <p>한 번 누르면 진한 도장(다 했어요), 두 번 누르면 연한 도장(조금만 했어요)이에요. 연한 도장도 오늘은 한 걸로 쳐요.</p>
-    <p id="giftNote" hidden>🎁 처음 열어 줘서 고마워요. 새 칸 열기에 하루를 미리 채워 뒀어요.</p>
-    <button class="btn main" id="hintOk" type="button">알겠어요</button>
+    <p id="hint1"></p>
+    <p id="hint2"></p>
+    <p id="giftNote" hidden></p>
+    <button class="btn main" id="hintOk" type="button"></button>
   </section>
 
   <section class="card" id="today"></section>
 
   <section class="card" id="piled">
-    <h2>쌓인 것</h2>
+    <h2 id="piledTitle"></h2>
     <div class="nums">
-      <div><b id="nDays">0</b><span>이어간 날</span></div>
-      <div><b id="nWeek">0</b><span>최근 7일</span></div>
-      <div><b id="nStamps">0</b><span>도장</span></div>
+      <div><b id="nDays">0</b><span id="lbDays"></span></div>
+      <div><b id="nWeek">0</b><span id="lbWeek"></span></div>
+      <div><b id="nStamps">0</b><span id="lbStamps"></span></div>
     </div>
     <p class="stat" id="pileNote"></p>
     <div id="unlock"></div>
   </section>
 
   <section class="card">
-    <h2>이번 주</h2>
+    <h2 id="weekTitle"></h2>
     <div class="week" id="week"></div>
     <p class="stat" id="stat"></p>
   </section>
 
   <section class="card">
-    <div class="row"><h2>할 일 칸 바꾸기</h2><button class="btn" id="editBtn" type="button">열기</button></div>
-    <p class="stat" style="margin-top:6px">할 일 이름과 그림을 바꾸고, 새 칸을 더해요.</p>
+    <div class="row"><h2 id="editTitle"></h2><button class="btn" id="editBtn" type="button"></button></div>
+    <p class="stat" style="margin-top:6px" id="editDesc"></p>
     <div id="edit" hidden>
       <div id="slots"></div>
       <div class="picker" id="picker"></div>
       <p class="msg" id="slotMsg"></p>
-      <button class="btn" id="addSlot" type="button">+ 칸 더 열기</button>
+      <button class="btn" id="addSlot" type="button"></button>
     </div>
   </section>
 
   <section class="card">
-    <h2>의견 보내기</h2>
-    <p class="stat" style="margin-top:6px">써 보고 느낀 점을 편하게 적어 주세요. 막힌 곳, 헷갈린 곳, 좋았던 점 아무거나 좋아요.</p>
-    <textarea id="fb" placeholder="예: 둘째 날부터 안 열었어요. 이유는…"></textarea>
+    <h2 id="fbTitle"></h2>
+    <p class="stat" style="margin-top:6px" id="fbDesc"></p>
+    <textarea id="fb"></textarea>
     <div class="row" style="margin-top:10px;justify-content:flex-start">
-      <button class="btn main" id="copyBtn" type="button">글 복사하기</button>
-      <a class="btn" id="formBtn" href="#" target="_blank" rel="noopener" hidden>폼으로 보내기</a>
+      <button class="btn main" id="copyBtn" type="button"></button>
+      <a class="btn" id="formBtn" href="#" target="_blank" rel="noopener" hidden></a>
     </div>
     <p class="msg" id="fbMsg"></p>
     <p class="stat" id="fbHow"></p>
@@ -168,8 +183,211 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 <script>
 /* 의견 폼 주소(구글 폼 등). 비워 두면 '폼으로 보내기' 버튼이 안 보이고 복사만 쓸 수 있어요. */
 const FEEDBACK_URL='';
-/* 복사한 글을 어디로 보낼지 안내 문구. 예: '카카오톡으로 보내 주세요' */
-const CONTACT_HINT='이 앱을 알려 준 사람에게 카카오톡이나 문자로 보내 주세요.';
+
+/* 문구. 한국어가 바뀌면 영어·중국어(간체·번체)도 직역하지 않고 현지 구어체로 새로 쓴다(CLAUDE.md 규칙, build-trial.js 가드).
+   {n} {date} {t} {days} {gift} 는 값이 들어가는 자리. fbHow 는 복사한 글을 누구에게 보낼지 안내도 함께 담는다. */
+const L={
+ko:{
+  title:'도장판 체험판',
+  h1:'🌸 도장판 체험판 🌸',
+  sub:'오늘 칸 {n}개에 도장만 찍어요',
+  storageNotice:'이 브라우저에서는 기록이 저장되지 않을 수 있어요. 창을 닫으면 사라질 수 있어요.',
+  hint1:'계획표는 안 짜도 돼요. 오늘 한 일은 칸을 눌러 도장을 찍어요.',
+  hint2:'한 번 누르면 진한 도장(다 했어요), 두 번 누르면 연한 도장(조금만 했어요)이에요. 연한 도장도 오늘은 한 걸로 쳐요.',
+  hintGift:'🎁 처음 열어 줘서 고마워요. 새 칸 열기에 하루를 미리 채워 뒀어요.',
+  hintOk:'알겠어요',
+  todayTitle:'오늘 · {date}',
+  stDone:'다 했어요!',
+  stMini:'조금 했어요 (연한 도장)',
+  stEmpty:'눌러서 도장 찍기',
+  bannerPerfect:'🌈 오늘 도장 다 찍었어요!',
+  bannerMini:'🌱 연한 도장으로 이어갔어요. 조금이라도 한 게 제일 중요해요.',
+  piledTitle:'쌓인 것',
+  nDays:'이어간 날',
+  nWeek:'최근 7일',
+  nStamps:'도장',
+  pileNote:'쌓이기만 하고 줄어들지 않아요. 하루 빠져도 그대로예요.',
+  unlockOpen:'새 칸이 열렸어요. 아래 "할 일 칸 바꾸기"에서 더해요.',
+  unlockLeft:'새 칸까지 {n}일 남았어요',
+  unlockLeftOne:'새 칸까지 {n}일 남았어요',
+  unlockGift:'첫 동그라미는 선물이에요. 처음 열어 줘서 미리 채워 뒀어요.',
+  unlockAll:'새 칸이 다 열렸어요.',
+  weekTitle:'이번 주',
+  monthStat:'이번 달 {n}일 이어갔어요.',
+  editTitle:'할 일 칸 바꾸기',
+  editDesc:'할 일 이름과 그림을 바꾸고, 새 칸을 더해요.',
+  open:'열기',
+  close:'닫기',
+  picIcon:'그림 바꾸기',
+  slotAria:'칸 이름',
+  delAsk:'지울까요?',
+  needOne:'칸은 하나 이상 있어야 해요.',
+  maxSix:'칸은 여섯 개까지예요.',
+  lockMsg:'도장을 찍은 날이 {t}일이 되면 칸이 하나 더 열려요. 지금 {days}일이에요{gift}.',
+  lockGift:' (첫 칸 선물 1일 포함)',
+  addSlot:'+ 칸 더 열기',
+  fbTitle:'의견 보내기',
+  fbDesc:'써 보고 느낀 점을 편하게 적어 주세요. 막힌 곳, 헷갈린 곳, 좋았던 점 아무거나 좋아요.',
+  fbPlaceholder:'예: 둘째 날부터 안 열었어요. 이유는…',
+  copyBtn:'글 복사하기',
+  formBtn:'폼으로 보내기',
+  copied:'복사했어요. 이제 붙여 넣어서 보내 주세요.',
+  copyFail:'자동 복사가 안 돼요. 선택된 글을 길게 눌러 복사해 주세요.',
+  fbHow:'복사할 때 쓴 날수와 도장 수가 글 끝에 같이 붙어요. 이 앱을 알려 준 사람에게 카카오톡이나 문자로 보내 주세요.',
+  slots:{wakeup:'일어나기',breakfast:'아침 먹기',move:'몸 움직이기'},
+  icons:{wake:'기상',meal:'아침식사',walk:'아침 산책',eng:'영어',zh:'중국어',code:'코딩',ai:'AI 개발',hack:'해커톤',jp:'일본어',es:'스페인어',fa:'페르시아어',climb:'암벽등반',hyrox:'하이록스',marathon:'마라톤',rowing:'조정',boxing:'권투',tennis:'테니스',golf:'골프',bowling:'볼링',walkrun:'걷기·달리기',strength:'근력',yoga:'요가',swimbike:'수영·자전거',read:'독서',orig:'원서',origwin:'원서 성공'}
+},
+en:{
+  title:'Routine Stamp Board · trial',
+  h1:'🌸 Routine Stamp Board 🌸',
+  sub:'{n} boxes today. All you do is stamp.',
+  storageNotice:"This browser might not save your progress. If you close the tab, it could disappear.",
+  hint1:"No planner needed. When you've done something, tap its box to stamp it.",
+  hint2:"Tap once for a solid stamp (did it all). Tap twice for a light one (did a little). A light stamp still counts as today done.",
+  hintGift:"🎁 Thanks for stopping by. One day toward your next box is already filled in.",
+  hintOk:'Got it',
+  todayTitle:'Today · {date}',
+  stDone:'Did it all!',
+  stMini:'Did a little (light stamp)',
+  stEmpty:'Tap to stamp',
+  bannerPerfect:'🌈 All stamped for today!',
+  bannerMini:'🌱 A light stamp keeps it going. Doing a little is what counts.',
+  piledTitle:'So far',
+  nDays:'Days kept up',
+  nWeek:'Last 7 days',
+  nStamps:'Stamps',
+  pileNote:"These only go up. Skip a day and they stay right where they are.",
+  unlockOpen:'A new box just opened. Add it under "My boxes" below.',
+  unlockLeft:'{n} more days until your next box',
+  unlockLeftOne:'{n} more day until your next box',
+  unlockGift:"The first dot is a gift, filled in for showing up.",
+  unlockAll:'Every box is unlocked.',
+  weekTitle:'This week',
+  monthStat:'Days this month: {n}',
+  editTitle:'My boxes',
+  editDesc:'Rename them, swap the picture, or add a new one.',
+  open:'Open',
+  close:'Close',
+  picIcon:'Change picture',
+  slotAria:'Box name',
+  delAsk:'Delete?',
+  needOne:'You need at least one box.',
+  maxSix:'Six boxes is the limit.',
+  lockMsg:'Stamp on {t} different days and another box opens. So far: {days}{gift}',
+  lockGift:' (including the 1-day gift)',
+  addSlot:'+ Add a box',
+  fbTitle:'Send feedback',
+  fbDesc:'Jot down how it went. Where you got stuck, what was confusing, what you liked. Anything helps.',
+  fbPlaceholder:'e.g. I stopped opening it on day 2 because…',
+  copyBtn:'Copy my note',
+  formBtn:'Send via form',
+  copied:'Copied. Now paste it into a message and send it over.',
+  copyFail:"Auto-copy didn't work. Press and hold the selected text to copy it.",
+  fbHow:'A few usage numbers get added to the end when you copy. Send it to whoever shared this app with you, by text or chat.',
+  slots:{wakeup:'Get up',breakfast:'Eat breakfast',move:'Move around'},
+  icons:{wake:'Waking up',meal:'Breakfast',walk:'Morning walk',eng:'English',zh:'Chinese',code:'Coding',ai:'AI dev',hack:'Hackathon',jp:'Japanese',es:'Spanish',fa:'Persian',climb:'Climbing',hyrox:'Hyrox',marathon:'Marathon',rowing:'Rowing',boxing:'Boxing',tennis:'Tennis',golf:'Golf',bowling:'Bowling',walkrun:'Walk or run',strength:'Strength',yoga:'Yoga',swimbike:'Swim or bike',read:'Reading',orig:'Book in original',origwin:'Book finished'}
+},
+'zh-Hans':{
+  title:'习惯盖章本 · 体验版',
+  h1:'🌸 习惯盖章本 🌸',
+  sub:'今天 {n} 格，盖章就行',
+  storageNotice:'这个浏览器可能存不住记录，关掉页面记录可能就没了。',
+  hint1:'不用排计划表。做完一件事，点一下它的格子就盖章。',
+  hint2:'点一下是深色章（都做完了），点两下是淡淡的章（只做了一点）。淡淡的章也算今天做过了。',
+  hintGift:'🎁 谢谢你第一次打开。解锁新格子的进度，先帮你填好了一天。',
+  hintOk:'知道了',
+  todayTitle:'今天 · {date}',
+  stDone:'都做完了！',
+  stMini:'做了一点（淡淡的章）',
+  stEmpty:'点一下盖章',
+  bannerPerfect:'🌈 今天的章都盖完啦！',
+  bannerMini:'🌱 淡淡的章也算接上了。哪怕只做一点，也比没做强。',
+  piledTitle:'已经攒下的',
+  nDays:'有盖章的天数',
+  nWeek:'最近 7 天',
+  nStamps:'盖的章',
+  pileNote:'只会越攒越多，不会减少。漏一天也不受影响。',
+  unlockOpen:'新格子开了！到下面的“我的格子”里加上。',
+  unlockLeft:'再过 {n} 天，开一个新格子',
+  unlockLeftOne:'再过 {n} 天，开一个新格子',
+  unlockGift:'第一个圆点是送你的，来了就先帮你填上。',
+  unlockAll:'格子都解锁啦。',
+  weekTitle:'这一周',
+  monthStat:'这个月有 {n} 天盖了章。',
+  editTitle:'我的格子',
+  editDesc:'可以改名字、换图案，也能加新格子。',
+  open:'展开',
+  close:'收起',
+  picIcon:'换图案',
+  slotAria:'格子名称',
+  delAsk:'删除？',
+  needOne:'至少要留一个格子。',
+  maxSix:'格子最多六个。',
+  lockMsg:'盖章满 {t} 天，就会多开一个格子。现在是 {days} 天{gift}。',
+  lockGift:'（含送你的 1 天）',
+  addSlot:'+ 加一个格子',
+  fbTitle:'意见反馈',
+  fbDesc:'用下来的感觉随便写写就行：哪里卡住了、哪里没看懂、哪里喜欢，都可以。',
+  fbPlaceholder:'比如：第二天就没打开了，因为……',
+  copyBtn:'复制这段话',
+  formBtn:'用表单提交',
+  copied:'复制好了，粘贴发给我们就行。',
+  copyFail:'自动复制没成功。长按选中的文字，手动复制一下。',
+  fbHow:'复制时，使用天数之类的几个数字会一起附在末尾。发给把这个应用推荐给你的人就行。',
+  slots:{wakeup:'起床',breakfast:'吃早饭',move:'动一动'},
+  icons:{wake:'起床',meal:'早餐',walk:'晨间散步',eng:'英语',zh:'中文',code:'编程',ai:'AI 开发',hack:'黑客松',jp:'日语',es:'西班牙语',fa:'波斯语',climb:'攀岩',hyrox:'Hyrox',marathon:'马拉松',rowing:'赛艇',boxing:'拳击',tennis:'网球',golf:'高尔夫',bowling:'保龄球',walkrun:'走路·跑步',strength:'力量训练',yoga:'瑜伽',swimbike:'游泳·骑车',read:'读书',orig:'读原版书',origwin:'原版书读完了'}
+},
+'zh-Hant':{
+  title:'習慣蓋章本 · 體驗版',
+  h1:'🌸 習慣蓋章本 🌸',
+  sub:'今天 {n} 格，蓋章就好',
+  storageNotice:'這個瀏覽器可能存不住紀錄，關掉頁面紀錄可能就不見了。',
+  hint1:'不用排計畫表。做完一件事，點一下它的格子就蓋章。',
+  hint2:'點一下是深色章（都做完了），點兩下是淡淡的章（只做了一點）。淡淡的章也算今天有做。',
+  hintGift:'🎁 謝謝你第一次打開。解鎖新格子的進度，先幫你填好一天了。',
+  hintOk:'知道了',
+  todayTitle:'今天 · {date}',
+  stDone:'都做完了！',
+  stMini:'做了一點（淡淡的章）',
+  stEmpty:'點一下蓋章',
+  bannerPerfect:'🌈 今天的章都蓋完囉！',
+  bannerMini:'🌱 淡淡的章也算接上了。哪怕只做一點，也比沒做好。',
+  piledTitle:'已經攢下的',
+  nDays:'有蓋章的天數',
+  nWeek:'最近 7 天',
+  nStamps:'蓋的章',
+  pileNote:'只會越攢越多，不會減少。漏一天也不受影響。',
+  unlockOpen:'新格子開了！到下面的「我的格子」裡加上。',
+  unlockLeft:'再過 {n} 天，開一個新格子',
+  unlockLeftOne:'再過 {n} 天，開一個新格子',
+  unlockGift:'第一個圓點是送你的，來了就先幫你填上。',
+  unlockAll:'格子都解鎖囉。',
+  weekTitle:'這一週',
+  monthStat:'這個月有 {n} 天蓋了章。',
+  editTitle:'我的格子',
+  editDesc:'可以改名字、換圖案，也能加新格子。',
+  open:'展開',
+  close:'收起',
+  picIcon:'換圖案',
+  slotAria:'格子名稱',
+  delAsk:'刪除？',
+  needOne:'至少要留一個格子。',
+  maxSix:'格子最多六個。',
+  lockMsg:'蓋章滿 {t} 天，就會多開一個格子。現在是 {days} 天{gift}。',
+  lockGift:'（含送你的 1 天）',
+  addSlot:'+ 加一個格子',
+  fbTitle:'意見回饋',
+  fbDesc:'用下來的感覺隨便寫寫就好：哪裡卡住、哪裡看不懂、哪裡喜歡，都可以。',
+  fbPlaceholder:'例如：第二天就沒打開了，因為……',
+  copyBtn:'複製這段話',
+  formBtn:'用表單送出',
+  copied:'複製好了，貼上傳給我們就好。',
+  copyFail:'自動複製沒成功。長按選取的文字，手動複製一下。',
+  fbHow:'複製時，使用天數之類的幾個數字會一起附在最後。傳給把這個 App 介紹給你的人就好。',
+  slots:{wakeup:'起床',breakfast:'吃早餐',move:'動一動'},
+  icons:{wake:'起床',meal:'早餐',walk:'晨間散步',eng:'英文',zh:'中文',code:'寫程式',ai:'AI 開發',hack:'黑客松',jp:'日文',es:'西班牙文',fa:'波斯文',climb:'攀岩',hyrox:'Hyrox',marathon:'馬拉松',rowing:'划船',boxing:'拳擊',tennis:'網球',golf:'高爾夫',bowling:'保齡球',walkrun:'走路·跑步',strength:'重量訓練',yoga:'瑜伽',swimbike:'游泳·騎車',read:'閱讀',orig:'讀原文書',origwin:'原文書讀完了'}
+}};
+/*END-L*/
 
 const ICONS={
 wake:`<path d="M12 58V27a20 20 0 0 1 40 0v31z" fill="#fff" stroke="#b9825a" stroke-width="3"/>
@@ -328,7 +546,19 @@ origwin:`<rect x="8" y="8" width="38" height="48" rx="4" fill="#3b6fd8" stroke="
 <path d="M56 10l1.2 3 3 1.2-3 1.2L56 18.4l-1.2-3-3-1.2 3-1.2z" fill="#ffd666"/>`
 };
 
-const NAMES={wake:'기상',meal:'아침식사',walk:'아침 산책',eng:'영어',zh:'중국어',code:'코딩',ai:'AI 개발',hack:'해커톤',jp:'일본어',es:'스페인어',fa:'페르시아어',climb:'암벽등반',hyrox:'하이록스',marathon:'마라톤',rowing:'조정',boxing:'권투',tennis:'테니스',golf:'골프',bowling:'볼링',walkrun:'걷기·달리기',strength:'근력',yoga:'요가',swimbike:'수영·자전거',read:'독서',orig:'원서',origwin:'원서 성공'};
+const LANGS=['ko','en','zh-Hans','zh-Hant'];
+const LOCALE={ko:'ko-KR',en:'en-US','zh-Hans':'zh-CN','zh-Hant':'zh-TW'};
+function flat(o,p='',out={}){for(const [k,v] of Object.entries(o)){const key=p?p+'.'+k:k;if(typeof v==='string')out[key]=v;else flat(v,key,out)}return out}
+const T={};for(const l of LANGS)T[l]=flat(L[l]);
+let lang='ko';
+const t=(k,v)=>{let s=T[lang][k]!==undefined?T[lang][k]:T.ko[k];if(v)for(const x in v)s=s.split('{'+x+'}').join(v[x]);return s};
+function guessLang(){
+  const n=(navigator.language||'').toLowerCase();
+  if(n.startsWith('ko')) return 'ko';
+  if(n.startsWith('zh')) return /tw|hk|mo|hant/.test(n)?'zh-Hant':'zh-Hans';
+  return 'en';
+}
+
 const COLORS=['#ff9fb7','#ffb98a','#7fd8b6','#8ccaf7','#b9a2ff','#ffd666','#f79bd3'];
 const KEY='routine-trial-v1';
 const MAX_SLOTS=6;
@@ -338,9 +568,11 @@ const todayStr=fmt(new Date());
 const $=id=>document.getElementById(id);
 
 const DEFAULT_SLOTS=[
-  {id:'s1',name:'일어나기',icon:'wake',color:COLORS[5]},
-  {id:'s2',name:'아침 먹기',icon:'meal',color:COLORS[1]},
-  {id:'s3',name:'몸 움직이기',icon:'walkrun',color:COLORS[2]}];
+  {id:'s1',key:'wakeup',icon:'wake',color:COLORS[5]},
+  {id:'s2',key:'breakfast',icon:'meal',color:COLORS[1]},
+  {id:'s3',key:'move',icon:'walkrun',color:COLORS[2]}];
+/* 예전 저장본은 한국어 이름이 그대로 들어 있어서, 기본 이름이면 언어를 따라가는 키로 바꿔 준다 */
+const OLD_KO={s1:['일어나기','wakeup'],s2:['아침 먹기','breakfast'],s3:['몸 움직이기','move']};
 let S={slots:DEFAULT_SLOTS.map(x=>({...x})),log:{},first:todayStr,hint:true,draft:''};
 let store={get(k){return localStorage.getItem(k)},set(k,v){localStorage.setItem(k,v)}};
 let persists=true, editOpen=false, pickFor=-1, pendingDel=null, lastPop=null;
@@ -351,10 +583,20 @@ function load(){
     const j=store.get(KEY);
     if(j){const o=JSON.parse(j);if(o&&Array.isArray(o.slots)&&o.slots.length&&o.log&&typeof o.log==='object'){S=Object.assign(S,o);fresh=false}}
   }catch(e){}
+  S.slots=S.slots.map(s=>{
+    if(s.key) return s;
+    const d=OLD_KO[s.id];
+    if(d&&s.name===d[0]) return {id:s.id,key:d[1],icon:s.icon,color:s.color};
+    if(s.name&&s.name===T.ko['icons.'+s.icon]) return {id:s.id,key:s.icon,icon:s.icon,color:s.color};
+    return s;
+  });
   if(fresh){S.gift=true;save()}
 }
 function save(){try{store.set(KEY,JSON.stringify(S));return true}catch(e){return false}}
 function probe(){try{store.set('__p','1');return store.get('__p')==='1'}catch(e){return false}}
+
+const autoLabel=s=>(s.key&&T[lang]['slots.'+s.key])||T[lang]['icons.'+(s.key||s.icon)]||'';
+const slotLabel=s=>s.name||autoLabel(s);
 
 const get=(date,id)=>(S.log[date]||{})[id]||0;
 const ids=()=>S.slots.map(s=>s.id);
@@ -378,6 +620,7 @@ function stampHTML(s,v,date){
   if(!v) return `<div class="empty">＋</div>`;
   return `<div class="stamp ${v===2?'mini':''}" style="--c:${s.color};--r:${rot(date,s.id)}">${iconSVG(s.icon)}</div>`;
 }
+const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 function toggle(date,id){
   const before=dayStatus(date);
@@ -391,42 +634,36 @@ function toggle(date,id){
   if(before==='none'&&dayStatus(date)!=='none') confetti();
 }
 
+function applyStatic(){
+  document.documentElement.lang=lang;
+  document.title=t('title');
+  const set=(id,k)=>{$(id).textContent=t(k)};
+  set('h1','h1');set('hint1','hint1');set('hint2','hint2');set('giftNote','hintGift');set('hintOk','hintOk');
+  set('piledTitle','piledTitle');set('lbDays','nDays');set('lbWeek','nWeek');set('lbStamps','nStamps');set('weekTitle','weekTitle');
+  set('editTitle','editTitle');set('editDesc','editDesc');set('addSlot','addSlot');
+  set('fbTitle','fbTitle');set('fbDesc','fbDesc');set('copyBtn','copyBtn');set('formBtn','formBtn');set('fbHow','fbHow');
+  $('fb').placeholder=t('fbPlaceholder');
+  if(!persists) $('notice').textContent=t('storageNotice');
+  $('sub').textContent=t('sub',{n:S.slots.length});
+  document.querySelectorAll('#langs button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.l===lang)));
+}
+
 function renderToday(){
   const n=S.slots.length;
   const done=S.slots.filter(s=>get(todayStr,s.id)>0).length;
   const st=dayStatus(todayStr);
-  const d=new Date();
+  const date=new Intl.DateTimeFormat(LOCALE[lang],{month:'long',day:'numeric',weekday:'short'}).format(new Date());
   $('today').innerHTML=`
-    <div class="row"><h2>오늘 · ${d.getMonth()+1}월 ${d.getDate()}일 (${'일월화수목금토'[d.getDay()]})</h2><span class="pill">${done} / ${n}</span></div>
+    <div class="row"><h2>${esc(t('todayTitle',{date}))}</h2><span class="pill">${done} / ${n}</span></div>
     <div class="bar"><i style="width:${n?Math.round(done/n*100):0}%"></i></div>
     <div class="grid">${S.slots.map(s=>{
       const v=get(todayStr,s.id);
       const pop=lastPop===todayStr+'|'+s.id?'pop':'';
       return `<button class="big ${v===1?'done':v===2?'mini':''} ${pop}" data-id="${s.id}" style="--c:${s.color}" type="button">
-        <div class="box">${stampHTML(s,v,todayStr)}</div><span class="nm">${esc(s.name)}</span>
-        <span class="st">${v===1?'다 했어요!':v===2?'조금 했어요 (연한 도장)':'눌러서 도장 찍기'}</span></button>`}).join('')}</div>
-    <div class="banner ${st!=='none'?'show':''}">${st==='perfect'?'🌈 오늘 도장 다 찍었어요!':'🌱 연한 도장으로 이어갔어요. 조금이라도 한 게 제일 중요해요.'}</div>`;
+        <div class="box">${stampHTML(s,v,todayStr)}</div><span class="nm">${esc(slotLabel(s))}</span>
+        <span class="st">${esc(v===1?t('stDone'):v===2?t('stMini'):t('stEmpty'))}</span></button>`}).join('')}</div>
+    <div class="banner ${st!=='none'?'show':''}">${esc(st==='perfect'?t('bannerPerfect'):t('bannerMini'))}</div>`;
   $('today').querySelectorAll('.big').forEach(b=>b.onclick=()=>toggle(todayStr,b.dataset.id));
-  $('sub').textContent=`오늘 칸 ${n}개에 도장만 찍어요`;
-}
-const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-
-function renderWeek(){
-  let h='';
-  for(let i=6;i>=0;i--){
-    const dt=new Date();dt.setDate(dt.getDate()-i);
-    const ds=fmt(dt);
-    const stt=dayStatus(ds);
-    h+=`<div class="day ${i===0?'today':''}"><small>${'일월화수목금토'[dt.getDay()]}</small><b>${dt.getDate()}</b><div class="dots">${S.slots.map(s=>{
-      const v=get(ds,s.id);
-      return `<button class="dot v${v}" style="--c:${s.color}" data-d="${ds}" data-id="${s.id}" aria-label="${esc(s.name)} ${ds}" type="button"></button>`}).join('')}</div><span class="mark">${stt==='perfect'?'🌈':stt==='mini'?'🌱':''}</span></div>`;
-  }
-  $('week').innerHTML=h;
-  $('week').querySelectorAll('.dot').forEach(b=>b.onclick=()=>toggle(b.dataset.d,b.dataset.id));
-  const ym=todayStr.slice(0,7);
-  let kept=0;
-  for(const d in S.log) if(d.startsWith(ym)&&hasStamp(d)) kept++;
-  $('stat').textContent=`이번 달 ${kept}일 이어갔어요.`;
 }
 
 function renderPiled(){
@@ -434,52 +671,79 @@ function renderPiled(){
   $('nDays').textContent=real;
   $('nWeek').textContent=weekCount();
   $('nStamps').textContent=stampCount();
-  $('pileNote').textContent='쌓이기만 하고 줄어들지 않아요. 하루 빠져도 그대로예요.';
-  const next=[3,7,14].find(t=>total<t);
+  $('pileNote').textContent=t('pileNote');
+  const next=[3,7,14].find(x=>total<x);
   let h='';
-  if(S.slots.length<capacity()) h+=`<p class="unlockhd">새 칸이 열렸어요. 아래 "할 일 칸 바꾸기"에서 더해요.</p>`;
+  if(S.slots.length<capacity()) h+=`<p class="unlockhd">${esc(t('unlockOpen'))}</p>`;
   if(next){
+    const left=next-total;
     const pips=Array.from({length:next},(_,i)=>`<i class="pip ${i<total?'on':''} ${S.gift&&i===0?'gift':''}">${S.gift&&i===0?'🎁':''}</i>`).join('');
-    h+=`<p class="unlockhd">새 칸까지 ${next-total}일 남았어요</p><div class="pips" aria-hidden="true">${pips}</div>`;
-    if(S.gift) h+=`<p class="stat">첫 칸은 선물이에요. 처음 열어 줘서 미리 채워 뒀어요.</p>`;
-  }else if(!h) h='<p class="unlockhd">새 칸이 다 열렸어요.</p>';
+    h+=`<p class="unlockhd">${esc(t(left===1?'unlockLeftOne':'unlockLeft',{n:left}))}</p><div class="pips" aria-hidden="true">${pips}</div>`;
+    if(S.gift) h+=`<p class="stat">${esc(t('unlockGift'))}</p>`;
+  }else if(!h) h=`<p class="unlockhd">${esc(t('unlockAll'))}</p>`;
   $('unlock').innerHTML=h;
+}
+
+function renderWeek(){
+  const wf=new Intl.DateTimeFormat(LOCALE[lang],{weekday:'short'});
+  let h='';
+  for(let i=6;i>=0;i--){
+    const dt=new Date();dt.setDate(dt.getDate()-i);
+    const ds=fmt(dt);
+    const stt=dayStatus(ds);
+    h+=`<div class="day ${i===0?'today':''}"><small>${esc(wf.format(dt))}</small><b>${dt.getDate()}</b><div class="dots">${S.slots.map(s=>{
+      const v=get(ds,s.id);
+      return `<button class="dot v${v}" style="--c:${s.color}" data-d="${ds}" data-id="${s.id}" aria-label="${esc(slotLabel(s))} ${ds}" type="button"></button>`}).join('')}</div><span class="mark">${stt==='perfect'?'🌈':stt==='mini'?'🌱':''}</span></div>`;
+  }
+  $('week').innerHTML=h;
+  $('week').querySelectorAll('.dot').forEach(b=>b.onclick=()=>toggle(b.dataset.d,b.dataset.id));
+  const ym=todayStr.slice(0,7);
+  let kept=0;
+  for(const d in S.log) if(d.startsWith(ym)&&hasStamp(d)) kept++;
+  $('stat').textContent=t('monthStat',{n:kept});
 }
 
 function renderEdit(){
   $('edit').hidden=!editOpen;
-  $('editBtn').textContent=editOpen?'닫기':'열기';
+  $('editBtn').textContent=editOpen?t('close'):t('open');
   if(!editOpen) return;
-  $('slots').innerHTML=S.slots.map((s,i)=>`<div class="slot"><button class="iconbtn" style="--c:${s.color}" data-i="${i}" aria-label="그림 바꾸기" type="button">${iconSVG(s.icon)}</button><input value="${esc(s.name)}" maxlength="14" data-i="${i}" aria-label="칸 이름"><button class="x" data-del="${i}" type="button">${pendingDel===i?'지울까요?':'✕'}</button></div>`).join('');
-  $('picker').innerHTML=pickFor>=0?Object.keys(ICONS).map(k=>`<button class="pk ${S.slots[pickFor]&&S.slots[pickFor].icon===k?'on':''}" data-k="${k}" aria-label="${NAMES[k]||k}" title="${NAMES[k]||k}" type="button"><svg viewBox="0 0 64 64">${ICONS[k]}</svg></button>`).join(''):'';
+  $('slots').innerHTML=S.slots.map((s,i)=>`<div class="slot"><button class="iconbtn" style="--c:${s.color}" data-i="${i}" aria-label="${esc(t('picIcon'))}" type="button">${iconSVG(s.icon)}</button><input value="${esc(slotLabel(s))}" maxlength="14" data-i="${i}" aria-label="${esc(t('slotAria'))}"><button class="x" data-del="${i}" type="button">${pendingDel===i?esc(t('delAsk')):'✕'}</button></div>`).join('');
+  $('picker').innerHTML=pickFor>=0?Object.keys(ICONS).map(k=>{const nm=esc(T[lang]['icons.'+k]||k);return `<button class="pk ${S.slots[pickFor]&&S.slots[pickFor].icon===k?'on':''}" data-k="${k}" aria-label="${nm}" title="${nm}" type="button"><svg viewBox="0 0 64 64">${ICONS[k]}</svg></button>`}).join(''):'';
   $('slots').querySelectorAll('.iconbtn').forEach(b=>b.onclick=()=>{pickFor=pickFor===+b.dataset.i?-1:+b.dataset.i;renderEdit()});
-  $('slots').querySelectorAll('input').forEach(inp=>inp.onchange=()=>{const s=S.slots[+inp.dataset.i];if(s){s.name=inp.value.trim()||s.name;save();render()}});
+  $('slots').querySelectorAll('input').forEach(inp=>inp.onchange=()=>{
+    const s=S.slots[+inp.dataset.i];if(!s) return;
+    const v=inp.value.trim();
+    if(!v||v===autoLabel(s)) delete s.name; else s.name=v;
+    save();render();
+  });
   $('slots').querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>{
     const i=+b.dataset.del;
-    if(S.slots.length<=1){$('slotMsg').textContent='칸은 하나 이상 있어야 해요.';return}
+    if(S.slots.length<=1){$('slotMsg').textContent=t('needOne');return}
     if(pendingDel!==i){pendingDel=i;renderEdit();return}
     const id=S.slots[i].id;
     for(const d in S.log){if(S.log[d][id]){S.log[d]=Object.assign({},S.log[d]);delete S.log[d][id];if(!Object.keys(S.log[d]).length)delete S.log[d]}}
     S.slots.splice(i,1);pendingDel=null;pickFor=-1;save();render();
   });
-  $('picker').querySelectorAll('.pk').forEach(b=>b.onclick=()=>{S.slots[pickFor].icon=b.dataset.k;pickFor=-1;save();render()});
+  $('picker').querySelectorAll('.pk').forEach(b=>b.onclick=()=>{
+    const s=S.slots[pickFor];
+    const followsIcon=!s.name&&s.key&&!(('slots.'+s.key) in T.ko);
+    s.icon=b.dataset.k;
+    if(followsIcon) s.key=b.dataset.k;
+    pickFor=-1;save();render();
+  });
   const cap=capacity(),days=stampDays();
   const can=S.slots.length<cap;
   $('addSlot').hidden=!can;
-  $('slotMsg').textContent=can?'':(S.slots.length>=MAX_SLOTS?'칸은 여섯 개까지예요.':`도장을 찍은 날이 ${days<3?3:days<7?7:14}일이 되면 칸이 하나 더 열려요. 지금 ${days}일이에요${S.gift?' (첫 칸 선물 1일 포함)':''}.`);
+  $('slotMsg').textContent=can?'':(S.slots.length>=MAX_SLOTS?t('maxSix'):t('lockMsg',{t:days<3?3:days<7?7:14,days,gift:S.gift?t('lockGift'):''}));
 }
 
-function renderFeedback(){
-  if(FEEDBACK_URL){$('formBtn').href=FEEDBACK_URL;$('formBtn').hidden=false}
-  $('fbHow').textContent='복사할 때 쓴 날수와 도장 수가 글 끝에 같이 붙어요. '+CONTACT_HINT;
-}
 function statsLine(){
-  return `[자동 입력] 처음 연 날 ${S.first} · 이어간 날 ${realDays()}일(선물 ${S.gift?1:0}일 별도) · 최근 7일 ${weekCount()}일 · 도장 ${stampCount()}개 · 칸 ${S.slots.length}개`;
+  return `[auto] first_open=${S.first} | active_days=${realDays()} (gift ${S.gift?1:0} separate) | last7=${weekCount()} | stamps=${stampCount()} | boxes=${S.slots.length} | lang=${lang}`;
 }
 $('copyBtn').onclick=async()=>{
   const full=($('fb').value.trim()?$('fb').value.trim()+'\n\n':'')+statsLine();
-  try{await navigator.clipboard.writeText(full);$('fbMsg').textContent='복사했어요. 이제 붙여 넣어서 보내 주세요.'}
-  catch(e){$('fb').value=full;$('fb').focus();$('fb').select();$('fbMsg').textContent='자동 복사가 안 돼요. 선택된 글을 길게 눌러 복사해 주세요.'}
+  try{await navigator.clipboard.writeText(full);$('fbMsg').textContent=t('copied')}
+  catch(e){$('fb').value=full;$('fb').focus();$('fb').select();$('fbMsg').textContent=t('copyFail')}
 };
 let draftTimer=null;
 $('fb').oninput=()=>{clearTimeout(draftTimer);draftTimer=setTimeout(()=>{S.draft=$('fb').value;save()},500)};
@@ -490,13 +754,18 @@ $('addSlot').onclick=()=>{
   if(S.slots.length>=capacity()) return;
   const used=new Set(S.slots.map(s=>s.icon));
   const icon=['read','yoga','strength','code','eng','zh'].find(k=>!used.has(k))||'read';
-  S.slots.push({id:'s'+Date.now(),name:NAMES[icon]||'새 칸',icon,color:COLORS[S.slots.length%COLORS.length]});
+  S.slots.push({id:'s'+Date.now(),key:icon,icon,color:COLORS[S.slots.length%COLORS.length]});
   save();render();
 };
+document.querySelectorAll('#langs button').forEach(b=>b.onclick=()=>{
+  lang=b.dataset.l;S.lang=lang;save();$('fbMsg').textContent='';render();
+});
 
 function render(){
   $('hint').hidden=!S.hint;
   $('giftNote').hidden=!S.gift;
+  if(FEEDBACK_URL){$('formBtn').href=FEEDBACK_URL;$('formBtn').hidden=false}
+  applyStatic();
   renderToday();renderPiled();renderWeek();renderEdit();
   lastPop=null;
 }
@@ -513,9 +782,9 @@ function confetti(){
 
 persists=probe();
 if(persists) load();
-if(!persists){$('notice').hidden=false;$('notice').textContent='이 브라우저에서는 기록이 저장되지 않을 수 있어요. 창을 닫으면 사라질 수 있어요.'}
+lang=LANGS.includes(S.lang)?S.lang:guessLang();
+if(!persists) $('notice').hidden=false;
 $('fb').value=S.draft||'';
-renderFeedback();
 render();
 </script>
 
