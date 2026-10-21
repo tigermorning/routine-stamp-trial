@@ -203,6 +203,17 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
     </div>
   </section>
 
+  <section class="card" id="bkCard">
+    <h2 id="bkTitle"></h2>
+    <p class="stat" style="margin-top:6px" id="bkDesc"></p>
+    <textarea id="bk"></textarea>
+    <div class="row" style="margin-top:10px;justify-content:flex-start">
+      <button class="btn main" id="bkOut" type="button"></button>
+      <button class="btn" id="bkIn" type="button"></button>
+    </div>
+    <p class="msg" id="bkMsg" role="status"></p>
+  </section>
+
   <section class="card" id="fbCard">
     <h2 id="fbTitle"></h2>
     <p class="stat" style="margin-top:6px" id="fbDesc"></p>
@@ -272,6 +283,19 @@ ko:{
   formBtn:'폼으로 보내기',
   copied:'복사했어요. 이제 붙여 넣어서 보내 주세요.',
   copyFail:'자동 복사가 안 돼요. 선택된 글을 길게 눌러 복사해 주세요.',
+  bkTitle:"기록 옮기기",
+  bkDesc:"기록은 이 기기의 브라우저에만 있어요. 코드로 내보내 두면 폰을 바꾸거나 브라우저 데이터를 지운 뒤에도 다시 가져올 수 있어요.",
+  bkPlaceholder:"내보낸 기록 코드를 여기에 붙여 넣어요",
+  bkOut:"기록 코드 복사하기",
+  bkIn:"붙여 넣은 기록 가져오기",
+  bkOk:"네, 바꿀게요",
+  bkCopied:"복사했어요. 메모장이나 나에게 보내는 메시지에 붙여 넣어 두세요.",
+  bkCopyFail:"자동 복사가 안 돼요. 위 칸의 글을 길게 눌러 복사해 주세요.",
+  bkEmpty:"가져올 기록 코드를 먼저 붙여 넣어 주세요.",
+  bkBad:"읽을 수 없는 코드예요. 복사한 글을 통째로 붙여 넣었는지 확인해 주세요.",
+  bkAsk:"도장 찍은 날 {n}일, 칸 {m}개가 담긴 기록이에요. 지금 기록은 이 기록으로 바뀌어요. 괜찮다면 한 번 더 눌러 주세요.",
+  bkDone:"기록을 가져왔어요.",
+  shelved:"칸을 빼도 쌓인 도장은 그대로 남아요.",
   fbHow:'복사할 때 쓴 날수와 도장 수가 글 끝에 같이 붙어요. 이 앱을 알려 준 사람에게 카카오톡이나 문자로 보내 주세요.',
   introTitle:'체험판이에요. 써 보고 의견을 들려주세요',
   introBody:'계획 짜다 지치는 사람도 계획에 치이지 않고 일단 시작해 볼 수 있게, 일부러 아주 단순하게 만들었어요. 3~7일만 써 보시고 모자란 점이나 헷갈린 점을 알려 주세요.',
@@ -332,6 +356,19 @@ en:{
   formBtn:'Send via form',
   copied:'Copied. Now paste it into a message and send it over.',
   copyFail:"Auto-copy didn't work. Press and hold the selected text to copy it.",
+  bkTitle:"Move my record",
+  bkDesc:"Your record only lives in this browser. Save it as a code and you can bring it back after switching phones or clearing browser data.",
+  bkPlaceholder:"Paste a saved code here",
+  bkOut:"Copy my record code",
+  bkIn:"Load the pasted code",
+  bkOk:"Yes, replace it",
+  bkCopied:"Copied. Paste it into a note or a message to yourself and keep it.",
+  bkCopyFail:"Auto-copy didn't work. Press and hold the text above to copy it.",
+  bkEmpty:"Paste a saved code first.",
+  bkBad:"Couldn't read that code. Make sure you pasted the whole thing.",
+  bkAsk:"Stamped days in this code: {n}. Boxes: {m}. It will replace your current record. Tap again if that's okay.",
+  bkDone:"Record loaded.",
+  shelved:"Taking a box away keeps the stamps you already collected.",
   fbHow:'A few usage numbers get added to the end when you copy. Send it to whoever shared this app with you, by text or chat.',
   introTitle:"A trial version. Try it and share how it goes",
   introBody:"It's deliberately simple, so even if planning wears you out, you can just start. Try it for 3 to 7 days, then let us know what felt missing or confusing.",
@@ -392,6 +429,19 @@ en:{
   formBtn:'用表单提交',
   copied:'复制好了，粘贴发给我们就行。',
   copyFail:'自动复制没成功。长按选中的文字，手动复制一下。',
+  bkTitle:"转移记录",
+  bkDesc:"记录只存在这个浏览器里。先导出成一串代码，换手机或清了浏览器数据之后还能再导入回来。",
+  bkPlaceholder:"把导出的记录代码粘贴到这里",
+  bkOut:"复制记录代码",
+  bkIn:"导入粘贴的记录",
+  bkOk:"好，替换掉",
+  bkCopied:"复制好了。粘贴到备忘录或发给自己的消息里存着。",
+  bkCopyFail:"自动复制没成功。长按上面的文字，手动复制一下。",
+  bkEmpty:"先把记录代码粘贴进来。",
+  bkBad:"这串代码读不出来。看看是不是整段都粘贴了。",
+  bkAsk:"这份记录里盖过章的天数：{n}，格子：{m}。导入后会替换现在的记录。没问题的话再点一次。",
+  bkDone:"记录导入好了。",
+  shelved:"拿掉格子，已经盖下的章也还在。",
   fbHow:'复制时，末尾会附上你用了几天、盖了几个章。微信或短信发给把这个应用介绍给你的人就行。',
   introTitle:'这是体验版，欢迎试用后留下意见',
   introBody:'我们特意做得很简单，一做计划就累的人，也能不被计划压着，先开始再说。试用三到七天，把觉得缺的、没看懂的地方告诉我们。',
@@ -452,6 +502,19 @@ en:{
   formBtn:'用表單送出',
   copied:'複製好了，貼上傳給我們就好。',
   copyFail:'自動複製沒成功。長按選取的文字，手動複製一下。',
+  bkTitle:"轉移紀錄",
+  bkDesc:"紀錄只存在這個瀏覽器裡。先匯出成一串代碼，換手機或清掉瀏覽器資料之後還能再匯入回來。",
+  bkPlaceholder:"把匯出的紀錄代碼貼在這裡",
+  bkOut:"複製紀錄代碼",
+  bkIn:"匯入貼上的紀錄",
+  bkOk:"好，替換掉",
+  bkCopied:"複製好了。貼到備忘錄或傳給自己的訊息裡存著。",
+  bkCopyFail:"自動複製沒成功。長按上面的文字，手動複製一下。",
+  bkEmpty:"先把紀錄代碼貼進來。",
+  bkBad:"這串代碼讀不出來。看看是不是整段都貼了。",
+  bkAsk:"這份紀錄裡蓋過章的天數：{n}，格子：{m}。匯入後會取代現在的紀錄。沒問題的話再按一次。",
+  bkDone:"紀錄匯入好了。",
+  shelved:"拿掉格子，已經蓋下的章也還在。",
   fbHow:'複製時，使用天數之類的幾個數字會一起附在最後。傳給把這個 App 介紹給你的人就好。',
   introTitle:'這是體驗版，歡迎試用後留下意見',
   introBody:'特地做得很簡單，給排計畫排到累的人，不用被計畫壓著，先開始再說。試用三到七天，再告訴我們哪裡不夠、哪裡看不懂。',
@@ -519,6 +582,19 @@ yue:{
   formBtn:'用表格交',
   copied:'複製咗喇，貼上再傳畀我哋就得。',
   copyFail:'自動複製唔成功。長㩒揀咗嘅文字，手動複製一下。',
+  bkTitle:"搬記錄",
+  bkDesc:"記錄淨係喺呢個瀏覽器入面。先匯出成一串代碼，換手機或者清咗瀏覽器資料之後都可以再匯入返嚟。",
+  bkPlaceholder:"將匯出嘅記錄代碼貼喺度",
+  bkOut:"複製記錄代碼",
+  bkIn:"匯入貼咗嘅記錄",
+  bkOk:"好，換咗佢",
+  bkCopied:"複製咗喇。貼落備忘錄或者傳畀自己嘅訊息度留起佢。",
+  bkCopyFail:"自動複製唔成功。長㩒上面嘅文字，手動複製一下。",
+  bkEmpty:"先將記錄代碼貼入嚟。",
+  bkBad:"呢串代碼讀唔到。睇下係咪成段都貼晒。",
+  bkAsk:"呢份記錄入面有印花嘅日數：{n}，格仔：{m}。匯入之後會取代而家嘅記錄。冇問題就再㩒一次。",
+  bkDone:"記錄匯入咗喇。",
+  shelved:"攞走格仔，已經儲到嘅印花都仲喺度。",
   fbHow:'複製嗰陣，用咗幾多日之類嘅幾個數字會一齊附喺最尾。傳畀介紹呢個 App 畀你嘅人就得。',
   slots:{wakeup:'起身',breakfast:'食早餐',move:'動一動'},
   icons:{wake:'起身',meal:'早餐',walk:'晨早散步',eng:'英文',zh:'中文',code:'寫程式',ai:'AI 開發',hack:'黑客松',jp:'日文',es:'西班牙文',fa:'波斯文',climb:'攀石',hyrox:'Hyrox',marathon:'馬拉松',rowing:'划艇',boxing:'拳擊',tennis:'網球',golf:'高爾夫球',bowling:'保齡球',walkrun:'行路·跑步',strength:'重量訓練',yoga:'瑜伽',swimbike:'游水·踩單車',read:'睇書',orig:'睇原文書',origwin:'原文書睇完喇'}
@@ -579,6 +655,19 @@ id:{
   formBtn:'Kirim lewat formulir',
   copied:'Sudah disalin. Sekarang tempel ke pesan dan kirim.',
   copyFail:'Salin otomatis gagal. Tekan lama teks yang terpilih untuk menyalinnya.',
+  bkTitle:"Pindahkan catatan",
+  bkDesc:"Catatanmu hanya ada di browser ini. Simpan sebagai kode, lalu kamu bisa memasukkannya lagi setelah ganti HP atau menghapus data browser.",
+  bkPlaceholder:"Tempel kode catatan di sini",
+  bkOut:"Salin kode catatan",
+  bkIn:"Masukkan kode yang ditempel",
+  bkOk:"Ya, ganti",
+  bkCopied:"Sudah disalin. Tempel ke catatan atau pesan untuk dirimu sendiri dan simpan.",
+  bkCopyFail:"Salin otomatis gagal. Tekan lama teks di atas untuk menyalinnya.",
+  bkEmpty:"Tempel kode catatan dulu.",
+  bkBad:"Kode itu tidak terbaca. Pastikan kamu menempelkan seluruhnya.",
+  bkAsk:"Hari bertanda stempel di kode ini: {n}. Kotak: {m}. Catatanmu sekarang akan diganti. Ketuk sekali lagi kalau setuju.",
+  bkDone:"Catatan sudah dimasukkan.",
+  shelved:"Kotak boleh dilepas, stempel yang sudah terkumpul tetap ada.",
   fbHow:'Saat disalin, jumlah hari dan stempelmu ikut tertempel di akhir teks. Kirim lewat chat atau SMS ke orang yang mengenalkan aplikasi ini ke kamu.',
   slots:{wakeup:'Bangun tidur',breakfast:'Sarapan',move:'Gerak badan'},
   icons:{wake:'Bangun tidur',meal:'Sarapan',walk:'Jalan pagi',eng:'Bahasa Inggris',zh:'Bahasa Mandarin',code:'Ngoding',ai:'Pengembangan AI',hack:'Hackathon',jp:'Bahasa Jepang',es:'Bahasa Spanyol',fa:'Bahasa Persia',climb:'Panjat tebing',hyrox:'Hyrox',marathon:'Maraton',rowing:'Dayung',boxing:'Tinju',tennis:'Tenis',golf:'Golf',bowling:'Boling',walkrun:'Jalan atau lari',strength:'Latihan beban',yoga:'Yoga',swimbike:'Renang atau sepeda',read:'Membaca',orig:'Buku bahasa asli',origwin:'Buku selesai dibaca'}
@@ -639,6 +728,19 @@ vi:{
   formBtn:'Gửi qua biểu mẫu',
   copied:'Đã sao chép. Giờ hãy dán vào tin nhắn rồi gửi đi nhé.',
   copyFail:'Sao chép tự động không được. Hãy nhấn giữ đoạn văn bản đang chọn để sao chép.',
+  bkTitle:"Chuyển tiến độ",
+  bkDesc:"Tiến độ chỉ nằm trong trình duyệt này. Hãy lưu thành một đoạn mã, sau này đổi điện thoại hay xóa dữ liệu trình duyệt vẫn nhập lại được.",
+  bkPlaceholder:"Dán đoạn mã đã lưu vào đây",
+  bkOut:"Sao chép mã tiến độ",
+  bkIn:"Nhập mã đã dán",
+  bkOk:"Đồng ý, thay thế",
+  bkCopied:"Đã sao chép. Dán vào ghi chú hoặc tin nhắn cho chính mình để giữ lại nhé.",
+  bkCopyFail:"Sao chép tự động không được. Hãy nhấn giữ đoạn chữ ở trên để sao chép.",
+  bkEmpty:"Hãy dán đoạn mã đã lưu vào trước nhé.",
+  bkBad:"Không đọc được đoạn mã này. Kiểm tra xem bạn đã dán đủ cả đoạn chưa.",
+  bkAsk:"Số ngày có dấu trong mã này: {n}. Số ô: {m}. Tiến độ hiện tại sẽ bị thay bằng nó. Nếu ổn, hãy bấm thêm một lần nữa.",
+  bkDone:"Đã nhập tiến độ.",
+  shelved:"Bỏ một ô đi thì các dấu đã đóng vẫn còn nguyên.",
   fbHow:'Khi sao chép, số ngày và số dấu bạn đã dùng sẽ được thêm vào cuối. Gửi cho người đã giới thiệu app này qua Zalo hoặc tin nhắn nhé.',
   slots:{wakeup:'Thức dậy',breakfast:'Ăn sáng',move:'Vận động'},
   icons:{wake:'Thức dậy',meal:'Bữa sáng',walk:'Đi dạo buổi sáng',eng:'Tiếng Anh',zh:'Tiếng Trung',code:'Lập trình',ai:'Phát triển AI',hack:'Hackathon',jp:'Tiếng Nhật',es:'Tiếng Tây Ban Nha',fa:'Tiếng Ba Tư',climb:'Leo núi đá',hyrox:'Hyrox',marathon:'Marathon',rowing:'Chèo thuyền',boxing:'Đấm bốc',tennis:'Quần vợt',golf:'Golf',bowling:'Bowling',walkrun:'Đi bộ hoặc chạy',strength:'Tập tạ',yoga:'Yoga',swimbike:'Bơi hoặc đạp xe',read:'Đọc sách',orig:'Sách bản gốc',origwin:'Đọc xong sách gốc'}
@@ -699,6 +801,19 @@ es:{
   formBtn:'Enviar por formulario',
   copied:'Copiado. Ahora pégalo en un mensaje y mándalo.',
   copyFail:'La copia automática no funcionó. Mantén presionado el texto seleccionado para copiarlo.',
+  bkTitle:"Pasar mi registro",
+  bkDesc:"Tu registro solo está en este navegador. Guárdalo como un código y podrás recuperarlo si cambias de móvil o borras los datos del navegador.",
+  bkPlaceholder:"Pega aquí un código guardado",
+  bkOut:"Copiar mi código",
+  bkIn:"Cargar el código pegado",
+  bkOk:"Sí, reemplazar",
+  bkCopied:"Copiado. Pégalo en una nota o en un mensaje a ti mismo y guárdalo.",
+  bkCopyFail:"La copia automática no funcionó. Mantén presionado el texto de arriba para copiarlo.",
+  bkEmpty:"Pega primero un código guardado.",
+  bkBad:"No se pudo leer ese código. Comprueba que lo pegaste entero.",
+  bkAsk:"Días con sello en este código: {n}. Casillas: {m}. Reemplazará tu registro actual. Pulsa otra vez si te parece bien.",
+  bkDone:"Registro cargado.",
+  shelved:"Quitar una casilla no borra los sellos que ya juntaste.",
   fbHow:'Al copiar, se añaden al final unos números de uso. Mándaselo a quien te compartió esta app, por mensaje o chat.',
   slots:{wakeup:'Levantarme',breakfast:'Desayunar',move:'Moverme'},
   icons:{wake:'Despertar',meal:'Desayuno',walk:'Paseo matutino',eng:'Inglés',zh:'Chino',code:'Programar',ai:'Desarrollo de IA',hack:'Hackatón',jp:'Japonés',es:'Español',fa:'Persa',climb:'Escalada',hyrox:'Hyrox',marathon:'Maratón',rowing:'Remo',boxing:'Boxeo',tennis:'Tenis',golf:'Golf',bowling:'Bolos',walkrun:'Caminar o correr',strength:'Fuerza',yoga:'Yoga',swimbike:'Nadar o bici',read:'Lectura',orig:'Libro en original',origwin:'Libro terminado'}
@@ -759,6 +874,19 @@ fi:{
   formBtn:'Lähetä lomakkeella',
   copied:'Kopioitu. Liitä se nyt viestiin ja lähetä eteenpäin.',
   copyFail:'Automaattinen kopiointi ei onnistunut. Kopioi valittu teksti painamalla sitä pitkään.',
+  bkTitle:"Siirrä merkinnät",
+  bkDesc:"Merkintäsi ovat vain tässä selaimessa. Tallenna ne koodina, niin saat ne takaisin puhelimen vaihdon tai selaindatan tyhjennyksen jälkeen.",
+  bkPlaceholder:"Liitä tallennettu koodi tähän",
+  bkOut:"Kopioi merkintäkoodi",
+  bkIn:"Tuo liitetty koodi",
+  bkOk:"Kyllä, korvaa",
+  bkCopied:"Kopioitu. Liitä se muistiinpanoon tai viestiin itsellesi ja säilytä.",
+  bkCopyFail:"Automaattinen kopiointi ei onnistunut. Kopioi yllä oleva teksti painamalla sitä pitkään.",
+  bkEmpty:"Liitä ensin tallennettu koodi.",
+  bkBad:"Koodia ei voitu lukea. Tarkista, että liitit sen kokonaan.",
+  bkAsk:"Leimapäiviä tässä koodissa: {n}. Ruutuja: {m}. Se korvaa nykyiset merkintäsi. Napauta uudelleen, jos sopii.",
+  bkDone:"Merkinnät tuotu.",
+  shelved:"Ruudun poistaminen ei poista jo kerättyjä leimoja.",
   fbHow:'Kun kopioit viestin, sen loppuun tulee päivien ja leimojen määrä. Lähetä viesti sille, joka kertoi sinulle tästä sovelluksesta, tekstiviestillä tai chatissa.',
   slots:{wakeup:'Herääminen',breakfast:'Aamiainen',move:'Liikkuminen'},
   icons:{wake:'Herääminen',meal:'Aamiainen',walk:'Aamukävely',eng:'Englannin kieli',zh:'Kiinan kieli',code:'Koodaus',ai:'Tekoälykehitys',hack:'Hackathon',jp:'Japanin kieli',es:'Espanjan kieli',fa:'Persian kieli',climb:'Kiipeily',hyrox:'Hyrox',marathon:'Maraton',rowing:'Soutu',boxing:'Nyrkkeily',tennis:'Tennis',golf:'Golf',bowling:'Keilaus',walkrun:'Kävely tai juoksu',strength:'Voimaharjoittelu',yoga:'Jooga',swimbike:'Uinti tai pyöräily',read:'Lukeminen',orig:'Kirja alkuperäiskielellä',origwin:'Kirja luettu'}
@@ -819,6 +947,19 @@ sv:{
   formBtn:'Skicka via formulär',
   copied:'Kopierat. Klistra in det i ett meddelande och skicka.',
   copyFail:'Automatisk kopiering fungerade inte. Håll inne på den markerade texten för att kopiera.',
+  bkTitle:"Flytta dina markeringar",
+  bkDesc:"Dina markeringar finns bara i den här webbläsaren. Spara dem som en kod så kan du hämta tillbaka dem om du byter telefon eller rensar webbläsardata.",
+  bkPlaceholder:"Klistra in en sparad kod här",
+  bkOut:"Kopiera min kod",
+  bkIn:"Hämta den inklistrade koden",
+  bkOk:"Ja, ersätt",
+  bkCopied:"Kopierat. Klistra in det i en anteckning eller ett meddelande till dig själv och spara det.",
+  bkCopyFail:"Automatisk kopiering fungerade inte. Håll inne på texten ovan för att kopiera.",
+  bkEmpty:"Klistra in en sparad kod först.",
+  bkBad:"Koden gick inte att läsa. Kontrollera att du klistrade in hela.",
+  bkAsk:"Dagar med stämpel i den här koden: {n}. Rutor: {m}. Den ersätter dina nuvarande markeringar. Tryck igen om det är okej.",
+  bkDone:"Markeringarna är hämtade.",
+  shelved:"Att ta bort en ruta tar inte bort stämplarna du redan samlat.",
   fbHow:'Antal dagar och stämplar läggs till sist i texten när du kopierar. Skicka den till den som tipsade dig om appen, via sms eller chatt.',
   slots:{wakeup:'Gå upp',breakfast:'Äta frukost',move:'Röra på sig'},
   icons:{wake:'Vakna',meal:'Frukost',walk:'Morgonpromenad',eng:'Engelska',zh:'Kinesiska',code:'Programmering',ai:'AI-utveckling',hack:'Hackathon',jp:'Japanska',es:'Spanska',fa:'Persiska',climb:'Klättring',hyrox:'Hyrox',marathon:'Maraton',rowing:'Rodd',boxing:'Boxning',tennis:'Tennis',golf:'Golf',bowling:'Bowling',walkrun:'Promenad eller löpning',strength:'Styrketräning',yoga:'Yoga',swimbike:'Simning eller cykling',read:'Läsning',orig:'Bok på originalspråk',origwin:'Bok utläst'}
@@ -1003,7 +1144,7 @@ const KEY='routine-trial-v1';
 const MAX_SLOTS=6;
 const pad=n=>String(n).padStart(2,'0');
 const fmt=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-const todayStr=fmt(new Date());
+let todayStr=fmt(new Date());
 const $=id=>document.getElementById(id);
 
 const DEFAULT_SLOTS=[
@@ -1012,9 +1153,9 @@ const DEFAULT_SLOTS=[
   {id:'s3',key:'move',icon:'walkrun',color:COLORS[2]}];
 /* 예전 저장본은 한국어 이름이 그대로 들어 있어서, 기본 이름이면 언어를 따라가는 키로 바꿔 준다 */
 const OLD_KO={s1:['일어나기','wakeup'],s2:['아침 먹기','breakfast'],s3:['몸 움직이기','move']};
-let S={slots:DEFAULT_SLOTS.map(x=>({...x})),log:{},first:todayStr,hint:true,draft:''};
+let S={slots:DEFAULT_SLOTS.map(x=>({...x})),log:{},shelf:[],first:todayStr,hint:true,draft:''};
 let store={get(k){return localStorage.getItem(k)},set(k,v){localStorage.setItem(k,v)}};
-let persists=true, editOpen=false, pickFor=-1, pendingDel=null, lastPop=null;
+let persists=true, editOpen=false, pickFor=-1, pendingDel=null, lastPop=null, shelvedMsg=false, bkPending=null;
 
 function load(){
   let fresh=true;
@@ -1022,6 +1163,7 @@ function load(){
     const j=store.get(KEY);
     if(j){const o=JSON.parse(j);if(o&&Array.isArray(o.slots)&&o.slots.length&&o.log&&typeof o.log==='object'){S=Object.assign(S,o);fresh=false}}
   }catch(e){}
+  if(!Array.isArray(S.shelf)) S.shelf=[];
   S.slots=S.slots.map(s=>{
     if(s.key) return s;
     const d=OLD_KO[s.id];
@@ -1038,7 +1180,7 @@ const autoLabel=s=>(s.key&&T[lang]['slots.'+s.key])||T[lang]['icons.'+(s.key||s.
 const slotLabel=s=>s.name||autoLabel(s);
 
 const get=(date,id)=>(S.log[date]||{})[id]||0;
-const ids=()=>S.slots.map(s=>s.id);
+const ids=()=>S.slots.concat(S.shelf).map(s=>s.id);
 function hasStamp(date){const have=new Set(ids());const d=S.log[date];return !!d&&Object.keys(d).some(k=>have.has(k)&&d[k]>0)}
 function realDays(){let n=0;for(const d in S.log)if(hasStamp(d))n++;return n}
 function stampDays(){return realDays()+(S.gift?1:0)}
@@ -1083,6 +1225,9 @@ function applyStatic(){
   set('introTitle','introTitle');set('introBody','introBody');set('introAsk','introAsk');set('introLang','introLang');set('introGo','introGo');set('introClose','introClose');set('introBtnTxt','introBtn');
   set('fbTitle','fbTitle');set('fbDesc','fbDesc');set('copyBtn','copyBtn');set('formBtn','formBtn');set('fbHow','fbHow');
   $('fb').placeholder=t('fbPlaceholder');
+  set('bkTitle','bkTitle');set('bkDesc','bkDesc');set('bkOut','bkOut');
+  $('bkIn').textContent=t(bkPending?'bkOk':'bkIn');
+  $('bk').placeholder=t('bkPlaceholder');$('bk').setAttribute('aria-label',t('bkTitle'));
   if(!persists) $('notice').textContent=t('storageNotice');
   $('sub').textContent=t(S.slots.length===1?'subOne':'sub',{n:S.slots.length});
   $('langCur').textContent=LANG_NAMES[lang];
@@ -1161,9 +1306,9 @@ function renderEdit(){
     const i=+b.dataset.del;
     if(S.slots.length<=1){$('slotMsg').textContent=t('needOne');return}
     if(pendingDel!==i){pendingDel=i;renderEdit();return}
-    const id=S.slots[i].id;
-    for(const d in S.log){if(S.log[d][id]){S.log[d]=Object.assign({},S.log[d]);delete S.log[d][id];if(!Object.keys(S.log[d]).length)delete S.log[d]}}
-    S.slots.splice(i,1);pendingDel=null;pickFor=-1;save();render();
+    /* 칸을 빼도 찍어 둔 도장은 지우지 않고 선반에 둔다 (도장 수와 열린 칸이 줄지 않게) */
+    S.shelf.push(S.slots.splice(i,1)[0]);
+    shelvedMsg=true;pendingDel=null;pickFor=-1;save();render();
   });
   $('picker').querySelectorAll('.pk').forEach(b=>b.onclick=()=>{
     const s=S.slots[pickFor];
@@ -1175,7 +1320,7 @@ function renderEdit(){
   const cap=capacity(),days=stampDays();
   const can=S.slots.length<cap;
   $('addSlot').hidden=!can;
-  $('slotMsg').textContent=can?'':(S.slots.length>=MAX_SLOTS?t('maxSix'):t('lockMsg',{t:days<3?3:days<7?7:14,days:t(days===1?'dayCountOne':'dayCount',{n:days}),gift:S.gift?t('lockGift'):''}));
+  $('slotMsg').textContent=[shelvedMsg?t('shelved'):'',can?'':(S.slots.length>=MAX_SLOTS?t('maxSix'):t('lockMsg',{t:days<3?3:days<7?7:14,days:t(days===1?'dayCountOne':'dayCount',{n:days}),gift:S.gift?t('lockGift'):''}))].filter(Boolean).join(' ');
 }
 
 function statsLine(){
@@ -1194,18 +1339,18 @@ $('introClose').onclick=()=>{S.introOff=true;save();render()};
 const scrollMode=()=>matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth';
 $('introBtn').onclick=()=>{S.introOff=false;save();render();scrollTo({top:0,behavior:scrollMode()})};
 $('introGo').onclick=()=>{$('fbCard').scrollIntoView({behavior:scrollMode(),block:'start'});$('fb').focus({preventScroll:true})};
-$('editBtn').onclick=()=>{editOpen=!editOpen;pickFor=-1;pendingDel=null;renderEdit()};
+$('editBtn').onclick=()=>{editOpen=!editOpen;pickFor=-1;pendingDel=null;shelvedMsg=false;renderEdit()};
 $('addSlot').onclick=()=>{
   if(S.slots.length>=capacity()) return;
   const used=new Set(S.slots.map(s=>s.icon));
   const icon=['read','yoga','strength','code','eng','zh'].find(k=>!used.has(k))||'read';
   S.slots.push({id:'s'+Date.now(),key:icon,icon,color:COLORS[S.slots.length%COLORS.length]});
-  save();render();
+  shelvedMsg=false;save();render();
 };
 function setLangMenu(open){$('langList').hidden=!open;$('langBtn').setAttribute('aria-expanded',String(open))}
 $('langBtn').onclick=e=>{e.stopPropagation();setLangMenu($('langList').hidden)};
 document.querySelectorAll('#langList [data-l]').forEach(b=>b.onclick=()=>{
-  lang=b.dataset.l;S.lang=lang;save();$('fbMsg').textContent='';setLangMenu(false);$('langBtn').focus();render();
+  lang=b.dataset.l;S.lang=lang;save();$('fbMsg').textContent='';bkPending=null;$('bkMsg').textContent='';setLangMenu(false);$('langBtn').focus();render();
 });
 document.addEventListener('click',e=>{if(!$('langmenu').contains(e.target))setLangMenu(false)});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('langList').hidden){setLangMenu(false);$('langBtn').focus()}});
@@ -1229,6 +1374,100 @@ function confetti(){
     document.body.appendChild(s);setTimeout(()=>s.remove(),4800);
   }
 }
+
+/* 날짜가 바뀌었는지 확인한다: 밤에 열어 둔 탭을 다음 날 다시 봐도 '오늘'이 맞게 */
+function refreshToday(){
+  const n=fmt(new Date());
+  if(n!==todayStr){todayStr=n;render()}
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshToday()});
+addEventListener('focus',refreshToday);
+addEventListener('pageshow',refreshToday);
+setInterval(refreshToday,60000);
+
+/* 기록 코드: 기록을 한 줄 글자로 바꿔 복사해 두었다가 다른 기기나 새 브라우저에서 다시 가져온다. 계정 없이 쓴다. */
+const BK_HEAD='DJP1:';
+function bkEncode(){
+  const json=JSON.stringify({v:1,slots:S.slots,shelf:S.shelf,log:S.log,first:S.first,gift:!!S.gift});
+  const bytes=new TextEncoder().encode(json);
+  let bin='';
+  for(let i=0;i<bytes.length;i+=8192) bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+8192));
+  return BK_HEAD+btoa(bin);
+}
+/* 붙여 넣은 글은 믿지 않고 모양을 하나하나 확인한다. 통과한 값만 새로 만들어 돌려준다. */
+function bkClean(o){
+  if(!o||typeof o!=='object'||o.v!==1) return null;
+  const okId=x=>typeof x==='string'&&/^s\d{1,16}$/.test(x);
+  const okDate=x=>typeof x==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x);
+  const seen=new Set();
+  const slot=s=>{
+    if(!s||typeof s!=='object'||!okId(s.id)||seen.has(s.id)) return null;
+    if(typeof s.icon!=='string'||!Object.prototype.hasOwnProperty.call(ICONS,s.icon)) return null;
+    if(typeof s.color!=='string'||!/^#[0-9a-fA-F]{6}$/.test(s.color)) return null;
+    const c={id:s.id,icon:s.icon,color:s.color};
+    if(typeof s.key==='string'&&/^[A-Za-z0-9_-]{1,24}$/.test(s.key)) c.key=s.key;
+    if(typeof s.name==='string'&&s.name.trim()) c.name=s.name.trim().slice(0,14);
+    seen.add(s.id);
+    return c;
+  };
+  if(!Array.isArray(o.slots)||o.slots.length<1||o.slots.length>MAX_SLOTS) return null;
+  const slots=o.slots.map(slot);
+  if(slots.includes(null)) return null;
+  const shelf=Array.isArray(o.shelf)?o.shelf.slice(0,200).map(slot):[];
+  if(shelf.includes(null)) return null;
+  if(!o.log||typeof o.log!=='object'||Array.isArray(o.log)) return null;
+  const log={};
+  let days=0;
+  for(const d of Object.keys(o.log)){
+    if(!okDate(d)||++days>20000) return null;
+    const row=o.log[d];
+    if(!row||typeof row!=='object'||Array.isArray(row)) return null;
+    const r={};
+    for(const id of Object.keys(row)){
+      if(!okId(id)||(row[id]!==1&&row[id]!==2)) return null;
+      if(seen.has(id)) r[id]=row[id];
+    }
+    if(Object.keys(r).length) log[d]=r;
+  }
+  return {slots,shelf,log,first:okDate(o.first)?o.first:todayStr,gift:o.gift===true};
+}
+function bkDecode(text){
+  const s=String(text).replace(/\s+/g,'');
+  if(s.length>3000000||!s.startsWith(BK_HEAD)) return null;
+  try{
+    const bin=atob(s.slice(BK_HEAD.length));
+    const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));
+    return bkClean(JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes)));
+  }catch(e){return null}
+}
+$('bk').oninput=()=>{if(bkPending){bkPending=null;$('bkMsg').textContent='';applyStatic()}};
+$('bkOut').onclick=async()=>{
+  const code=bkEncode();
+  $('bk').value=code;bkPending=null;
+  try{await navigator.clipboard.writeText(code);$('bkMsg').textContent=t('bkCopied')}
+  catch(e){$('bk').focus();$('bk').select();$('bkMsg').textContent=t('bkCopyFail')}
+  applyStatic();
+};
+$('bkIn').onclick=()=>{
+  if(bkPending){
+    const c=bkPending;bkPending=null;
+    S.slots=c.slots;S.shelf=c.shelf;S.log=c.log;S.first=c.first;S.gift=c.gift;
+    pickFor=-1;pendingDel=null;shelvedMsg=false;
+    save();render();
+    $('bk').value='';$('bkMsg').textContent=t('bkDone');
+    return;
+  }
+  const raw=$('bk').value.trim();
+  if(!raw){$('bkMsg').textContent=t('bkEmpty');return}
+  const c=bkDecode(raw);
+  if(!c){$('bkMsg').textContent=t('bkBad');return}
+  bkPending=c;
+  const have=new Set(c.slots.concat(c.shelf).map(s=>s.id));
+  let n=0;
+  for(const d in c.log) if(Object.keys(c.log[d]).some(id=>have.has(id))) n++;
+  $('bkMsg').textContent=t('bkAsk',{n:n,m:c.slots.length});
+  applyStatic();
+};
 
 persists=probe();
 if(persists) load();
