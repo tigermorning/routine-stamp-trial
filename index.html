@@ -1982,7 +1982,7 @@ async function sendChat(text){
   }
   const um={r:'u',c:text};c.msgs.push(um);
   chBusy=true;chLive={text:''};renderChat();
-  const body={messages:chatHistory(c),context:{slots:S.slots.map(slotLabel),days:stampDays()},todos:[]};
+  const body={messages:chatHistory(c),context:{slots:S.slots.map(slotLabel),days:stampDays(),today:S.slots.map(s=>get(todayStr,s.id))},todos:[]};
   const hc=helperChar();if(Object.keys(hc).length) body.character=hc; // 고른 것만 보낸다(안 고르면 서버 기본 동작)
   const ctl=chCtl=new AbortController();
   const timer=setTimeout(()=>ctl.abort(),CHAT_TIMEOUT);
@@ -2071,7 +2071,8 @@ function renderSettings(){
   renderKeyRow();
 }
 /* 도우미 말투: 이름·말투·이모지. 고른 것만 이 브라우저에 저장하고 대화 요청에 character 로 보낸다. 서버가 값을 한 번 더 걸러 쓴다 */
-const HP_SPEECH=[['','hpDef'],['casual','hpCasual'],['polite','hpPolite']], HP_EMOJI=[['','hpDef'],['none','hpNone'],['some','hpSome'],['often','hpOften']];
+const HP_SPEECH=[['casual','hpCasual'],['polite','hpPolite']], HP_EMOJI=[['none','hpNone'],['some','hpSome'],['often','hpOften']];
+const HP_DEF={speech:'polite',emoji:'some'}; // 서버 기본(설정 없음)과 같다: 존댓말, 이모지 가끔
 function helperChar(){
   const c=chatData(),o=c.char&&typeof c.char==='object'?c.char:{},out={};
   const nm=String(o.name||'').trim().slice(0,20);if(nm) out.name=nm;
@@ -2088,9 +2089,9 @@ function renderHelperRow(){
   if(document.activeElement!==$('hpName')) $('hpName').value=o.name||'';
   $('hpSpeechCap').textContent=t('hpSpeech');$('hpEmojiCap').textContent=t('hpEmoji');
   const pills=(id,list,key)=>{
-    $(id).innerHTML=list.map(([v,kk])=>`<button type="button" class="opt" role="radio" aria-checked="${(o[key]||'')===v}" data-v="${v}">${esc(t(kk))}</button>`).join('');
+    $(id).innerHTML=list.map(([v,kk])=>`<button type="button" class="opt" role="radio" aria-checked="${(o[key]||HP_DEF[key])===v}" data-v="${v}">${esc(t(kk))}</button>`).join('');
     $(id).querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
-      setHelperChar(key,b.dataset.v);
+      setHelperChar(key,b.dataset.v===HP_DEF[key]?'':b.dataset.v); // 기본값을 고르면 저장값을 지운다
       const sel=$(id).querySelector('[aria-checked="true"]');if(sel)sel.focus({preventScroll:true});
     });
   };

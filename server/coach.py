@@ -40,15 +40,30 @@ def clean_history(raw):
 
 
 def clean_context(ctx):
-    """사용자가 보여 주기로 한 칸 이름·일수. 없으면 None."""
+    """사용자가 보여 주기로 한 칸 이름·일수·오늘 칸 상태(0 아직 안 찍음, 1 진하게, 2 연하게). 없으면 None."""
     if not isinstance(ctx, dict):
         return None
-    slots = [" ".join(str(s).split())[:30] for s in (ctx.get("slots") or [])[:MAX_SLOTS] if str(s).strip()]
+    raw_today = ctx.get("today") if isinstance(ctx.get("today"), list) else []
+    pairs = []
+    for i, s in enumerate((ctx.get("slots") or [])[:MAX_SLOTS]):
+        name = " ".join(str(s).split())[:30]
+        if not name:
+            continue
+        v = raw_today[i] if i < len(raw_today) else None
+        pairs.append((name, v if v in (0, 1, 2) and not isinstance(v, bool) else None))
     try:
         days = max(0, min(int(ctx.get("days", 0)), 100000))
     except (TypeError, ValueError):
         days = 0
-    return {"slots": slots, "days": days} if slots else None
+    if not pairs:
+        return None
+    out = {"slots": [n for n, _ in pairs], "days": days}
+    if all(v is not None for _, v in pairs):  # 오늘 상태는 모든 칸이 제대로 왔을 때만 쓴다
+        out["today"] = [v for _, v in pairs]
+    return out
+
+
+TODAY_TEXT = {0: "아직 도장을 안 찍음", 1: "진한 도장(다 했어요)", 2: "연한 도장(조금 했어요)"}
 
 
 def clean_todos(raw):
@@ -151,6 +166,8 @@ def build_system(mode, cards, ctx, todos, character=None, history=None):
     info = []
     if ctx:
         info.append(f"[이 앱에 저장된 내 칸(칸 이름과 도장이 쌓인 일수)] 칸: {', '.join(ctx['slots'])} / 도장이 쌓인 일수: {ctx['days']}")
+        if ctx.get("today"):
+            info.append("[오늘 내 칸 상태(이 앱에서 읽은 사실)] " + " / ".join(f"{n}: {TODAY_TEXT[v]}" for n, v in zip(ctx["slots"], ctx["today"])))
     if todos:
         info.append("[내 할 일]\n" + "\n".join(f"- {t}" for t in todos))
     return "\n\n".join(parts + info)
