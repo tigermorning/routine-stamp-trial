@@ -119,10 +119,7 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 .nums b{display:block;font-family:var(--display);font-weight:400;font-size:28px;line-height:1.2;font-variant-numeric:tabular-nums}
 .nums span{font-size:13px;color:var(--soft)}
 .unlockhd{margin:14px 0 6px;font-size:15px}
-.pips{display:flex;gap:6px;flex-wrap:wrap}
-.pip{width:22px;height:22px;border-radius:50%;border:2px solid var(--accent);display:inline-grid;place-items:center;font-size:12px;line-height:1}
-.pip.on{background:var(--accent)}
-.pip.gift{background:var(--sun-bg);border-color:var(--sun-bg)}
+.ub{margin:10px 0 8px}
 .fall{position:fixed;top:-40px;font-size:28px;pointer-events:none;z-index:99;animation:fall linear forwards}
 @keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.9}}
 @media (prefers-reduced-motion:reduce){.pop .stamp,.banner{animation:none}.fall{display:none}.bar>i{transition:none}}
@@ -258,7 +255,7 @@ ko:{
   unlockOpen:'새 칸이 열렸어요. 아래 "할 일 칸 바꾸기"에서 더해요.',
   unlockLeft:'새 칸까지 {n}일 남았어요',
   unlockLeftOne:'새 칸까지 {n}일 남았어요',
-  unlockGift:'첫 동그라미는 선물이에요. 처음 열어 줘서 미리 채워 뒀어요.',
+  unlockGift:"첫 1일은 선물이에요. 처음 열어 줘서 미리 채워 뒀어요.",
   unlockAll:'새 칸이 다 열렸어요.',
   weekTitle:'이번 주',
   monthStat:'이번 달 {n}일 이어갔어요.',
@@ -331,7 +328,7 @@ en:{
   unlockOpen:'A new box just opened. Add it under "My boxes" below.',
   unlockLeft:'{n} more days until your next box',
   unlockLeftOne:'{n} more day until your next box',
-  unlockGift:"The first dot is a gift, filled in for showing up.",
+  unlockGift:"The first day is a gift, filled in for showing up.",
   unlockAll:'Every box is unlocked.',
   weekTitle:'This week',
   monthStat:'Days this month: {n}',
@@ -404,7 +401,7 @@ en:{
   unlockOpen:'新格子开了！到下面的“我的格子”里加上。',
   unlockLeft:'离新格子还有 {n} 天',
   unlockLeftOne:'离新格子还有 {n} 天',
-  unlockGift:'第一个圆点是送你的，来了就先帮你填上。',
+  unlockGift:"第一天是送你的，来了就先帮你填上。",
   unlockAll:'格子都解锁啦。',
   weekTitle:'这一周',
   monthStat:'这个月有 {n} 天盖了章。',
@@ -477,7 +474,7 @@ en:{
   unlockOpen:'新格子開了！到下面的「我的格子」裡加上。',
   unlockLeft:'再過 {n} 天，開一個新格子',
   unlockLeftOne:'再過 {n} 天，開一個新格子',
-  unlockGift:'第一個圓點是送你的，來了就先幫你填上。',
+  unlockGift:"第一天是送你的，來了就先幫你填上。",
   unlockAll:'格子都解鎖囉。',
   weekTitle:'這一週',
   monthStat:'這個月有 {n} 天蓋了章。',
@@ -550,7 +547,7 @@ yue:{
   unlockOpen:'新格仔開咗！去下面嘅「我嘅格仔」加返個上去啦。',
   unlockLeft:'再 {n} 日就開到新格仔',
   unlockLeftOne:'再 {n} 日就開到新格仔',
-  unlockGift:'第一粒圓點係送畀你嘅，你第一次嚟，就先幫你填咗。',
+  unlockGift:"第一日係送畀你嘅，你第一次嚟，就先幫你填咗。",
   unlockAll:'格仔全部解鎖晒喇。',
   weekTitle:'呢一個星期',
   monthStat:'今個月有 {n} 日蓋咗印花。',
@@ -623,7 +620,7 @@ id:{
   unlockOpen:'Kotak baru terbuka. Tambahkan di "Kotakku" di bawah.',
   unlockLeft:'{n} hari lagi menuju kotak berikutnya',
   unlockLeftOne:'{n} hari lagi menuju kotak berikutnya',
-  unlockGift:'Titik pertama hadiah dari kami. Sudah diisi duluan karena kamu mampir.',
+  unlockGift:"Hari pertama hadiah dari kami. Sudah diisi duluan karena kamu mampir.",
   unlockAll:'Semua kotak sudah terbuka.',
   weekTitle:'Minggu ini',
   monthStat:'Bulan ini kamu sudah menstempel {n} hari.',
@@ -696,7 +693,7 @@ vi:{
   unlockOpen:'Có ô mới rồi! Thêm ở mục "Sửa ô việc" bên dưới nhé.',
   unlockLeft:'Còn {n} ngày nữa là mở ô mới',
   unlockLeftOne:'Còn {n} ngày nữa là mở ô mới',
-  unlockGift:'Vòng tròn đầu tiên là quà, mình điền sẵn vì bạn đã mở thử app.',
+  unlockGift:"Ngày đầu tiên là quà, mình điền sẵn vì bạn đã mở thử app.",
   unlockAll:'Tất cả các ô đã mở.',
   weekTitle:'Tuần này',
   monthStat:'Tháng này bạn đã duy trì {n} ngày rồi.',
@@ -769,7 +766,7 @@ es:{
   unlockOpen:'Se abrió una casilla nueva. Añádela en "Mis casillas", más abajo.',
   unlockLeft:'Faltan {n} días para tu próxima casilla',
   unlockLeftOne:'Falta {n} día para tu próxima casilla',
-  unlockGift:'El primer círculo es un regalo: ya viene relleno por haber entrado.',
+  unlockGift:"El primer día es un regalo: ya viene relleno por haber entrado.",
   unlockAll:'Todas las casillas están abiertas.',
   weekTitle:'Esta semana',
   monthStat:'Días con sello este mes: {n}',
@@ -842,7 +839,7 @@ fi:{
   unlockOpen:'Uusi ruutu avautui. Lisää se alta kohdasta "Omat ruutuni".',
   unlockLeft:'{n} päivää seuraavaan ruutuun',
   unlockLeftOne:'{n} päivä seuraavaan ruutuun',
-  unlockGift:'Ensimmäinen ympyrä on lahja. Se on valmiiksi täytetty, kun kävit kokeilemassa.',
+  unlockGift:"Ensimmäinen päivä on lahja. Se on valmiiksi täytetty, kun kävit kokeilemassa.",
   unlockAll:'Kaikki ruudut ovat auki.',
   weekTitle:'Tämä viikko',
   monthStat:'Leimapäiviä tässä kuussa: {n}',
@@ -915,7 +912,7 @@ sv:{
   unlockOpen:'En ny ruta har öppnats. Lägg till den under "Mina rutor" nedan.',
   unlockLeft:'{n} dagar till nästa ruta',
   unlockLeftOne:'{n} dag till nästa ruta',
-  unlockGift:'Den första pricken är en present, som tack för att du tittade in.',
+  unlockGift:"Den första dagen är en present, som tack för att du tittade in.",
   unlockAll:'Alla rutor är öppnade.',
   weekTitle:'Den här veckan',
   monthStat:'Dagar med stämpel den här månaden: {n}',
@@ -1171,7 +1168,12 @@ function load(){
     if(s.name&&s.name===T.ko['icons.'+s.icon]) return {id:s.id,key:s.icon,icon:s.icon,color:s.color};
     return s;
   });
-  if(fresh){S.gift=true;save()}
+  let migrated=false;
+  if(typeof S.opened!=='number'){
+    S.opened=Math.min(MAX_SLOTS,Math.max(S.slots.length,legacyCap(stampDays())));
+    migrated=true;
+  }
+  if(fresh){S.gift=true;save()}else if(migrated) save();
 }
 function save(){try{store.set(KEY,JSON.stringify(S));return true}catch(e){return false}}
 function probe(){try{store.set('__p','1');return store.get('__p')==='1'}catch(e){return false}}
@@ -1186,7 +1188,17 @@ function realDays(){let n=0;for(const d in S.log)if(hasStamp(d))n++;return n}
 function stampDays(){return realDays()+(S.gift?1:0)}
 function weekCount(){let n=0;for(let i=0;i<7;i++){const dt=new Date();dt.setDate(dt.getDate()-i);if(hasStamp(fmt(dt)))n++}return n}
 function stampCount(){let n=0;const have=new Set(ids());for(const d in S.log)for(const k in S.log[d])if(have.has(k)&&S.log[d][k]>0)n++;return n}
-function capacity(){const d=stampDays();return Math.min(MAX_SLOTS,3+(d>=3?1:0)+(d>=7?1:0)+(d>=14?1:0))}
+/* 도장 찍은 날(누적)이 이만큼 되면 4·5·6번째 칸이 열린다 */
+const UNLOCK=[3,28,60];
+/* 예전 일정(3·7·14일). 예전에 이미 열어 둔 칸을 지키는 데만 쓴다 */
+const legacyCap=d=>3+(d>=3?1:0)+(d>=7?1:0)+(d>=14?1:0);
+function capacity(){
+  const d=stampDays();
+  const c=Math.min(MAX_SLOTS,3+UNLOCK.filter(x=>d>=x).length);
+  /* 한 번 열린 칸은 일정이 바뀌어도 다시 닫지 않는다 */
+  if(!(S.opened>=c)){S.opened=c;save()}
+  return Math.min(MAX_SLOTS,S.opened);
+}
 function dayStatus(date){
   const v=S.slots.map(s=>get(date,s.id));
   if(!v.length) return 'none';
@@ -1258,13 +1270,14 @@ function renderPiled(){
   $('nWeek').textContent=weekCount();
   $('nStamps').textContent=stampCount();
   $('pileNote').textContent=t('pileNote');
-  const next=[3,7,14].find(x=>total<x);
+  const cap=capacity();
+  const next=cap<MAX_SLOTS?UNLOCK[cap-3]:0;
   let h='';
-  if(S.slots.length<capacity()) h+=`<p class="unlockhd">${esc(t('unlockOpen'))}</p>`;
+  if(S.slots.length<cap) h+=`<p class="unlockhd">${esc(t('unlockOpen'))}</p>`;
   if(next){
     const left=next-total;
-    const pips=Array.from({length:next},(_,i)=>`<i class="pip ${i<total?'on':''} ${S.gift&&i===0?'gift':''}">${S.gift&&i===0?'🎁':''}</i>`).join('');
-    h+=`<p class="unlockhd">${esc(t(left===1?'unlockLeftOne':'unlockLeft',{n:left}))}</p><div class="pips" aria-hidden="true">${pips}</div>`;
+    const pct=Math.min(100,Math.round(total/next*100));
+    h+=`<p class="unlockhd">${esc(t(left===1?'unlockLeftOne':'unlockLeft',{n:left}))}</p><div class="bar ub" aria-hidden="true"><i style="width:${pct}%"></i></div>`;
     if(S.gift) h+=`<p class="stat">${esc(t('unlockGift'))}</p>`;
   }else if(!h) h=`<p class="unlockhd">${esc(t('unlockAll'))}</p>`;
   $('unlock').innerHTML=h;
@@ -1320,7 +1333,7 @@ function renderEdit(){
   const cap=capacity(),days=stampDays();
   const can=S.slots.length<cap;
   $('addSlot').hidden=!can;
-  $('slotMsg').textContent=[shelvedMsg?t('shelved'):'',can?'':(S.slots.length>=MAX_SLOTS?t('maxSix'):t('lockMsg',{t:days<3?3:days<7?7:14,days:t(days===1?'dayCountOne':'dayCount',{n:days}),gift:S.gift?t('lockGift'):''}))].filter(Boolean).join(' ');
+  $('slotMsg').textContent=[shelvedMsg?t('shelved'):'',can?'':(S.slots.length>=MAX_SLOTS?t('maxSix'):t('lockMsg',{t:UNLOCK[cap-3],days:t(days===1?'dayCountOne':'dayCount',{n:days}),gift:S.gift?t('lockGift'):''}))].filter(Boolean).join(' ');
 }
 
 function statsLine(){
@@ -1388,7 +1401,7 @@ setInterval(refreshToday,60000);
 /* 기록 코드: 기록을 한 줄 글자로 바꿔 복사해 두었다가 다른 기기나 새 브라우저에서 다시 가져온다. 계정 없이 쓴다. */
 const BK_HEAD='DJP1:';
 function bkEncode(){
-  const json=JSON.stringify({v:1,slots:S.slots,shelf:S.shelf,log:S.log,first:S.first,gift:!!S.gift});
+  const json=JSON.stringify({v:1,slots:S.slots,shelf:S.shelf,log:S.log,first:S.first,gift:!!S.gift,opened:S.opened});
   const bytes=new TextEncoder().encode(json);
   let bin='';
   for(let i=0;i<bytes.length;i+=8192) bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+8192));
@@ -1429,7 +1442,10 @@ function bkClean(o){
     }
     if(Object.keys(r).length) log[d]=r;
   }
-  return {slots,shelf,log,first:okDate(o.first)?o.first:todayStr,gift:o.gift===true};
+  const gift=o.gift===true;
+  /* 열린 칸 수가 적힌 코드는 그대로, 없는 옛 코드는 예전 일정으로 이미 열린 칸까지 이어 준다 */
+  const op=Number.isInteger(o.opened)&&o.opened>=3&&o.opened<=MAX_SLOTS?o.opened:legacyCap(Object.keys(log).length+(gift?1:0));
+  return {slots,shelf,log,first:okDate(o.first)?o.first:todayStr,gift,opened:Math.min(MAX_SLOTS,Math.max(slots.length,op))};
 }
 function bkDecode(text){
   const s=String(text).replace(/\s+/g,'');
@@ -1451,7 +1467,7 @@ $('bkOut').onclick=async()=>{
 $('bkIn').onclick=()=>{
   if(bkPending){
     const c=bkPending;bkPending=null;
-    S.slots=c.slots;S.shelf=c.shelf;S.log=c.log;S.first=c.first;S.gift=c.gift;
+    S.slots=c.slots;S.shelf=c.shelf;S.log=c.log;S.first=c.first;S.gift=c.gift;S.opened=c.opened;
     pickFor=-1;pendingDel=null;shelvedMsg=false;
     save();render();
     $('bk').value='';$('bkMsg').textContent=t('bkDone');
