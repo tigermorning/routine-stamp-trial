@@ -291,7 +291,7 @@ def test_today_state_reaches_prompt_and_listen_rule_uses_it():
     assert r.status_code == 200
     sys_ = llm.systems[0]
     assert "[오늘 내 칸 상태(이 앱에서 읽은 사실)] 일어나기: 진한 도장(다 했어요) / 아침 먹기: 아직 도장을 안 찍음 / 몸 움직이기: 연한 도장(조금 했어요)" in sys_
-    assert "아직 도장을 안 찍은 칸이나 연한 도장을 찍은 칸 하나를 칸 이름으로 말하고" in sys_
+    assert "'도장을 안 찍으셨네요', '연한 도장을 찍으셨네요'" in sys_
 
 
 def test_today_state_is_cleaned_and_dropped_when_malformed():
