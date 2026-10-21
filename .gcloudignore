@@ -1,0 +1,15 @@
+# 소스 배포(gcloud run deploy --source)할 때 올리지 않을 파일
+.gcloudignore
+.git
+.gitignore
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.claude/
+server/tests/
+server/requirements.txt
+PRD.md
+README.md
+routine-app-pain-points.md

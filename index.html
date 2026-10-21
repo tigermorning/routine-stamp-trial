@@ -6,13 +6,13 @@
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#f2f7f5">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="도장판">
+<meta name="apple-mobile-web-app-title" content="루틴 도장">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%233fb8a5'/%3E%3Ccircle cx='16' cy='16' r='9.5' fill='none' stroke='white' stroke-width='2.2'/%3E%3Ccircle cx='16' cy='16' r='3' fill='white'/%3E%3C/svg%3E">
 <style>[hidden]{display:none!important}img{max-width:100%}html{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
-<title>도장판 체험판</title>
+<title>루틴 도장</title>
 <link href="https://fonts.googleapis.com/css2?family=Jua&family=Gowun+Dodum&display=swap" rel="stylesheet">
 <style>
-/* 레이아웃: 언어 선택 → 오늘 칸(큰 도장) → 쌓인 것 → 이번 주 점 → 내 칸 바꾸기(접힘) → 의견 보내기. 폰 한 열 기준 */
+/* 레이아웃: 위쪽 줄(안내·설정) → 오늘 칸(큰 도장) → 이번 주 점 → 쌓인 것 → 내 칸 바꾸기(접힘). 설정 화면(접힌 줄: 언어·색 테마·기록 옮기기·의견 보내기). 폰 한 열 기준 */
 :root{
   --bg:#f2f7f5; --card:#ffffff; --ink:#34484a; --soft:#69807f; --line:#dbe7e4;
   --accent:#3fb8a5; --accent-ink:#0b3a33; --sun-bg:#ffe08a; --sun-ink:#6b4f00; --shadow:0 6px 18px rgba(63,140,130,.14);
@@ -31,6 +31,10 @@
     --sun-bg:#8a6d1f; --sun-ink:#fff3c9; --shadow:0 6px 18px rgba(0,0,0,.35); --blob1:rgba(95,209,190,.12); --blob2:rgba(255,214,102,.08); color-scheme:dark;
   }
 }
+/* 색 테마(칸이 열릴 때 하나씩 열림). 어두운 시스템 설정보다 뒤에 두어 고른 테마가 이긴다. 글자·강조 명암비는 WCAG 계산으로 확인(2026-10-21) */
+:root[data-theme="peach"]{--bg:#fbf1ea;--card:#ffffff;--ink:#4a3631;--soft:#7d655d;--line:#efd9cc;--accent:#d06a49;--accent-ink:#2b0e05;--shadow:0 6px 18px rgba(190,110,80,.14);--blob1:rgba(208,106,73,.14);--blob2:rgba(255,214,102,.28);color-scheme:light}
+:root[data-theme="lavender"]{--bg:#f3f0fa;--card:#ffffff;--ink:#3a3350;--soft:#6f668c;--line:#dfd8f0;--accent:#8670d2;--accent-ink:#0d0620;--shadow:0 6px 18px rgba(120,100,190,.14);--blob1:rgba(134,112,210,.16);--blob2:rgba(255,214,102,.2);color-scheme:light}
+:root[data-theme="sunny"]{--bg:#fff7df;--card:#ffffff;--ink:#4a3f1f;--soft:#75683f;--line:#f0e2b8;--accent:#b98400;--accent-ink:#241a00;--shadow:0 6px 18px rgba(190,150,40,.15);--blob1:rgba(185,132,0,.14);--blob2:rgba(255,150,100,.14);color-scheme:light}
 :root[data-theme="dark"]{
   --bg:#1f2b2c; --card:#2a3a3b; --ink:#e6f0ee; --soft:#a3b8b4; --line:#3d5351; --accent:#5fd1be; --accent-ink:#06302a;
   --sun-bg:#8a6d1f; --sun-ink:#fff3c9; --shadow:0 6px 18px rgba(0,0,0,.35); --blob1:rgba(95,209,190,.12); --blob2:rgba(255,214,102,.08); color-scheme:dark;
@@ -41,25 +45,55 @@ body{margin:0;background-color:var(--bg);color:var(--ink);font-family:var(--body
   background-image:radial-gradient(circle at 10% 8%,var(--blob1) 0 90px,transparent 91px),radial-gradient(circle at 92% 16%,var(--blob2) 0 70px,transparent 71px);background-attachment:fixed}
 .wrap{max-width:640px;margin:0 auto}
 button{font-family:inherit;color:var(--ink)}
-h1{font-family:var(--display);font-weight:400;font-size:27px;margin:6px 0 2px;text-align:center;display:flex;align-items:center;justify-content:center;gap:10px}
+h1{font-family:var(--display);font-weight:400;font-size:27px;margin:6px 0 16px;text-align:center;display:flex;align-items:center;justify-content:center;gap:10px}
 .logo{width:30px;height:30px;flex:none}
 h2{font-family:var(--display);font-weight:400;font-size:19px;margin:0}
 :root[lang="zh-Hans"] h1,:root[lang="zh-Hans"] h2,:root[lang="zh-Hans"] .nums b,:root[lang="zh-Hant"] h1,:root[lang="zh-Hant"] h2,:root[lang="zh-Hant"] .nums b,:root[lang^="yue"] h1,:root[lang^="yue"] h2,:root[lang^="yue"] .nums b,:root[lang="vi"] h1,:root[lang="vi"] h2,:root[lang="vi"] .nums b{font-weight:700}
 .topbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:2px}
-.langmenu{position:relative;display:flex;justify-content:flex-end}
+.topbar #setBtn{margin-left:auto} /* 안내 버튼이 숨겨져도 설정 버튼은 오른쪽에 둔다 */
 .introcard{border-color:var(--accent)}
 .introcard p{margin:8px 0 0}
 .langbtn{display:inline-flex;align-items:center;gap:6px;font-size:14px;background:var(--card);border:2px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer}
 .langbtn[aria-expanded="true"]{border-color:var(--accent)}
-.langbtn .caret{font-size:11px;opacity:.7}
-.langlist{position:absolute;right:0;top:calc(100% + 6px);z-index:50;min-width:180px;max-height:min(60vh,380px);overflow-y:auto;display:flex;flex-direction:column;gap:2px;background:var(--card);border:2px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:6px}
-.langlist[hidden]{display:none}
-.langlist button{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:left;border:none;background:none;padding:9px 12px;border-radius:10px;font-size:15px;cursor:pointer}
-.langlist button:hover{background:color-mix(in srgb,var(--accent) 12%,var(--card))}
-.langlist button[aria-selected="true"]{background:color-mix(in srgb,var(--accent) 22%,var(--card))}
-.langlist button[aria-selected="true"]::after{content:"✓";font-size:13px}
-.langbtn:focus-visible,.langlist button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-.sub{text-align:center;color:var(--soft);margin:0 0 14px;font-size:15px;text-wrap:balance}
+.langbtn:focus-visible,.opt:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.sethd{font-weight:700;font-size:17px}
+.btn.danger{border-color:#c0392b}
+.btn.danger.on{background:#b3261e;border-color:#b3261e;color:#fff}
+.setrow{border-top:2px solid var(--line);padding:12px 0 4px;margin-top:10px}
+.setrow>summary{display:flex;align-items:center;gap:8px;cursor:pointer;list-style:none;padding-bottom:8px}
+.setrow>summary::-webkit-details-marker{display:none}
+.setrow>summary>:first-child{margin-right:auto}
+.setrow>summary::after{content:"▾";color:var(--soft);font-size:13px;transition:transform .15s}
+.setrow[open]>summary::after{transform:rotate(180deg)}
+.setrow>summary .val{color:var(--soft);font-size:14px}
+.setrow>summary h2{font-size:17px;margin:0}
+.setrow>summary:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:8px}
+.setrow .pillrow{padding-bottom:8px}
+#hpName,#keyIn{font:inherit;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px;min-width:0;flex:1 1 160px}
+.pillrow{display:flex;flex-wrap:wrap;gap:8px}
+.opt{font:inherit;font-size:14px;color:var(--ink);background:var(--card);border:2px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+.opt[aria-checked="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,var(--card))}
+.opt:disabled{opacity:.65;cursor:default}
+.opt small{font-size:12px;color:var(--soft)}
+.sw{width:14px;height:14px;border-radius:50%;border:1px solid var(--line);flex:none}
+.sw-base{background:linear-gradient(135deg,#f2f7f5 50%,#3fb8a5 50%)}
+.sw-peach{background:linear-gradient(135deg,#fbf1ea 50%,#d06a49 50%)}
+.sw-lavender{background:linear-gradient(135deg,#f3f0fa 50%,#8670d2 50%)}
+.sw-sunny{background:linear-gradient(135deg,#fff7df 50%,#b98400 50%)}
+.nextcolor{display:flex;align-items:center;gap:6px;margin:8px 0 0}
+.rtn{display:flex;align-items:center;gap:12px;padding:8px 0}
+.rtn+.rtn{border-top:1px solid var(--line)}
+.rico{width:36px;height:36px;flex:none;border-radius:50%;border:2px solid var(--c);background:color-mix(in srgb,var(--c) 18%,var(--card));display:grid;place-items:center;font-size:18px}
+.rico .ico{width:68%;height:68%;vertical-align:baseline}
+.rnm{flex:1;min-width:0;overflow-wrap:anywhere}
+.rdays{color:var(--soft);font-variant-numeric:tabular-nums;white-space:nowrap}
+.goals{margin-top:14px;padding-top:10px;border-top:2px solid var(--line);font-size:13px}
+.goals .goalscap{margin:0 0 4px;color:var(--soft);font-size:12px}
+.goals .unlockhd{font-size:13px;margin:8px 0 4px}
+.goals .pip{width:16px;height:16px}
+.goals .meter{height:10px;border-width:2px}
+.goals .mile{font-size:12px}
+.goals .miles{margin-top:6px;font-size:12px}
 .notice{background:var(--sun-bg);color:var(--sun-ink);border-radius:14px;padding:8px 12px;font-size:14px;margin:0 0 14px}
 .card{background:var(--card);border-radius:24px;box-shadow:var(--shadow);padding:18px;margin-bottom:16px;border:2px solid var(--line)}
 .row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
@@ -107,22 +141,68 @@ h2{font-family:var(--display);font-weight:400;font-size:19px;margin:0}
 .x{border:none;background:var(--line);border-radius:999px;min-width:28px;height:28px;cursor:pointer;font-size:13px;padding:0 8px}
 .picker{display:grid;grid-template-columns:repeat(auto-fill,minmax(54px,1fr));gap:8px;max-height:210px;overflow-y:auto;padding:8px 4px}
 .picker:empty{display:none}
+.chatlink{margin-top:14px}
+#goalCard .goals{margin:0;padding:0;border-top:0;font-size:14px}
+#goalCard .goalscap{margin:0 0 8px;font-size:18px;font-weight:700;color:var(--ink)}
+.wrap{padding-bottom:76px}
+.fab{position:fixed;right:16px;bottom:16px;height:56px;padding:0 20px 0 16px;border-radius:999px;border:0;background:var(--accent);color:var(--accent-ink);box-shadow:0 8px 22px rgba(0,0,0,.28);font:inherit;font-size:16px;font-weight:700;line-height:1;display:inline-flex;align-items:center;gap:8px;cursor:pointer;z-index:55}
+.fab .fi{font-size:24px;line-height:1}
+.fab::after{content:"";position:absolute;inset:-4px;border-radius:999px;border:3px solid var(--accent);opacity:0;pointer-events:none;animation:fabpulse 2.2s ease-out 4}
+.fab.seen::after{display:none}
+@keyframes fabpulse{0%{opacity:.75;transform:scale(1)}100%{opacity:0;transform:scale(1.22)}}
+@media (prefers-reduced-motion:reduce){.fab::after{animation:none}}
+.linkbtn{font:inherit;border:0;background:none;padding:0;margin-left:6px;color:var(--ink);font-weight:700;text-decoration:underline;cursor:pointer}
+.fab[hidden]{display:none}
+.fab:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+#chatView{position:fixed;right:16px;bottom:16px;width:min(400px,calc(100vw - 32px));max-height:calc(100dvh - 32px);z-index:60;display:flex;flex-direction:column}
+#chatView[hidden]{display:none}
+#chatView #chat{margin:0;min-height:0;overflow:auto;box-shadow:0 12px 40px rgba(0,0,0,.28)}
+#chatView #chLog{max-height:min(46vh,420px)}
+@media (max-width:640px){
+  #chatView{left:0;right:0;bottom:0;width:auto;max-height:86dvh}
+  #chatView #chat{border-radius:24px 24px 0 0}
+}
+.chrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.chrow input{flex:1 1 180px;min-width:0;font:inherit;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 14px}
+#chShare{margin-top:12px;padding:12px;border:2px dashed var(--line);border-radius:18px}
+#chLog{display:flex;flex-direction:column;gap:10px;margin-top:12px;max-height:55vh;overflow-y:auto;padding:2px}
+.bub{max-width:88%;padding:10px 14px;border-radius:18px;border:2px solid var(--line);background:var(--card);overflow-wrap:anywhere;white-space:pre-wrap}
+.bub.u{align-self:flex-end;background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.bub.a{align-self:flex-start}
+.bub small{display:block;margin-top:6px;font-size:12px;color:var(--soft);white-space:normal}
+.bub small a{color:inherit}
+.quest{margin-top:8px;padding:10px 12px;border:2px solid var(--accent);border-radius:14px;white-space:normal}
+.quest b{display:block;font-size:13px;margin-bottom:4px}
+.stepline{margin:12px 0 0;padding:8px 12px;border-radius:14px;background:color-mix(in srgb,var(--accent) 14%,var(--card));font-size:14px}
+.stepline b{margin-right:6px}
+.todobox{margin-top:14px;border-top:1px dashed var(--line);padding-top:10px}
+.todobox summary{cursor:pointer;font-weight:700}
+.todo{display:flex;gap:8px;align-items:center;margin-top:8px}
+.todo button.tk{flex:1 1 auto;text-align:left;font:inherit;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:14px;padding:6px 12px;cursor:pointer;overflow-wrap:anywhere}
+.todo button.tk.done{text-decoration:line-through;opacity:.6}
 .pk{border:2px solid var(--line);border-radius:14px;background:var(--card);padding:4px;cursor:pointer;min-width:0}
 .pk.on{border-color:var(--accent)}
 .pk svg{width:100%;height:auto;display:block}
+.ico.photo{border-radius:50%;object-fit:cover}
+.ico.emo{display:inline-grid;place-items:center;font-style:normal;line-height:1;font-size:.82em;overflow:hidden}
+.makerow{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.makerow input[type=text]{flex:1 1 140px;min-width:0;font:inherit;border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:6px 14px}
+.makerow label.btn{display:inline-block;cursor:pointer}
 textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);border-radius:18px;background:var(--card);color:var(--ink);padding:10px 14px;margin-top:10px;resize:vertical}
 .msg{font-size:14px;color:var(--soft);margin:8px 0 0;min-height:20px}
 .hintcard p{margin:0 0 10px}
 :root[lang="ko"] :is(.stat,.unlockhd,.msg,.hintcard p,.introcard p,.introcard h2,.big .st,.sub,.notice){word-break:keep-all}
-.nums{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
-.nums div{background:color-mix(in srgb,var(--accent) 14%,transparent);border-radius:18px;padding:10px 6px;text-align:center}
-.nums b{display:block;font-family:var(--display);font-weight:400;font-size:28px;line-height:1.2;font-variant-numeric:tabular-nums}
-.nums span{font-size:13px;color:var(--soft)}
 .unlockhd{margin:14px 0 6px;font-size:15px}
 .pips{display:flex;gap:6px;flex-wrap:wrap}
 .pip{width:22px;height:22px;border-radius:50%;border:2px solid var(--accent);display:inline-grid;place-items:center;font-size:12px;line-height:1}
 .pip.on{background:var(--accent)}
 .pip.gift{background:var(--sun-bg);border-color:var(--sun-bg)}
+.meter{height:14px;border-radius:7px;border:2px solid var(--accent);overflow:hidden}
+.meter i{display:block;height:100%;background:var(--accent)}
+.miles{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:10px;font-size:13px;color:var(--soft)}
+.mile{padding:1px 10px;border-radius:999px;border:2px solid var(--accent);font-variant-numeric:tabular-nums}
+.mile.done{background:var(--accent);color:var(--accent-ink)}
+.miles .milescap{flex-basis:100%}
 .fall{position:fixed;top:-40px;font-size:28px;pointer-events:none;z-index:99;animation:fall linear forwards}
 @keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.9}}
 @media (prefers-reduced-motion:reduce){.pop .stamp,.banner{animation:none}.fall{display:none}.bar>i{transition:none}}
@@ -132,33 +212,18 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 <div class="wrap">
   <div class="topbar">
   <button type="button" class="langbtn" id="introBtn"><span aria-hidden="true">ⓘ</span><span id="introBtnTxt"></span></button>
-  <div class="langmenu" id="langmenu">
-    <button type="button" class="langbtn" id="langBtn" aria-haspopup="listbox" aria-expanded="false" aria-controls="langList" aria-label="Language"><span aria-hidden="true">🌐</span><span id="langCur"></span><span class="caret" aria-hidden="true">▾</span></button>
-    <div class="langlist" id="langList" role="listbox" aria-label="Language" hidden>
-      <button type="button" role="option" data-l="ko">한국어</button>
-      <button type="button" role="option" data-l="en">English</button>
-      <button type="button" role="option" data-l="zh-Hans">简体中文</button>
-      <button type="button" role="option" data-l="zh-Hant">繁體中文</button>
-      <button type="button" role="option" data-l="yue">廣東話</button>
-      <button type="button" role="option" data-l="id">Bahasa Indonesia</button>
-      <button type="button" role="option" data-l="vi">Tiếng Việt</button>
-      <button type="button" role="option" data-l="es">Español</button>
-      <button type="button" role="option" data-l="fi">Suomi</button>
-      <button type="button" role="option" data-l="sv">Svenska</button>
-    </div>
-  </div>
+  <button type="button" class="langbtn" id="setBtn" aria-expanded="false" aria-controls="settingsView"><span aria-hidden="true">⚙</span><span id="setBtnTxt"></span></button>
   </div>
 
   <header>
-    <h1><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="var(--accent)"/><circle cx="16" cy="16" r="9.5" fill="none" stroke="var(--card)" stroke-width="2.2"/><circle cx="16" cy="16" r="3" fill="var(--card)"/></svg><span id="h1"></span></h1>
-    <p class="sub" id="sub"></p>
+    <h1><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="var(--accent)"/><circle cx="16" cy="16" r="9.5" fill="none" stroke="var(--card)" stroke-width="2.2"/><circle cx="16" cy="16" r="3" fill="var(--card)"/></svg><span id="h1"></span><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="var(--accent)"/><circle cx="16" cy="16" r="9.5" fill="none" stroke="var(--card)" stroke-width="2.2"/><circle cx="16" cy="16" r="3" fill="var(--card)"/></svg></h1>
     <p class="notice" id="notice" hidden></p>
   </header>
 
+  <div id="mainView">
   <section class="card introcard" id="intro" hidden>
     <h2 id="introTitle"></h2>
     <p id="introBody"></p>
-    <p class="stat" id="introAsk"></p>
     <p class="stat" id="introLang"></p>
     <div class="row" style="justify-content:flex-start;margin-top:12px">
       <button class="btn main" id="introGo" type="button"></button>
@@ -169,27 +234,25 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
   <section class="card hintcard" id="hint" hidden>
     <p id="hint1"></p>
     <p id="hint2"></p>
-    <p id="giftNote" hidden></p>
     <button class="btn main" id="hintOk" type="button"></button>
   </section>
 
   <section class="card" id="today"></section>
 
-  <section class="card" id="piled">
-    <h2 id="piledTitle"></h2>
-    <div class="nums">
-      <div><b id="nDays">0</b><span id="lbDays"></span></div>
-      <div><b id="nWeek">0</b><span id="lbWeek"></span></div>
-      <div><b id="nStamps">0</b><span id="lbStamps"></span></div>
-    </div>
-    <p class="stat" id="pileNote"></p>
-    <div id="unlock"></div>
-  </section>
-
   <section class="card">
     <h2 id="weekTitle"></h2>
     <div class="week" id="week"></div>
     <p class="stat" id="stat"></p>
+  </section>
+
+  <section class="card" id="piled">
+    <h2 id="piledTitle"></h2>
+    <div id="routines"></div>
+    <p class="stat" id="pileNote"></p>
+  </section>
+
+  <section class="card" id="goalCard">
+    <div id="unlock" class="goals"></div>
   </section>
 
   <section class="card">
@@ -198,33 +261,82 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
     <div id="edit" hidden>
       <div id="slots"></div>
       <div class="picker" id="picker"></div>
+      <div class="makerow" id="makeRow" hidden><input type="text" id="emojiIn" maxlength="8" autocomplete="off"><label class="btn" for="photoIn" id="photoLbl"></label><input type="file" id="photoIn" accept="image/*" hidden></div>
+      <div class="makerow" id="aiRow" hidden><button class="btn" id="sugBtn" type="button" hidden></button><button class="btn" id="aiGo" type="button"></button><button class="btn" id="aiStop" type="button" hidden></button></div>
       <p class="msg" id="slotMsg"></p>
       <button class="btn" id="addSlot" type="button"></button>
     </div>
   </section>
 
-  <section class="card" id="bkCard">
-    <h2 id="bkTitle"></h2>
-    <p class="stat" style="margin-top:6px" id="bkDesc"></p>
-    <textarea id="bk"></textarea>
-    <div class="row" style="margin-top:10px;justify-content:flex-start">
-      <button class="btn main" id="bkOut" type="button"></button>
-      <button class="btn" id="bkIn" type="button"></button>
-    </div>
-    <p class="msg" id="bkMsg" role="status"></p>
-  </section>
+  </div>
 
-  <section class="card" id="fbCard">
-    <h2 id="fbTitle"></h2>
-    <p class="stat" style="margin-top:6px" id="fbDesc"></p>
-    <textarea id="fb"></textarea>
-    <div class="row" style="margin-top:10px;justify-content:flex-start">
-      <button class="btn main" id="copyBtn" type="button"></button>
-      <a class="btn" id="formBtn" href="#" target="_blank" rel="noopener" hidden></a>
+  <button class="fab" id="chatFab" type="button" aria-controls="chatView" aria-expanded="false"><span class="fi" id="chFabIco" aria-hidden="true"></span><span id="chFabTxt"></span></button>
+  <div id="chatView" hidden>
+  <section class="card" id="chat">
+    <div class="row"><h2 id="chTitle"></h2><button class="btn" id="chBack" type="button"></button></div>
+    <p class="stat" id="chNotice"></p>
+    <p class="stat" id="chStyle"><span id="chStyleTxt"></span><button class="linkbtn" id="chStyleBtn" type="button"></button></p>
+    <div id="chMain">
+      <div id="chLog" role="log" aria-live="polite"></div>
+      <p class="msg" id="chMsg" role="status" aria-live="polite"></p>
+      <div class="chrow"><input id="chIn" maxlength="300" autocomplete="off"><button class="btn main" id="chSend" type="button"></button></div>
     </div>
-    <p class="msg" id="fbMsg"></p>
-    <p class="stat" id="fbHow"></p>
   </section>
+  </div>
+
+  <div id="settingsView" hidden>
+  <section class="card" id="settings">
+    <div class="row"><h2 id="setTitle"></h2><button class="btn" id="setBack" type="button"></button></div>
+    <details class="setrow" id="langRow">
+      <summary><span class="sethd" id="langCap"></span><span class="val" id="langVal"></span></summary>
+      <div class="pillrow" id="langPills" role="radiogroup"></div>
+    </details>
+    <details class="setrow" id="themeRow">
+      <summary><span class="sethd" id="themeCap"></span><span class="val" id="themeVal"></span></summary>
+      <div class="pillrow" id="themePills" role="radiogroup"></div>
+    </details>
+    <details class="setrow" id="fbCard">
+      <summary><h2 id="fbTitle"></h2></summary>
+      <p class="stat" style="margin-top:6px" id="fbDesc"></p>
+      <textarea id="fb"></textarea>
+      <div class="row" style="margin-top:10px;justify-content:flex-start">
+        <button class="btn main" id="copyBtn" type="button"></button>
+        <a class="btn" id="formBtn" href="#" target="_blank" rel="noopener" hidden></a>
+      </div>
+      <p class="msg" id="fbMsg"></p>
+      <p class="stat" id="fbHow"></p>
+    </details>
+    <details class="setrow" id="hpRow">
+      <summary><span class="sethd" id="hpCap"></span><span class="val" id="hpVal"></span></summary>
+      <p class="stat" id="hpNameCap"></p>
+      <div class="pillrow"><input id="hpName" maxlength="20" autocomplete="off"></div>
+      <p class="stat" id="hpSpeechCap"></p>
+      <div class="pillrow" id="hpSpeech" role="radiogroup"></div>
+      <p class="stat" id="hpEmojiCap"></p>
+      <div class="pillrow" id="hpEmoji" role="radiogroup"></div>
+    </details>
+    <details class="setrow" id="privRow">
+      <summary><span class="sethd" id="privCap"></span></summary>
+      <p class="stat" style="margin-top:2px" id="privBody"></p>
+    </details>
+    <details class="setrow" id="delRow">
+      <summary><span class="sethd" id="delCap"></span></summary>
+      <p class="stat" style="margin-top:2px" id="delBody"></p>
+      <div class="row" style="margin-top:10px;justify-content:flex-start">
+        <button class="btn danger" id="delBtn" type="button"></button>
+        <button class="btn" id="delCancel" type="button" hidden></button>
+      </div>
+      <p class="msg" id="delMsg" role="status"></p>
+    </details>
+    <details class="setrow" id="keyRow">
+      <summary><span class="sethd" id="keyCap"></span><span class="val" id="keyVal"></span></summary>
+      <p class="stat" id="keyState"></p>
+      <div class="pillrow"><input id="keyIn" type="password" autocomplete="off" maxlength="200"></div>
+      <div class="pillrow"><button class="opt" id="keySave" type="button"></button><button class="opt" id="keyClear" type="button"></button></div>
+      <p class="msg" id="keyMsg" role="status"></p>
+    </details>
+  </section>
+  </div>
 </div>
 
 <script>
@@ -235,14 +347,13 @@ const FEEDBACK_URL='';
    {n} {date} {t} {days} {gift} 는 값이 들어가는 자리. fbHow 는 복사한 글을 누구에게 보낼지 안내도 함께 담는다. */
 const L={
 ko:{
-  title:'도장판 체험판',
-  h1:'도장판 체험판',
+  title:'루틴 도장',
+  h1:'루틴 도장',
   sub:'오늘 칸 {n}개에 도장만 찍어요',
   subOne:"오늘 칸 {n}개에 도장만 찍어요",
   storageNotice:'이 브라우저에서는 기록이 저장되지 않을 수 있어요. 창을 닫으면 사라질 수 있어요.',
-  hint1:'계획표는 안 짜도 돼요. 오늘 한 일은 칸을 눌러 도장을 찍어요.',
+  hint1:'처음에는 계획표를 안 짜도 돼요. 시작이 엄두가 안 나는 사람은 오늘 한 일의 칸을 눌러 도장부터 찍어 보세요.',
   hint2:'한 번 누르면 진한 도장(다 했어요), 두 번 누르면 연한 도장(조금만 했어요)이에요. 연한 도장도 오늘은 한 걸로 쳐요.',
-  hintGift:'🎁 처음 열어 줘서 고마워요. 새 칸 열기에 하루를 미리 채워 뒀어요.',
   hintOk:'알겠어요',
   todayTitle:'오늘 · {date}',
   stDone:'다 했어요!',
@@ -250,16 +361,16 @@ ko:{
   stEmpty:'눌러서 도장 찍기',
   bannerPerfect:'🌈 오늘 도장 다 찍었어요!',
   bannerMini:'🌱 연한 도장으로 이어갔어요. 조금이라도 한 게 제일 중요해요.',
-  piledTitle:'쌓인 것',
-  nDays:'이어간 날',
-  nWeek:'최근 7일',
-  nStamps:'도장',
+  piledTitle:"내 루틴",
+  routineDay:"{n}일째", routineNone:"아직 시작 전", goalsCap:"열림 목표",
   pileNote:'쌓이기만 하고 줄어들지 않아요. 하루 빠져도 그대로예요.',
   unlockOpen:'새 칸이 열렸어요. 아래 "할 일 칸 바꾸기"에서 더해요.',
   unlockLeft:'새 칸까지 {n}일 남았어요',
   unlockLeftOne:'새 칸까지 {n}일 남았어요',
-  unlockGift:'첫 동그라미는 선물이에요. 처음 열어 줘서 미리 채워 뒀어요.',
   unlockAll:'새 칸이 다 열렸어요.',
+  unlockSoFar:'도장 {n}일째예요',
+  unlockSoFarOne:'도장 {n}일째예요',
+  milesCap:'칸이 하나씩 열려요',
   weekTitle:'이번 주',
   monthStat:'이번 달 {n}일 이어갔어요.',
   editTitle:'할 일 칸 바꾸기',
@@ -267,12 +378,55 @@ ko:{
   open:'열기',
   close:'닫기',
   picIcon:'그림 바꾸기',
+  picEmoji:"이모지로 도장 만들기", picPhoto:"📷 내 사진으로", photoFail:"이 사진을 열 수 없어요. 다른 사진을 골라 주세요.",
+  picAi:"✨ 이 이름으로 그려 줘", picSuggest:"어울리는 도장:", aiWait:"그리는 중이에요. 길면 1분쯤 걸려요.", aiFail:"지금은 그릴 수 없어요. 이모지나 사진을 써 주세요.", aiStop:"멈추기",
   slotAria:'칸 이름',
   delAsk:'지울까요?',
   needOne:'칸은 하나 이상 있어야 해요.',
+  chEntry:"💬 도우미와 얘기하기",
+  chTitle:"도우미",
+  chNotice:"루틴이 잘 안 이어질 때 같이 생각해 주는 AI예요. 상담이나 치료는 아니고 틀릴 수도 있어요.",
+  chFabTxt:"도우미", chStyleTxt:"말투와 이름은 설정에서 바꿀 수 있어요.", chStyleBtn:"설정 열기",
+  chShareAsk:"내 칸 이름과 도장 일수를 보여 주면 도우미가 더 잘 도와줘요. 보여 줄까요?",
+  chShareYes:"보여 줄게요",
+  chShareNo:"보여 주지 않을래요",
+  chPh:"요즘 루틴이 어때요?",
+  chSend:"보내기",
+  chWait:"생각하는 중이에요…",
+  chHello:"안녕하세요! 루틴이 잘 안 이어져서 고민이면 편하게 말해 주세요. 먼저 들어 볼게요.",
+  chTodoSum:"내 할 일 ({n})",
+  chTodoPh:"할 일 적기",
+  chTodoAdd:"추가",
+  chTodoNone:"아직 없어요.",
+  chTodoDel:"지우기",
+  chOrg:"정리해 달라고 하기",
+  chOrgMsg:"내 할 일을 정리해 주세요.",
+  chQuest:"오늘의 퀘스트",
+  chAccept:"받기",
+  chChange:"바꾸기",
+  chChangeMsg:"다른 퀘스트로 바꿔 주세요.",
+  chAdded:"오늘 화면에 올렸어요.", stepCap:"오늘의 한 걸음",
+  chEvFull:"근거: {src} · 원문 확인",
+  chEvPart:"근거: {src} · 원문 일부만 확인한 연구예요",
+  chEvAbs:"근거: {src} · 초록만 확인한 연구예요",
+  chNoEv:"이 고민에 보여 드릴 수 있는 연구 근거를 아직 못 찾았어요. 방법은 말하지 않고 이야기를 더 들어 볼게요.",
+  chScope:"그 이야기는 제가 도울 수 있는 범위를 넘어요. 마음이 많이 힘들거나 몸이 걱정되면 가까운 전문가나 공식 상담 기관에 이야기해 보세요. 루틴이 안 이어지는 고민이라면 계속 들어 드릴게요.",
+  chCrisis:"지금 많이 힘든 마음이 느껴져서 걱정돼요. 저는 AI라서 충분히 도와드릴 수 없지만, 자살예방상담전화 109나 정신건강위기상담전화 1577-0199(24시간)에 이야기하면 바로 들어 줄 사람이 있어요. 지금 위험한 상황이라면 112나 119에 연락해 주세요.",
+  chBusy:"도우미와 연결되지 않았어요. 잠시 뒤에 다시 해 주세요. 도장 찍기는 그대로 쓸 수 있어요.",
+  chCut:"끝까지 오지 않았어요. 다시 보내 주세요.",
+  chBlock:"근거 확인을 통과하지 못해서 이 답은 보여 드리지 않았어요. 다시 물어봐 주세요.",
+  chShareCap:"도우미에게 칸 이름·도장 일수 보여 주기",
+  chShareOn:"보여 줘요",
+  chShareOff:"안 보여 줘요",
+  chClear:"도우미 대화 지우기",
+  chClearAsk:"정말 지울까요? 한 번 더 눌러 주세요",
+  hpCap:"도우미 말투", hpName:"도우미 이름", hpNamePh:"이름 (비우면 기본)", hpSpeech:"말투", hpDef:"기본", hpCasual:"편한 말투 (반말)", hpPolite:"정중한 말투 (존댓말)", hpEmoji:"이모지", hpNone:"안 씀", hpSome:"가끔", hpOften:"자주",
+  keyCap:"내 API 키 (선택)", keyPh:"API 키 붙여넣기", keySave:"저장", keyClear:"키 지우기", keySet:"넣은 키: 끝 네 자리 {k}", keyNone:"아직 넣지 않았어요", keyDone:"저장했어요", keyBad:"키 모양이 맞지 않아요. 다시 확인해 주세요", keyMissing:"키가 필요해요. 설정 맨 아래 '내 API 키'에 넣어 주세요", keyInvalid:"넣은 키가 맞지 않아요. 설정에서 키를 확인해 주세요", keyLimit:"넣은 키의 사용 한도에 닿았어요. 키를 발급한 곳의 한도와 결제를 확인해 주세요",
+  chCleared:"지웠어요.",
   maxSix:'칸은 여섯 개까지예요.',
-  lockMsg:"도장을 찍은 날이 {t}일이 되면 칸이 하나 더 열려요. 지금 {days}이에요{gift}.",
-  lockGift:' (첫 칸 선물 1일 포함)',
+  lockMsg:"도장 {t}일째에 칸이 하나 더 열려요. 지금 {days}째예요{gift}.",
+  lockGift:' (첫 방문 선물 1일 포함)',
+  giftTag:" (🎁 첫 방문 선물 1일 포함)",
   dayCount:"{n}일",
   dayCountOne:"{n}일",
   addSlot:'+ 칸 더 열기',
@@ -283,39 +437,31 @@ ko:{
   formBtn:'폼으로 보내기',
   copied:'복사했어요. 이제 붙여 넣어서 보내 주세요.',
   copyFail:'자동 복사가 안 돼요. 선택된 글을 길게 눌러 복사해 주세요.',
-  bkTitle:"기록 옮기기",
-  bkDesc:"기록은 이 기기의 브라우저에만 있어요. 코드로 내보내 두면 폰을 바꾸거나 브라우저 데이터를 지운 뒤에도 다시 가져올 수 있어요.",
-  bkPlaceholder:"내보낸 기록 코드를 여기에 붙여 넣어요",
-  bkOut:"기록 코드 복사하기",
-  bkIn:"붙여 넣은 기록 가져오기",
-  bkOk:"네, 바꿀게요",
-  bkCopied:"복사했어요. 메모장이나 나에게 보내는 메시지에 붙여 넣어 두세요.",
-  bkCopyFail:"자동 복사가 안 돼요. 위 칸의 글을 길게 눌러 복사해 주세요.",
-  bkEmpty:"가져올 기록 코드를 먼저 붙여 넣어 주세요.",
-  bkBad:"읽을 수 없는 코드예요. 복사한 글을 통째로 붙여 넣었는지 확인해 주세요.",
-  bkAsk:"도장 찍은 날 {n}일, 칸 {m}개가 담긴 기록이에요. 지금 기록은 이 기록으로 바뀌어요. 괜찮다면 한 번 더 눌러 주세요.",
-  bkDone:"기록을 가져왔어요.",
   shelved:"칸을 빼도 쌓인 도장은 그대로 남아요.",
   fbHow:'복사할 때 쓴 날수와 도장 수가 글 끝에 같이 붙어요. 이 앱을 알려 준 사람에게 카카오톡이나 문자로 보내 주세요.',
-  introTitle:'체험판이에요. 써 보고 의견을 들려주세요',
-  introBody:'계획 짜다 지치는 사람도 계획에 치이지 않고 일단 시작해 볼 수 있게, 일부러 아주 단순하게 만들었어요. 3~7일만 써 보시고 모자란 점이나 헷갈린 점을 알려 주세요.',
-  introAsk:'칭찬보다 "여기서 막혔어요", "안 열게 됐어요" 같은 이야기가 더 큰 도움이 돼요.',
-  introLang:'말투나 문구가 어색한 곳이 있으면 그것도 알려 주세요.',
+  introTitle:'써 보고 의견을 들려주세요',
+  introBody:"계획 짜다 지치는 사람도 일단 시작해 볼 수 있게, 아주 단순하게 만들었어요. 설정과 기능 등 모든 면에서 선택지를 최소한으로 줄여, 이 앱이 '루틴 만들기'라는 목표에만 집중하도록 만들었습니다. 꾸준히 이어 갈수록 기능이 하나씩 열려서, 나중에는 일반 일정 앱처럼 쓸 수 있게 될 거예요. 써 보시고 필요한 점을 알려 주시면 고맙겠습니다.",
+  introLang:'',
   introGo:'의견 쓰러 가기',
   introClose:'닫기',
-  introBtn:'체험판 안내',
+  introBtn:'안내',
+  setBtn:"설정", setBack:"돌아가기", langCap:"언어", themeCap:"색 테마",
+  theme_base:"기본", theme_peach:"복숭아", theme_lavender:"라벤더", theme_sunny:"햇살", themeLocked:"{d}에 열려요",
+  nextColor:"다음 색",
+  privCap:"개인정보 안내", privBody:"계정도 로그인도 없어요. 도장 기록은 이 기기에만 저장돼요. 그래서 브라우저 데이터를 지우거나 폰을 바꾸면 기록이 사라져요. 도우미와 나눈 말은 답을 만들 때 AI 서비스에 전달되고, 이 앱 서버에는 저장되지 않아요. 이름·연락처 같은 개인정보는 적지 말아 주세요.",
+  delCap:"내 기록 지우기", delBody:"이 기기에 저장된 도장 기록, 칸, 설정, 도우미 대화를 모두 지우고 처음 상태로 돌아가요.",
+  delBtn:"내 기록 지우기", delYes:"네, 모두 지울게요", delCancel:"취소", delAsk:"도장 찍은 날 {n}일, 칸 {m}개가 모두 사라지고 되돌릴 수 없어요. 정말 지울까요?",
   slots:{wakeup:'일어나기',breakfast:'아침 먹기',move:'몸 움직이기'},
   icons:{wake:'기상',meal:'아침식사',walk:'아침 산책',eng:'영어',zh:'중국어',code:'코딩',ai:'AI 개발',hack:'해커톤',jp:'일본어',es:'스페인어',fa:'페르시아어',climb:'암벽등반',hyrox:'하이록스',marathon:'마라톤',rowing:'조정',boxing:'권투',tennis:'테니스',golf:'골프',bowling:'볼링',walkrun:'걷기·달리기',strength:'근력',yoga:'요가',swimbike:'수영·자전거',read:'독서',orig:'원서',origwin:'원서 성공'}
 },
 en:{
-  title:'Routine Stamp Board · trial',
+  title:'Routine Stamp Board',
   h1:'Routine Stamp Board',
   sub:'{n} boxes today. All you do is stamp.',
   subOne:"{n} box today. All you do is stamp.",
   storageNotice:"This browser might not save your progress. If you close the tab, it could disappear.",
-  hint1:"No planner needed. When you've done something, tap its box to stamp it.",
+  hint1:"At first, you don't need a planner. If starting feels like too much, just tap the box for something you did today and stamp it.",
   hint2:"Tap once for a solid stamp (did it all). Tap twice for a light one (did a little). A light stamp still counts as done for today.",
-  hintGift:"🎁 Thanks for stopping by. One day toward your next box is already filled in.",
   hintOk:'Got it',
   todayTitle:'Today · {date}',
   stDone:'Did it all!',
@@ -323,16 +469,16 @@ en:{
   stEmpty:'Tap to stamp',
   bannerPerfect:'🌈 All stamped for today!',
   bannerMini:'🌱 A light stamp keeps it going. Doing a little is what counts.',
-  piledTitle:'So far',
-  nDays:'Days kept up',
-  nWeek:'Last 7 days',
-  nStamps:'Stamps',
+  piledTitle:"My routines",
+  routineDay:"Day {n}", routineNone:"Not started", goalsCap:"Unlock goals",
   pileNote:"These only go up. Skip a day and they stay right where they are.",
   unlockOpen:'A new box just opened. Add it under "My boxes" below.',
   unlockLeft:'{n} more days until your next box',
   unlockLeftOne:'{n} more day until your next box',
-  unlockGift:"The first dot is a gift, filled in for showing up.",
   unlockAll:'Every box is unlocked.',
+  unlockSoFar:'{n} days stamped so far',
+  unlockSoFarOne:'{n} day stamped so far',
+  milesCap:'A new box opens on',
   weekTitle:'This week',
   monthStat:'Days this month: {n}',
   editTitle:'My boxes',
@@ -340,12 +486,55 @@ en:{
   open:'Open',
   close:'Close',
   picIcon:'Change picture',
+  picEmoji:"Type an emoji for your stamp", picPhoto:"📷 Use my photo", photoFail:"Couldn't open this photo. Please pick another.",
+  picAi:"✨ Draw one from the name", picSuggest:"Suggested stamp:", aiWait:"Drawing… this can take up to a minute.", aiFail:"Can't draw right now. Please use an emoji or a photo.", aiStop:"Stop",
   slotAria:'Box name',
   delAsk:'Delete?',
   needOne:'You need at least one box.',
+  chEntry:"💬 Chat with the helper",
+  chTitle:"Helper",
+  chNotice:"An AI that thinks with you when a routine isn't sticking. It isn't counseling or treatment, and it can be wrong.",
+  chFabTxt:"Helper", chStyleTxt:"You can change the tone and name in Settings.", chStyleBtn:"Open Settings",
+  chShareAsk:"If you show your box names and stamp days, the helper can help better. Show them?",
+  chShareYes:"Yes, show them",
+  chShareNo:"No, don't show",
+  chPh:"How's your routine going?",
+  chSend:"Send",
+  chWait:"Thinking…",
+  chHello:"Hi! If it's hard to keep a routine going, tell me about it. I'll listen first.",
+  chTodoSum:"My to-dos ({n})",
+  chTodoPh:"Add a to-do",
+  chTodoAdd:"Add",
+  chTodoNone:"Nothing yet.",
+  chTodoDel:"Remove",
+  chOrg:"Ask to sort them out",
+  chOrgMsg:"Please sort out my to-dos.",
+  chQuest:"Today's quest",
+  chAccept:"Take it",
+  chChange:"Swap it",
+  chChangeMsg:"Please give me a different quest.",
+  chAdded:"Added to today's screen.", stepCap:"Today's one step",
+  chEvFull:"Basis: {src} · full text checked",
+  chEvPart:"Basis: {src} · only part of the full text checked",
+  chEvAbs:"Basis: {src} · only the abstract was checked",
+  chNoEv:"I haven't found research evidence I can show for this. I won't suggest methods; let me keep listening.",
+  chScope:"That's beyond what I can help with. If you're struggling or worried about your health, please talk to a nearby professional or an official support service. If it's about a routine that won't stick, I'm happy to keep listening.",
+  chCrisis:"I'm worried about you. I'm an AI and can't give you the help you deserve, but please reach out right now to a local crisis line or emergency services. You don't have to go through this alone.",
+  chBusy:"Couldn't reach the helper. Please try again in a moment. Stamping still works.",
+  chCut:"The reply didn't finish. Please send it again.",
+  chBlock:"That reply didn't pass the evidence check, so I'm not showing it. Please ask again.",
+  chShareCap:"Show the helper my box names and stamp days",
+  chShareOn:"Showing",
+  chShareOff:"Not showing",
+  chClear:"Delete helper chat",
+  chClearAsk:"Really delete? Tap once more",
+  hpCap:"Helper style", hpName:"Helper name", hpNamePh:"Name (blank = default)", hpSpeech:"Tone", hpDef:"Default", hpCasual:"Casual", hpPolite:"Polite", hpEmoji:"Emoji", hpNone:"None", hpSome:"Sometimes", hpOften:"Often",
+  keyCap:"My API key (optional)", keyPh:"Paste API key", keySave:"Save", keyClear:"Remove key", keySet:"Key added: last four {k}", keyNone:"Not added yet", keyDone:"Saved", keyBad:"That doesn't look like a key. Please check it", keyMissing:"A key is needed. Add it under 'My API key' at the bottom of Settings", keyInvalid:"The key you added isn't valid. Please check it in Settings", keyLimit:"Your key hit its usage limit. Check the limit and billing where the key was issued",
+  chCleared:"Deleted.",
   maxSix:'Six boxes is the limit.',
   lockMsg:"Stamp on {t} different days and another box opens. So far: {days}{gift}.",
   lockGift:' (including the 1-day gift)',
+  giftTag:" (🎁 includes a 1-day first-visit gift)",
   dayCount:"{n} days",
   dayCountOne:"{n} day",
   addSlot:'+ Add a box',
@@ -356,39 +545,31 @@ en:{
   formBtn:'Send via form',
   copied:'Copied. Now paste it into a message and send it over.',
   copyFail:"Auto-copy didn't work. Press and hold the selected text to copy it.",
-  bkTitle:"Move my record",
-  bkDesc:"Your record only lives in this browser. Save it as a code and you can bring it back after switching phones or clearing browser data.",
-  bkPlaceholder:"Paste a saved code here",
-  bkOut:"Copy my record code",
-  bkIn:"Load the pasted code",
-  bkOk:"Yes, replace it",
-  bkCopied:"Copied. Paste it into a note or a message to yourself and keep it.",
-  bkCopyFail:"Auto-copy didn't work. Press and hold the text above to copy it.",
-  bkEmpty:"Paste a saved code first.",
-  bkBad:"Couldn't read that code. Make sure you pasted the whole thing.",
-  bkAsk:"Stamped days in this code: {n}. Boxes: {m}. It will replace your current record. Tap again if that's okay.",
-  bkDone:"Record loaded.",
   shelved:"Taking a box away keeps the stamps you already collected.",
   fbHow:'A few usage numbers get added to the end when you copy. Send it to whoever shared this app with you, by text or chat.',
-  introTitle:"A trial version. Try it and share how it goes",
-  introBody:"It's deliberately simple, so even if planning wears you out, you can just start. Try it for 3 to 7 days, then let us know what felt missing or confusing.",
-  introAsk:'Praise is nice, but "I got stuck here" or "I stopped opening it" helps far more.',
+  introTitle:"Try it and share how it goes",
+  introBody:"We made it very simple so that even people who get worn out by planning can just start. We kept choices to a minimum everywhere, from settings to features, so the app stays focused on one goal: building a routine. The longer you keep going, the more features unlock one by one, until you can use it like an everyday schedule app. Give it a try and let us know what you need.",
   introLang:'If any wording sounds off or unnatural, please say so too.',
   introGo:'Write feedback',
   introClose:'Close',
-  introBtn:'About this trial',
+  introBtn:'Guide',
+  setBtn:"Settings", setBack:"Back", langCap:"Language", themeCap:"Color theme",
+  theme_base:"Default", theme_peach:"Peach", theme_lavender:"Lavender", theme_sunny:"Sunshine", themeLocked:"Opens on {d}",
+  nextColor:"Next color",
+  privCap:"Privacy", privBody:"There are no accounts or logins. Your stamps are saved only on this device, so clearing browser data or switching phones erases them. What you say to the helper is passed to an AI service to write its reply, and this app's server doesn't store it. Please don't write personal details like your name or contact info.",
+  delCap:"Delete my record", delBody:"Erases the stamp record, boxes, settings and helper chat saved on this device and returns the app to its first-run state.",
+  delBtn:"Delete my record", delYes:"Yes, delete everything", delCancel:"Cancel", delAsk:"{n} stamped days and {m} boxes will be erased for good. Delete them?",
   slots:{wakeup:'Get up',breakfast:'Eat breakfast',move:'Move around'},
   icons:{wake:'Waking up',meal:'Breakfast',walk:'Morning walk',eng:'English',zh:'Chinese',code:'Coding',ai:'AI dev',hack:'Hackathon',jp:'Japanese',es:'Spanish',fa:'Persian',climb:'Climbing',hyrox:'Hyrox',marathon:'Marathon',rowing:'Rowing',boxing:'Boxing',tennis:'Tennis',golf:'Golf',bowling:'Bowling',walkrun:'Walk or run',strength:'Strength',yoga:'Yoga',swimbike:'Swim or bike',read:'Reading',orig:'Book in original',origwin:'Book finished'}
 },
 'zh-Hans':{
-  title:'习惯盖章本 · 体验版',
+  title:'习惯盖章本',
   h1:'习惯盖章本',
   sub:'今天 {n} 格，盖章就行',
   subOne:"今天 {n} 格，盖章就行",
   storageNotice:'这个浏览器可能存不住记录，关掉页面记录可能就没了。',
-  hint1:'不用排计划表。做完一件事，点一下它的格子就盖章。',
+  hint1:'一开始不用排计划表。觉得难以开始的话，就点一下今天做完的那件事的格子，先盖个章。',
   hint2:'点一下是深色章（都做完了），点两下是淡淡的章（只做了一点）。淡淡的章也算今天做过了。',
-  hintGift:'🎁 谢谢你第一次打开。解锁新格子的进度，先帮你填好了一天。',
   hintOk:'知道了',
   todayTitle:'今天 · {date}',
   stDone:'都做完了！',
@@ -396,16 +577,16 @@ en:{
   stEmpty:'点一下盖章',
   bannerPerfect:'🌈 今天的章都盖完啦！',
   bannerMini:'🌱 淡淡的章也算接上了。哪怕只做一点，也比没做强。',
-  piledTitle:'已经攒下的',
-  nDays:'盖章天数',
-  nWeek:'最近 7 天',
-  nStamps:'盖的章',
+  piledTitle:"我的习惯",
+  routineDay:"第 {n} 天", routineNone:"还没开始", goalsCap:"解锁目标",
   pileNote:'只会越攒越多，不会减少。漏一天，攒下的也不会少。',
   unlockOpen:'新格子开了！到下面的“我的格子”里加上。',
   unlockLeft:'离新格子还有 {n} 天',
   unlockLeftOne:'离新格子还有 {n} 天',
-  unlockGift:'第一个圆点是送你的，来了就先帮你填上。',
   unlockAll:'格子都解锁啦。',
+  unlockSoFar:'已经盖章 {n} 天',
+  unlockSoFarOne:'已经盖章 {n} 天',
+  milesCap:'到了这些天，就多开一个格子',
   weekTitle:'这一周',
   monthStat:'这个月有 {n} 天盖了章。',
   editTitle:'我的格子',
@@ -413,12 +594,55 @@ en:{
   open:'展开',
   close:'收起',
   picIcon:'换图案',
+  picEmoji:"输入表情做成图章", picPhoto:"📷 用我的照片", photoFail:"打不开这张照片，请换一张。",
+  picAi:"✨ 按名称画一个", picSuggest:"适合的图章：", aiWait:"正在画，最长可能要一分钟。", aiFail:"现在画不了，请用表情或照片。", aiStop:"停止",
   slotAria:'格子名称',
   delAsk:'删除？',
   needOne:'至少要留一个格子。',
+  chEntry:"💬 和小帮手聊聊",
+  chTitle:"小帮手",
+  chNotice:"这是在习惯难以坚持时陪你一起想办法的 AI。它不是心理咨询或治疗，也可能出错。",
+  chFabTxt:"小帮手", chStyleTxt:"语气和名字可以在设置里更改。", chStyleBtn:"打开设置",
+  chShareAsk:"让小帮手看到格子名称和盖章天数，它能帮得更好。要给它看吗？",
+  chShareYes:"好，给它看",
+  chShareNo:"不给看",
+  chPh:"最近习惯坚持得怎么样？",
+  chSend:"发送",
+  chWait:"想一想…",
+  chHello:"你好！如果习惯总是坚持不下去，可以放心跟我说，我先听你讲。",
+  chTodoSum:"我的待办（{n}）",
+  chTodoPh:"写下待办",
+  chTodoAdd:"添加",
+  chTodoNone:"还没有。",
+  chTodoDel:"删除",
+  chOrg:"请它帮我整理",
+  chOrgMsg:"请帮我整理一下待办。",
+  chQuest:"今日任务",
+  chAccept:"接受",
+  chChange:"换一个",
+  chChangeMsg:"请换一个任务。",
+  chAdded:"已放到今天的页面。", stepCap:"今天的一小步",
+  chEvFull:"依据：{src} · 已核对全文",
+  chEvPart:"依据：{src} · 只核对了部分全文",
+  chEvAbs:"依据：{src} · 只核对了摘要",
+  chNoEv:"关于这个烦恼，我暂时没找到可以拿出来的研究依据。我先不给方法，继续听你说。",
+  chScope:"这个话题超出了我能帮忙的范围。如果你心里很难受或担心身体，请向身边的专业人士或官方求助机构倾诉。如果是习惯坚持不下去的烦恼，我会继续听你说。",
+  chCrisis:"我很担心你现在的状态。我只是 AI，没办法给你足够的帮助，请马上联系当地的心理援助热线或紧急求助电话。你不用一个人扛着。",
+  chBusy:"没能连上小帮手，请稍后再试。盖章功能不受影响。",
+  chCut:"回复没有完整收到，请再发一次。",
+  chBlock:"这条回复没有通过依据核对，所以不显示。请再问一次。",
+  chShareCap:"让小帮手看到格子名称和盖章天数",
+  chShareOn:"给看",
+  chShareOff:"不给看",
+  chClear:"删除小帮手聊天",
+  chClearAsk:"确定删除吗？请再按一次",
+  hpCap:"小帮手语气", hpName:"小帮手名字", hpNamePh:"名字（留空为默认）", hpSpeech:"语气", hpDef:"默认", hpCasual:"随意", hpPolite:"礼貌", hpEmoji:"表情", hpNone:"不用", hpSome:"偶尔", hpOften:"常用",
+  keyCap:"我的 API 密钥（可选）", keyPh:"粘贴 API 密钥", keySave:"保存", keyClear:"删除密钥", keySet:"已填入密钥：末四位 {k}", keyNone:"还没有填入", keyDone:"已保存", keyBad:"密钥格式不对，请再检查", keyMissing:"需要密钥。请在设置最下方的“我的 API 密钥”中填入", keyInvalid:"填入的密钥无效，请在设置中检查", keyLimit:"填入的密钥已达使用上限，请检查发行该密钥的平台的额度和付款",
+  chCleared:"已删除。",
   maxSix:'格子最多六个。',
   lockMsg:"盖章满 {t} 天，就会多开一个格子。现在是 {days}{gift}。",
   lockGift:'（含送你的 1 天）',
+  giftTag:"（🎁 含首次到访的 1 天礼物）",
   dayCount:"{n} 天",
   dayCountOne:"{n} 天",
   addSlot:'+ 加一个格子',
@@ -429,39 +653,31 @@ en:{
   formBtn:'用表单提交',
   copied:'复制好了，粘贴发给我们就行。',
   copyFail:'自动复制没成功。长按选中的文字，手动复制一下。',
-  bkTitle:"转移记录",
-  bkDesc:"记录只存在这个浏览器里。先导出成一串代码，换手机或清了浏览器数据之后还能再导入回来。",
-  bkPlaceholder:"把导出的记录代码粘贴到这里",
-  bkOut:"复制记录代码",
-  bkIn:"导入粘贴的记录",
-  bkOk:"好，替换掉",
-  bkCopied:"复制好了。粘贴到备忘录或发给自己的消息里存着。",
-  bkCopyFail:"自动复制没成功。长按上面的文字，手动复制一下。",
-  bkEmpty:"先把记录代码粘贴进来。",
-  bkBad:"这串代码读不出来。看看是不是整段都粘贴了。",
-  bkAsk:"这份记录里盖过章的天数：{n}，格子：{m}。导入后会替换现在的记录。没问题的话再点一次。",
-  bkDone:"记录导入好了。",
   shelved:"拿掉格子，已经盖下的章也还在。",
   fbHow:'复制时，末尾会附上你用了几天、盖了几个章。微信或短信发给把这个应用介绍给你的人就行。',
-  introTitle:'这是体验版，欢迎试用后留下意见',
-  introBody:'我们特意做得很简单，一做计划就累的人，也能不被计划压着，先开始再说。试用三到七天，把觉得缺的、没看懂的地方告诉我们。',
-  introAsk:'比起夸奖，“卡在这里了”“后来就不打开了”这种话更有帮助。',
+  introTitle:'欢迎试用后留下意见',
+  introBody:"我们把它做得很简单，让一做计划就累的人也能先开始。从设置到功能，各方面都把选择减到最少，让这个应用只专注于“建立习惯”这一个目标。越是坚持，功能就会一个个开启，以后可以像普通日程应用一样使用。试用之后，请告诉我们你需要什么。",
   introLang:'如果哪句话读起来别扭、不自然，也请告诉我们。',
   introGo:'去写意见',
   introClose:'关闭',
-  introBtn:'体验版说明',
+  introBtn:'使用说明',
+  setBtn:"设置", setBack:"返回", langCap:"语言", themeCap:"颜色主题",
+  theme_base:"默认", theme_peach:"蜜桃", theme_lavender:"薰衣草", theme_sunny:"阳光", themeLocked:"{d}时开启",
+  nextColor:"下一个颜色",
+  privCap:"隐私说明", privBody:"没有账号，也不用登录。盖章记录只保存在这台设备上，所以清除浏览器数据或换手机后记录会消失。你和小帮手说的话会在生成回答时传给 AI 服务，本应用的服务器不会保存。请不要写姓名、联系方式等个人信息。",
+  delCap:"删除我的记录", delBody:"清除这台设备上保存的盖章记录、格子、设置和小帮手聊天，回到最初的状态。",
+  delBtn:"删除我的记录", delYes:"是的，全部删除", delCancel:"取消", delAsk:"盖章天数 {n} 天、格子 {m} 个会全部消失，无法恢复。确定删除吗？",
   slots:{wakeup:'起床',breakfast:'吃早饭',move:'动一动'},
   icons:{wake:'起床',meal:'早餐',walk:'早上散步',eng:'英语',zh:'中文',code:'编程',ai:'AI 开发',hack:'黑客松',jp:'日语',es:'西班牙语',fa:'波斯语',climb:'攀岩',hyrox:'Hyrox',marathon:'马拉松',rowing:'赛艇',boxing:'拳击',tennis:'网球',golf:'高尔夫',bowling:'保龄球',walkrun:'走路·跑步',strength:'力量训练',yoga:'瑜伽',swimbike:'游泳·骑车',read:'读书',orig:'读原版书',origwin:'原版书读完了'}
 },
 'zh-Hant':{
-  title:'習慣蓋章本 · 體驗版',
+  title:'習慣蓋章本',
   h1:'習慣蓋章本',
   sub:'今天 {n} 格，蓋章就好',
   subOne:"今天 {n} 格，蓋章就好",
   storageNotice:'這個瀏覽器可能存不住紀錄，關掉頁面紀錄可能就不見了。',
-  hint1:'不用排計畫表。做完一件事，點一下它的格子就蓋章。',
+  hint1:'一開始不用排計畫表。覺得很難開始的話，就點一下今天做完的那件事的格子，先蓋個章。',
   hint2:'點一下是深色章（都做完了），點兩下是淡淡的章（只做了一點）。淡淡的章也算今天有做。',
-  hintGift:'🎁 謝謝你第一次打開。解鎖新格子的進度，先幫你填好一天了。',
   hintOk:'知道了',
   todayTitle:'今天 · {date}',
   stDone:'都做完了！',
@@ -469,16 +685,16 @@ en:{
   stEmpty:'點一下蓋章',
   bannerPerfect:'🌈 今天的章都蓋完囉！',
   bannerMini:'🌱 淡淡的章也算接上了。哪怕只做一點，也比沒做好。',
-  piledTitle:'累積下來的',
-  nDays:'有蓋章的天數',
-  nWeek:'最近 7 天',
-  nStamps:'蓋的章',
+  piledTitle:"我的習慣",
+  routineDay:"第 {n} 天", routineNone:"還沒開始", goalsCap:"解鎖目標",
   pileNote:'只會越累積越多，不會減少。漏一天也不會少。',
   unlockOpen:'新格子開了！到下面的「我的格子」裡加上。',
   unlockLeft:'再過 {n} 天，開一個新格子',
   unlockLeftOne:'再過 {n} 天，開一個新格子',
-  unlockGift:'第一個圓點是送你的，來了就先幫你填上。',
   unlockAll:'格子都解鎖囉。',
+  unlockSoFar:'已經蓋章 {n} 天',
+  unlockSoFarOne:'已經蓋章 {n} 天',
+  milesCap:'到了這些天，就多開一個格子',
   weekTitle:'這一週',
   monthStat:'這個月有 {n} 天蓋了章。',
   editTitle:'我的格子',
@@ -486,12 +702,55 @@ en:{
   open:'展開',
   close:'收起',
   picIcon:'換圖案',
+  picEmoji:"輸入表情符號做成印章", picPhoto:"📷 用我的照片", photoFail:"打不開這張照片，請換一張。",
+  picAi:"✨ 依名稱畫一個", picSuggest:"適合的印章：", aiWait:"正在畫，最長可能要一分鐘。", aiFail:"現在畫不了，請用表情符號或照片。", aiStop:"停止",
   slotAria:'格子名稱',
   delAsk:'刪除？',
   needOne:'至少要留一個格子。',
+  chEntry:"💬 和小幫手聊聊",
+  chTitle:"小幫手",
+  chNotice:"這是在習慣難以持續時陪你一起想辦法的 AI。它不是諮商或治療，也可能出錯。",
+  chFabTxt:"小幫手", chStyleTxt:"語氣和名字可以在設定裡更改。", chStyleBtn:"開啟設定",
+  chShareAsk:"讓小幫手看到格子名稱和蓋章天數，它能幫得更好。要給它看嗎？",
+  chShareYes:"好，給它看",
+  chShareNo:"不給看",
+  chPh:"最近習慣堅持得怎麼樣？",
+  chSend:"傳送",
+  chWait:"想一想…",
+  chHello:"你好！如果習慣總是堅持不下去，可以放心跟我說，我先聽你講。",
+  chTodoSum:"我的待辦（{n}）",
+  chTodoPh:"寫下待辦",
+  chTodoAdd:"新增",
+  chTodoNone:"還沒有。",
+  chTodoDel:"刪除",
+  chOrg:"請它幫我整理",
+  chOrgMsg:"請幫我整理一下待辦。",
+  chQuest:"今日任務",
+  chAccept:"接受",
+  chChange:"換一個",
+  chChangeMsg:"請換一個任務。",
+  chAdded:"已放到今天的畫面。", stepCap:"今天的一小步",
+  chEvFull:"依據：{src} · 已核對全文",
+  chEvPart:"依據：{src} · 只核對了部分全文",
+  chEvAbs:"依據：{src} · 只核對了摘要",
+  chNoEv:"關於這個煩惱，我暫時沒找到可以拿出來的研究依據。我先不給方法，繼續聽你說。",
+  chScope:"這個話題超出了我能幫忙的範圍。如果你心裡很難受或擔心身體，請向身邊的專業人士或官方求助機構傾訴。如果是習慣堅持不下去的煩惱，我會繼續聽你說。",
+  chCrisis:"我很擔心你現在的狀態。我只是 AI，沒辦法給你足夠的幫助，請馬上聯絡當地的心理援助專線或緊急求助電話。你不用一個人扛著。",
+  chBusy:"沒能連上小幫手，請稍後再試。蓋章功能不受影響。",
+  chCut:"回覆沒有完整收到，請再傳一次。",
+  chBlock:"這則回覆沒有通過依據核對，所以不顯示。請再問一次。",
+  chShareCap:"讓小幫手看到格子名稱和蓋章天數",
+  chShareOn:"給看",
+  chShareOff:"不給看",
+  chClear:"刪除小幫手聊天",
+  chClearAsk:"確定刪除嗎？請再按一次",
+  hpCap:"小幫手語氣", hpName:"小幫手名字", hpNamePh:"名字（留空為預設）", hpSpeech:"語氣", hpDef:"預設", hpCasual:"隨意", hpPolite:"禮貌", hpEmoji:"表情符號", hpNone:"不用", hpSome:"偶爾", hpOften:"常用",
+  keyCap:"我的 API 金鑰（選填）", keyPh:"貼上 API 金鑰", keySave:"儲存", keyClear:"刪除金鑰", keySet:"已填入金鑰：末四碼 {k}", keyNone:"還沒有填入", keyDone:"已儲存", keyBad:"金鑰格式不對，請再檢查", keyMissing:"需要金鑰。請在設定最下方的「我的 API 金鑰」中填入", keyInvalid:"填入的金鑰無效，請在設定中檢查", keyLimit:"填入的金鑰已達使用上限，請檢查發行該金鑰的平台的額度和付款",
+  chCleared:"已刪除。",
   maxSix:'格子最多六個。',
   lockMsg:"蓋章滿 {t} 天，就會多開一個格子。現在是 {days}{gift}。",
   lockGift:'（含送你的 1 天）',
+  giftTag:"（🎁 含首次到訪的 1 天禮物）",
   dayCount:"{n} 天",
   dayCountOne:"{n} 天",
   addSlot:'+ 加一個格子',
@@ -502,39 +761,31 @@ en:{
   formBtn:'用表單送出',
   copied:'複製好了，貼上傳給我們就好。',
   copyFail:'自動複製沒成功。長按選取的文字，手動複製一下。',
-  bkTitle:"轉移紀錄",
-  bkDesc:"紀錄只存在這個瀏覽器裡。先匯出成一串代碼，換手機或清掉瀏覽器資料之後還能再匯入回來。",
-  bkPlaceholder:"把匯出的紀錄代碼貼在這裡",
-  bkOut:"複製紀錄代碼",
-  bkIn:"匯入貼上的紀錄",
-  bkOk:"好，替換掉",
-  bkCopied:"複製好了。貼到備忘錄或傳給自己的訊息裡存著。",
-  bkCopyFail:"自動複製沒成功。長按上面的文字，手動複製一下。",
-  bkEmpty:"先把紀錄代碼貼進來。",
-  bkBad:"這串代碼讀不出來。看看是不是整段都貼了。",
-  bkAsk:"這份紀錄裡蓋過章的天數：{n}，格子：{m}。匯入後會取代現在的紀錄。沒問題的話再按一次。",
-  bkDone:"紀錄匯入好了。",
   shelved:"拿掉格子，已經蓋下的章也還在。",
   fbHow:'複製時，使用天數之類的幾個數字會一起附在最後。傳給把這個 App 介紹給你的人就好。',
-  introTitle:'這是體驗版，歡迎試用後留下意見',
-  introBody:'特地做得很簡單，給排計畫排到累的人，不用被計畫壓著，先開始再說。試用三到七天，再告訴我們哪裡不夠、哪裡看不懂。',
-  introAsk:'比起稱讚，「卡在這裡了」「後來就不開了」這種話更有幫助。',
+  introTitle:'歡迎試用後留下意見',
+  introBody:"我們把它做得很簡單，讓一排計畫就累的人也能先開始。從設定到功能，各方面都把選擇減到最少，讓這個應用只專注於「建立習慣」這一個目標。越是堅持，功能就會一個個開啟，之後可以像一般行程應用一樣使用。試用之後，請告訴我們你需要什麼。",
   introLang:'如果哪句話讀起來彆扭、不自然，也請告訴我們。',
   introGo:'去寫意見',
   introClose:'關閉',
-  introBtn:'體驗版說明',
+  introBtn:'使用說明',
+  setBtn:"設定", setBack:"返回", langCap:"語言", themeCap:"顏色主題",
+  theme_base:"預設", theme_peach:"蜜桃", theme_lavender:"薰衣草", theme_sunny:"陽光", themeLocked:"{d}時開啟",
+  nextColor:"下一個顏色",
+  privCap:"隱私說明", privBody:"沒有帳號，也不用登入。蓋章紀錄只儲存在這台裝置上，所以清除瀏覽器資料或換手機後紀錄會消失。你和小幫手說的話會在產生回答時傳給 AI 服務，本應用的伺服器不會儲存。請不要寫姓名、聯絡方式等個人資訊。",
+  delCap:"刪除我的紀錄", delBody:"清除這台裝置上儲存的蓋章紀錄、格子、設定和小幫手聊天，回到最初的狀態。",
+  delBtn:"刪除我的紀錄", delYes:"是的，全部刪除", delCancel:"取消", delAsk:"蓋章天數 {n} 天、格子 {m} 個會全部消失，無法復原。確定刪除嗎？",
   slots:{wakeup:'起床',breakfast:'吃早餐',move:'動一動'},
   icons:{wake:'起床',meal:'早餐',walk:'晨間散步',eng:'英文',zh:'中文',code:'寫程式',ai:'AI 開發',hack:'黑客松',jp:'日文',es:'西班牙文',fa:'波斯文',climb:'攀岩',hyrox:'Hyrox',marathon:'馬拉松',rowing:'划船',boxing:'拳擊',tennis:'網球',golf:'高爾夫',bowling:'保齡球',walkrun:'走路·跑步',strength:'重量訓練',yoga:'瑜伽',swimbike:'游泳·騎車',read:'閱讀',orig:'讀原文書',origwin:'原文書讀完了'}
 },
 yue:{
-  title:'習慣印花咭 · 試用版',
+  title:'習慣印花咭',
   h1:'習慣印花咭',
   sub:'今日 {n} 格，蓋個印就得',
   subOne:"今日 {n} 格，蓋個印就得",
   storageNotice:'呢個瀏覽器可能儲唔到記錄，閂咗個頁面記錄可能就冇晒。',
-  hint1:'唔使排計劃表。做完一件事，就㩒一下個格，蓋個印。',
+  hint1:'一開始唔使排計劃表。覺得好難開始嘅話，就㩒一下今日做完嗰件事嘅格，先蓋個印。',
   hint2:'㩒一下就係深色印花（全部做晒），㩒兩下就係淺色印花（只係做咗少少）。淺色印花都當今日做咗。',
-  hintGift:'🎁 多謝你第一次嚟開。開新格仔嘅進度，已經幫你預先填咗一日。',
   hintOk:'知道喇',
   todayTitle:'今日 · {date}',
   stDone:'全部做晒！',
@@ -542,16 +793,16 @@ yue:{
   stEmpty:'㩒一下蓋印',
   bannerPerfect:'🌈 今日啲印花全部蓋晒喇！',
   bannerMini:'🌱 淺色印花都算有繼續。就算只係做咗少少，都好過冇做。',
-  piledTitle:'已經儲到嘅',
-  nDays:'有印花嘅日數',
-  nWeek:'最近 7 日',
-  nStamps:'儲到嘅印花',
+  piledTitle:"我嘅習慣",
+  routineDay:"第 {n} 日", routineNone:"仲未開始", goalsCap:"解鎖目標",
   pileNote:'只會愈儲愈多，唔會少返。漏咗一日都唔緊要。',
   unlockOpen:'新格仔開咗！去下面嘅「我嘅格仔」加返個上去啦。',
   unlockLeft:'再 {n} 日就開到新格仔',
   unlockLeftOne:'再 {n} 日就開到新格仔',
-  unlockGift:'第一粒圓點係送畀你嘅，你第一次嚟，就先幫你填咗。',
   unlockAll:'格仔全部解鎖晒喇。',
+  unlockSoFar:'已經儲咗 {n} 日印花',
+  unlockSoFarOne:'已經儲咗 {n} 日印花',
+  milesCap:'到咗呢啲日子，就多開一個格仔',
   weekTitle:'呢一個星期',
   monthStat:'今個月有 {n} 日蓋咗印花。',
   editTitle:'我嘅格仔',
@@ -559,22 +810,70 @@ yue:{
   open:'打開',
   close:'收埋',
   picIcon:'換圖案',
+  picEmoji:"輸入表情符號做印章", picPhoto:"📷 用我嘅相", photoFail:"打唔開呢張相，請揀另一張。",
+  picAi:"✨ 按名畫一個", picSuggest:"啱嘅印章：", aiWait:"畫緊，最長可能要一分鐘。", aiFail:"而家畫唔到，請用表情符號或者相。", aiStop:"停",
   slotAria:'格仔名稱',
   delAsk:'要刪咗佢？',
   needOne:'最少要留低一個格仔。',
+  chEntry:"💬 同小幫手傾下",
+  chTitle:"小幫手",
+  chNotice:"呢個係喺習慣難以持續嗰陣陪你一齊諗辦法嘅 AI。佢唔係輔導或者治療，亦可能出錯。",
+  chFabTxt:"小幫手", chStyleTxt:"語氣同名可以喺設定度改。", chStyleBtn:"打開設定",
+  chShareAsk:"俾小幫手睇格仔名稱同印章日數，佢可以幫得更好。要唔要俾佢睇？",
+  chShareYes:"好，俾佢睇",
+  chShareNo:"唔俾睇",
+  chPh:"近排習慣堅持得點樣？",
+  chSend:"傳送",
+  chWait:"諗緊…",
+  chHello:"你好！如果習慣成日堅持唔到，放心同我講，我先聽你講。",
+  chTodoSum:"我嘅待辦（{n}）",
+  chTodoPh:"寫低待辦",
+  chTodoAdd:"加",
+  chTodoNone:"暫時未有。",
+  chTodoDel:"刪除",
+  chOrg:"叫佢幫我整理",
+  chOrgMsg:"請幫我整理下待辦。",
+  chQuest:"今日任務",
+  chAccept:"收低",
+  chChange:"換一個",
+  chChangeMsg:"請換第二個任務。",
+  chAdded:"已放咗落今日嘅畫面。", stepCap:"今日嘅一小步",
+  chEvFull:"根據：{src} · 已核對全文",
+  chEvPart:"根據：{src} · 只核對咗部分全文",
+  chEvAbs:"根據：{src} · 只核對咗摘要",
+  chNoEv:"對於呢個煩惱，我暫時搵唔到可以拎出嚟嘅研究根據。我先唔畀方法，繼續聽你講。",
+  chScope:"呢個話題超出咗我可以幫手嘅範圍。如果你好辛苦或者擔心身體，請同身邊嘅專業人士或者官方求助機構傾訴。如果係習慣堅持唔到嘅煩惱，我會繼續聽你講。",
+  chCrisis:"我好擔心你。我只係 AI，幫唔到你太多，請即刻聯絡當地嘅輔導熱線或者緊急求助電話。你唔使一個人撐。",
+  chBusy:"連唔到小幫手，請遲啲再試。蓋印照用得。",
+  chCut:"回覆未收齊，請再傳一次。",
+  chBlock:"呢個回覆冇通過根據核對，所以唔顯示。請再問一次。",
+  chShareCap:"俾小幫手睇格仔名稱同印章日數",
+  chShareOn:"俾睇",
+  chShareOff:"唔俾睇",
+  chClear:"刪除小幫手傾偈",
+  chClearAsk:"確定刪除？請再撳一次",
+  hpCap:"小幫手語氣", hpName:"小幫手名", hpNamePh:"名（留空就用預設）", hpSpeech:"語氣", hpDef:"預設", hpCasual:"隨便啲", hpPolite:"禮貌啲", hpEmoji:"表情符號", hpNone:"唔用", hpSome:"間中", hpOften:"成日",
+  keyCap:"我嘅 API 金鑰（可選）", keyPh:"貼上 API 金鑰", keySave:"儲存", keyClear:"刪除金鑰", keySet:"已填金鑰：尾四個字 {k}", keyNone:"未填", keyDone:"已儲存", keyBad:"金鑰格式唔啱，請再檢查", keyMissing:"需要金鑰。請喺設定最底嘅「我嘅 API 金鑰」填入", keyInvalid:"填咗嘅金鑰無效，請喺設定檢查", keyLimit:"填咗嘅金鑰已用完額度，請檢查發行金鑰嘅平台嘅額度同付款",
+  chCleared:"已刪除。",
   maxSix:'格仔最多六個。',
   lockMsg:"儲夠 {t} 日印花，就會多開一個格仔。而家係 {days}{gift}。",
   lockGift:'（連埋送畀你嗰 1 日）',
+  giftTag:"（🎁 連埋第一次嚟嘅 1 日禮物）",
   dayCount:"{n} 日",
   dayCountOne:"{n} 日",
   addSlot:'+ 加一個格仔',
-  introTitle:'呢個係試用版，歡迎試完留低意見',
-  introBody:'特登整得好簡單，等一做計劃就覺得攰嘅人，都唔使畀計劃壓住，先開始再算。試用三至七日，將覺得欠咗啲咩、邊度睇唔明話畀我哋知。',
-  introAsk:'比起稱讚，「喺呢度卡住咗」「之後就冇再開」呢啲話更有幫助。',
+  introTitle:'歡迎試完留低意見',
+  introBody:"我哋整得好簡單，等一排計劃就覺得攰嘅人都可以先開始。由設定到功能，各方面都將選擇減到最少，等呢個 app 只專注「建立習慣」呢個目標。你愈堅持，功能就會一個一個開出嚟，之後可以好似一般行程 app 咁用。試用過後，請話畀我哋知你需要啲咩。",
   introLang:'如果有邊句讀落去唔自然，都請話畀我哋知。',
   introGo:'去寫意見',
   introClose:'關閉',
-  introBtn:'試用版說明',
+  introBtn:'使用說明',
+  setBtn:"設定", setBack:"返回", langCap:"語言", themeCap:"顏色主題",
+  theme_base:"預設", theme_peach:"蜜桃", theme_lavender:"薰衣草", theme_sunny:"陽光", themeLocked:"{d}就開",
+  nextColor:"下一個顏色",
+  privCap:"私隱說明", privBody:"冇帳戶，亦唔使登入。印花記錄只會儲存喺呢部裝置，所以清咗瀏覽器資料或者轉咗手機，記錄就會冇晒。你同小幫手講嘅嘢會喺產生回覆嗰陣傳去 AI 服務，呢個 app 嘅伺服器唔會儲存。請唔好寫姓名、聯絡方法等個人資料。",
+  delCap:"刪除我嘅記錄", delBody:"清走呢部裝置入面儲存嘅印花記錄、格仔、設定同小幫手傾偈，返到最初嘅狀態。",
+  delBtn:"刪除我嘅記錄", delYes:"係，全部刪除", delCancel:"取消", delAsk:"有印花嘅日數 {n} 日、格仔 {m} 個會全部冇晒，冇得還原。真係要刪除？",
   fbTitle:'畀個意見',
   fbDesc:'用完嘅感覺隨便寫幾句就得：邊度卡住、邊度睇唔明、邊度鍾意，都可以。',
   fbPlaceholder:'例如：第二日開始就冇再開，因為……',
@@ -582,32 +881,19 @@ yue:{
   formBtn:'用表格交',
   copied:'複製咗喇，貼上再傳畀我哋就得。',
   copyFail:'自動複製唔成功。長㩒揀咗嘅文字，手動複製一下。',
-  bkTitle:"搬記錄",
-  bkDesc:"記錄淨係喺呢個瀏覽器入面。先匯出成一串代碼，換手機或者清咗瀏覽器資料之後都可以再匯入返嚟。",
-  bkPlaceholder:"將匯出嘅記錄代碼貼喺度",
-  bkOut:"複製記錄代碼",
-  bkIn:"匯入貼咗嘅記錄",
-  bkOk:"好，換咗佢",
-  bkCopied:"複製咗喇。貼落備忘錄或者傳畀自己嘅訊息度留起佢。",
-  bkCopyFail:"自動複製唔成功。長㩒上面嘅文字，手動複製一下。",
-  bkEmpty:"先將記錄代碼貼入嚟。",
-  bkBad:"呢串代碼讀唔到。睇下係咪成段都貼晒。",
-  bkAsk:"呢份記錄入面有印花嘅日數：{n}，格仔：{m}。匯入之後會取代而家嘅記錄。冇問題就再㩒一次。",
-  bkDone:"記錄匯入咗喇。",
   shelved:"攞走格仔，已經儲到嘅印花都仲喺度。",
   fbHow:'複製嗰陣，用咗幾多日之類嘅幾個數字會一齊附喺最尾。傳畀介紹呢個 App 畀你嘅人就得。',
   slots:{wakeup:'起身',breakfast:'食早餐',move:'動一動'},
   icons:{wake:'起身',meal:'早餐',walk:'晨早散步',eng:'英文',zh:'中文',code:'寫程式',ai:'AI 開發',hack:'黑客松',jp:'日文',es:'西班牙文',fa:'波斯文',climb:'攀石',hyrox:'Hyrox',marathon:'馬拉松',rowing:'划艇',boxing:'拳擊',tennis:'網球',golf:'高爾夫球',bowling:'保齡球',walkrun:'行路·跑步',strength:'重量訓練',yoga:'瑜伽',swimbike:'游水·踩單車',read:'睇書',orig:'睇原文書',origwin:'原文書睇完喇'}
 },
 id:{
-  title:'Papan Stempel Rutinitas · uji coba',
+  title:'Papan Stempel Rutinitas',
   h1:'Papan Stempel Rutinitas',
   sub:'{n} kotak hari ini. Tinggal stempel.',
   subOne:"{n} kotak hari ini. Tinggal stempel.",
   storageNotice:'Browser ini mungkin tidak menyimpan catatanmu. Kalau tab ditutup, catatannya bisa hilang.',
-  hint1:'Tidak perlu bikin rencana. Kalau sudah melakukan sesuatu, ketuk kotaknya untuk menstempel.',
+  hint1:'Pada awalnya tidak perlu bikin rencana. Kalau memulai terasa berat, cukup ketuk kotak untuk hal yang sudah kamu lakukan hari ini dan stempel dulu.',
   hint2:'Ketuk sekali untuk stempel tebal (semua beres). Ketuk dua kali untuk stempel tipis (baru sedikit). Stempel tipis tetap dihitung: hari ini kamu sudah melakukannya.',
-  hintGift:'🎁 Terima kasih sudah mampir. Satu hari menuju kotak berikutnya sudah diisi duluan.',
   hintOk:'Oke, paham',
   todayTitle:'Hari ini · {date}',
   stDone:'Beres semua!',
@@ -615,16 +901,16 @@ id:{
   stEmpty:'Ketuk untuk menstempel',
   bannerPerfect:'🌈 Stempel hari ini lengkap!',
   bannerMini:'🌱 Stempel tipis juga tetap jalan. Sedikit pun sudah berarti.',
-  piledTitle:'Sejauh ini',
-  nDays:'Hari terisi',
-  nWeek:'7 hari terakhir',
-  nStamps:'Stempel',
+  piledTitle:"Rutinitasku",
+  routineDay:"Hari ke-{n}", routineNone:"Belum mulai", goalsCap:"Target pembukaan",
   pileNote:'Angka-angka ini cuma naik. Kalau sehari terlewat, angkanya tetap di tempat.',
   unlockOpen:'Kotak baru terbuka. Tambahkan di "Kotakku" di bawah.',
   unlockLeft:'{n} hari lagi menuju kotak berikutnya',
   unlockLeftOne:'{n} hari lagi menuju kotak berikutnya',
-  unlockGift:'Titik pertama hadiah dari kami. Sudah diisi duluan karena kamu mampir.',
   unlockAll:'Semua kotak sudah terbuka.',
+  unlockSoFar:'Sudah {n} hari berstempel',
+  unlockSoFarOne:'Sudah {n} hari berstempel',
+  milesCap:'Satu kotak baru terbuka pada',
   weekTitle:'Minggu ini',
   monthStat:'Bulan ini kamu sudah menstempel {n} hari.',
   editTitle:'Kotakku',
@@ -632,22 +918,70 @@ id:{
   open:'Buka',
   close:'Tutup',
   picIcon:'Ganti gambar',
+  picEmoji:"Ketik emoji untuk stempelmu", picPhoto:"📷 Pakai fotoku", photoFail:"Foto ini tidak bisa dibuka. Pilih foto lain.",
+  picAi:"✨ Gambar dari nama", picSuggest:"Stempel yang cocok:", aiWait:"Sedang menggambar… bisa sampai satu menit.", aiFail:"Saat ini tidak bisa menggambar. Pakai emoji atau foto.", aiStop:"Berhenti",
   slotAria:'Nama kotak',
   delAsk:'Hapus?',
   needOne:'Minimal harus ada satu kotak.',
+  chEntry:"💬 Ngobrol dengan pembantu",
+  chTitle:"Pembantu",
+  chNotice:"AI yang membantumu berpikir saat rutinitas sulit berlanjut. Ini bukan konseling atau terapi, dan bisa saja keliru.",
+  chFabTxt:"Pembantu", chStyleTxt:"Gaya bicara dan nama bisa diubah di Pengaturan.", chStyleBtn:"Buka Pengaturan",
+  chShareAsk:"Kalau nama kotak dan hari stempel ditunjukkan, pembantu bisa membantu lebih baik. Tunjukkan?",
+  chShareYes:"Boleh, tunjukkan",
+  chShareNo:"Jangan tunjukkan",
+  chPh:"Bagaimana rutinitasmu akhir-akhir ini?",
+  chSend:"Kirim",
+  chWait:"Lagi mikir…",
+  chHello:"Halo! Kalau rutinitasmu susah dilanjutkan, ceritakan saja. Aku dengarkan dulu.",
+  chTodoSum:"Tugasku ({n})",
+  chTodoPh:"Tulis tugas",
+  chTodoAdd:"Tambah",
+  chTodoNone:"Belum ada.",
+  chTodoDel:"Hapus",
+  chOrg:"Minta dirapikan",
+  chOrgMsg:"Tolong rapikan daftar tugasku.",
+  chQuest:"Misi hari ini",
+  chAccept:"Ambil",
+  chChange:"Ganti",
+  chChangeMsg:"Tolong beri misi yang lain.",
+  chAdded:"Sudah ditaruh di layar hari ini.", stepCap:"Satu langkah hari ini",
+  chEvFull:"Dasar: {src} · teks lengkap diperiksa",
+  chEvPart:"Dasar: {src} · hanya sebagian teks lengkap diperiksa",
+  chEvAbs:"Dasar: {src} · hanya abstrak yang diperiksa",
+  chNoEv:"Aku belum menemukan bukti penelitian yang bisa kutunjukkan untuk masalah ini. Aku tidak akan menyarankan cara; biar aku dengarkan lebih dulu.",
+  chScope:"Itu di luar yang bisa kubantu. Kalau kamu sedang sangat berat atau khawatir soal kesehatan, bicaralah dengan tenaga profesional terdekat atau layanan bantuan resmi. Kalau soal rutinitas yang sulit berlanjut, aku siap terus mendengarkan.",
+  chCrisis:"Aku khawatir dengan keadaanmu. Aku hanya AI dan tidak bisa membantu sebaik yang kamu butuhkan, tolong segera hubungi layanan krisis atau darurat di tempatmu. Kamu tidak harus menghadapinya sendirian.",
+  chBusy:"Tidak bisa terhubung ke pembantu. Coba lagi sebentar lagi. Stempel tetap bisa dipakai.",
+  chCut:"Balasan belum sampai selesai. Tolong kirim lagi.",
+  chBlock:"Balasan itu tidak lolos pemeriksaan dasar penelitian, jadi tidak kutampilkan. Coba tanya lagi.",
+  chShareCap:"Tunjukkan nama kotak dan hari stempel ke pembantu",
+  chShareOn:"Ditunjukkan",
+  chShareOff:"Tidak ditunjukkan",
+  chClear:"Hapus obrolan pembantu",
+  chClearAsk:"Yakin dihapus? Tekan sekali lagi",
+  hpCap:"Gaya pembantu", hpName:"Nama pembantu", hpNamePh:"Nama (kosong = bawaan)", hpSpeech:"Gaya bicara", hpDef:"Bawaan", hpCasual:"Santai", hpPolite:"Sopan", hpEmoji:"Emoji", hpNone:"Tidak", hpSome:"Kadang", hpOften:"Sering",
+  keyCap:"Kunci API saya (opsional)", keyPh:"Tempel kunci API", keySave:"Simpan", keyClear:"Hapus kunci", keySet:"Kunci dimasukkan: empat akhir {k}", keyNone:"Belum dimasukkan", keyDone:"Tersimpan", keyBad:"Bentuk kunci tidak sesuai. Periksa lagi", keyMissing:"Kunci diperlukan. Masukkan di 'Kunci API saya' di bagian bawah Pengaturan", keyInvalid:"Kunci yang dimasukkan tidak valid. Periksa di Pengaturan", keyLimit:"Kunci mencapai batas pemakaian. Periksa batas dan tagihan di tempat kunci diterbitkan",
+  chCleared:"Sudah dihapus.",
   maxSix:'Maksimal enam kotak.',
   lockMsg:"Stempel di {t} hari berbeda, nanti satu kotak lagi terbuka. Sekarang baru {days}{gift}.",
   lockGift:' (termasuk 1 hari hadiah)',
+  giftTag:" (🎁 termasuk hadiah 1 hari kunjungan pertama)",
   dayCount:"{n} hari",
   dayCountOne:"{n} hari",
   addSlot:'+ Tambah kotak',
-  introTitle:'Ini versi uji coba. Coba dulu, lalu ceritakan pengalamanmu',
-  introBody:'Sengaja dibuat sangat sederhana, supaya yang capek bikin rencana tetap bisa mulai tanpa merasa terbebani. Coba 3 sampai 7 hari, lalu kabari kalau ada yang kurang atau bikin bingung.',
-  introAsk:'Pujian memang menyenangkan, tapi cerita seperti "aku mentok di sini" atau "aku jadi berhenti buka" jauh lebih membantu.',
+  introTitle:'Coba dulu, lalu ceritakan pengalamanmu',
+  introBody:"Kami membuatnya sangat sederhana agar yang capek merencanakan pun bisa langsung mulai. Pilihan kami minimalkan di semua sisi, dari pengaturan hingga fitur, supaya aplikasi ini fokus pada satu tujuan: membangun rutinitas. Semakin rutin kamu melanjutkan, fitur terbuka satu per satu, hingga nanti bisa dipakai seperti aplikasi jadwal biasa. Coba dulu, lalu kabari kami apa yang kamu butuhkan.",
   introLang:'Kalau ada kalimat yang terasa kaku atau tidak natural, kabari juga ya.',
   introGo:'Tulis masukan',
   introClose:'Tutup',
-  introBtn:'Tentang uji coba ini',
+  introBtn:'Panduan',
+  setBtn:"Pengaturan", setBack:"Kembali", langCap:"Bahasa", themeCap:"Tema warna",
+  theme_base:"Bawaan", theme_peach:"Persik", theme_lavender:"Lavender", theme_sunny:"Mentari", themeLocked:"Terbuka di {d}",
+  nextColor:"Warna berikutnya",
+  privCap:"Privasi", privBody:"Tidak ada akun atau login. Catatan stempelmu hanya disimpan di perangkat ini, jadi kalau data browser dihapus atau ganti HP, catatannya hilang. Ucapanmu kepada pembantu diteruskan ke layanan AI untuk membuat jawaban, dan server aplikasi ini tidak menyimpannya. Jangan menulis data pribadi seperti nama atau kontak.",
+  delCap:"Hapus catatanku", delBody:"Menghapus catatan stempel, kotak, pengaturan, dan obrolan pembantu yang tersimpan di perangkat ini, lalu mengembalikan aplikasi ke keadaan awal.",
+  delBtn:"Hapus catatanku", delYes:"Ya, hapus semuanya", delCancel:"Batal", delAsk:"{n} hari berstempel dan {m} kotak akan hilang selamanya. Yakin ingin menghapus?",
   fbTitle:'Kirim masukan',
   fbDesc:'Tulis saja kesanmu: di mana kamu mentok, apa yang membingungkan, apa yang kamu suka. Apa pun berguna.',
   fbPlaceholder:'Contoh: Aku berhenti buka di hari ke-2 karena…',
@@ -655,32 +989,19 @@ id:{
   formBtn:'Kirim lewat formulir',
   copied:'Sudah disalin. Sekarang tempel ke pesan dan kirim.',
   copyFail:'Salin otomatis gagal. Tekan lama teks yang terpilih untuk menyalinnya.',
-  bkTitle:"Pindahkan catatan",
-  bkDesc:"Catatanmu hanya ada di browser ini. Simpan sebagai kode, lalu kamu bisa memasukkannya lagi setelah ganti HP atau menghapus data browser.",
-  bkPlaceholder:"Tempel kode catatan di sini",
-  bkOut:"Salin kode catatan",
-  bkIn:"Masukkan kode yang ditempel",
-  bkOk:"Ya, ganti",
-  bkCopied:"Sudah disalin. Tempel ke catatan atau pesan untuk dirimu sendiri dan simpan.",
-  bkCopyFail:"Salin otomatis gagal. Tekan lama teks di atas untuk menyalinnya.",
-  bkEmpty:"Tempel kode catatan dulu.",
-  bkBad:"Kode itu tidak terbaca. Pastikan kamu menempelkan seluruhnya.",
-  bkAsk:"Hari bertanda stempel di kode ini: {n}. Kotak: {m}. Catatanmu sekarang akan diganti. Ketuk sekali lagi kalau setuju.",
-  bkDone:"Catatan sudah dimasukkan.",
   shelved:"Kotak boleh dilepas, stempel yang sudah terkumpul tetap ada.",
   fbHow:'Saat disalin, jumlah hari dan stempelmu ikut tertempel di akhir teks. Kirim lewat chat atau SMS ke orang yang mengenalkan aplikasi ini ke kamu.',
   slots:{wakeup:'Bangun tidur',breakfast:'Sarapan',move:'Gerak badan'},
   icons:{wake:'Bangun tidur',meal:'Sarapan',walk:'Jalan pagi',eng:'Bahasa Inggris',zh:'Bahasa Mandarin',code:'Ngoding',ai:'Pengembangan AI',hack:'Hackathon',jp:'Bahasa Jepang',es:'Bahasa Spanyol',fa:'Bahasa Persia',climb:'Panjat tebing',hyrox:'Hyrox',marathon:'Maraton',rowing:'Dayung',boxing:'Tinju',tennis:'Tenis',golf:'Golf',bowling:'Boling',walkrun:'Jalan atau lari',strength:'Latihan beban',yoga:'Yoga',swimbike:'Renang atau sepeda',read:'Membaca',orig:'Buku bahasa asli',origwin:'Buku selesai dibaca'}
 },
 vi:{
-  title:'Bảng đóng dấu thói quen · bản dùng thử',
+  title:'Bảng đóng dấu thói quen',
   h1:'Bảng đóng dấu thói quen',
   sub:'Hôm nay có {n} ô. Bạn chỉ cần đóng dấu.',
   subOne:"Hôm nay có {n} ô. Bạn chỉ cần đóng dấu.",
   storageNotice:'Trình duyệt này có thể không lưu được tiến độ của bạn. Đóng tab là có thể mất.',
-  hint1:'Không cần lập kế hoạch gì cả. Làm xong việc nào thì chạm vào ô đó để đóng dấu.',
+  hint1:'Lúc đầu không cần lập kế hoạch. Nếu bắt đầu thấy quá sức, cứ chạm vào ô của việc bạn đã làm hôm nay để đóng dấu trước.',
   hint2:'Chạm một lần là dấu đậm (làm xong hết). Chạm hai lần là dấu nhạt (mới làm một chút). Dấu nhạt vẫn tính là hôm nay bạn đã làm.',
-  hintGift:'🎁 Cảm ơn bạn đã mở thử app. Mình điền sẵn 1 ngày vào phần mở ô mới rồi nhé.',
   hintOk:'Hiểu rồi',
   todayTitle:'Hôm nay · {date}',
   stDone:'Xong hết rồi!',
@@ -688,16 +1009,16 @@ vi:{
   stEmpty:'Chạm để đóng dấu',
   bannerPerfect:'🌈 Hôm nay đóng dấu đủ cả rồi!',
   bannerMini:'🌱 Dấu nhạt cũng giữ được nhịp. Làm một chút vẫn hơn không làm.',
-  piledTitle:'Đã tích được',
-  nDays:'Ngày duy trì',
-  nWeek:'7 ngày gần nhất',
-  nStamps:'Dấu đã đóng',
+  piledTitle:"Thói quen của tôi",
+  routineDay:"Ngày thứ {n}", routineNone:"Chưa bắt đầu", goalsCap:"Mục tiêu mở khóa",
   pileNote:'Các con số này chỉ tăng lên thôi. Bỏ lỡ một ngày thì chúng vẫn nằm nguyên đó.',
   unlockOpen:'Có ô mới rồi! Thêm ở mục "Sửa ô việc" bên dưới nhé.',
   unlockLeft:'Còn {n} ngày nữa là mở ô mới',
   unlockLeftOne:'Còn {n} ngày nữa là mở ô mới',
-  unlockGift:'Vòng tròn đầu tiên là quà, mình điền sẵn vì bạn đã mở thử app.',
   unlockAll:'Tất cả các ô đã mở.',
+  unlockSoFar:'Đã đóng dấu {n} ngày',
+  unlockSoFarOne:'Đã đóng dấu {n} ngày',
+  milesCap:'Mỗi lần đến những ngày này, mở thêm một ô',
   weekTitle:'Tuần này',
   monthStat:'Tháng này bạn đã duy trì {n} ngày rồi.',
   editTitle:'Sửa ô việc',
@@ -705,22 +1026,70 @@ vi:{
   open:'Mở',
   close:'Đóng',
   picIcon:'Đổi hình',
+  picEmoji:"Nhập emoji làm dấu", picPhoto:"📷 Dùng ảnh của tôi", photoFail:"Không mở được ảnh này. Hãy chọn ảnh khác.",
+  picAi:"✨ Vẽ theo tên", picSuggest:"Dấu phù hợp:", aiWait:"Đang vẽ… có thể mất tới một phút.", aiFail:"Hiện chưa vẽ được. Hãy dùng emoji hoặc ảnh.", aiStop:"Dừng",
   slotAria:'Tên ô',
   delAsk:'Xóa?',
   needOne:'Cần giữ lại ít nhất một ô.',
+  chEntry:"💬 Trò chuyện với trợ lý",
+  chTitle:"Trợ lý",
+  chNotice:"AI cùng bạn suy nghĩ khi thói quen khó duy trì. Đây không phải tư vấn hay điều trị và có thể sai.",
+  chFabTxt:"Trợ lý", chStyleTxt:"Bạn có thể đổi giọng điệu và tên trong Cài đặt.", chStyleBtn:"Mở Cài đặt",
+  chShareAsk:"Nếu cho trợ lý xem tên ô và số ngày đóng dấu, trợ lý sẽ giúp tốt hơn. Cho xem nhé?",
+  chShareYes:"Cho xem",
+  chShareNo:"Không cho xem",
+  chPh:"Dạo này thói quen của bạn thế nào?",
+  chSend:"Gửi",
+  chWait:"Đang nghĩ…",
+  chHello:"Xin chào! Nếu khó duy trì thói quen, cứ kể cho mình nghe. Mình sẽ lắng nghe trước.",
+  chTodoSum:"Việc cần làm ({n})",
+  chTodoPh:"Ghi việc cần làm",
+  chTodoAdd:"Thêm",
+  chTodoNone:"Chưa có.",
+  chTodoDel:"Xóa",
+  chOrg:"Nhờ sắp xếp lại",
+  chOrgMsg:"Hãy sắp xếp giúp mình các việc cần làm.",
+  chQuest:"Nhiệm vụ hôm nay",
+  chAccept:"Nhận",
+  chChange:"Đổi",
+  chChangeMsg:"Hãy cho mình nhiệm vụ khác.",
+  chAdded:"Đã đặt lên màn hình hôm nay.", stepCap:"Một bước hôm nay",
+  chEvFull:"Căn cứ: {src} · đã kiểm tra toàn văn",
+  chEvPart:"Căn cứ: {src} · chỉ kiểm tra một phần toàn văn",
+  chEvAbs:"Căn cứ: {src} · chỉ kiểm tra phần tóm tắt",
+  chNoEv:"Mình chưa tìm được bằng chứng nghiên cứu nào có thể đưa ra cho vấn đề này. Mình sẽ không gợi ý cách làm, mà lắng nghe thêm.",
+  chScope:"Chuyện đó vượt quá phạm vi mình có thể giúp. Nếu bạn đang rất khó khăn hoặc lo cho sức khỏe, hãy nói với chuyên gia gần bạn hoặc đơn vị hỗ trợ chính thức. Nếu là chuyện thói quen khó duy trì, mình sẽ tiếp tục lắng nghe.",
+  chCrisis:"Mình lo cho bạn. Mình chỉ là AI nên không thể giúp bạn đủ, hãy liên hệ ngay đường dây hỗ trợ khủng hoảng hoặc cấp cứu ở nơi bạn sống. Bạn không phải đối mặt một mình.",
+  chBusy:"Không kết nối được với trợ lý. Hãy thử lại sau ít phút. Bạn vẫn đóng dấu bình thường.",
+  chCut:"Câu trả lời chưa đến hết. Bạn gửi lại nhé.",
+  chBlock:"Câu trả lời đó không qua được bước kiểm tra căn cứ nên mình không hiển thị. Bạn hỏi lại nhé.",
+  chShareCap:"Cho trợ lý xem tên ô và số ngày đóng dấu",
+  chShareOn:"Đang cho xem",
+  chShareOff:"Không cho xem",
+  chClear:"Xóa cuộc trò chuyện với trợ lý",
+  chClearAsk:"Xóa thật chứ? Bấm thêm một lần",
+  hpCap:"Phong cách trợ lý", hpName:"Tên trợ lý", hpNamePh:"Tên (để trống = mặc định)", hpSpeech:"Giọng điệu", hpDef:"Mặc định", hpCasual:"Thân mật", hpPolite:"Lịch sự", hpEmoji:"Emoji", hpNone:"Không", hpSome:"Thỉnh thoảng", hpOften:"Thường xuyên",
+  keyCap:"Khóa API của tôi (tùy chọn)", keyPh:"Dán khóa API", keySave:"Lưu", keyClear:"Xóa khóa", keySet:"Đã nhập khóa: 4 ký tự cuối {k}", keyNone:"Chưa nhập", keyDone:"Đã lưu", keyBad:"Khóa không đúng dạng. Hãy kiểm tra lại", keyMissing:"Cần có khóa. Hãy nhập ở 'Khóa API của tôi' cuối phần Cài đặt", keyInvalid:"Khóa đã nhập không hợp lệ. Hãy kiểm tra trong Cài đặt", keyLimit:"Khóa đã chạm giới hạn sử dụng. Hãy kiểm tra hạn mức và thanh toán nơi cấp khóa",
+  chCleared:"Đã xóa.",
   maxSix:'Tối đa sáu ô.',
   lockMsg:"Đóng dấu đủ {t} ngày là mở thêm một ô. Hiện bạn có {days}{gift}.",
   lockGift:' (đã tính cả 1 ngày quà tặng)',
+  giftTag:" (🎁 đã tính cả 1 ngày quà tặng lần đầu ghé)",
   dayCount:"{n} ngày",
   dayCountOne:"{n} ngày",
   addSlot:'+ Thêm ô',
-  introTitle:'Đây là bản dùng thử. Dùng thử rồi cho ý kiến nhé',
-  introBody:'Ứng dụng cố ý làm rất đơn giản, để người hay mệt vì lập kế hoạch vẫn có thể bắt đầu mà không bị kế hoạch đè nặng. Hãy dùng thử từ 3 đến 7 ngày, rồi cho biết điều gì còn thiếu hoặc khó hiểu.',
-  introAsk:'Lời khen thì vui, nhưng những câu như "mình bị kẹt ở đây" hay "mình không mở nữa" hữu ích hơn nhiều.',
+  introTitle:'Dùng thử rồi cho ý kiến nhé',
+  introBody:"Chúng tôi làm ứng dụng rất đơn giản để người hay mệt vì lập kế hoạch vẫn có thể bắt đầu. Từ cài đặt đến tính năng, mọi mặt đều giảm lựa chọn tối đa để ứng dụng chỉ tập trung vào một mục tiêu: xây dựng thói quen. Càng duy trì đều đặn, các tính năng càng mở ra từng cái một, sau này bạn có thể dùng như một ứng dụng lịch trình thông thường. Hãy dùng thử rồi cho chúng tôi biết bạn cần gì.",
   introLang:'Nếu câu nào đọc thấy gượng hoặc không tự nhiên, cũng hãy cho biết nhé.',
   introGo:'Viết ý kiến',
   introClose:'Đóng',
-  introBtn:'Giới thiệu bản dùng thử',
+  introBtn:'Hướng dẫn',
+  setBtn:"Cài đặt", setBack:"Quay lại", langCap:"Ngôn ngữ", themeCap:"Chủ đề màu",
+  theme_base:"Mặc định", theme_peach:"Đào", theme_lavender:"Oải hương", theme_sunny:"Nắng", themeLocked:"Mở vào {d}",
+  nextColor:"Màu tiếp theo",
+  privCap:"Quyền riêng tư", privBody:"Không có tài khoản hay đăng nhập. Bản ghi dấu chỉ lưu trên thiết bị này, nên xóa dữ liệu trình duyệt hoặc đổi điện thoại thì bản ghi sẽ mất. Những gì bạn nói với trợ lý được chuyển cho dịch vụ AI để tạo câu trả lời, và máy chủ của ứng dụng này không lưu lại. Vui lòng đừng viết thông tin cá nhân như tên hay liên hệ.",
+  delCap:"Xóa bản ghi của tôi", delBody:"Xóa bản ghi dấu, các ô, cài đặt và cuộc trò chuyện với trợ lý lưu trên thiết bị này, đưa ứng dụng về trạng thái ban đầu.",
+  delBtn:"Xóa bản ghi của tôi", delYes:"Có, xóa hết", delCancel:"Hủy", delAsk:"{n} ngày đóng dấu và {m} ô sẽ mất hẳn, không thể khôi phục. Bạn chắc chắn muốn xóa?",
   fbTitle:'Gửi ý kiến',
   fbDesc:'Cứ ghi lại cảm nhận của bạn: bạn bị kẹt ở đâu, chỗ nào khó hiểu, bạn thích gì. Điều gì cũng có ích.',
   fbPlaceholder:'Ví dụ: Ngày thứ 2 mình không mở nữa vì…',
@@ -728,32 +1097,19 @@ vi:{
   formBtn:'Gửi qua biểu mẫu',
   copied:'Đã sao chép. Giờ hãy dán vào tin nhắn rồi gửi đi nhé.',
   copyFail:'Sao chép tự động không được. Hãy nhấn giữ đoạn văn bản đang chọn để sao chép.',
-  bkTitle:"Chuyển tiến độ",
-  bkDesc:"Tiến độ chỉ nằm trong trình duyệt này. Hãy lưu thành một đoạn mã, sau này đổi điện thoại hay xóa dữ liệu trình duyệt vẫn nhập lại được.",
-  bkPlaceholder:"Dán đoạn mã đã lưu vào đây",
-  bkOut:"Sao chép mã tiến độ",
-  bkIn:"Nhập mã đã dán",
-  bkOk:"Đồng ý, thay thế",
-  bkCopied:"Đã sao chép. Dán vào ghi chú hoặc tin nhắn cho chính mình để giữ lại nhé.",
-  bkCopyFail:"Sao chép tự động không được. Hãy nhấn giữ đoạn chữ ở trên để sao chép.",
-  bkEmpty:"Hãy dán đoạn mã đã lưu vào trước nhé.",
-  bkBad:"Không đọc được đoạn mã này. Kiểm tra xem bạn đã dán đủ cả đoạn chưa.",
-  bkAsk:"Số ngày có dấu trong mã này: {n}. Số ô: {m}. Tiến độ hiện tại sẽ bị thay bằng nó. Nếu ổn, hãy bấm thêm một lần nữa.",
-  bkDone:"Đã nhập tiến độ.",
   shelved:"Bỏ một ô đi thì các dấu đã đóng vẫn còn nguyên.",
   fbHow:'Khi sao chép, số ngày và số dấu bạn đã dùng sẽ được thêm vào cuối. Gửi cho người đã giới thiệu app này qua Zalo hoặc tin nhắn nhé.',
   slots:{wakeup:'Thức dậy',breakfast:'Ăn sáng',move:'Vận động'},
   icons:{wake:'Thức dậy',meal:'Bữa sáng',walk:'Đi dạo buổi sáng',eng:'Tiếng Anh',zh:'Tiếng Trung',code:'Lập trình',ai:'Phát triển AI',hack:'Hackathon',jp:'Tiếng Nhật',es:'Tiếng Tây Ban Nha',fa:'Tiếng Ba Tư',climb:'Leo núi đá',hyrox:'Hyrox',marathon:'Marathon',rowing:'Chèo thuyền',boxing:'Đấm bốc',tennis:'Quần vợt',golf:'Golf',bowling:'Bowling',walkrun:'Đi bộ hoặc chạy',strength:'Tập tạ',yoga:'Yoga',swimbike:'Bơi hoặc đạp xe',read:'Đọc sách',orig:'Sách bản gốc',origwin:'Đọc xong sách gốc'}
 },
 es:{
-  title:'Tarjeta de sellos de rutina · prueba',
+  title:'Tarjeta de sellos de rutina',
   h1:'Tarjeta de sellos de rutina',
   sub:'{n} casillas hoy. Solo tienes que sellar.',
   subOne:"{n} casilla hoy. Solo tienes que sellar.",
   storageNotice:'Puede que este navegador no guarde tu progreso. Si cierras la pestaña, se podría perder.',
-  hint1:'No hace falta planificar nada. Cuando hayas hecho algo, toca su casilla para sellarlo.',
+  hint1:'Al principio no hace falta planificar nada. Si empezar te abruma, toca la casilla de algo que hiciste hoy y séllalo primero.',
   hint2:'Un toque es un sello fuerte (lo hiciste todo). Dos toques es un sello suave (hiciste un poco). El sello suave también cuenta como día hecho.',
-  hintGift:'🎁 Gracias por pasarte. Ya tienes un día adelantado para tu próxima casilla.',
   hintOk:'Entendido',
   todayTitle:'Hoy · {date}',
   stDone:'¡Todo hecho!',
@@ -761,16 +1117,16 @@ es:{
   stEmpty:'Toca para sellar',
   bannerPerfect:'🌈 ¡Todos los sellos de hoy!',
   bannerMini:'🌱 Un sello suave mantiene el ritmo. Hacer un poco es lo que cuenta.',
-  piledTitle:'Hasta ahora',
-  nDays:'Días con sello',
-  nWeek:'Últimos 7 días',
-  nStamps:'Sellos',
+  piledTitle:"Mis rutinas",
+  routineDay:"Día {n}", routineNone:"Aún sin empezar", goalsCap:"Metas por desbloquear",
   pileNote:'Estos números solo suben. Si te saltas un día, se quedan como están.',
   unlockOpen:'Se abrió una casilla nueva. Añádela en "Mis casillas", más abajo.',
   unlockLeft:'Faltan {n} días para tu próxima casilla',
   unlockLeftOne:'Falta {n} día para tu próxima casilla',
-  unlockGift:'El primer círculo es un regalo: ya viene relleno por haber entrado.',
   unlockAll:'Todas las casillas están abiertas.',
+  unlockSoFar:'Llevas {n} días sellados',
+  unlockSoFarOne:'Llevas {n} día sellado',
+  milesCap:'Se abre una casilla nueva en',
   weekTitle:'Esta semana',
   monthStat:'Días con sello este mes: {n}',
   editTitle:'Mis casillas',
@@ -778,22 +1134,70 @@ es:{
   open:'Abrir',
   close:'Cerrar',
   picIcon:'Cambiar dibujo',
+  picEmoji:"Escribe un emoji para tu sello", picPhoto:"📷 Usar mi foto", photoFail:"No se pudo abrir esta foto. Elige otra.",
+  picAi:"✨ Dibujar según el nombre", picSuggest:"Sello sugerido:", aiWait:"Dibujando… puede tardar hasta un minuto.", aiFail:"Ahora no se puede dibujar. Usa un emoji o una foto.", aiStop:"Parar",
   slotAria:'Nombre de la casilla',
   delAsk:'¿Borrar?',
   needOne:'Tiene que quedar al menos una casilla.',
+  chEntry:"💬 Hablar con el ayudante",
+  chTitle:"Ayudante",
+  chNotice:"Una IA que piensa contigo cuando una rutina no se sostiene. No es consejería ni tratamiento y puede equivocarse.",
+  chFabTxt:"Ayudante", chStyleTxt:"Puedes cambiar el tono y el nombre en Ajustes.", chStyleBtn:"Abrir Ajustes",
+  chShareAsk:"Si muestras los nombres de tus casillas y los días de sellos, el ayudante podrá ayudarte mejor. ¿Los muestro?",
+  chShareYes:"Sí, que los vea",
+  chShareNo:"No, que no los vea",
+  chPh:"¿Cómo va tu rutina?",
+  chSend:"Enviar",
+  chWait:"Pensando…",
+  chHello:"¡Hola! Si te cuesta mantener una rutina, cuéntamelo. Primero te escucho.",
+  chTodoSum:"Mis tareas ({n})",
+  chTodoPh:"Escribe una tarea",
+  chTodoAdd:"Añadir",
+  chTodoNone:"Aún no hay.",
+  chTodoDel:"Quitar",
+  chOrg:"Pedir que las ordene",
+  chOrgMsg:"Por favor, ordena mis tareas.",
+  chQuest:"Misión de hoy",
+  chAccept:"Aceptar",
+  chChange:"Cambiar",
+  chChangeMsg:"Por favor, dame otra misión.",
+  chAdded:"Puesto en la pantalla de hoy.", stepCap:"El paso de hoy",
+  chEvFull:"Base: {src} · texto completo revisado",
+  chEvPart:"Base: {src} · solo se revisó parte del texto completo",
+  chEvAbs:"Base: {src} · solo se revisó el resumen",
+  chNoEv:"No he encontrado evidencia de investigación que pueda mostrarte para esto. No te sugeriré métodos; sigo escuchándote.",
+  chScope:"Eso va más allá de lo que puedo ayudar. Si lo estás pasando mal o te preocupa tu salud, habla con un profesional cercano o con un servicio de ayuda oficial. Si es por una rutina que no se sostiene, sigo aquí para escucharte.",
+  chCrisis:"Me preocupas. Soy una IA y no puedo ayudarte como mereces, pero por favor contacta ahora con una línea de crisis o los servicios de emergencia de tu zona. No tienes por qué pasar por esto sin apoyo.",
+  chBusy:"No se pudo conectar con el ayudante. Inténtalo de nuevo en un momento. Los sellos siguen funcionando.",
+  chCut:"La respuesta no llegó completa. Envíala de nuevo.",
+  chBlock:"Esa respuesta no pasó la revisión de evidencia, así que no la muestro. Vuelve a preguntar.",
+  chShareCap:"Mostrar al ayudante mis casillas y días de sellos",
+  chShareOn:"Se muestran",
+  chShareOff:"No se muestran",
+  chClear:"Borrar el chat con el ayudante",
+  chClearAsk:"¿Seguro que quieres borrar? Toca una vez más",
+  hpCap:"Estilo del ayudante", hpName:"Nombre del ayudante", hpNamePh:"Nombre (vacío = predeterminado)", hpSpeech:"Tono", hpDef:"Predeterminado", hpCasual:"Informal", hpPolite:"Formal", hpEmoji:"Emojis", hpNone:"Ninguno", hpSome:"A veces", hpOften:"Muchos",
+  keyCap:"Mi clave de API (opcional)", keyPh:"Pega la clave de API", keySave:"Guardar", keyClear:"Quitar clave", keySet:"Clave añadida: últimas cuatro {k}", keyNone:"Aún no añadida", keyDone:"Guardada", keyBad:"La clave no tiene el formato correcto. Revísala", keyMissing:"Hace falta una clave. Añádela en «Mi clave de API», al final de Ajustes", keyInvalid:"La clave añadida no es válida. Revísala en Ajustes", keyLimit:"Tu clave alcanzó su límite de uso. Revisa el límite y la facturación donde se emitió",
+  chCleared:"Borrado.",
   maxSix:'El máximo es de seis casillas.',
   lockMsg:"Sella en {t} días distintos y se abre otra casilla. Por ahora: {days}{gift}.",
   lockGift:' (incluido el día de regalo)',
+  giftTag:" (🎁 incluye 1 día de regalo por tu primera visita)",
   dayCount:"{n} días",
   dayCountOne:"{n} día",
   addSlot:'+ Añadir casilla',
-  introTitle:'Versión de prueba. Pruébala y cuéntanos qué tal',
-  introBody:'Es muy sencilla a propósito: así, quien se agota planificando puede empezar sin que el plan estorbe. Pruébala de 3 a 7 días y cuéntanos qué echaste en falta o qué te confundió.',
-  introAsk:'Los elogios están bien, pero "aquí me atasqué" o "dejé de abrirla" ayudan mucho más.',
+  introTitle:'Pruébala y cuéntanos qué tal',
+  introBody:"La hicimos muy sencilla para que quien se agota planificando pueda empezar. Dejamos las opciones al mínimo en todo, desde los ajustes hasta las funciones, para que la app se centre en un solo objetivo: crear una rutina. Cuanto más constante seas, más funciones se irán abriendo una a una, hasta que puedas usarla como una app de agenda normal. Pruébala y cuéntanos qué necesitas.",
   introLang:'Si alguna frase suena rara o poco natural, avísanos también.',
   introGo:'Escribir opinión',
   introClose:'Cerrar',
-  introBtn:'Sobre esta prueba',
+  introBtn:'Guía',
+  setBtn:"Ajustes", setBack:"Volver", langCap:"Idioma", themeCap:"Tema de color",
+  theme_base:"Predeterminado", theme_peach:"Melocotón", theme_lavender:"Lavanda", theme_sunny:"Sol", themeLocked:"Se abre el {d}",
+  nextColor:"Siguiente color",
+  privCap:"Privacidad", privBody:"No hay cuentas ni inicio de sesión. Tus sellos se guardan solo en este dispositivo, así que si borras los datos del navegador o cambias de teléfono se pierden. Lo que le dices al ayudante se envía a un servicio de IA para redactar la respuesta, y el servidor de esta app no lo guarda. Por favor, no escribas datos personales como tu nombre o contacto.",
+  delCap:"Borrar mi registro", delBody:"Borra el registro de sellos, las casillas, los ajustes y el chat con el ayudante guardados en este dispositivo y deja la app como al principio.",
+  delBtn:"Borrar mi registro", delYes:"Sí, borrar todo", delCancel:"Cancelar", delAsk:"Se borrarán para siempre {n} días con sello y {m} casillas. ¿Quieres borrarlos?",
   fbTitle:'Enviar comentarios',
   fbDesc:'Apunta cómo te fue: dónde te atascaste, qué te confundió, qué te gustó. Cualquier cosa sirve.',
   fbPlaceholder:'Ej.: Dejé de abrirla el día 2 porque…',
@@ -801,32 +1205,19 @@ es:{
   formBtn:'Enviar por formulario',
   copied:'Copiado. Ahora pégalo en un mensaje y mándalo.',
   copyFail:'La copia automática no funcionó. Mantén presionado el texto seleccionado para copiarlo.',
-  bkTitle:"Pasar mi registro",
-  bkDesc:"Tu registro solo está en este navegador. Guárdalo como un código y podrás recuperarlo si cambias de móvil o borras los datos del navegador.",
-  bkPlaceholder:"Pega aquí un código guardado",
-  bkOut:"Copiar mi código",
-  bkIn:"Cargar el código pegado",
-  bkOk:"Sí, reemplazar",
-  bkCopied:"Copiado. Pégalo en una nota o en un mensaje a ti mismo y guárdalo.",
-  bkCopyFail:"La copia automática no funcionó. Mantén presionado el texto de arriba para copiarlo.",
-  bkEmpty:"Pega primero un código guardado.",
-  bkBad:"No se pudo leer ese código. Comprueba que lo pegaste entero.",
-  bkAsk:"Días con sello en este código: {n}. Casillas: {m}. Reemplazará tu registro actual. Pulsa otra vez si te parece bien.",
-  bkDone:"Registro cargado.",
   shelved:"Quitar una casilla no borra los sellos que ya juntaste.",
   fbHow:'Al copiar, se añaden al final unos números de uso. Mándaselo a quien te compartió esta app, por mensaje o chat.',
   slots:{wakeup:'Levantarme',breakfast:'Desayunar',move:'Moverme'},
   icons:{wake:'Despertar',meal:'Desayuno',walk:'Paseo matutino',eng:'Inglés',zh:'Chino',code:'Programar',ai:'Desarrollo de IA',hack:'Hackatón',jp:'Japonés',es:'Español',fa:'Persa',climb:'Escalada',hyrox:'Hyrox',marathon:'Maratón',rowing:'Remo',boxing:'Boxeo',tennis:'Tenis',golf:'Golf',bowling:'Bolos',walkrun:'Caminar o correr',strength:'Fuerza',yoga:'Yoga',swimbike:'Nadar o bici',read:'Lectura',orig:'Libro en original',origwin:'Libro terminado'}
 },
 fi:{
-  title:'Rutiinileimakortti · kokeiluversio',
+  title:'Rutiinileimakortti',
   h1:'Rutiinileimakortti',
   sub:'Tänään {n} ruutua. Sinun tarvitsee vain leimata.',
   subOne:"Tänään {n} ruutu. Sinun tarvitsee vain leimata.",
   storageNotice:'Tämä selain ei välttämättä tallenna merkintöjäsi. Jos suljet välilehden, ne voivat kadota.',
-  hint1:'Suunnitelmaa ei tarvita. Kun olet tehnyt jotain, napauta sen ruutua ja leimaa se.',
+  hint1:'Alussa suunnitelmaa ei tarvita. Jos aloittaminen tuntuu ylivoimaiselta, napauta tänään tekemäsi asian ruutua ja leimaa se ensin.',
   hint2:'Yksi napautus on vahva leima (tein kaiken). Kaksi napautusta on vaalea leima (tein vähän). Vaalea leimakin lasketaan: tänään sait jotain tehtyä.',
-  hintGift:'🎁 Kiitos, kun kävit. Yksi päivä kohti seuraavaa ruutua on jo täytetty.',
   hintOk:'Selvä',
   todayTitle:'Tänään · {date}',
   stDone:'Kaikki tehty!',
@@ -834,16 +1225,16 @@ fi:{
   stEmpty:'Napauta ja leimaa',
   bannerPerfect:'🌈 Tänään kaikki leimattu!',
   bannerMini:'🌱 Vaalea leimakin pitää vauhdin yllä. Vähän on parempi kuin ei mitään.',
-  piledTitle:'Tähän asti',
-  nDays:'Leimapäiviä',
-  nWeek:'Viimeiset 7 päivää',
-  nStamps:'Leimoja',
+  piledTitle:"Rutiinini",
+  routineDay:"Päivä {n}", routineNone:"Ei vielä aloitettu", goalsCap:"Avattavat tavoitteet",
   pileNote:'Nämä luvut vain kasvavat. Jos jätät päivän väliin, ne pysyvät ennallaan.',
   unlockOpen:'Uusi ruutu avautui. Lisää se alta kohdasta "Omat ruutuni".',
   unlockLeft:'{n} päivää seuraavaan ruutuun',
   unlockLeftOne:'{n} päivä seuraavaan ruutuun',
-  unlockGift:'Ensimmäinen ympyrä on lahja. Se on valmiiksi täytetty, kun kävit kokeilemassa.',
   unlockAll:'Kaikki ruudut ovat auki.',
+  unlockSoFar:'Leimattu jo {n} päivänä',
+  unlockSoFarOne:'Leimattu jo {n} päivänä',
+  milesCap:'Uusi ruutu avautuu',
   weekTitle:'Tämä viikko',
   monthStat:'Leimapäiviä tässä kuussa: {n}',
   editTitle:'Omat ruutuni',
@@ -851,22 +1242,70 @@ fi:{
   open:'Avaa',
   close:'Sulje',
   picIcon:'Vaihda kuva',
+  picEmoji:"Kirjoita emoji leimaksi", picPhoto:"📷 Käytä omaa kuvaa", photoFail:"Kuvaa ei voi avata. Valitse toinen.",
+  picAi:"✨ Piirrä nimen mukaan", picSuggest:"Ehdotettu leima:", aiWait:"Piirretään… voi kestää minuutin.", aiFail:"Piirtäminen ei onnistu nyt. Käytä emojia tai kuvaa.", aiStop:"Pysäytä",
   slotAria:'Ruudun nimi',
   delAsk:'Poistetaanko?',
   needOne:'Ainakin yksi ruutu pitää jättää.',
+  chEntry:"💬 Juttele apulaisen kanssa",
+  chTitle:"Apulainen",
+  chNotice:"Tekoäly, joka miettii kanssasi, kun rutiini ei pysy. Se ei ole neuvontaa eikä hoitoa, ja se voi olla väärässä.",
+  chFabTxt:"Apulainen", chStyleTxt:"Sävyn ja nimen voi vaihtaa Asetuksissa.", chStyleBtn:"Avaa Asetukset",
+  chShareAsk:"Jos näytät ruutujen nimet ja leimapäivät, apulainen voi auttaa paremmin. Näytetäänkö?",
+  chShareYes:"Saa nähdä",
+  chShareNo:"Ei saa nähdä",
+  chPh:"Miten rutiinisi sujuu?",
+  chSend:"Lähetä",
+  chWait:"Mietin…",
+  chHello:"Hei! Jos rutiinin ylläpito on vaikeaa, kerro rohkeasti. Kuuntelen ensin.",
+  chTodoSum:"Tehtäväni ({n})",
+  chTodoPh:"Kirjoita tehtävä",
+  chTodoAdd:"Lisää",
+  chTodoNone:"Ei vielä.",
+  chTodoDel:"Poista",
+  chOrg:"Pyydä järjestämään",
+  chOrgMsg:"Järjestä tehtäväni, kiitos.",
+  chQuest:"Päivän tehtävä",
+  chAccept:"Ota",
+  chChange:"Vaihda",
+  chChangeMsg:"Anna minulle toinen tehtävä, kiitos.",
+  chAdded:"Lisätty tämän päivän näkymään.", stepCap:"Tämän päivän askel",
+  chEvFull:"Peruste: {src} · koko teksti tarkistettu",
+  chEvPart:"Peruste: {src} · vain osa koko tekstistä tarkistettu",
+  chEvAbs:"Peruste: {src} · vain tiivistelmä tarkistettu",
+  chNoEv:"En ole löytänyt tähän tutkimusnäyttöä, jonka voisin näyttää. En ehdota keinoja vaan kuuntelen lisää.",
+  chScope:"Tuo on minun auttamiseni ulkopuolella. Jos sinulla on kovin raskasta tai olet huolissasi terveydestäsi, puhu lähellä olevalle ammattilaiselle tai viralliselle tukipalvelulle. Jos kyse on rutiinista, joka ei pysy, kuuntelen mielelläni.",
+  chCrisis:"Olen huolissani sinusta. Olen tekoäly enkä voi auttaa sinua riittävästi, mutta ota heti yhteyttä alueesi kriisipuhelimeen tai hätänumeroon. Sinun ei tarvitse selvitä tästä yksin.",
+  chBusy:"Apulaiseen ei saatu yhteyttä. Yritä hetken päästä uudelleen. Leimaus toimii silti.",
+  chCut:"Vastaus ei tullut loppuun. Lähetä se uudelleen.",
+  chBlock:"Vastaus ei läpäissyt näytön tarkistusta, joten en näytä sitä. Kysy uudelleen.",
+  chShareCap:"Näytä apulaiselle ruutujen nimet ja leimapäivät",
+  chShareOn:"Näytetään",
+  chShareOff:"Ei näytetä",
+  chClear:"Poista keskustelu apulaisen kanssa",
+  chClearAsk:"Poistetaanko varmasti? Paina vielä kerran",
+  hpCap:"Apulaisen tyyli", hpName:"Apulaisen nimi", hpNamePh:"Nimi (tyhjä = oletus)", hpSpeech:"Sävy", hpDef:"Oletus", hpCasual:"Rento", hpPolite:"Kohtelias", hpEmoji:"Emoji", hpNone:"Ei", hpSome:"Joskus", hpOften:"Usein",
+  keyCap:"Oma API-avaimeni (valinnainen)", keyPh:"Liitä API-avain", keySave:"Tallenna", keyClear:"Poista avain", keySet:"Avain lisätty: neljä viimeistä {k}", keyNone:"Ei vielä lisätty", keyDone:"Tallennettu", keyBad:"Avain ei näytä oikealta. Tarkista se", keyMissing:"Avain tarvitaan. Lisää se Asetusten alaosassa kohdassa 'Oma API-avaimeni'", keyInvalid:"Lisätty avain ei kelpaa. Tarkista se Asetuksissa", keyLimit:"Avaimesi käyttöraja täyttyi. Tarkista raja ja laskutus siellä, mistä avain on peräisin",
+  chCleared:"Poistettu.",
   maxSix:'Ruutuja voi olla enintään kuusi.',
   lockMsg:"Leimaa {t} eri päivänä, niin avautuu yksi ruutu lisää. Nyt {days}{gift}.",
   lockGift:' (mukana lahjapäivä)',
+  giftTag:" (🎁 mukana 1 päivän lahja ensimmäisestä käynnistä)",
   dayCount:"{n} päivää",
   dayCountOne:"{n} päivä",
   addSlot:'+ Lisää ruutu',
-  introTitle:'Tämä on kokeiluversio. Kokeile ja kerro, miten meni',
-  introBody:'Tämä on tehty tarkoituksella todella yksinkertaiseksi, jotta aloittaminen onnistuu, vaikka suunnittelu uuvuttaisi. Kokeile 3–7 päivää ja kerro, mikä jäi puuttumaan tai oli epäselvää.',
-  introAsk:'Kehut ovat kivoja, mutta "jäin jumiin tähän" tai "en enää avannut sitä" auttaa paljon enemmän.',
+  introTitle:'Kokeile ja kerro, miten meni',
+  introBody:"Teimme tästä hyvin yksinkertaisen, jotta aloittaminen onnistuu, vaikka suunnittelu uuvuttaisi. Pidimme valinnat minimissä kaikkialla, asetuksista toimintoihin, jotta sovellus keskittyy yhteen tavoitteeseen: rutiinin rakentamiseen. Mitä pidempään jatkat, sitä enemmän toimintoja avautuu yksi kerrallaan, kunnes voit käyttää sitä kuten tavallista aikataulusovellusta. Kokeile ja kerro, mitä tarvitset.",
   introLang:'Jos jokin lause kuulostaa oudolta tai epäluonnolliselta, kerro siitäkin.',
   introGo:'Kirjoita palaute',
   introClose:'Sulje',
-  introBtn:'Tietoa kokeilusta',
+  introBtn:'Opas',
+  setBtn:"Asetukset", setBack:"Takaisin", langCap:"Kieli", themeCap:"Värimaailma",
+  theme_base:"Oletus", theme_peach:"Persikka", theme_lavender:"Laventeli", theme_sunny:"Aurinko", themeLocked:"Avautuu: {d}",
+  nextColor:"Seuraava väri",
+  privCap:"Yksityisyys", privBody:"Tässä ei ole tiliä eikä kirjautumista. Leimamerkintäsi tallentuvat vain tälle laitteelle, joten selaimen tietojen tyhjentäminen tai puhelimen vaihto poistaa ne. Apulaiselle kirjoittamasi välitetään tekoälypalveluun vastauksen tekemistä varten, eikä tämän sovelluksen palvelin tallenna sitä. Älä kirjoita henkilötietoja, kuten nimeä tai yhteystietoja.",
+  delCap:"Poista merkintäni", delBody:"Poistaa tälle laitteelle tallennetut leimamerkinnät, ruudut, asetukset ja keskustelun apulaisen kanssa ja palauttaa sovelluksen alkutilaan.",
+  delBtn:"Poista merkintäni", delYes:"Kyllä, poista kaikki", delCancel:"Peruuta", delAsk:"{n} leimapäivää ja {m} ruutua poistetaan lopullisesti. Poistetaanko?",
   fbTitle:'Lähetä palautetta',
   fbDesc:'Kirjoita muistiin, miten meni: mihin jäit jumiin, mikä oli sekavaa, mistä pidit. Mikä tahansa auttaa.',
   fbPlaceholder:'Esim. En enää avannut tätä toisen päivän jälkeen, koska…',
@@ -874,32 +1313,19 @@ fi:{
   formBtn:'Lähetä lomakkeella',
   copied:'Kopioitu. Liitä se nyt viestiin ja lähetä eteenpäin.',
   copyFail:'Automaattinen kopiointi ei onnistunut. Kopioi valittu teksti painamalla sitä pitkään.',
-  bkTitle:"Siirrä merkinnät",
-  bkDesc:"Merkintäsi ovat vain tässä selaimessa. Tallenna ne koodina, niin saat ne takaisin puhelimen vaihdon tai selaindatan tyhjennyksen jälkeen.",
-  bkPlaceholder:"Liitä tallennettu koodi tähän",
-  bkOut:"Kopioi merkintäkoodi",
-  bkIn:"Tuo liitetty koodi",
-  bkOk:"Kyllä, korvaa",
-  bkCopied:"Kopioitu. Liitä se muistiinpanoon tai viestiin itsellesi ja säilytä.",
-  bkCopyFail:"Automaattinen kopiointi ei onnistunut. Kopioi yllä oleva teksti painamalla sitä pitkään.",
-  bkEmpty:"Liitä ensin tallennettu koodi.",
-  bkBad:"Koodia ei voitu lukea. Tarkista, että liitit sen kokonaan.",
-  bkAsk:"Leimapäiviä tässä koodissa: {n}. Ruutuja: {m}. Se korvaa nykyiset merkintäsi. Napauta uudelleen, jos sopii.",
-  bkDone:"Merkinnät tuotu.",
   shelved:"Ruudun poistaminen ei poista jo kerättyjä leimoja.",
   fbHow:'Kun kopioit viestin, sen loppuun tulee päivien ja leimojen määrä. Lähetä viesti sille, joka kertoi sinulle tästä sovelluksesta, tekstiviestillä tai chatissa.',
   slots:{wakeup:'Herääminen',breakfast:'Aamiainen',move:'Liikkuminen'},
   icons:{wake:'Herääminen',meal:'Aamiainen',walk:'Aamukävely',eng:'Englannin kieli',zh:'Kiinan kieli',code:'Koodaus',ai:'Tekoälykehitys',hack:'Hackathon',jp:'Japanin kieli',es:'Espanjan kieli',fa:'Persian kieli',climb:'Kiipeily',hyrox:'Hyrox',marathon:'Maraton',rowing:'Soutu',boxing:'Nyrkkeily',tennis:'Tennis',golf:'Golf',bowling:'Keilaus',walkrun:'Kävely tai juoksu',strength:'Voimaharjoittelu',yoga:'Jooga',swimbike:'Uinti tai pyöräily',read:'Lukeminen',orig:'Kirja alkuperäiskielellä',origwin:'Kirja luettu'}
 },
 sv:{
-  title:'Stämpelkort för rutiner · testversion',
+  title:'Stämpelkort för rutiner',
   h1:'Stämpelkort för rutiner',
   sub:'{n} rutor idag. Du behöver bara stämpla.',
   subOne:"{n} ruta idag. Du behöver bara stämpla.",
   storageNotice:'Den här webbläsaren kanske inte sparar dina framsteg. Om du stänger fliken kan de försvinna.',
-  hint1:'Du behöver inte planera något. När du har gjort något trycker du på rutan för att stämpla.',
+  hint1:'Till en början behöver du inte planera något. Om det känns övermäktigt att börja kan du bara trycka på rutan för något du gjort idag och stämpla det först.',
   hint2:'Ett tryck ger en tydlig stämpel (allt klart). Två tryck ger en ljus stämpel (lite gjort). En ljus stämpel räknas också som en gjord dag.',
-  hintGift:'🎁 Tack för att du tittade in! Jag har redan fyllt i en dag mot nästa ruta.',
   hintOk:'Okej',
   todayTitle:'Idag · {date}',
   stDone:'Allt klart!',
@@ -907,16 +1333,16 @@ sv:{
   stEmpty:'Tryck för att stämpla',
   bannerPerfect:'🌈 Alla dagens stämplar är satta!',
   bannerMini:'🌱 En ljus stämpel håller igång det också. Lite är bättre än inget.',
-  piledTitle:'Hittills',
-  nDays:'Dagar med stämpel',
-  nWeek:'Senaste 7 dagarna',
-  nStamps:'Stämplar',
+  piledTitle:"Mina rutiner",
+  routineDay:"Dag {n}", routineNone:"Inte påbörjad", goalsCap:"Mål att låsa upp",
   pileNote:'De här siffrorna går bara uppåt. Hoppar du över en dag står de kvar.',
   unlockOpen:'En ny ruta har öppnats. Lägg till den under "Mina rutor" nedan.',
   unlockLeft:'{n} dagar till nästa ruta',
   unlockLeftOne:'{n} dag till nästa ruta',
-  unlockGift:'Den första pricken är en present, som tack för att du tittade in.',
   unlockAll:'Alla rutor är öppnade.',
+  unlockSoFar:'Stämplat på {n} dagar',
+  unlockSoFarOne:'Stämplat på {n} dag',
+  milesCap:'En ny ruta öppnas på',
   weekTitle:'Den här veckan',
   monthStat:'Dagar med stämpel den här månaden: {n}',
   editTitle:'Mina rutor',
@@ -924,22 +1350,70 @@ sv:{
   open:'Öppna',
   close:'Stäng',
   picIcon:'Byt bild',
+  picEmoji:"Skriv en emoji till din stämpel", picPhoto:"📷 Använd mitt foto", photoFail:"Det gick inte att öppna bilden. Välj en annan.",
+  picAi:"✨ Rita efter namnet", picSuggest:"Föreslagen stämpel:", aiWait:"Ritar… kan ta upp till en minut.", aiFail:"Det går inte att rita just nu. Använd en emoji eller ett foto.", aiStop:"Stoppa",
   slotAria:'Rutans namn',
   delAsk:'Ta bort?',
   needOne:'Minst en ruta måste finnas kvar.',
+  chEntry:"💬 Prata med hjälpen",
+  chTitle:"Hjälpen",
+  chNotice:"En AI som tänker med dig när en rutin inte håller. Den är varken rådgivning eller behandling och kan ha fel.",
+  chFabTxt:"Hjälpen", chStyleTxt:"Du kan ändra ton och namn i Inställningar.", chStyleBtn:"Öppna Inställningar",
+  chShareAsk:"Om du visar rutornas namn och stämpeldagar kan hjälpen hjälpa bättre. Visa dem?",
+  chShareYes:"Ja, visa",
+  chShareNo:"Nej, visa inte",
+  chPh:"Hur går det med rutinen?",
+  chSend:"Skicka",
+  chWait:"Funderar…",
+  chHello:"Hej! Om det är svårt att få rutinen att hålla, berätta gärna. Jag lyssnar först.",
+  chTodoSum:"Min att göra-lista ({n})",
+  chTodoPh:"Skriv något att göra",
+  chTodoAdd:"Lägg till",
+  chTodoNone:"Inget än.",
+  chTodoDel:"Ta bort",
+  chOrg:"Be om att ordna listan",
+  chOrgMsg:"Kan du ordna min att göra-lista?",
+  chQuest:"Dagens uppdrag",
+  chAccept:"Ta emot",
+  chChange:"Byt",
+  chChangeMsg:"Kan jag få ett annat uppdrag?",
+  chAdded:"Lagt på dagens vy.", stepCap:"Dagens steg",
+  chEvFull:"Underlag: {src} · hela texten kontrollerad",
+  chEvPart:"Underlag: {src} · bara en del av hela texten kontrollerad",
+  chEvAbs:"Underlag: {src} · bara sammanfattningen kontrollerad",
+  chNoEv:"Jag har inte hittat något forskningsunderlag jag kan visa för det här. Jag föreslår inga metoder utan lyssnar vidare.",
+  chScope:"Det ligger utanför vad jag kan hjälpa till med. Om du mår mycket dåligt eller oroar dig för din hälsa, prata med en yrkesperson i närheten eller en officiell stödtjänst. Gäller det en rutin som inte håller lyssnar jag gärna vidare.",
+  chCrisis:"Jag oroar mig för dig. Jag är en AI och kan inte ge dig den hjälp du behöver, men kontakta en krisjour eller larmcentral där du bor just nu. Du behöver inte klara det här ensam.",
+  chBusy:"Det gick inte att nå hjälpen. Försök igen om en stund. Stämplingen fungerar fortfarande.",
+  chCut:"Svaret kom inte hela vägen. Skicka igen.",
+  chBlock:"Det svaret klarade inte kontrollen av underlag, så jag visar det inte. Fråga igen.",
+  chShareCap:"Visa rutornas namn och stämpeldagar för hjälpen",
+  chShareOn:"Visas",
+  chShareOff:"Visas inte",
+  chClear:"Radera samtalet med hjälpen",
+  chClearAsk:"Verkligen ta bort? Tryck en gång till",
+  hpCap:"Hjälpens stil", hpName:"Hjälpens namn", hpNamePh:"Namn (tomt = standard)", hpSpeech:"Ton", hpDef:"Standard", hpCasual:"Avslappnad", hpPolite:"Artig", hpEmoji:"Emoji", hpNone:"Inga", hpSome:"Ibland", hpOften:"Ofta",
+  keyCap:"Min API-nyckel (valfri)", keyPh:"Klistra in API-nyckel", keySave:"Spara", keyClear:"Ta bort nyckel", keySet:"Nyckel inlagd: sista fyra {k}", keyNone:"Inte inlagd än", keyDone:"Sparad", keyBad:"Nyckeln har fel format. Kontrollera den", keyMissing:"En nyckel behövs. Lägg in den under 'Min API-nyckel' längst ned i Inställningar", keyInvalid:"Nyckeln du lade in gäller inte. Kontrollera den i Inställningar", keyLimit:"Din nyckel nådde sin användningsgräns. Kontrollera gräns och fakturering hos utfärdaren",
+  chCleared:"Borttaget.",
   maxSix:'Max sex rutor.',
   lockMsg:"Stämpla på {t} olika dagar så öppnas en ruta till. Hittills: {days}{gift}.",
   lockGift:' (inklusive presentdagen)',
+  giftTag:" (🎁 inklusive 1 dags present för första besöket)",
   dayCount:"{n} dagar",
   dayCountOne:"{n} dag",
   addSlot:'+ Lägg till ruta',
-  introTitle:'Det här är en testversion. Prova och berätta hur det gick',
-  introBody:'Den är medvetet gjord väldigt enkel, så att den som blir trött av att planera kan komma igång utan att planen står i vägen. Prova i 3 till 7 dagar och berätta vad som saknades eller var oklart.',
-  introAsk:'Beröm är trevligt, men "jag fastnade här" eller "jag slutade öppna den" hjälper mycket mer.',
+  introTitle:'Prova och berätta hur det gick',
+  introBody:"Vi har gjort den väldigt enkel, så att den som blir trött av att planera kan komma igång. Vi har hållit valen till ett minimum överallt, från inställningar till funktioner, så att appen fokuserar på ett enda mål: att bygga en rutin. Ju längre du håller i, desto fler funktioner öppnas en i taget, tills du kan använda den som en vanlig kalenderapp. Prova och berätta vad du behöver.",
   introLang:'Om någon mening låter konstig eller onaturlig får du gärna säga till om det också.',
   introGo:'Skriv feedback',
   introClose:'Stäng',
-  introBtn:'Om testversionen',
+  introBtn:'Guide',
+  setBtn:"Inställningar", setBack:"Tillbaka", langCap:"Språk", themeCap:"Färgtema",
+  theme_base:"Standard", theme_peach:"Persika", theme_lavender:"Lavendel", theme_sunny:"Sol", themeLocked:"Öppnas på {d}",
+  nextColor:"Nästa färg",
+  privCap:"Integritet", privBody:"Det finns inga konton eller inloggning. Dina stämplar sparas bara på den här enheten, så om du rensar webbläsardata eller byter telefon försvinner de. Det du skriver till hjälpen skickas vidare till en AI-tjänst för att ta fram svaret, och den här appens server sparar det inte. Skriv inga personuppgifter som namn eller kontaktuppgifter.",
+  delCap:"Radera mina stämplar", delBody:"Raderar stämplar, rutor, inställningar och samtalet med hjälpen som sparats på den här enheten och återställer appen till startläget.",
+  delBtn:"Radera mina stämplar", delYes:"Ja, radera allt", delCancel:"Avbryt", delAsk:"{n} dagar med stämpel och {m} rutor raderas för alltid. Vill du radera dem?",
   fbTitle:'Skicka feedback',
   fbDesc:'Skriv ner hur det gick: var du fastnade, vad som var förvirrande, vad du gillade. Allt hjälper.',
   fbPlaceholder:'T.ex. Jag slutade öppna den dag 2 eftersom…',
@@ -947,18 +1421,6 @@ sv:{
   formBtn:'Skicka via formulär',
   copied:'Kopierat. Klistra in det i ett meddelande och skicka.',
   copyFail:'Automatisk kopiering fungerade inte. Håll inne på den markerade texten för att kopiera.',
-  bkTitle:"Flytta dina markeringar",
-  bkDesc:"Dina markeringar finns bara i den här webbläsaren. Spara dem som en kod så kan du hämta tillbaka dem om du byter telefon eller rensar webbläsardata.",
-  bkPlaceholder:"Klistra in en sparad kod här",
-  bkOut:"Kopiera min kod",
-  bkIn:"Hämta den inklistrade koden",
-  bkOk:"Ja, ersätt",
-  bkCopied:"Kopierat. Klistra in det i en anteckning eller ett meddelande till dig själv och spara det.",
-  bkCopyFail:"Automatisk kopiering fungerade inte. Håll inne på texten ovan för att kopiera.",
-  bkEmpty:"Klistra in en sparad kod först.",
-  bkBad:"Koden gick inte att läsa. Kontrollera att du klistrade in hela.",
-  bkAsk:"Dagar med stämpel i den här koden: {n}. Rutor: {m}. Den ersätter dina nuvarande markeringar. Tryck igen om det är okej.",
-  bkDone:"Markeringarna är hämtade.",
   shelved:"Att ta bort en ruta tar inte bort stämplarna du redan samlat.",
   fbHow:'Antal dagar och stämplar läggs till sist i texten när du kopierar. Skicka den till den som tipsade dig om appen, via sms eller chatt.',
   slots:{wakeup:'Gå upp',breakfast:'Äta frukost',move:'Röra på sig'},
@@ -1142,6 +1604,9 @@ function guessLang(){
 const COLORS=['#ff8f70','#ffb85c','#5fcfb0','#6cb6f5','#9a8cf2','#ffd666','#4fc3d9'];
 const KEY='routine-trial-v1';
 const MAX_SLOTS=6;
+const UNLOCKS=[3,28,60]; // 도장 찍은 누적 일수 → 칸이 하나씩 열림(PRD 2026-10-21)
+const THEMES=[{id:'base'},{id:'peach',at:UNLOCKS[0]},{id:'lavender',at:UNLOCKS[1]},{id:'sunny',at:UNLOCKS[2]}]; // 칸이 열릴 때 테마도 하나씩 열림
+const THEME_BG={base:'#f2f7f5',peach:'#fbf1ea',lavender:'#f3f0fa',sunny:'#fff7df'};
 const pad=n=>String(n).padStart(2,'0');
 const fmt=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 let todayStr=fmt(new Date());
@@ -1155,7 +1620,7 @@ const DEFAULT_SLOTS=[
 const OLD_KO={s1:['일어나기','wakeup'],s2:['아침 먹기','breakfast'],s3:['몸 움직이기','move']};
 let S={slots:DEFAULT_SLOTS.map(x=>({...x})),log:{},shelf:[],first:todayStr,hint:true,draft:''};
 let store={get(k){return localStorage.getItem(k)},set(k,v){localStorage.setItem(k,v)}};
-let persists=true, editOpen=false, pickFor=-1, pendingDel=null, lastPop=null, shelvedMsg=false, bkPending=null;
+let persists=true, editOpen=false, pickFor=-1, pendingDel=null, lastPop=null, shelvedMsg=false, delPending=false;
 
 function load(){
   let fresh=true;
@@ -1186,7 +1651,18 @@ function realDays(){let n=0;for(const d in S.log)if(hasStamp(d))n++;return n}
 function stampDays(){return realDays()+(S.gift?1:0)}
 function weekCount(){let n=0;for(let i=0;i<7;i++){const dt=new Date();dt.setDate(dt.getDate()-i);if(hasStamp(fmt(dt)))n++}return n}
 function stampCount(){let n=0;const have=new Set(ids());for(const d in S.log)for(const k in S.log[d])if(have.has(k)&&S.log[d][k]>0)n++;return n}
-function capacity(){const d=stampDays();return Math.min(MAX_SLOTS,3+(d>=3?1:0)+(d>=7?1:0)+(d>=14?1:0))}
+function capacity(){const d=stampDays();return Math.min(MAX_SLOTS,3+UNLOCKS.filter(x=>d>=x).length)}
+function themeOpen(th){return !th.at||stampDays()>=th.at}
+function currentTheme(){ // 설정에서 고른 테마(열려 있을 때). 고르지 않았으면 열린 것 중 가장 나중 테마가 자동 적용
+  const th=THEMES.find(x=>x.id===S.theme);if(th&&themeOpen(th))return th.id;
+  let id='base';for(const x of THEMES)if(x.at&&themeOpen(x))id=x.id;return id}
+function applyTheme(){
+  const id=currentTheme();
+  const root=document.documentElement;
+  if(id==='base') root.removeAttribute('data-theme'); else root.setAttribute('data-theme',id);
+  const m=document.querySelector('meta[name="theme-color"]');
+  if(m) m.setAttribute('content',THEME_BG[id]);
+}
 function dayStatus(date){
   const v=S.slots.map(s=>get(date,s.id));
   if(!v.length) return 'none';
@@ -1194,12 +1670,17 @@ function dayStatus(date){
   if(v.every(x=>x>=1)) return 'mini';
   return 'none';
 }
+const iconOf=s=>{
+  if(s.img&&String(s.img).startsWith('data:image/')) return `<img class="ico photo" src="${esc(s.img)}" alt="">`;
+  if(s.emoji) return `<span class="ico emo" aria-hidden="true">${esc(s.emoji)}</span>`;
+  return iconSVG(s.icon);
+};
 const iconSVG=k=>ICONS[k]?`<svg class="ico" viewBox="0 0 64 64" aria-hidden="true">${ICONS[k]}</svg>`:'⭐';
 function hash(s){let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))|0;return h}
 const rot=(date,id)=>((hash(date+id)%15)-7)+'deg';
 function stampHTML(s,v,date){
   if(!v) return `<div class="empty">＋</div>`;
-  return `<div class="stamp ${v===2?'mini':''}" style="--c:${s.color};--r:${rot(date,s.id)}">${iconSVG(s.icon)}</div>`;
+  return `<div class="stamp ${v===2?'mini':''}" style="--c:${s.color};--r:${rot(date,s.id)}">${iconOf(s)}</div>`;
 }
 const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
@@ -1219,19 +1700,15 @@ function applyStatic(){
   document.documentElement.lang=HTML_LANG[lang];
   document.title=t('title');
   const set=(id,k)=>{$(id).textContent=t(k)};
-  set('h1','h1');set('hint1','hint1');set('hint2','hint2');set('giftNote','hintGift');set('hintOk','hintOk');
-  set('piledTitle','piledTitle');set('lbDays','nDays');set('lbWeek','nWeek');set('lbStamps','nStamps');set('weekTitle','weekTitle');
+  set('h1','h1');set('hint1','hint1');set('hint2','hint2');set('hintOk','hintOk');
+  set('piledTitle','piledTitle');set('weekTitle','weekTitle');
   set('editTitle','editTitle');set('editDesc','editDesc');set('addSlot','addSlot');
-  set('introTitle','introTitle');set('introBody','introBody');set('introAsk','introAsk');set('introLang','introLang');set('introGo','introGo');set('introClose','introClose');set('introBtnTxt','introBtn');
+  set('introTitle','introTitle');set('introBody','introBody');set('introLang','introLang');$('introLang').hidden=!t('introLang');set('introGo','introGo');set('introClose','introClose');set('introBtnTxt','introBtn');
   set('fbTitle','fbTitle');set('fbDesc','fbDesc');set('copyBtn','copyBtn');set('formBtn','formBtn');set('fbHow','fbHow');
   $('fb').placeholder=t('fbPlaceholder');
-  set('bkTitle','bkTitle');set('bkDesc','bkDesc');set('bkOut','bkOut');
-  $('bkIn').textContent=t(bkPending?'bkOk':'bkIn');
-  $('bk').placeholder=t('bkPlaceholder');$('bk').setAttribute('aria-label',t('bkTitle'));
   if(!persists) $('notice').textContent=t('storageNotice');
-  $('sub').textContent=t(S.slots.length===1?'subOne':'sub',{n:S.slots.length});
-  $('langCur').textContent=LANG_NAMES[lang];
-  document.querySelectorAll('#langList [data-l]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.l===lang)));
+  set('setBtnTxt','setBtn');set('setTitle','setBtn');set('setBack','setBack');set('langCap','langCap');set('themeCap','themeCap');
+  set('privCap','privCap');set('privBody','privBody');set('delCap','delCap');set('delBody','delBody');
 }
 
 function renderToday(){
@@ -1239,6 +1716,8 @@ function renderToday(){
   const done=S.slots.filter(s=>get(todayStr,s.id)>0).length;
   const st=dayStatus(todayStr);
   const date=new Intl.DateTimeFormat(LOCALE[lang],{month:'long',day:'numeric',weekday:'short'}).format(new Date());
+  if(S.step&&S.step.d!==todayStr){delete S.step;save()} // 하루가 지나면 말없이 사라진다(쌓이지 않고 지울 일도 없음)
+  const stepLine=S.step?`<p class="stepline"><b>${esc(t('stepCap'))}</b>${esc(S.step.t)}</p>`:'';
   $('today').innerHTML=`
     <div class="row"><h2>${esc(t('todayTitle',{date}))}</h2><span class="pill">${done} / ${n}</span></div>
     <div class="bar"><i style="width:${n?Math.round(done/n*100):0}%"></i></div>
@@ -1248,25 +1727,34 @@ function renderToday(){
       return `<button class="big ${v===1?'done':v===2?'mini':''} ${pop}" data-id="${s.id}" style="--c:${s.color}" type="button">
         <div class="box">${stampHTML(s,v,todayStr)}</div><span class="nm">${esc(slotLabel(s))}</span>
         <span class="st">${esc(v===1?t('stDone'):v===2?t('stMini'):t('stEmpty'))}</span></button>`}).join('')}</div>
+    ${stepLine}
     <div class="banner ${st!=='none'?'show':''}">${esc(st==='perfect'?t('bannerPerfect'):t('bannerMini'))}</div>`;
   $('today').querySelectorAll('.big').forEach(b=>b.onclick=()=>toggle(todayStr,b.dataset.id));
 }
 
+function slotDays(id){let n=0;for(const d in S.log)if(S.log[d][id]>0)n++;return n} // 그 칸에 도장을 찍은 누적 날수(연속 아님, 줄어들지 않음). '자리 잡았다' 같은 판정은 하지 않는다
 function renderPiled(){
-  const real=realDays(),total=stampDays();
-  $('nDays').textContent=real;
-  $('nWeek').textContent=weekCount();
-  $('nStamps').textContent=stampCount();
+  const total=stampDays();
+  $('routines').innerHTML=S.slots.map(sl=>{const n=slotDays(sl.id);return `<div class="rtn" style="--c:${sl.color}"><span class="rico">${iconOf(sl)}</span><span class="rnm">${esc(slotLabel(sl))}</span><span class="rdays">${esc(n?t('routineDay',{n}):t('routineNone'))}</span></div>`}).join('');
   $('pileNote').textContent=t('pileNote');
-  const next=[3,7,14].find(x=>total<x);
-  let h='';
+  const next=UNLOCKS.find(x=>total<x);
+  let h=`<p class="goalscap">${esc(t('goalsCap'))}</p>`;
+  const hd=h; // 캡션만 있는 상태(아래 '모두 열림' 판단용)
   if(S.slots.length<capacity()) h+=`<p class="unlockhd">${esc(t('unlockOpen'))}</p>`;
   if(next){
     const left=next-total;
-    const pips=Array.from({length:next},(_,i)=>`<i class="pip ${i<total?'on':''} ${S.gift&&i===0?'gift':''}">${S.gift&&i===0?'🎁':''}</i>`).join('');
-    h+=`<p class="unlockhd">${esc(t(left===1?'unlockLeftOne':'unlockLeft',{n:left}))}</p><div class="pips" aria-hidden="true">${pips}</div>`;
-    if(S.gift) h+=`<p class="stat">${esc(t('unlockGift'))}</p>`;
-  }else if(!h) h=`<p class="unlockhd">${esc(t('unlockAll'))}</p>`;
+    const pips=next<=14
+      ?`<div class="pips" aria-hidden="true">${Array.from({length:next},(_,i)=>`<i class="pip ${i<total?'on':''} ${S.gift&&i===0?'gift':''}">${S.gift&&i===0?'🎁':''}</i>`).join('')}</div>`
+      :`<div class="meter" aria-hidden="true"><i style="width:${Math.min(100,Math.round(total/next*100))}%"></i></div>`;
+    // 초반에는 '쌓인 일수', 다음 칸이 가까워지면(80%~) '남은 일수'를 보여 준다(Koo & Fishbach 2012 초록 기준, 전환 시점은 설계 판단)
+    const soon=total===0||total/next>=0.8;
+    const msg=soon?t(left===1?'unlockLeftOne':'unlockLeft',{n:left}):t(total===1?'unlockSoFarOne':'unlockSoFar',{n:total});
+    const giftTag=S.gift&&next<=14?t('giftTag'):''; // 첫 방문 선물 1일이 포함돼 있음을 '쌓인 일수' 옆에 밝힌다
+    h+=`<p class="unlockhd">${esc(msg+giftTag)}</p>${pips}`;
+  }else if(h===hd) h+=`<p class="unlockhd">${esc(t('unlockAll'))}</p>`;
+  h+=`<div class="miles"><span class="milescap">${esc(t('milesCap'))}</span>${UNLOCKS.map(x=>`<span class="mile ${total>=x?'done':''}">${total>=x?'✔ ':''}${esc(t('routineDay',{n:x}))}</span>`).join('')}</div>`;
+  const nt=THEMES.find(th=>th.at&&!themeOpen(th)); // 다음에 열리는 색을 한 줄로 알린다(모두 열렸으면 줄 없음)
+  if(nt) h+=`<p class="stat nextcolor"><i class="sw sw-${nt.id}"></i><span>${esc(t('nextColor'))}: ${esc(t('theme_'+nt.id))} · ${esc(t('themeLocked',{d:t('routineDay',{n:nt.at})}))}</span></p>`;
   $('unlock').innerHTML=h;
 }
 
@@ -1293,7 +1781,13 @@ function renderEdit(){
   $('edit').hidden=!editOpen;
   $('editBtn').textContent=editOpen?t('close'):t('open');
   if(!editOpen) return;
-  $('slots').innerHTML=S.slots.map((s,i)=>`<div class="slot"><button class="iconbtn" style="--c:${s.color}" data-i="${i}" aria-label="${esc(t('picIcon'))}" type="button">${iconSVG(s.icon)}</button><input value="${esc(slotLabel(s))}" maxlength="14" data-i="${i}" aria-label="${esc(t('slotAria'))}"><button class="x" data-del="${i}" type="button">${pendingDel===i?esc(t('delAsk')):'✕'}</button></div>`).join('');
+  $('slots').innerHTML=S.slots.map((s,i)=>`<div class="slot"><button class="iconbtn" style="--c:${s.color}" data-i="${i}" aria-label="${esc(t('picIcon'))}" type="button">${iconOf(s)}</button><input value="${esc(slotLabel(s))}" maxlength="14" data-i="${i}" aria-label="${esc(t('slotAria'))}"><button class="x" data-del="${i}" type="button">${pendingDel===i?esc(t('delAsk')):'✕'}</button></div>`).join('');
+  $('makeRow').hidden=pickFor<0;
+  $('emojiIn').placeholder=t('picEmoji');$('emojiIn').setAttribute('aria-label',t('picEmoji'));
+  $('photoLbl').textContent=t('picPhoto');
+  $('aiRow').hidden=pickFor<0;$('aiGo').textContent=t('picAi');$('aiStop').textContent=t('aiStop');
+  { const sg=pickFor>=0&&S.slots[pickFor]?suggestEmoji(slotLabel(S.slots[pickFor])):'';
+    $('sugBtn').hidden=!sg;$('sugBtn').dataset.e=sg;$('sugBtn').textContent=sg?t('picSuggest')+' '+sg:''; }
   $('picker').innerHTML=pickFor>=0?Object.keys(ICONS).map(k=>{const nm=esc(T[lang]['icons.'+k]||k);return `<button class="pk ${S.slots[pickFor]&&S.slots[pickFor].icon===k?'on':''}" data-k="${k}" aria-label="${nm}" title="${nm}" type="button"><svg viewBox="0 0 64 64">${ICONS[k]}</svg></button>`}).join(''):'';
   $('slots').querySelectorAll('.iconbtn').forEach(b=>b.onclick=()=>{pickFor=pickFor===+b.dataset.i?-1:+b.dataset.i;renderEdit()});
   $('slots').querySelectorAll('input').forEach(inp=>inp.onchange=()=>{
@@ -1313,14 +1807,14 @@ function renderEdit(){
   $('picker').querySelectorAll('.pk').forEach(b=>b.onclick=()=>{
     const s=S.slots[pickFor];
     const followsIcon=!s.name&&s.key&&!(('slots.'+s.key) in T.ko);
-    s.icon=b.dataset.k;
+    s.icon=b.dataset.k;delete s.emoji;delete s.img;
     if(followsIcon) s.key=b.dataset.k;
     pickFor=-1;save();render();
   });
   const cap=capacity(),days=stampDays();
   const can=S.slots.length<cap;
   $('addSlot').hidden=!can;
-  $('slotMsg').textContent=[shelvedMsg?t('shelved'):'',can?'':(S.slots.length>=MAX_SLOTS?t('maxSix'):t('lockMsg',{t:days<3?3:days<7?7:14,days:t(days===1?'dayCountOne':'dayCount',{n:days}),gift:S.gift?t('lockGift'):''}))].filter(Boolean).join(' ');
+  $('slotMsg').textContent=[shelvedMsg?t('shelved'):'',can?'':(S.slots.length>=MAX_SLOTS?t('maxSix'):t('lockMsg',{t:UNLOCKS.find(x=>days<x),days:t(days===1?'dayCountOne':'dayCount',{n:days}),gift:S.gift?t('lockGift'):''}))].filter(Boolean).join(' ');
 }
 
 function statsLine(){
@@ -1336,9 +1830,83 @@ $('fb').oninput=()=>{clearTimeout(draftTimer);draftTimer=setTimeout(()=>{S.draft
 
 $('hintOk').onclick=()=>{S.hint=false;save();render()};
 $('introClose').onclick=()=>{S.introOff=true;save();render()};
+/* 이모지·사진 도장: 이름이 그림을 따라 바뀌지 않게, 그림을 바꾸기 전 이름을 고정한다. 사진은 112px 정사각 JPEG로 줄여 이 브라우저에만 저장한다(서버로 보내지 않음) */
+function setOwnStamp(s,patch){
+  if(!s.name) s.name=slotLabel(s);
+  delete s.emoji;delete s.img;Object.assign(s,patch);
+  pickFor=-1;save();render();
+}
+const firstGlyph=v=>{v=String(v||'').trim();if(!v) return '';
+  if(window.Intl&&Intl.Segmenter){for(const x of new Intl.Segmenter(undefined,{granularity:'grapheme'}).segment(v)) return x.segment}
+  return Array.from(v)[0]};
+$('emojiIn').onchange=()=>{
+  const s=S.slots[pickFor],g=firstGlyph($('emojiIn').value);
+  $('emojiIn').value='';
+  if(!s||!g) return;
+  setOwnStamp(s,{emoji:g});
+};
+$('photoIn').onchange=e=>{
+  const f=e.target.files[0],s=S.slots[pickFor];e.target.value='';
+  if(!f||!s) return;
+  const rd=new FileReader();
+  rd.onload=()=>{
+    const im=new Image();
+    im.onload=()=>{
+      const N=112,c=document.createElement('canvas');c.width=c.height=N;
+      const m=Math.min(im.width,im.height);
+      c.getContext('2d').drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,N,N);
+      setOwnStamp(s,{img:c.toDataURL('image/jpeg',.82)});
+    };
+    im.onerror=()=>{$('slotMsg').textContent=t('photoFail')};
+    im.src=rd.result;
+  };
+  rd.onerror=()=>{$('slotMsg').textContent=t('photoFail')};
+  rd.readAsDataURL(f);
+};
+/* 칸 이름 → 이모지 제안(작은 목록; 없으면 제안하지 않는다). 사용자가 눌러야 적용된다 */
+const SUGGEST=[['하이록스|hyrox','🏋️'],['마라톤|marathon','🏅'],['달리기|러닝|조깅|run|jog','🏃'],['요가|yoga|스트레칭|stretch','🧘'],['독서|책|read|book','📖'],['물|water','💧'],['산책|walk','🚶'],['수영|swim','🏊'],['자전거|bike|cycl','🚴'],['암벽|클라이밍|climb|boulder','🧗'],['근력|웨이트|운동|gym|workout|strength','💪'],['공부|study','✏️'],['영어|english','🔤'],['중국어|chinese|中文','🀄'],['일본어|japanese','🗾'],['코딩|code|coding','💻'],['명상|meditat','🧘'],['일기|journal|diary','📝'],['비타민|영양제|약|vitamin|pill','💊'],['청소|clean','🧹'],['요리|cook','🍳'],['기타|guitar','🎸'],['피아노|piano','🎹'],['그림|draw|paint','🎨'],['잠|수면|sleep','😴'],['양치|brush','🪥'],['감사|gratitude','🙏'],['테니스|tennis','🎾'],['골프|golf','⛳'],['볼링|bowling','🎳'],['권투|복싱|box','🥊']];
+function suggestEmoji(name){
+  const n=String(name||'').toLowerCase();if(!n) return '';
+  for(const [keys,e] of SUGGEST) if(keys.split('|').some(w=>n.includes(w))) return e;
+  return '';
+}
+$('sugBtn').onclick=()=>{const s=S.slots[pickFor],e=$('sugBtn').dataset.e;if(s&&e) setOwnStamp(s,{emoji:e})};
+/* 서버가 그려 주는 도장(POST /api/stamp → {svg}). 받은 SVG는 한 번 더 걸러서(허용 태그만, 스크립트·외부 연결 제거) 쓴다. 서버가 없거나 실패하면 이모지·사진을 쓰라고 알린다 */
+const STAMP_URL='/api/stamp', STAMP_TIMEOUT=70000;
+const BAD_SVG_TAG=/^(script|foreignobject|image|use|a|style|animate|animatetransform|animatemotion|set|iframe|object|embed)$/i;
+function cleanSvg(raw){
+  const m=String(raw).match(/<svg[\s\S]*<\/svg>/i);if(!m) return null;
+  const doc=new DOMParser().parseFromString(m[0],'image/svg+xml');
+  const svg=doc.documentElement;
+  if(!svg||svg.localName!=='svg'||doc.querySelector('parsererror')) return null;
+  [svg,...svg.querySelectorAll('*')].forEach(el=>{
+    if(el!==svg&&BAD_SVG_TAG.test(el.localName)){el.remove();return}
+    [...el.attributes].forEach(a=>{const n=a.name.toLowerCase();if(n.startsWith('on')||n.includes('href')||/url\((?!\s*#)/i.test(a.value))el.removeAttribute(a.name)});
+  });
+  svg.setAttribute('xmlns','http://www.w3.org/2000/svg');
+  svg.setAttribute('viewBox','0 0 64 64');svg.removeAttribute('width');svg.removeAttribute('height');
+  const out=new XMLSerializer().serializeToString(svg);
+  return out.length>16000?null:'data:image/svg+xml;charset=utf-8,'+encodeURIComponent(out);
+}
+let aiCtl=null;
+$('aiGo').onclick=async()=>{
+  const s=S.slots[pickFor];if(!s||aiCtl) return;
+  const name=slotLabel(s).trim().slice(0,20);if(!name) return;
+  aiCtl=new AbortController();const to=setTimeout(()=>aiCtl&&aiCtl.abort(),STAMP_TIMEOUT);
+  $('slotMsg').textContent=t('aiWait');$('aiGo').disabled=true;$('aiStop').hidden=false;
+  try{
+    const r=await fetch(STAMP_URL,{method:'POST',headers:keyHeaders({'Content-Type':'application/json'}),body:JSON.stringify({name}),signal:aiCtl.signal});
+    if(!r.ok){const er=new Error('http '+r.status);try{er.code=(await r.json()).error||''}catch(x){}throw er}
+    const uri=cleanSvg((await r.json()).svg);
+    if(!uri) throw new Error('bad svg');
+    $('slotMsg').textContent='';setOwnStamp(s,{img:uri});
+  }catch(e){ $('slotMsg').textContent=aiCtl&&aiCtl.signal.aborted&&e.name==='AbortError'?'':t(KEY_ERRS.includes(e&&e.code)?e.code:'aiFail') }
+  finally{clearTimeout(to);aiCtl=null;$('aiGo').disabled=false;$('aiStop').hidden=true}
+};
+$('aiStop').onclick=()=>{if(aiCtl) aiCtl.abort()};
 const scrollMode=()=>matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth';
-$('introBtn').onclick=()=>{S.introOff=false;save();render();scrollTo({top:0,behavior:scrollMode()})};
-$('introGo').onclick=()=>{$('fbCard').scrollIntoView({behavior:scrollMode(),block:'start'});$('fb').focus({preventScroll:true})};
+$('introBtn').onclick=()=>{S.introOff=false;S.hint=true;save();render();scrollTo({top:0,behavior:scrollMode()})};
+$('introGo').onclick=()=>{setView(true);$('fbCard').open=true;$('fbCard').scrollIntoView({behavior:scrollMode(),block:'start'});$('fb').focus({preventScroll:true})};
 $('editBtn').onclick=()=>{editOpen=!editOpen;pickFor=-1;pendingDel=null;shelvedMsg=false;renderEdit()};
 $('addSlot').onclick=()=>{
   if(S.slots.length>=capacity()) return;
@@ -1347,21 +1915,219 @@ $('addSlot').onclick=()=>{
   S.slots.push({id:'s'+Date.now(),key:icon,icon,color:COLORS[S.slots.length%COLORS.length]});
   shelvedMsg=false;save();render();
 };
-function setLangMenu(open){$('langList').hidden=!open;$('langBtn').setAttribute('aria-expanded',String(open))}
-$('langBtn').onclick=e=>{e.stopPropagation();setLangMenu($('langList').hidden)};
-document.querySelectorAll('#langList [data-l]').forEach(b=>b.onclick=()=>{
-  lang=b.dataset.l;S.lang=lang;save();$('fbMsg').textContent='';bkPending=null;$('bkMsg').textContent='';setLangMenu(false);$('langBtn').focus();render();
-});
-document.addEventListener('click',e=>{if(!$('langmenu').contains(e.target))setLangMenu(false)});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('langList').hidden){setLangMenu(false);$('langBtn').focus()}});
+/* 도우미 (대화형 루틴 코치, PRD "도우미"): 대화·할 일은 이 브라우저에만 저장하고, 보낼 때마다 최근 대화와 할 일 목록(허락했다면 칸 이름·도장 일수)을 서버(POST /api/chat)로 보낸다.
+   도장 날짜별 기록은 보내지 않는다. 서버가 없거나 실패해도 도장 찍기는 그대로다. 서버가 보내는 done(ok)을 받지 못한 답은 버린다. 위기 표현은 서버로 보내지 않고 여기서 먼저 걸러 낸다. */
+const CHAT_URL='/api/chat', CHAT_TIMEOUT=45000, CHAT_KEEP=40, CHAT_SEND=20;
+const CRISIS_WORDS=['죽고 싶','죽고싶','자살','살기 싫','살기싫','사라지고 싶','자해','목숨을 끊','극단적 선택','kill myself','suicide','want to die','end my life','self-harm','self harm','hurt myself','想死','自杀','自殺','自残','自殘','不想活','了结生命','結束生命','尋死','寻死','bunuh diri','mau mati','tự tử','muốn chết','quiero morir','suicidio','quitarme la vida','itsemurha','haluan kuolla','självmord','vill dö']; // server/coach.py 의 CRISIS_KEYWORDS 와 같게 유지
+const isCrisis=s=>{const l=s.toLowerCase();return CRISIS_WORDS.some(w=>l.includes(w))};
+let inChat=false, chBusy=false, chCtl=null, chLive=null;
+function chatData(){
+  if(!S.chat||typeof S.chat!=='object') S.chat={};
+  const c=S.chat;
+  if(!Array.isArray(c.msgs)) c.msgs=[];
+  if(!Array.isArray(c.todos)) c.todos=[];
+  c.share=false; // 옛 '보여 줄까요?' 설정은 더 쓰지 않는다(칸 이름·도장 일수는 늘 함께 보낸다)
+  return c;
+}
+function evLines(cards){
+  const out=[];
+  for(const cd of cards||[]) for(const s of cd.sources||[]){
+    const key=s.checked==='full'?'chEvFull':s.checked==='partial'?'chEvPart':'chEvAbs';
+    const link=`<a href="https://doi.org/${esc(s.doi)}" target="_blank" rel="noopener noreferrer">${esc(s.short)}</a>`;
+    out.push('<small>'+esc(t(key,{src:'\u0001'})).replace('\u0001',link)+'</small>');
+  }
+  return out.join('');
+}
+function bubble(m,i,last){
+  if(m.r==='u') return `<div class="bub u">${esc(m.c)}</div>`;
+  if(m.k) return `<div class="bub a">${esc(t(m.k))}</div>`;
+  const note=m.note?`<small>${esc(t('chNoEv'))}</small>`:'';
+  if(m.mode==='quest'){
+    const btns=m.acc?`<small>${esc(t('chAdded'))}</small>`:(last?`<div class="chrow"><button class="btn main" data-q="acc" data-i="${i}" type="button">${esc(t('chAccept'))}</button><button class="btn" data-q="chg" type="button">${esc(t('chChange'))}</button></div>`:'');
+    return `<div class="bub a"><div class="quest"><b>${esc(t('chQuest'))}</b>${esc(m.c)}</div>${evLines(m.cards)}${btns}</div>`;
+  }
+  return `<div class="bub a">${esc(m.c)}${note}${evLines(m.cards)}</div>`;
+}
+function renderChat(){
+  $('chFabIco').textContent='💬';$('chFabTxt').textContent=t('chFabTxt');$('chatFab').classList.toggle('seen',!!S.chatSeen);$('chatFab').setAttribute('aria-label',t('chEntry'));$('chatFab').title=t('chEntry');$('chatFab').hidden=inChat;$('chatFab').setAttribute('aria-expanded',String(inChat));
+  const c=chatData();
+  $('chatView').hidden=!inChat;
+  if(!inChat) return;
+  $('chTitle').textContent=t('chTitle');$('chBack').textContent=t('close');$('chNotice').textContent=t('chNotice');$('chStyleTxt').textContent=t('chStyleTxt');$('chStyleBtn').textContent=t('chStyleBtn');
+  $('chMain').hidden=false;
+  $('chIn').placeholder=t('chPh');$('chIn').setAttribute('aria-label',t('chPh'));$('chSend').textContent=t('chSend');$('chSend').disabled=chBusy;
+  const lastQ=(()=>{for(let i=c.msgs.length-1;i>=0;i--){if(c.msgs[i].r==='a')return c.msgs[i].mode==='quest'?i:-1}return -1})();
+  let h=`<div class="bub a">${esc(t('chHello'))}</div>`+c.msgs.map((m,i)=>bubble(m,i,i===lastQ&&i===c.msgs.length-1)).join('');
+  if(chLive) h+=`<div class="bub a">${chLive.text?esc(chLive.text):esc(t('chWait'))}</div>`;
+  $('chLog').innerHTML=h;
+  $('chLog').querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{
+    if(b.dataset.q==='chg'){sendChat(t('chChangeMsg'));return}
+    const m=c.msgs[+b.dataset.i];if(!m||m.acc) return;
+    S.step={t:m.c.slice(0,100),d:todayStr};m.acc=true;save();render();
+  });
+  $('chLog').scrollTop=$('chLog').scrollHeight;
+}
+function chatHistory(c){
+  const h=c.msgs.filter(m=>!m.x&&m.c).slice(-CHAT_SEND).map(m=>({role:m.r==='u'?'user':'assistant',content:m.c}));
+  while(h.length&&h[0].role!=='user') h.shift();
+  return h;
+}
+async function sendChat(text){
+  text=String(text||'').trim().slice(0,300);
+  if(!text||chBusy) return;
+  const c=chatData();
+  $('chMsg').textContent='';
+  if(isCrisis(text)){ // 서버로 보내지 않고, 이 말은 이후 대화에도 보내지 않는다
+    c.msgs.push({r:'u',c:text,x:true},{r:'a',k:'chCrisis',x:true});c.msgs=c.msgs.slice(-CHAT_KEEP);save();renderChat();return;
+  }
+  const um={r:'u',c:text};c.msgs.push(um);
+  chBusy=true;chLive={text:''};renderChat();
+  const body={messages:chatHistory(c),context:{slots:S.slots.map(slotLabel),days:stampDays()},todos:[]};
+  const hc=helperChar();if(Object.keys(hc).length) body.character=hc; // 고른 것만 보낸다(안 고르면 서버 기본 동작)
+  const ctl=chCtl=new AbortController();
+  const timer=setTimeout(()=>ctl.abort(),CHAT_TIMEOUT);
+  let done=null,end='',note='',mode='',keyErr='';
+  const onLine=l=>{
+    let e;try{e=JSON.parse(l)}catch(x){return}
+    if(e.type==='delta'){chLive.text+=e.text||'';renderChat()}
+    else if(e.type==='notice'&&e.key==='noEvidence')note='noEvidence';
+    else if(e.type==='mode')mode=e.mode;
+    else if(e.type==='done')done=e;
+    else if(e.type==='crisis'||e.type==='scope'||e.type==='error'){end=e.type;if(e.key)keyErr=String(e.key)}
+  };
+  try{
+    const res=await fetch(CHAT_URL,{method:'POST',headers:keyHeaders({'Content-Type':'application/json'}),body:JSON.stringify(body),signal:ctl.signal});
+    if(!res.ok) throw new Error('http');
+    if(res.body&&res.body.getReader){
+      const rd=res.body.getReader(),dec=new TextDecoder();let buf='';
+      for(;;){const r=await rd.read();if(r.done)break;buf+=dec.decode(r.value,{stream:true});const parts=buf.split('\n');buf=parts.pop();parts.forEach(onLine)}
+      if(buf.trim()) onLine(buf);
+    }else (await res.text()).split('\n').forEach(l=>l.trim()&&onLine(l));
+  }catch(e){end='error'} // 도우미를 못 부르면(서버 없음·시간 초과·끊김) 안내만 하고 앱은 그대로
+  finally{clearTimeout(timer)}
+  const live=chLive;chLive=null;chBusy=false;chCtl=null;
+  const retry=key=>{ // 이번 말은 지우고 입력창에 되돌려 놓아 다시 보낼 수 있게 한다
+    c.msgs.splice(c.msgs.indexOf(um),1);$('chIn').value=text;$('chMsg').textContent=t(key);
+  };
+  if(end==='crisis'||end==='scope'){um.x=true;c.msgs.push({r:'a',k:end==='crisis'?'chCrisis':'chScope',x:true})}
+  else if(end==='error') retry(KEY_ERRS.includes(keyErr)?keyErr:'chBusy');
+  else if(!done) retry('chCut');
+  else if(!done.ok) retry('chBlock');
+  else c.msgs.push({r:'a',c:live.text.trim(),mode:done.mode||mode,cards:done.cards||[],note});
+  c.msgs=c.msgs.slice(-CHAT_KEEP);save();renderChat();
+  if($('chIn').value) $('chIn').focus({preventScroll:true});
+}
+function setChat(on){
+  inChat=on;if(on&&!S.chatSeen){S.chatSeen=true;save()}render();
+  if(on){const c=chatData();$('chIn').focus({preventScroll:true})}else $('chatFab').focus({preventScroll:true});
+}
+$('chatFab').onclick=()=>setChat(true);
+$('chStyleBtn').onclick=()=>{setView(true);const r=$('hpRow');r.open=true;r.scrollIntoView({behavior:scrollMode(),block:'start'})};
+$('chBack').onclick=()=>setChat(false);
+$('chSend').onclick=()=>{const v=$('chIn').value;$('chIn').value='';sendChat(v)};
+$('chIn').onkeydown=e=>{if(e.key==='Enter'&&!e.isComposing){e.preventDefault();$('chSend').onclick()}};
+
+let inSettings=false;
+function setView(on){
+  inSettings=on;if(on)inChat=false;if(!on){delPending=false}render();scrollTo({top:0});
+  $(on?'setBack':'setBtn').focus({preventScroll:true});
+}
+$('setBtn').onclick=()=>setView(!inSettings);
+$('setBack').onclick=()=>setView(false);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(inChat)setChat(false);else if(inSettings)setView(false)}});
+/* 내 기록 지우기: 한 번 누르면 '정말 지울까요?'로 바뀌고, 한 번 더 눌러야 지워진다. 이 기기의 저장 내용을 모두 지우고 처음 상태로 돌아간다. */
+function renderDelete(){
+  $('delBtn').textContent=t(delPending?'delYes':'delBtn');
+  $('delBtn').classList.toggle('on',delPending);
+  $('delCancel').textContent=t('delCancel');$('delCancel').hidden=!delPending;
+  $('delMsg').textContent=delPending?t('delAsk',{n:realDays(),m:S.slots.length}):'';
+}
+$('delBtn').onclick=()=>{
+  if(!delPending){delPending=true;renderDelete();return}
+  try{localStorage.removeItem(KEY)}catch(e){}
+  setUserKey('');
+  location.reload();
+};
+$('delCancel').onclick=()=>{delPending=false;renderDelete();$('delBtn').focus({preventScroll:true})};
+function renderSettings(){
+  renderDelete();
+  $('langPills').innerHTML=LANGS.map(l=>`<button type="button" class="opt" role="radio" aria-checked="${l===lang}" data-l="${l}">${esc(LANG_NAMES[l])}</button>`).join('');
+  $('langPills').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    lang=b.dataset.l;S.lang=lang;save();$('fbMsg').textContent='';render();
+    const sel=$('langPills').querySelector('[aria-checked="true"]');if(sel)sel.focus({preventScroll:true});
+  });
+  const cur=currentTheme();
+  $('langVal').textContent=LANG_NAMES[lang];$('themeVal').textContent=t('theme_'+cur); // 접힌 줄에 현재 값을 보여 준다
+  $('themePills').innerHTML=THEMES.map(th=>{
+    const open=themeOpen(th),name=esc(t('theme_'+th.id));
+    const lock=open?'':`<small>🔒 ${esc(t('themeLocked',{d:t('routineDay',{n:th.at})}))}</small>`; // 잠긴 색은 '언제 열리는지'를 보여 주는 목표
+    return `<button type="button" class="opt" role="radio" aria-checked="${open&&cur===th.id}" data-th="${th.id}"${open?'':' disabled'}><i class="sw sw-${th.id}"></i><span>${name} ${lock}</span></button>`}).join('');
+  $('themePills').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    if(b.disabled) return;
+    S.theme=b.dataset.th;save();render();
+    const sel=$('themePills').querySelector('[aria-checked="true"]');if(sel)sel.focus({preventScroll:true});
+  });
+  renderHelperRow();
+  renderKeyRow();
+}
+/* 도우미 말투: 이름·말투·이모지. 고른 것만 이 브라우저에 저장하고 대화 요청에 character 로 보낸다. 서버가 값을 한 번 더 걸러 쓴다 */
+const HP_SPEECH=[['','hpDef'],['casual','hpCasual'],['polite','hpPolite']], HP_EMOJI=[['','hpDef'],['none','hpNone'],['some','hpSome'],['often','hpOften']];
+function helperChar(){
+  const c=chatData(),o=c.char&&typeof c.char==='object'?c.char:{},out={};
+  const nm=String(o.name||'').trim().slice(0,20);if(nm) out.name=nm;
+  if(o.speech==='casual'||o.speech==='polite') out.speech=o.speech;
+  if(['none','some','often'].includes(o.emoji)) out.emoji=o.emoji;
+  return out;
+}
+function setHelperChar(key,v){const c=chatData(),o=helperChar();if(v) o[key]=v;else delete o[key];c.char=o;save();render()}
+function renderHelperRow(){
+  const o=helperChar();
+  const sp=HP_SPEECH.find(x=>x[0]===(o.speech||''));
+  $('hpCap').textContent=t('hpCap');$('hpVal').textContent=[o.name,o.speech?t(sp[1]):''].filter(Boolean).join(' · ');
+  $('hpNameCap').textContent=t('hpName');$('hpName').placeholder=t('hpNamePh');$('hpName').setAttribute('aria-label',t('hpName'));
+  if(document.activeElement!==$('hpName')) $('hpName').value=o.name||'';
+  $('hpSpeechCap').textContent=t('hpSpeech');$('hpEmojiCap').textContent=t('hpEmoji');
+  const pills=(id,list,key)=>{
+    $(id).innerHTML=list.map(([v,kk])=>`<button type="button" class="opt" role="radio" aria-checked="${(o[key]||'')===v}" data-v="${v}">${esc(t(kk))}</button>`).join('');
+    $(id).querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+      setHelperChar(key,b.dataset.v);
+      const sel=$(id).querySelector('[aria-checked="true"]');if(sel)sel.focus({preventScroll:true});
+    });
+  };
+  pills('hpSpeech',HP_SPEECH,'speech');pills('hpEmoji',HP_EMOJI,'emoji');
+}
+/* 내 OpenAI 키(선택): 이 브라우저 탭의 sessionStorage 에만 둔다(탭을 닫으면 지워짐). 서버에는 요청마다 X-User-LLM-Key 헤더로만 보내고, 화면에는 끝 네 자리만 보인다 */
+const UKEY='routine-user-key', KEY_ERRS=['keyMissing','keyInvalid','keyLimit'];
+function getUserKey(){try{return sessionStorage.getItem(UKEY)||''}catch(e){return ''}}
+function setUserKey(v){try{if(v)sessionStorage.setItem(UKEY,v);else sessionStorage.removeItem(UKEY);return true}catch(e){return false}}
+const validKey=v=>/^[\x21-\x7e]{20,200}$/.test(v);
+function keyHeaders(hd){const k=getUserKey();if(k)hd['X-User-LLM-Key']=k;return hd}
+function renderKeyRow(){
+  const k=getUserKey();
+  $('keyCap').textContent=t('keyCap');
+  $('keyState').textContent=k?t('keySet',{k:k.slice(-4)}):t('keyNone');
+  $('keyVal').textContent=k?'····'+k.slice(-4):'';
+  $('keyIn').placeholder=t('keyPh');$('keyIn').setAttribute('aria-label',t('keyCap'));
+  $('keySave').textContent=t('keySave');$('keyClear').textContent=t('keyClear');$('keyClear').hidden=!k;
+}
+$('keySave').onclick=()=>{
+  const v=$('keyIn').value.trim();
+  if(!validKey(v)||!setUserKey(v)){$('keyMsg').textContent=t('keyBad');return}
+  $('keyIn').value='';$('keyMsg').textContent=t('keyDone');renderKeyRow();
+};
+$('keyClear').onclick=()=>{setUserKey('');$('keyIn').value='';$('keyMsg').textContent='';renderKeyRow()};
+$('hpName').onchange=()=>setHelperChar('name',$('hpName').value.trim().slice(0,20));
 
 function render(){
+  $('mainView').hidden=inSettings;$('settingsView').hidden=!inSettings;
+  $('setBtn').setAttribute('aria-expanded',String(inSettings));
   $('intro').hidden=!!S.introOff;
+  $('introBtn').hidden=inSettings||(!S.introOff&&!!S.hint); // 설정 화면이거나 소개·사용법 카드가 모두 열려 있을 땐 숨김
   $('hint').hidden=!S.hint;
-  $('giftNote').hidden=!S.gift;
   if(FEEDBACK_URL){$('formBtn').href=FEEDBACK_URL;$('formBtn').hidden=false}
   applyStatic();
-  renderToday();renderPiled();renderWeek();renderEdit();
+  applyTheme();
+  renderToday();renderPiled();renderWeek();renderEdit();renderChat();renderSettings();
   lastPop=null;
 }
 function confetti(){
@@ -1384,90 +2150,6 @@ document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshTod
 addEventListener('focus',refreshToday);
 addEventListener('pageshow',refreshToday);
 setInterval(refreshToday,60000);
-
-/* 기록 코드: 기록을 한 줄 글자로 바꿔 복사해 두었다가 다른 기기나 새 브라우저에서 다시 가져온다. 계정 없이 쓴다. */
-const BK_HEAD='DJP1:';
-function bkEncode(){
-  const json=JSON.stringify({v:1,slots:S.slots,shelf:S.shelf,log:S.log,first:S.first,gift:!!S.gift});
-  const bytes=new TextEncoder().encode(json);
-  let bin='';
-  for(let i=0;i<bytes.length;i+=8192) bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+8192));
-  return BK_HEAD+btoa(bin);
-}
-/* 붙여 넣은 글은 믿지 않고 모양을 하나하나 확인한다. 통과한 값만 새로 만들어 돌려준다. */
-function bkClean(o){
-  if(!o||typeof o!=='object'||o.v!==1) return null;
-  const okId=x=>typeof x==='string'&&/^s\d{1,16}$/.test(x);
-  const okDate=x=>typeof x==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(x);
-  const seen=new Set();
-  const slot=s=>{
-    if(!s||typeof s!=='object'||!okId(s.id)||seen.has(s.id)) return null;
-    if(typeof s.icon!=='string'||!Object.prototype.hasOwnProperty.call(ICONS,s.icon)) return null;
-    if(typeof s.color!=='string'||!/^#[0-9a-fA-F]{6}$/.test(s.color)) return null;
-    const c={id:s.id,icon:s.icon,color:s.color};
-    if(typeof s.key==='string'&&/^[A-Za-z0-9_-]{1,24}$/.test(s.key)) c.key=s.key;
-    if(typeof s.name==='string'&&s.name.trim()) c.name=s.name.trim().slice(0,14);
-    seen.add(s.id);
-    return c;
-  };
-  if(!Array.isArray(o.slots)||o.slots.length<1||o.slots.length>MAX_SLOTS) return null;
-  const slots=o.slots.map(slot);
-  if(slots.includes(null)) return null;
-  const shelf=Array.isArray(o.shelf)?o.shelf.slice(0,200).map(slot):[];
-  if(shelf.includes(null)) return null;
-  if(!o.log||typeof o.log!=='object'||Array.isArray(o.log)) return null;
-  const log={};
-  let days=0;
-  for(const d of Object.keys(o.log)){
-    if(!okDate(d)||++days>20000) return null;
-    const row=o.log[d];
-    if(!row||typeof row!=='object'||Array.isArray(row)) return null;
-    const r={};
-    for(const id of Object.keys(row)){
-      if(!okId(id)||(row[id]!==1&&row[id]!==2)) return null;
-      if(seen.has(id)) r[id]=row[id];
-    }
-    if(Object.keys(r).length) log[d]=r;
-  }
-  return {slots,shelf,log,first:okDate(o.first)?o.first:todayStr,gift:o.gift===true};
-}
-function bkDecode(text){
-  const s=String(text).replace(/\s+/g,'');
-  if(s.length>3000000||!s.startsWith(BK_HEAD)) return null;
-  try{
-    const bin=atob(s.slice(BK_HEAD.length));
-    const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));
-    return bkClean(JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes)));
-  }catch(e){return null}
-}
-$('bk').oninput=()=>{if(bkPending){bkPending=null;$('bkMsg').textContent='';applyStatic()}};
-$('bkOut').onclick=async()=>{
-  const code=bkEncode();
-  $('bk').value=code;bkPending=null;
-  try{await navigator.clipboard.writeText(code);$('bkMsg').textContent=t('bkCopied')}
-  catch(e){$('bk').focus();$('bk').select();$('bkMsg').textContent=t('bkCopyFail')}
-  applyStatic();
-};
-$('bkIn').onclick=()=>{
-  if(bkPending){
-    const c=bkPending;bkPending=null;
-    S.slots=c.slots;S.shelf=c.shelf;S.log=c.log;S.first=c.first;S.gift=c.gift;
-    pickFor=-1;pendingDel=null;shelvedMsg=false;
-    save();render();
-    $('bk').value='';$('bkMsg').textContent=t('bkDone');
-    return;
-  }
-  const raw=$('bk').value.trim();
-  if(!raw){$('bkMsg').textContent=t('bkEmpty');return}
-  const c=bkDecode(raw);
-  if(!c){$('bkMsg').textContent=t('bkBad');return}
-  bkPending=c;
-  const have=new Set(c.slots.concat(c.shelf).map(s=>s.id));
-  let n=0;
-  for(const d in c.log) if(Object.keys(c.log[d]).some(id=>have.has(id))) n++;
-  $('bkMsg').textContent=t('bkAsk',{n:n,m:c.slots.length});
-  applyStatic();
-};
 
 persists=probe();
 if(persists) load();
