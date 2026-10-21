@@ -3,6 +3,7 @@
 - GET  /          : 앱 화면(../index.html). 화면과 API 가 같은 주소라 CORS 가 필요 없다.
 - GET  /health    : 상태 확인
 - POST /api/stamp : 루틴 이름 → {"svg": 정리된 SVG}. 대화와 별도의 더 빡빡한 속도 제한(stamp.py 가 SVG 를 정리한다)
+- POST /api/feedback : 의견 글 → 만든 사람 메일로 전달(feedback.py). 저장하지 않고 본문을 로그에 남기지 않는다. 오류: 400 empty / 429 busy / 503 notConfigured / 502 failed
 - POST /api/chat  : 최근 대화 + (사용자가 허락한) 칸 이름·일수 + 할 일 목록 → 도우미의 답. NDJSON 이벤트로 스트리밍한다.
     이벤트: mode{mode} / notice{key} / delta{text} / done{ok,mode,cards} / crisis / scope / error
     화면은 done 을 받지 못하거나 ok 가 false 이면 그 답을 버린다.
@@ -27,6 +28,7 @@ from pydantic import BaseModel
 import byok
 import cards as cardlib
 import coach
+import feedback
 import llm as llm_module
 import stamp
 from llm import make_llm
@@ -36,6 +38,8 @@ RATE_PER_IP = int(os.environ.get("RATE_PER_IP_PER_MIN", "20"))
 RATE_ALL = int(os.environ.get("RATE_ALL_PER_MIN", "120"))
 RATE_STAMP_PER_IP = int(os.environ.get("RATE_STAMP_PER_IP_PER_MIN", "5"))   # 도장 그림은 비용이 커서 훨씬 빡빡하다
 RATE_STAMP_ALL = int(os.environ.get("RATE_STAMP_ALL_PER_MIN", "30"))
+RATE_FEEDBACK_PER_IP = int(os.environ.get("RATE_FEEDBACK_PER_IP_PER_MIN", "3"))   # 의견 메일은 스팸이 되기 쉬워 빡빡하다
+RATE_FEEDBACK_ALL = int(os.environ.get("RATE_FEEDBACK_ALL_PER_MIN", "20"))
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 log = logging.getLogger("coach")
@@ -161,6 +165,29 @@ def stamp_picture(req: StampRequest, request: Request, model=Depends(get_llm), f
     if not svg:
         return JSONResponse({"error": "failed"}, status_code=502)
     return JSONResponse({"svg": svg}, headers={"Cache-Control": "no-store"})
+
+
+class FeedbackRequest(BaseModel):
+    text: str = ""
+    stats: str = ""
+
+
+@app.post("/api/feedback")
+def send_feedback(req: FeedbackRequest, request: Request):
+    """의견 한 통을 메일로 보낸다. 성공 {"ok": true}."""
+    if limited(client_ip(request), "feedback", RATE_FEEDBACK_PER_IP, RATE_FEEDBACK_ALL):
+        return JSONResponse({"error": "busy"}, status_code=429)
+    text = feedback.clean(req.text, feedback.MAX_TEXT)
+    if not text:
+        return JSONResponse({"error": "empty"}, status_code=400)
+    if not feedback.configured():
+        return JSONResponse({"error": "notConfigured"}, status_code=503)
+    try:
+        feedback.send(text, req.stats)
+    except Exception as error:  # 글·계정·비밀번호는 남기지 않고 오류 종류만 남긴다
+        log.error("feedback failed: %s", type(error).__name__)
+        return JSONResponse({"error": "failed"}, status_code=502)
+    return JSONResponse({"ok": True}, headers={"Cache-Control": "no-store"})
 
 
 @app.post("/api/chat")

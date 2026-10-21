@@ -300,8 +300,8 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
       <p class="stat" style="margin-top:6px" id="fbDesc"></p>
       <textarea id="fb"></textarea>
       <div class="row" style="margin-top:10px;justify-content:flex-start">
-        <button class="btn main" id="copyBtn" type="button"></button>
-        <a class="btn" id="formBtn" href="#" target="_blank" rel="noopener" hidden></a>
+        <button class="btn main" id="formBtn" type="button"></button>
+        <button class="btn" id="copyBtn" type="button"></button>
       </div>
       <p class="msg" id="fbMsg"></p>
       <p class="stat" id="fbHow"></p>
@@ -434,11 +434,12 @@ ko:{
   fbDesc:'써 보고 느낀 점을 편하게 적어 주세요. 막힌 곳, 헷갈린 곳, 좋았던 점 아무거나 좋아요.',
   fbPlaceholder:'예: 둘째 날부터 안 열었어요. 이유는…',
   copyBtn:'글 복사하기',
-  formBtn:'폼으로 보내기',
+  formBtn:"제출하기",
   copied:'복사했어요. 이제 붙여 넣어서 보내 주세요.',
   copyFail:'자동 복사가 안 돼요. 선택된 글을 길게 눌러 복사해 주세요.',
   shelved:"칸을 빼도 쌓인 도장은 그대로 남아요.",
-  fbHow:'복사할 때 쓴 날수와 도장 수가 글 끝에 같이 붙어요. 이 앱을 알려 준 사람에게 카카오톡이나 문자로 보내 주세요.',
+  fbHow:"‘제출하기’를 누르면 이 앱을 만든 사람에게 바로 전달돼요. 쓴 날수와 도장 수가 글 끝에 같이 붙어요. 안 보내지면 ‘글 복사하기’로 복사해서 보내 주세요.",
+  fbSent:"보냈어요. 고마워요!", fbFail:"보내지 못했어요. 잠시 뒤에 다시 해 보거나 ‘글 복사하기’로 복사해 보내 주세요.", fbEmpty:"보낼 글을 먼저 적어 주세요.", fbBusy:"보내는 중…",
   introTitle:'써 보고 의견을 들려주세요',
   introBody:"계획 짜다 지치는 사람도 일단 시작해 볼 수 있게, 아주 단순하게 만들었어요. 설정과 기능 등 모든 면에서 선택지를 최소한으로 줄여, 이 앱이 '루틴 만들기'라는 목표에만 집중하도록 만들었습니다. 꾸준히 이어 갈수록 기능이 하나씩 열려서, 나중에는 일반 일정 앱처럼 쓸 수 있게 될 거예요. 써 보시고 필요한 점을 알려 주시면 고맙겠습니다.",
   introLang:'',
@@ -542,11 +543,12 @@ en:{
   fbDesc:'Jot down how it went. Where you got stuck, what was confusing, what you liked. Anything helps.',
   fbPlaceholder:'e.g. I stopped opening it on day 2 because…',
   copyBtn:'Copy my note',
-  formBtn:'Send via form',
+  formBtn:"Submit",
   copied:'Copied. Now paste it into a message and send it over.',
   copyFail:"Auto-copy didn't work. Press and hold the selected text to copy it.",
   shelved:"Taking a box away keeps the stamps you already collected.",
-  fbHow:'A few usage numbers get added to the end when you copy. Send it to whoever shared this app with you, by text or chat.',
+  fbHow:"“Submit” sends your note straight to the app's maker, with a few usage numbers added at the end. If it doesn't go through, copy your note with the copy button and send it yourself.",
+  fbSent:"Sent. Thank you!", fbFail:"Couldn't send it. Try again in a moment, or copy your note and send it yourself.", fbEmpty:"Please write something first.", fbBusy:"Sending…",
   introTitle:"Try it and share how it goes",
   introBody:"We made it very simple so that even people who get worn out by planning can just start. We kept choices to a minimum everywhere, from settings to features, so the app stays focused on one goal: building a routine. The longer you keep going, the more features unlock one by one, until you can use it like an everyday schedule app. Give it a try and let us know what you need.",
   introLang:'If any wording sounds off or unnatural, please say so too.',
@@ -650,11 +652,12 @@ en:{
   fbDesc:'用下来的感觉随便写写就行：哪里卡住了、哪里没看懂、哪里喜欢，都可以。',
   fbPlaceholder:'比如：第二天就没打开了，因为……',
   copyBtn:'复制这段话',
-  formBtn:'用表单提交',
+  formBtn:"提交",
   copied:'复制好了，粘贴发给我们就行。',
   copyFail:'自动复制没成功。长按选中的文字，手动复制一下。',
   shelved:"拿掉格子，已经盖下的章也还在。",
-  fbHow:'复制时，末尾会附上你用了几天、盖了几个章。微信或短信发给把这个应用介绍给你的人就行。',
+  fbHow:"点“提交”，你的话会直接发给这个应用的作者，末尾会附上你用了几天、盖了几个章。如果没发出去，请用“复制这段话”复制后自己发送。",
+  fbSent:"已发送，谢谢！", fbFail:"没能发送。请稍后再试，或复制后自己发送。", fbEmpty:"请先写点内容。", fbBusy:"发送中…",
   introTitle:'欢迎试用后留下意见',
   introBody:"我们把它做得很简单，让一做计划就累的人也能先开始。从设置到功能，各方面都把选择减到最少，让这个应用只专注于“建立习惯”这一个目标。越是坚持，功能就会一个个开启，以后可以像普通日程应用一样使用。试用之后，请告诉我们你需要什么。",
   introLang:'如果哪句话读起来别扭、不自然，也请告诉我们。',
@@ -758,11 +761,12 @@ en:{
   fbDesc:'用下來的感覺隨便寫寫就好：哪裡卡住、哪裡看不懂、哪裡喜歡，都可以。',
   fbPlaceholder:'例如：第二天就沒打開了，因為……',
   copyBtn:'複製這段話',
-  formBtn:'用表單送出',
+  formBtn:"提交",
   copied:'複製好了，貼上傳給我們就好。',
   copyFail:'自動複製沒成功。長按選取的文字，手動複製一下。',
   shelved:"拿掉格子，已經蓋下的章也還在。",
-  fbHow:'複製時，使用天數之類的幾個數字會一起附在最後。傳給把這個 App 介紹給你的人就好。',
+  fbHow:"點「提交」，你的話會直接傳給這個應用程式的作者，最後會附上你用了幾天、蓋了幾個章。如果沒送出去，請用「複製這段話」複製後自己傳送。",
+  fbSent:"已送出，謝謝！", fbFail:"沒能送出。請稍後再試，或複製後自己傳送。", fbEmpty:"請先寫點內容。", fbBusy:"送出中…",
   introTitle:'歡迎試用後留下意見',
   introBody:"我們把它做得很簡單，讓一排計畫就累的人也能先開始。從設定到功能，各方面都把選擇減到最少，讓這個應用只專注於「建立習慣」這一個目標。越是堅持，功能就會一個個開啟，之後可以像一般行程應用一樣使用。試用之後，請告訴我們你需要什麼。",
   introLang:'如果哪句話讀起來彆扭、不自然，也請告訴我們。',
@@ -878,11 +882,12 @@ yue:{
   fbDesc:'用完嘅感覺隨便寫幾句就得：邊度卡住、邊度睇唔明、邊度鍾意，都可以。',
   fbPlaceholder:'例如：第二日開始就冇再開，因為……',
   copyBtn:'複製呢段文字',
-  formBtn:'用表格交',
+  formBtn:"交出去",
   copied:'複製咗喇，貼上再傳畀我哋就得。',
   copyFail:'自動複製唔成功。長㩒揀咗嘅文字，手動複製一下。',
   shelved:"攞走格仔，已經儲到嘅印花都仲喺度。",
-  fbHow:'複製嗰陣，用咗幾多日之類嘅幾個數字會一齊附喺最尾。傳畀介紹呢個 App 畀你嘅人就得。',
+  fbHow:"㩒「交出去」，你寫嘅嘢會直接傳畀呢個 app 嘅作者，最尾會附上你用咗幾多日、蓋咗幾多個印。如果傳唔到，就用「複製呢段文字」複製咗自己傳。",
+  fbSent:"傳咗喇，多謝！", fbFail:"傳唔到。遲啲再試，或者複製咗自己傳。", fbEmpty:"請先寫啲嘢。", fbBusy:"傳緊…",
   slots:{wakeup:'起身',breakfast:'食早餐',move:'動一動'},
   icons:{wake:'起身',meal:'早餐',walk:'晨早散步',eng:'英文',zh:'中文',code:'寫程式',ai:'AI 開發',hack:'黑客松',jp:'日文',es:'西班牙文',fa:'波斯文',climb:'攀石',hyrox:'Hyrox',marathon:'馬拉松',rowing:'划艇',boxing:'拳擊',tennis:'網球',golf:'高爾夫球',bowling:'保齡球',walkrun:'行路·跑步',strength:'重量訓練',yoga:'瑜伽',swimbike:'游水·踩單車',read:'睇書',orig:'睇原文書',origwin:'原文書睇完喇'}
 },
@@ -986,11 +991,12 @@ id:{
   fbDesc:'Tulis saja kesanmu: di mana kamu mentok, apa yang membingungkan, apa yang kamu suka. Apa pun berguna.',
   fbPlaceholder:'Contoh: Aku berhenti buka di hari ke-2 karena…',
   copyBtn:'Salin catatanku',
-  formBtn:'Kirim lewat formulir',
+  formBtn:"Kirim",
   copied:'Sudah disalin. Sekarang tempel ke pesan dan kirim.',
   copyFail:'Salin otomatis gagal. Tekan lama teks yang terpilih untuk menyalinnya.',
   shelved:"Kotak boleh dilepas, stempel yang sudah terkumpul tetap ada.",
-  fbHow:'Saat disalin, jumlah hari dan stempelmu ikut tertempel di akhir teks. Kirim lewat chat atau SMS ke orang yang mengenalkan aplikasi ini ke kamu.',
+  fbHow:"Tombol “Kirim” mengirim catatanmu langsung ke pembuat aplikasi, dengan jumlah hari dan stempelmu di akhir. Kalau gagal, salin catatanmu dengan tombol salin lalu kirim sendiri.",
+  fbSent:"Terkirim. Terima kasih!", fbFail:"Gagal terkirim. Coba lagi sebentar lagi, atau salin catatanmu dan kirim sendiri.", fbEmpty:"Tulis sesuatu dulu ya.", fbBusy:"Mengirim…",
   slots:{wakeup:'Bangun tidur',breakfast:'Sarapan',move:'Gerak badan'},
   icons:{wake:'Bangun tidur',meal:'Sarapan',walk:'Jalan pagi',eng:'Bahasa Inggris',zh:'Bahasa Mandarin',code:'Ngoding',ai:'Pengembangan AI',hack:'Hackathon',jp:'Bahasa Jepang',es:'Bahasa Spanyol',fa:'Bahasa Persia',climb:'Panjat tebing',hyrox:'Hyrox',marathon:'Maraton',rowing:'Dayung',boxing:'Tinju',tennis:'Tenis',golf:'Golf',bowling:'Boling',walkrun:'Jalan atau lari',strength:'Latihan beban',yoga:'Yoga',swimbike:'Renang atau sepeda',read:'Membaca',orig:'Buku bahasa asli',origwin:'Buku selesai dibaca'}
 },
@@ -1094,11 +1100,12 @@ vi:{
   fbDesc:'Cứ ghi lại cảm nhận của bạn: bạn bị kẹt ở đâu, chỗ nào khó hiểu, bạn thích gì. Điều gì cũng có ích.',
   fbPlaceholder:'Ví dụ: Ngày thứ 2 mình không mở nữa vì…',
   copyBtn:'Sao chép ghi chú',
-  formBtn:'Gửi qua biểu mẫu',
+  formBtn:"Gửi",
   copied:'Đã sao chép. Giờ hãy dán vào tin nhắn rồi gửi đi nhé.',
   copyFail:'Sao chép tự động không được. Hãy nhấn giữ đoạn văn bản đang chọn để sao chép.',
   shelved:"Bỏ một ô đi thì các dấu đã đóng vẫn còn nguyên.",
-  fbHow:'Khi sao chép, số ngày và số dấu bạn đã dùng sẽ được thêm vào cuối. Gửi cho người đã giới thiệu app này qua Zalo hoặc tin nhắn nhé.',
+  fbHow:"Nhấn “Gửi” để ghi chú đến thẳng người làm ra ứng dụng, kèm số ngày và số dấu bạn đã dùng ở cuối. Nếu không gửi được, hãy sao chép ghi chú bằng nút sao chép rồi tự gửi.",
+  fbSent:"Đã gửi. Cảm ơn bạn!", fbFail:"Không gửi được. Hãy thử lại sau ít phút, hoặc sao chép ghi chú rồi tự gửi.", fbEmpty:"Hãy viết gì đó trước nhé.", fbBusy:"Đang gửi…",
   slots:{wakeup:'Thức dậy',breakfast:'Ăn sáng',move:'Vận động'},
   icons:{wake:'Thức dậy',meal:'Bữa sáng',walk:'Đi dạo buổi sáng',eng:'Tiếng Anh',zh:'Tiếng Trung',code:'Lập trình',ai:'Phát triển AI',hack:'Hackathon',jp:'Tiếng Nhật',es:'Tiếng Tây Ban Nha',fa:'Tiếng Ba Tư',climb:'Leo núi đá',hyrox:'Hyrox',marathon:'Marathon',rowing:'Chèo thuyền',boxing:'Đấm bốc',tennis:'Quần vợt',golf:'Golf',bowling:'Bowling',walkrun:'Đi bộ hoặc chạy',strength:'Tập tạ',yoga:'Yoga',swimbike:'Bơi hoặc đạp xe',read:'Đọc sách',orig:'Sách bản gốc',origwin:'Đọc xong sách gốc'}
 },
@@ -1202,11 +1209,12 @@ es:{
   fbDesc:'Apunta cómo te fue: dónde te atascaste, qué te confundió, qué te gustó. Cualquier cosa sirve.',
   fbPlaceholder:'Ej.: Dejé de abrirla el día 2 porque…',
   copyBtn:'Copiar mi nota',
-  formBtn:'Enviar por formulario',
+  formBtn:"Enviar",
   copied:'Copiado. Ahora pégalo en un mensaje y mándalo.',
   copyFail:'La copia automática no funcionó. Mantén presionado el texto seleccionado para copiarlo.',
   shelved:"Quitar una casilla no borra los sellos que ya juntaste.",
-  fbHow:'Al copiar, se añaden al final unos números de uso. Mándaselo a quien te compartió esta app, por mensaje o chat.',
+  fbHow:"“Enviar” manda tu nota directamente a quien hizo la app, con unos números de uso al final. Si no se envía, copia tu nota con el botón de copiar y mándala tú.",
+  fbSent:"Enviado. ¡Gracias!", fbFail:"No se pudo enviar. Inténtalo de nuevo en un momento, o copia tu nota y mándala tú.", fbEmpty:"Escribe algo primero.", fbBusy:"Enviando…",
   slots:{wakeup:'Levantarme',breakfast:'Desayunar',move:'Moverme'},
   icons:{wake:'Despertar',meal:'Desayuno',walk:'Paseo matutino',eng:'Inglés',zh:'Chino',code:'Programar',ai:'Desarrollo de IA',hack:'Hackatón',jp:'Japonés',es:'Español',fa:'Persa',climb:'Escalada',hyrox:'Hyrox',marathon:'Maratón',rowing:'Remo',boxing:'Boxeo',tennis:'Tenis',golf:'Golf',bowling:'Bolos',walkrun:'Caminar o correr',strength:'Fuerza',yoga:'Yoga',swimbike:'Nadar o bici',read:'Lectura',orig:'Libro en original',origwin:'Libro terminado'}
 },
@@ -1310,11 +1318,12 @@ fi:{
   fbDesc:'Kirjoita muistiin, miten meni: mihin jäit jumiin, mikä oli sekavaa, mistä pidit. Mikä tahansa auttaa.',
   fbPlaceholder:'Esim. En enää avannut tätä toisen päivän jälkeen, koska…',
   copyBtn:'Kopioi viestini',
-  formBtn:'Lähetä lomakkeella',
+  formBtn:"Lähetä",
   copied:'Kopioitu. Liitä se nyt viestiin ja lähetä eteenpäin.',
   copyFail:'Automaattinen kopiointi ei onnistunut. Kopioi valittu teksti painamalla sitä pitkään.',
   shelved:"Ruudun poistaminen ei poista jo kerättyjä leimoja.",
-  fbHow:'Kun kopioit viestin, sen loppuun tulee päivien ja leimojen määrä. Lähetä viesti sille, joka kertoi sinulle tästä sovelluksesta, tekstiviestillä tai chatissa.',
+  fbHow:"”Lähetä” vie viestisi suoraan sovelluksen tekijälle, ja loppuun tulee päivien ja leimojen määrä. Jos se ei mene perille, kopioi viestisi kopiointipainikkeella ja lähetä se itse.",
+  fbSent:"Lähetetty. Kiitos!", fbFail:"Lähetys ei onnistunut. Yritä hetken päästä uudelleen tai kopioi viesti ja lähetä itse.", fbEmpty:"Kirjoita ensin jotain.", fbBusy:"Lähetetään…",
   slots:{wakeup:'Herääminen',breakfast:'Aamiainen',move:'Liikkuminen'},
   icons:{wake:'Herääminen',meal:'Aamiainen',walk:'Aamukävely',eng:'Englannin kieli',zh:'Kiinan kieli',code:'Koodaus',ai:'Tekoälykehitys',hack:'Hackathon',jp:'Japanin kieli',es:'Espanjan kieli',fa:'Persian kieli',climb:'Kiipeily',hyrox:'Hyrox',marathon:'Maraton',rowing:'Soutu',boxing:'Nyrkkeily',tennis:'Tennis',golf:'Golf',bowling:'Keilaus',walkrun:'Kävely tai juoksu',strength:'Voimaharjoittelu',yoga:'Jooga',swimbike:'Uinti tai pyöräily',read:'Lukeminen',orig:'Kirja alkuperäiskielellä',origwin:'Kirja luettu'}
 },
@@ -1418,11 +1427,12 @@ sv:{
   fbDesc:'Skriv ner hur det gick: var du fastnade, vad som var förvirrande, vad du gillade. Allt hjälper.',
   fbPlaceholder:'T.ex. Jag slutade öppna den dag 2 eftersom…',
   copyBtn:'Kopiera min text',
-  formBtn:'Skicka via formulär',
+  formBtn:"Skicka",
   copied:'Kopierat. Klistra in det i ett meddelande och skicka.',
   copyFail:'Automatisk kopiering fungerade inte. Håll inne på den markerade texten för att kopiera.',
   shelved:"Att ta bort en ruta tar inte bort stämplarna du redan samlat.",
-  fbHow:'Antal dagar och stämplar läggs till sist i texten när du kopierar. Skicka den till den som tipsade dig om appen, via sms eller chatt.',
+  fbHow:"”Skicka” skickar din text direkt till appens skapare, med antal dagar och stämplar sist i texten. Om det inte går, kopiera din text med kopieringsknappen och skicka den själv.",
+  fbSent:"Skickat. Tack!", fbFail:"Det gick inte att skicka. Försök igen om en stund, eller kopiera texten och skicka själv.", fbEmpty:"Skriv något först.", fbBusy:"Skickar…",
   slots:{wakeup:'Gå upp',breakfast:'Äta frukost',move:'Röra på sig'},
   icons:{wake:'Vakna',meal:'Frukost',walk:'Morgonpromenad',eng:'Engelska',zh:'Kinesiska',code:'Programmering',ai:'AI-utveckling',hack:'Hackathon',jp:'Japanska',es:'Spanska',fa:'Persiska',climb:'Klättring',hyrox:'Hyrox',marathon:'Maraton',rowing:'Rodd',boxing:'Boxning',tennis:'Tennis',golf:'Golf',bowling:'Bowling',walkrun:'Promenad eller löpning',strength:'Styrketräning',yoga:'Yoga',swimbike:'Simning eller cykling',read:'Läsning',orig:'Bok på originalspråk',origwin:'Bok utläst'}
 }};
@@ -1820,8 +1830,23 @@ function renderEdit(){
 function statsLine(){
   return `[auto] first_open=${S.first} | active_days=${realDays()} (gift ${S.gift?1:0} separate) | last7=${weekCount()} | stamps=${stampCount()} | boxes=${S.slots.length} | lang=${lang}`;
 }
+const fbFull=()=>($('fb').value.trim()?$('fb').value.trim()+'\n\n':'')+statsLine();
+const FB_URL='/api/feedback'; // 서버가 만든 사람 메일로 전달한다(저장하지 않음)
+let fbSending=false;
+$('formBtn').onclick=async()=>{
+  const text=$('fb').value.trim();
+  if(fbSending) return;
+  if(!text){$('fbMsg').textContent=t('fbEmpty');return}
+  fbSending=true;$('formBtn').disabled=true;$('fbMsg').textContent=t('fbBusy');
+  try{
+    const r=await fetch(FB_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,stats:statsLine()})});
+    if(!r.ok) throw new Error('http');
+    $('fb').value='';S.draft='';save();$('fbMsg').textContent=t('fbSent');
+  }catch(e){$('fbMsg').textContent=t('fbFail')}
+  fbSending=false;$('formBtn').disabled=false;
+};
 $('copyBtn').onclick=async()=>{
-  const full=($('fb').value.trim()?$('fb').value.trim()+'\n\n':'')+statsLine();
+  const full=fbFull();
   try{await navigator.clipboard.writeText(full);$('fbMsg').textContent=t('copied')}
   catch(e){$('fb').value=full;$('fb').focus();$('fb').select();$('fbMsg').textContent=t('copyFail')}
 };
