@@ -222,6 +222,8 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
     <p class="msg" id="fbMsg"></p>
     <p class="stat" id="fbHow"></p>
   </section>
+
+  <p class="stat" id="ver" hidden></p>
 </div>
 
 <script>
@@ -1491,6 +1493,11 @@ lang=LANGS.includes(S.lang)?S.lang:guessLang();
 if(!persists) $('notice').hidden=false;
 $('fb').value=S.draft||'';
 render();
+</script>
+
+<script>
+/* 배포된 커밋 번호. 배포할 때 러너가 __COMMIT__ 자리를 커밋 번호로 바꿔요. 바뀌지 않았으면 보여 주지 않아요. */
+(function(){var v='__COMMIT__',e=document.getElementById('ver');if(e&&v.indexOf('__')!==0){e.textContent='v '+v;e.hidden=false;}})();
 </script>
 
 </body>
