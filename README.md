@@ -32,3 +32,5 @@
 ## 구성
 
 - `index.html` 한 파일 (서버 없음)
+
+이 저장소는 tigermorning이 Cloud Run 배포 실습용으로 만들었다.
