@@ -34,3 +34,8 @@
 - `index.html` 한 파일 (서버 없음)
 
 이 저장소는 tigermorning이 Cloud Run 배포 실습용으로 만들었다.
+
+## 배포
+
+- `main` 에 머지하면 GitHub Actions(`.github/workflows/deploy.yml`)가 Cloud Run 서비스 `routine-stamp-trial` 에 자동 배포함
+- 서비스는 비공개(인증 필요). 배포 권한은 키 파일 없이 Workload Identity Federation 으로 이 저장소에만 줌
