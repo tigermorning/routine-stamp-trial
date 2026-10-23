@@ -60,7 +60,23 @@ def clean_context(ctx):
     out = {"slots": [n for n, _ in pairs], "days": days}
     if all(v is not None for _, v in pairs):  # 오늘 상태는 모든 칸이 제대로 왔을 때만 쓴다
         out["today"] = [v for _, v in pairs]
+    hour = ctx.get("hour")
+    if isinstance(hour, int) and not isinstance(hour, bool) and 0 <= hour <= 23:  # 사용자 기기의 현재 시(0~23)만 받는다. 날짜·분은 받지 않는다
+        out["hour"] = hour
     return out
+
+
+def hour_band(hour):
+    return "새벽" if hour < 5 else "아침" if hour < 11 else "점심때" if hour < 14 else "오후" if hour < 18 else "저녁" if hour < 22 else "밤"
+
+
+def time_note(hour):
+    """지금 시각에 이미 지난 활동을 권하지 않고, 못 한 칸 때문에 오늘을 통째로 포기하지 않게 북돋우는 규칙."""
+    return (f"[지금 시각(사용자 기기 기준)] {hour_band(hour)} {hour % 12 or 12}시쯤. "
+            "권하는 한 걸음은 이 시각에 아직 할 수 있는 것이어야 한다. 이미 지난 시간대의 활동(예: 오후나 저녁에 아침 먹기, 밤에 아침 운동)은 권하지 않는다. "
+            "권할 때는 사용자의 칸 중 지금 시간대에 어울리는 것을 고르거나, 지금부터 할 수 있는 가장 가벼운 한 걸음을 고른다. "
+            "시간이 지나 못 하게 된 칸이 있어도 놓쳤다고 말하거나 탓하지 않는다. '그 칸은 내일 다시 하면 돼요, 오늘은 지금부터 가능한 걸 해 봐도 좋아요'처럼 "
+            "의욕을 북돋워 오늘 전체를 포기하지 않게 돕는다. 사용자가 시각 때문에 못 한다고 말하면 그 말을 받아 주고 곧바로 지금 가능한 쪽으로 넘어간다.")
 
 
 TODAY_TEXT = {0: "아직 도장을 안 찍음", 1: "진한 도장(다 했어요)", 2: "연한 도장(조금 했어요)"}
@@ -168,6 +184,8 @@ def build_system(mode, cards, ctx, todos, character=None, history=None):
         info.append(f"[이 앱에 저장된 내 칸(칸 이름과 도장이 쌓인 일수)] 칸: {', '.join(ctx['slots'])} / 도장이 쌓인 일수: {ctx['days']}")
         if ctx.get("today"):
             info.append("[오늘 내 칸 상태(이 앱에서 읽은 사실)] " + " / ".join(f"{n}: {TODAY_TEXT[v]}" for n, v in zip(ctx["slots"], ctx["today"])))
+        if ctx.get("hour") is not None:
+            info.append(time_note(ctx["hour"]))
     if todos:
         info.append("[내 할 일]\n" + "\n".join(f"- {t}" for t in todos))
     return "\n\n".join(parts + info)
@@ -186,6 +204,8 @@ def numbers_ok(reply, cards, history, ctx, todos, extra=()):
     allowed |= set(NUM.findall(pool))
     if ctx:
         allowed.add(str(ctx["days"]))
+        if ctx.get("hour") is not None:
+            allowed.update({str(ctx["hour"]), str(ctx["hour"] % 12 or 12)})  # 지금 시각을 말해도 된다
     for m in NUM.finditer(reply):
         n = m.group(0)
         if n in allowed:
