@@ -243,3 +243,15 @@ test('긴 말은 24자에서 줄이고 태그는 글자로만 보인다', () => 
 test('한 달이 넘은 대화는 꺼내지 않는다', () => {
   assert.equal(recallOf([day(daysAgo(45), '운동')]).length, 1);
 });
+
+// 도우미에게 보내는 값에 지금 시(hour)와 칸별 '몇 시까지'(until)가 들어간다(서버가 지난 시간대 칸을 권하지 않게 하는 재료).
+test('도우미 요청에 hour 와 칸별 until 이 실려 간다(기본 칸만 시간대가 있다)', async () => {
+  const w = openApp({ stamped: [] });
+  w.eval(`S.slots.push({id:'s9',name:'내 칸',icon:'meal',color:'#ccc'})`);
+  w.eval(`window.__b=null;window.fetch=(u,o)=>{window.__b=JSON.parse(o.body);return Promise.reject(new Error('x'))}`);
+  await w.eval(`sendChat('안녕')`);
+  const ctx = w.eval('JSON.parse(JSON.stringify(window.__b.context))');
+  assert.equal(JSON.stringify(ctx.until), '[11,11,null,null]'); // 일어나기·아침 먹기는 11시까지, 몸 움직이기·내 칸은 하루 종일
+  assert.equal(ctx.hour, new Date().getHours());
+  w.close();
+});
