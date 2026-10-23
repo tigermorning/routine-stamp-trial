@@ -301,3 +301,54 @@ def test_until_is_validated_and_needs_hour():
     assert "closed" not in coach.clean_context({**base, "hour": 20, "until": ["11", True]})  # 문자열·불리언은 버린다
     assert "closed" not in coach.clean_context({**base, "hour": 20, "until": [0, 25]})  # 범위(1~24) 밖은 버린다
     assert "closed" not in coach.clean_context({**base, "hour": 20, "until": "11"})
+
+
+class Sequenced(Scripted):
+    """호출할 때마다 정해 둔 답을 차례로 내보낸다(마지막 답은 되풀이)."""
+
+    def __init__(self, replies):
+        super().__init__({"mode": "listen", "card_ids": []})
+        self.replies = list(replies)
+
+    def chat_stream(self, messages):
+        self.stream_calls.append(messages)
+        yield self.replies.pop(0) if len(self.replies) > 1 else self.replies[0]
+
+
+CLOSED_CTX = {"slots": ["일어나기", "아침 먹기", "몸 움직이기"], "days": 3, "today": [0, 0, 1], "hour": 16, "until": [11, 11, None]}
+
+
+def reply_text(ev):
+    return "".join(e["text"] for e in ev if e["type"] == "delta")
+
+
+def test_recommends_closed_checks_sentences():
+    assert coach.recommends_closed("이제 아침 먹기 쪽도 해 볼까요?", ["아침 먹기"])
+    assert not coach.recommends_closed("아침 먹기는 내일 다시 해요. 지금은 몸 움직이기가 좋아요.", ["아침 먹기"])
+    assert coach.recommends_closed("내일은 쉬어요. 아침 먹기도 해 봐요.", ["아침 먹기"])  # '내일'이 다른 문장에 있으면 소용없다
+    assert not coach.recommends_closed("몸 움직이기를 잘하셨어요.", ["아침 먹기"])
+
+
+def test_closed_slot_reply_is_retried_when_it_recommends_the_closed_slot():
+    llm = Sequenced(["이제 아침 먹기 쪽을 해 보세요.", "산책 좋았어요. 지금은 몸 움직이기를 한 번 더 해 볼까요?"])
+    _, ev = post(use(llm), "1시간 산책했어", context=CLOSED_CTX)
+    assert reply_text(ev) == "산책 좋았어요. 지금은 몸 움직이기를 한 번 더 해 볼까요?"
+    assert len(llm.stream_calls) == 2 and "[다시 쓰기]" in llm.stream_calls[1][0]["content"] and "[다시 쓰기]" not in llm.stream_calls[0][0]["content"]
+    assert ev[-1]["type"] == "done" and ev[-1]["ok"] is True
+
+
+def test_closed_slot_guard_falls_back_after_three_bad_replies():
+    llm = Sequenced(["아침 먹기를 해 보세요."])
+    _, ev = post(use(llm), "1시간 산책했어", context=CLOSED_CTX)
+    text = reply_text(ev)
+    assert len(llm.stream_calls) == 3
+    assert "내일 다시 하면 돼요" in text and "아침 먹기" not in text and "일어나기" not in text and "몸 움직이기" in text
+    assert text.endswith("말씀해 주세요.") and ev[-1]["ok"] is True
+
+
+def test_closed_slot_fallback_when_nothing_left_and_no_guard_without_closed():
+    ctx = {"slots": ["일어나기", "아침 먹기"], "days": 1, "hour": 20, "until": [11, 11]}
+    assert "오늘은 와 주신 것만으로도 충분해요" in coach.closed_fallback(coach.clean_context(ctx))
+    llm = Sequenced(["아침 먹기를 해 보세요."])  # 시간이 지난 칸이 없는 맥락(아침 8시)이면 검사하지 않는다
+    _, ev = post(use(llm), "안녕", context={**CLOSED_CTX, "hour": 8})
+    assert len(llm.stream_calls) == 1 and reply_text(ev) == "아침 먹기를 해 보세요."
