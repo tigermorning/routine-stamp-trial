@@ -9,6 +9,9 @@ __pycache__/
 .pytest_cache/
 .claude/
 server/tests/
+webtests/
+node_modules/
+.github/
 server/requirements.txt
 PRD.md
 README.md
