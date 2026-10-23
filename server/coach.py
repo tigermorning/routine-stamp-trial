@@ -96,6 +96,25 @@ def closed_note(closed):
             "비교하거나 탓하는 말('못 했네요', '놓쳤네요')은 쓰지 않는다.")
 
 
+CLOSED_RETRY = ("[다시 쓰기] 방금 답은 오늘 시간이 지난 칸을 지금 해 보라는 뜻으로 읽힌다. 그 칸 이름은 '내일'과 함께만 말하거나 아예 말하지 않는다. "
+                "지금 할 수 있는 칸 하나만 가볍게 권한다.")
+
+
+def recommends_closed(reply, closed):
+    """시간이 지난 칸의 이름이 '내일' 없이 한 문장에 들어 있으면 그 칸을 지금 권하는 것으로 본다(근사 검사: 칸 이름을 다르게 바꿔 말하면 못 거른다)."""
+    for sentence in re.split(r"[.!?\n…]+", reply):
+        if any(name in sentence for name in closed) and "내일" not in sentence:
+            return True
+    return False
+
+
+def closed_fallback(ctx):
+    """다시 써도 지난 칸을 권하면 쓰는 고정 답. 지난 칸을 이름으로 말하지 않고, 오늘을 포기하지 않게 하며, 요청을 살피는 말로 끝낸다."""
+    left = [n for n in ctx["slots"] if n not in ctx.get("closed", [])]
+    step = f"지금은 '{left[0]}'부터 한 번만 가볍게 눌러 볼까요? 한 번이면 충분해요." if left else "오늘은 와 주신 것만으로도 충분해요."
+    return f"그 시간은 지나갔지만 괜찮아요. 오늘은 아직 남았고, 놓친 건 내일 다시 하면 돼요 🙂 {step} 필요한 게 있으면 편하게 말씀해 주세요."
+
+
 TODAY_TEXT = {0: "아직 도장을 안 찍음", 1: "진한 도장(다 했어요)", 2: "연한 도장(조금 했어요)"}
 
 

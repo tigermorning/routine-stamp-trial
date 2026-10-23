@@ -235,14 +235,31 @@ def chat(req: ChatRequest, request: Request, model=Depends(get_llm), factory=Dep
                 mode = "listen"
             yield line({"type": "mode", "mode": mode})
             msgs = [{"role": "system", "content": coach.build_system(mode, picked, ctx, todos, character, history)}] + coach.with_tone_reminder(coach.neutralize_history(history, character), character, coach.variation_hint(history) if mode in coach.CHAT_MODES else "")
-            limiter = coach.Limiter(coach.MAX_QUEST if mode == "quest" else coach.MAX_REPLY, one_line=(mode == "quest"))
-            for piece in engine.chat_stream(msgs):
-                out = limiter.feed(piece)
-                if out:
-                    yield line({"type": "delta", "text": out})
-                if limiter.done:
-                    break
-            reply = limiter.out.strip()
+            def generate(turns, stream):
+                limiter = coach.Limiter(coach.MAX_QUEST if mode == "quest" else coach.MAX_REPLY, one_line=(mode == "quest"))
+                for piece in engine.chat_stream(turns):
+                    out = limiter.feed(piece)
+                    if out and stream:
+                        yield line({"type": "delta", "text": out})
+                    if limiter.done:
+                        break
+                return limiter.out.strip()
+
+            if ctx and ctx.get("closed"):
+                # 시간이 지난 칸이 있으면 답을 화면에 보내기 전에 모아서 검사한다(이미 보낸 글은 고칠 수 없다). 지난 칸을 지금 권하면 두 번까지 다시 쓰게 하고, 그래도 안 되면 고정 답을 쓴다.
+                reply = ""
+                for attempt in range(3):
+                    turns = msgs if attempt == 0 else [{**msgs[0], "content": msgs[0]["content"] + "\n\n" + coach.CLOSED_RETRY}] + msgs[1:]
+                    reply = yield from generate(turns, False)
+                    if not reply or "[REFUSED]" in reply or not coach.recommends_closed(reply, ctx["closed"]):
+                        break
+                else:
+                    reply = coach.closed_fallback(ctx)
+                    log.info("closed-slot guard: fallback used")
+                if reply:
+                    yield line({"type": "delta", "text": reply})
+            else:
+                reply = yield from generate(msgs, True)
             ok = bool(reply) and "[REFUSED]" not in reply
             if ok and mode in ("advise", "quest", "app", "general", "listen"):  # 근거 없는 숫자를 지어내지 않았는지(앱·대화 모드는 앱 안내의 숫자만 더 허용)
                 ok = coach.numbers_ok(reply, picked, history, ctx, todos, coach.APP_NUMBERS if mode in ("app", "listen") else ())
