@@ -1191,7 +1191,7 @@ function stampDays(){return realDays()+(S.gift?1:0)}
 function weekCount(){let n=0;for(let i=0;i<7;i++){const dt=new Date();dt.setDate(dt.getDate()-i);if(hasStamp(fmt(dt)))n++}return n}
 function stampCount(){let n=0;const have=new Set(ids());for(const d in S.log)for(const k in S.log[d])if(have.has(k)&&S.log[d][k]>0)n++;return n}
 /* 도장 찍은 날(누적)이 이만큼 되면 4·5·6번째 칸이 열린다 */
-const UNLOCK=[3,28,60];
+const UNLOCK=[3,7,14];
 /* 예전 일정(3·7·14일). 예전에 이미 열어 둔 칸을 지키는 데만 쓴다 */
 const legacyCap=d=>3+(d>=3?1:0)+(d>=7?1:0)+(d>=14?1:0);
 function capacity(){
