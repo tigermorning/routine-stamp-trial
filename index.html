@@ -2060,7 +2060,7 @@ async function sendChat(text){
   }
   const um={r:'u',c:text};c.msgs.push(um);
   chBusy=true;chLive={text:''};renderChat();
-  const body={messages:chatHistory(c),context:{slots:S.slots.map(slotLabel),days:stampDays(),today:S.slots.map(s=>get(todayStr,s.id))},todos:[]};
+  const body={messages:chatHistory(c),context:{slots:S.slots.map(slotLabel),days:stampDays(),today:S.slots.map(s=>get(todayStr,s.id)),hour:new Date().getHours()},todos:[]}; // hour: 지금 시(0~23)만. 이미 지난 시간대의 활동을 권하지 않게 하려고 보낸다
   const hc=helperChar();if(Object.keys(hc).length) body.character=hc; // 고른 것만 보낸다(안 고르면 서버 기본 동작)
   const ctl=chCtl=new AbortController();
   const timer=setTimeout(()=>ctl.abort(),CHAT_TIMEOUT);

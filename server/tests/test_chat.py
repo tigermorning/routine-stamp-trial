@@ -258,3 +258,22 @@ def test_limiter_trims_decoration_and_caps_length():
     out = lim.feed('"스트레칭') + lim.feed(" 1분 하고 나서 더 길게\n다음")
     assert out == "스트레칭 1분 하고 나" or len(lim.out) == 10
     assert lim.done
+
+
+def test_hour_adds_time_note_and_is_validated():
+    llm = Scripted({"mode": "listen", "card_ids": []}, ["네."])
+    post(use(llm), "안녕", context={"slots": ["아침 먹기"], "days": 2, "hour": 16}, todos=[])
+    system = llm.stream_calls[0][0]["content"]
+    assert "[지금 시각(사용자 기기 기준)] 오후 4시쯤" in system
+    assert "이미 지난 시간대의 활동" in system and "포기하지 않게" in system
+    for bad in (24, -1, "16", True, None):  # 범위 밖·문자열·불리언은 버린다
+        llm2 = Scripted({"mode": "listen", "card_ids": []}, ["네."])
+        post(use(llm2), "안녕", context={"slots": ["아침 먹기"], "days": 2, "hour": bad}, todos=[])
+        assert "[지금 시각" not in llm2.stream_calls[0][0]["content"]
+
+
+def test_hour_bands_and_numbers_allow_current_hour():
+    assert [coach.hour_band(h) for h in (3, 8, 12, 16, 20, 23)] == ["새벽", "아침", "점심때", "오후", "저녁", "밤"]
+    ctx = {"slots": ["달리기"], "days": 1, "hour": 16}
+    assert coach.numbers_ok("지금 4시쯤이니 가볍게 걸어 봐요.", [], [], ctx, [])
+    assert not coach.numbers_ok("지금 5시쯤이니 가볍게 걸어 봐요.", [], [], ctx, [])
