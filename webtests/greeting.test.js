@@ -97,12 +97,26 @@ test('인사에 {slot} 같은 자리표시가 남지 않고, 칸 이름이 들�
 });
 
 test('모든 한국어 인사 문구에 점검하거나 탓하는 표현이 없다', () => {
-  const BANNED = ['안 했', '안했', '못 했', '못했', '아직', '왜 ', '놓쳤', '밀렸', '끊', '연속', '실패', '게으', '해야', '반드시'];
+  // '아직'은 사용자가 직접 정한 문구("아직 찍은 도장이 없네요")에 들어 있어 목록에서 뺐다. 탓하는 말투는 나머지 표현으로 계속 막는다.
+  const BANNED = ['안 했', '안했', '못 했', '못했', '왜 ', '놓쳤', '밀렸', '끊', '연속', '실패', '게으', '해야', '반드시'];
   withApp({}, (w) => {
     const all = pool(w, 'chGr');
     assert.ok(all.length >= 8, `chGr* 인사 문구가 8개 있어야 한다(지금 ${all.length}개)`);
     for (const tpl of all) {
       for (const b of BANNED) assert.ok(!tpl.includes(b), `금지 표현 '${b}' 이(가) 있음: ${tpl}`);
+    }
+  });
+});
+
+test('모든 인사는 사용자의 요청을 살피는 배려 문장으로 끝난다', () => {
+  // 마지막 문장에 이 중 하나가 들어 있어야 한다: 무엇을 도와드릴지·궁금한 점·필요한 점을 묻거나, 도장을 찍어 달라고 청하는 말
+  const CLOSERS = ['도와드릴까요', '궁금', '필요한', '말씀해', '물어보세요', '찍어 주세요'];
+  withApp({}, (w) => {
+    const all = pool(w, 'chGr');
+    assert.ok(all.length >= 8, `chGr* 인사 문구가 8개 있어야 한다(지금 ${all.length}개)`);
+    for (const tpl of all) {
+      const last = tpl.trim().split(/(?<=[.!?])\s+/).pop();
+      assert.ok(CLOSERS.some((c) => last.includes(c)), `마지막 문장이 요청을 살피는 말이 아님: ${last}`);
     }
   });
 });
