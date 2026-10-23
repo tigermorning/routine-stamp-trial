@@ -394,6 +394,14 @@ ko:{
   chSend:"보내기",
   chWait:"생각하는 중이에요…",
   chHello:"안녕하세요! 루틴이 잘 안 이어져서 고민이면 편하게 말해 주세요. 먼저 들어 볼게요.",
+  chGrNone1:"안녕! 오늘도 와 줘서 반가워요 ☀️ 작게 시작해도 충분해요. '{slot}'부터 가볍게 눌러 볼까요?",
+  chGrNone2:"반가워요! 🌼 오늘 하루는 어때요? 마음 가는 칸 하나만 눌러도 멋진 시작이에요.",
+  chGrNone3:"어서 와요 😊 오늘은 '{slot}' 칸부터 만나 볼까요? 천천히, 편한 만큼만 해요.",
+  chGrSome1:"안녕하세요 😊 오늘 도장이 모이고 있네요! 기분 좋은 김에 '{slot}'도 살짝 눌러 볼까요? 아니어도 괜찮아요.",
+  chGrSome2:"반가워요! ✨ 오늘 시작이 좋아요. 다음은 '{slot}' 어때요? 쉬어 가도 좋아요.",
+  chGrSome3:"오늘도 한 걸음 했네요 🌱 '{slot}'도 가볍게 해 볼까요? 편한 대로 해요.",
+  chGrAll1:"오늘 도장 다 모았어요 🎉 정말 멋져요! 오늘 하루는 어땠는지 들려줄래요?",
+  chGrAll2:"와, 오늘 칸을 다 채웠네요 🌟 수고했어요. 쉬면서 이야기 나눠요.",
   chTodoSum:"내 할 일 ({n})",
   chTodoPh:"할 일 적기",
   chTodoAdd:"추가",
@@ -1946,6 +1954,18 @@ const CHAT_URL='/api/chat', CHAT_TIMEOUT=45000, CHAT_KEEP=40, CHAT_SEND=20;
 const CRISIS_WORDS=['죽고 싶','죽고싶','자살','살기 싫','살기싫','사라지고 싶','자해','목숨을 끊','극단적 선택','kill myself','suicide','want to die','end my life','self-harm','self harm','hurt myself','想死','自杀','自殺','自残','自殘','不想活','了结生命','結束生命','尋死','寻死','bunuh diri','mau mati','tự tử','muốn chết','quiero morir','suicidio','quitarme la vida','itsemurha','haluan kuolla','självmord','vill dö']; // server/coach.py 의 CRISIS_KEYWORDS 와 같게 유지
 const isCrisis=s=>{const l=s.toLowerCase();return CRISIS_WORDS.some(w=>l.includes(w))};
 let inChat=false, chBusy=false, chCtl=null, chLive=null;
+/* 도우미 첫 인사. 오늘 칸 상태(없음/일부/전부)에 맞춰 밝고 가볍게 말하고, 서버·LLM 은 부르지 않는다.
+   한국어만 문구(chGr*)가 있고, 다른 언어는 예전 인사(chHello)를 그대로 쓴다. t() 는 없는 키를 한국어로 채우므로
+   한국어가 아닐 때는 T[lang] 에 키가 있는지 직접 본다. 점검하거나 탓하는 말투는 쓰지 않는다(tests 에서 금지 표현을 검사한다). */
+let chGreetN=0, chGreet='';
+function greetPick(){
+  const todo=S.slots.filter(s=>!get(todayStr,s.id)); // 오늘 아직 안 찍은 칸(연한 도장도 찍은 걸로 친다)
+  const kind=todo.length===S.slots.length?'None':todo.length?'Some':'All';
+  const keys=Object.keys(T[lang]).filter(k=>k.startsWith('chGr'+kind));
+  if(!keys.length) return t('chHello');
+  const i=Math.abs(hash(todayStr+kind))+chGreetN++; // 같은 날 같은 상태여도 창을 열 때마다 다음 문구로 넘어간다
+  return t(keys[i%keys.length],{slot:todo.length?slotLabel(todo[i%todo.length]):''});
+}
 function chatData(){
   if(!S.chat||typeof S.chat!=='object') S.chat={};
   const c=S.chat;
@@ -1982,7 +2002,7 @@ function renderChat(){
   $('chMain').hidden=false;
   $('chIn').placeholder=t('chPh');$('chIn').setAttribute('aria-label',t('chPh'));$('chSend').textContent=t('chSend');$('chSend').disabled=chBusy;
   const lastQ=(()=>{for(let i=c.msgs.length-1;i>=0;i--){if(c.msgs[i].r==='a')return c.msgs[i].mode==='quest'?i:-1}return -1})();
-  let h=`<div class="bub a">${esc(t('chHello'))}</div>`+c.msgs.map((m,i)=>bubble(m,i,i===lastQ&&i===c.msgs.length-1)).join('');
+  let h=`<div class="bub a">${esc(chGreet||(chGreet=greetPick()))}</div>`+c.msgs.map((m,i)=>bubble(m,i,i===lastQ&&i===c.msgs.length-1)).join('');
   if(chLive) h+=`<div class="bub a">${chLive.text?esc(chLive.text):esc(t('chWait'))}</div>`;
   $('chLog').innerHTML=h;
   $('chLog').querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{
@@ -2043,7 +2063,8 @@ async function sendChat(text){
   if($('chIn').value) $('chIn').focus({preventScroll:true});
 }
 function setChat(on){
-  inChat=on;if(on&&!S.chatSeen){S.chatSeen=true;save()}render();
+  inChat=on;chGreet=on?greetPick():''; // 창을 여는 순간 한 번 고르고, 대화 중 화면이 다시 그려져도 바뀌지 않게 둔다
+  if(on&&!S.chatSeen){S.chatSeen=true;save()}render();
   if(on){const c=chatData();$('chIn').focus({preventScroll:true})}else $('chatFab').focus({preventScroll:true});
 }
 $('chatFab').onclick=()=>setChat(true);

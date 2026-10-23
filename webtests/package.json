@@ -1,0 +1,10 @@
+{
+  "name": "routine-helper-webtests",
+  "private": true,
+  "scripts": {
+    "test": "node --test greeting.test.js"
+  },
+  "devDependencies": {
+    "jsdom": "30.1.3"
+  }
+}
