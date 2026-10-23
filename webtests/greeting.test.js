@@ -161,3 +161,85 @@ test('칸 이름에 HTML 을 넣어도 화면에 요소로 만들어지지 않�
     }
   });
 });
+
+// 새 하루가 되면 새 대화로 시작하고, 지난 대화는 기기 안에 날짜별로 보관한다.
+test('날이 바뀌면 도우미 대화가 새로 시작되고 지난 대화는 보관된다', () => {
+  const w = openApp({ stamped: [] });
+  const old = [{ r: 'u', c: '어제 얘기' }, { r: 'a', c: '어제 답' }];
+  w.eval(`S.chat={day:'2020-01-01',msgs:${JSON.stringify(old)},todos:[]}`);
+  openChat(w);
+  const log = w.document.getElementById('chLog').textContent;
+  assert.ok(!log.includes('어제 얘기'), '지난 대화가 오늘 화면에 이어지면 안 된다');
+  assert.equal(w.eval('S.chat.msgs.length'), 0);
+  assert.deepEqual(JSON.parse(JSON.stringify(w.eval('S.chat.past'))), [{ d: '2020-01-01', msgs: old }]);
+  assert.equal(w.eval('S.chat.day'), TODAY);
+  w.close();
+});
+
+test('날짜 표시가 없는 옛 저장본의 대화도 한 번 지난 대화로 넘어간다', () => {
+  const w = openApp({ stamped: [] });
+  w.eval(`S.chat={msgs:[{r:'u',c:'옛 대화'}],todos:[]}`);
+  openChat(w);
+  assert.ok(!w.document.getElementById('chLog').textContent.includes('옛 대화'));
+  assert.equal(w.eval('S.chat.past.length'), 1);
+  w.close();
+});
+
+test('같은 날 다시 열면 오늘 대화가 그대로 이어진다', () => {
+  const w = openApp({ stamped: [] });
+  w.eval(`S.chat={day:${JSON.stringify(TODAY)},msgs:[{r:'u',c:'오늘 얘기'}],todos:[]}`);
+  openChat(w);
+  assert.ok(w.document.getElementById('chLog').textContent.includes('오늘 얘기'));
+  assert.equal(w.eval('S.chat.past.length'), 0);
+  w.close();
+});
+
+// 지난 대화 한 줄 꺼내기: 가장 최근 지난 날짜의 마지막 사용자 말을 시간 표현과 함께 첫 인사 뒤에 말한다.
+const daysAgo = (n) => {
+  const d = new Date();
+  d.setDate(d.getDate() - n);
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+};
+const recallOf = (past, { lang = 'ko', msgs = [] } = {}) => {
+  const w = openApp({ lang });
+  w.eval(`S.chat={day:${JSON.stringify(TODAY)},msgs:${JSON.stringify(msgs)},past:${JSON.stringify(past)},todos:[]}`);
+  openChat(w);
+  const bubs = [...w.document.querySelectorAll('#chLog .bub.a')].map((b) => b.textContent);
+  w.close();
+  return bubs;
+};
+const day = (d, ...us) => ({ d, msgs: us.flatMap((c) => [{ r: 'u', c }, { r: 'a', c: '답' }]) });
+
+test('어제 대화가 있으면 첫 인사 뒤에 "어제 ○○ 이야기"를 한 줄 꺼낸다', () => {
+  const b = recallOf([day(daysAgo(1), '아침 스트레칭', '물 마시기가 어려워요')]);
+  assert.equal(b.length, 2);
+  assert.match(b[1], /^어제 '물 마시기가 어려워요' 이야기를 나눴었죠/);
+  assert.match(b[1], /궁금해요\.$/);
+});
+
+test('시간 표현이 날짜 차이에 맞는다(그저께·N일 전·지난주쯤·N주쯤 전)', () => {
+  const when = (n) => recallOf([day(daysAgo(n), '운동')])[1].split(' ')[0];
+  assert.equal(when(2), '그저께');
+  assert.match(recallOf([day(daysAgo(4), '운동')])[1], /^4일 전 /);
+  assert.match(recallOf([day(daysAgo(8), '운동')])[1], /^지난주쯤 /);
+  assert.match(recallOf([day(daysAgo(21), '운동')])[1], /^3주쯤 전 /);
+});
+
+test('가장 최근 날짜를 쓰고, 오늘 이미 말했거나 쓸 수 없는 기록이면 꺼내지 않는다', () => {
+  const past = [day(daysAgo(5), '옛날 얘기'), day(daysAgo(2), '최근 얘기')];
+  assert.match(recallOf(past)[1], /^그저께 '최근 얘기'/);
+  assert.equal(recallOf(past, { msgs: [{ r: 'u', c: '오늘 말함' }] }).length, 1, '오늘 대화 중이면 꺼내지 않는다');
+  assert.equal(recallOf([{ d: '', msgs: [{ r: 'u', c: '날짜 모름' }] }]).length, 1);
+  assert.equal(recallOf([{ d: daysAgo(1), msgs: [{ r: 'u', c: '위기 표현', x: true }] }]).length, 1);
+  assert.equal(recallOf([day(daysAgo(1), '운동')], { lang: 'en' }).length, 1, '한국어가 아니면 말하지 않는다');
+});
+
+test('긴 말은 24자에서 줄이고 태그는 글자로만 보인다', () => {
+  const b = recallOf([day(daysAgo(1), '<b>' + '가'.repeat(40))]);
+  assert.ok(b[1].includes('<b>가'), '태그가 글자 그대로 보인다');
+  assert.ok(b[1].includes('…'));
+});
+
+test('한 달이 넘은 대화는 꺼내지 않는다', () => {
+  assert.equal(recallOf([day(daysAgo(45), '운동')]).length, 1);
+});

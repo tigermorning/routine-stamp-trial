@@ -402,6 +402,8 @@ ko:{
   chGrSome3:"오늘도 한 걸음 했네요 🌱 쉬어 가도 괜찮아요. 필요한 게 있으면 편하게 말씀해 주세요.",
   chGrAll1:"와, 오늘 칸을 다 채웠네요 🌟 수고했어요. 쉬면서 이야기 나눠요. 무엇이 궁금하세요?",
   chGrAll2:"오늘 도장 다 모으셨네요 🎉 정말 멋져요! 오늘 하루는 어떠셨어요? 필요한 게 있으면 말씀해 주세요.",
+  chRcWhen0:"며칠 전", chRcYest:"어제", chRcTwo:"그저께", chRcDays:"{n}일 전", chRcWeek:"지난주쯤", chRcWeeks:"{n}주쯤 전",
+  chRc:"{when} '{topic}' 이야기를 나눴었죠 🙂 그 뒤로 어떻게 지내셨는지 궁금해요.",
   chTodoSum:"내 할 일 ({n})",
   chTodoPh:"할 일 적기",
   chTodoAdd:"추가",
@@ -1950,7 +1952,7 @@ $('addSlot').onclick=()=>{
 };
 /* 도우미 (대화형 루틴 코치, PRD "도우미"): 대화·할 일은 이 브라우저에만 저장하고, 보낼 때마다 최근 대화와 할 일 목록(허락했다면 칸 이름·도장 일수)을 서버(POST /api/chat)로 보낸다.
    도장 날짜별 기록은 보내지 않는다. 서버가 없거나 실패해도 도장 찍기는 그대로다. 서버가 보내는 done(ok)을 받지 못한 답은 버린다. 위기 표현은 서버로 보내지 않고 여기서 먼저 걸러 낸다. */
-const CHAT_URL='/api/chat', CHAT_TIMEOUT=45000, CHAT_KEEP=40, CHAT_SEND=20;
+const CHAT_URL='/api/chat', CHAT_TIMEOUT=45000, CHAT_KEEP=40, CHAT_SEND=20, CHAT_DAYS=30;
 const CRISIS_WORDS=['죽고 싶','죽고싶','자살','살기 싫','살기싫','사라지고 싶','자해','목숨을 끊','극단적 선택','kill myself','suicide','want to die','end my life','self-harm','self harm','hurt myself','想死','自杀','自殺','自残','自殘','不想活','了结生命','結束生命','尋死','寻死','bunuh diri','mau mati','tự tử','muốn chết','quiero morir','suicidio','quitarme la vida','itsemurha','haluan kuolla','självmord','vill dö']; // server/coach.py 의 CRISIS_KEYWORDS 와 같게 유지
 const isCrisis=s=>{const l=s.toLowerCase();return CRISIS_WORDS.some(w=>l.includes(w))};
 let inChat=false, chBusy=false, chCtl=null, chLive=null;
@@ -1966,10 +1968,41 @@ function greetPick(){
   const i=Math.abs(hash(todayStr+kind))+chGreetN++; // 같은 날 같은 상태여도 창을 열 때마다 다음 문구로 넘어간다
   return t(keys[i%keys.length],{slot:todo.length?slotLabel(todo[i%todo.length]):''});
 }
+/* 지난 대화 한 줄 꺼내기(규칙 기반, 서버·LLM 없음). 기기에 보관한 지난 대화 중 가장 최근 날짜에서 사용자가 마지막으로 한 말을
+   '어제/그저께/N일 전' 같은 시간 표현과 함께 첫 인사 뒤에 한 줄로 말한다. 시간 순서가 어긋나지 않게,
+   오늘 이미 대화를 나눴으면 꺼내지 않고(이어 가는 중이므로), 날짜를 모르는 옛 대화(d:'')와 위기 표현(x)은 쓰지 않는다.
+   한국어만 문구(chRc*)가 있어서 다른 언어는 말하지 않는다. */
+let chRecall='';
+function recallPick(){
+  if(!T[lang]||!T[lang].chRc) return '';
+  const c=chatData();
+  if(c.msgs.length) return '';
+  const ymd=s=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(s||'');return m?new Date(+m[1],+m[2]-1,+m[3]):null};
+  const now=ymd(todayStr);
+  for(let i=c.past.length-1;i>=0;i--){
+    const p=c.past[i],d=ymd(p.d);
+    if(!d||!now) continue;
+    const n=Math.round((now-d)/86400000);
+    if(n<1||n>CHAT_DAYS) continue; // 한 달이 넘은 대화는 "그 뒤로 어떻게 지내셨는지"가 어색해서 꺼내지 않는다
+    const um=(p.msgs||[]).filter(m=>m.r==='u'&&!m.x&&m.c).pop();
+    if(!um) continue;
+    const when=n===1?t('chRcYest'):n===2?t('chRcTwo'):n<7?t('chRcDays',{n}):n<14?t('chRcWeek'):t('chRcWeeks',{n:Math.round(n/7)});
+    const topic=um.c.replace(/\s+/g,' ').trim();
+    return t('chRc',{when,topic:topic.length>24?topic.slice(0,24)+'…':topic});
+  }
+  return '';
+}
 function chatData(){
   if(!S.chat||typeof S.chat!=='object') S.chat={};
   const c=S.chat;
   if(!Array.isArray(c.msgs)) c.msgs=[];
+  if(!Array.isArray(c.past)) c.past=[];
+  /* 날이 바뀌면 새 대화로 시작한다. 지난 대화는 날짜별로 이 기기에 보관만 하고(최근 CHAT_DAYS 일), 서버로는 보내지 않는다.
+     날짜 표시(day)가 없는 옛 저장본의 대화도 한 번 지난 대화로 넘긴다(날짜는 모름, d:''). */
+  if(c.day!==todayStr){
+    if(c.msgs.length){c.past.push({d:c.day||'',msgs:c.msgs});c.past=c.past.slice(-CHAT_DAYS);c.msgs=[]}
+    c.day=todayStr;
+  }
   if(!Array.isArray(c.todos)) c.todos=[];
   c.share=false; // 옛 '보여 줄까요?' 설정은 더 쓰지 않는다(칸 이름·도장 일수는 늘 함께 보낸다)
   return c;
@@ -2002,7 +2035,7 @@ function renderChat(){
   $('chMain').hidden=false;
   $('chIn').placeholder=t('chPh');$('chIn').setAttribute('aria-label',t('chPh'));$('chSend').textContent=t('chSend');$('chSend').disabled=chBusy;
   const lastQ=(()=>{for(let i=c.msgs.length-1;i>=0;i--){if(c.msgs[i].r==='a')return c.msgs[i].mode==='quest'?i:-1}return -1})();
-  let h=`<div class="bub a">${esc(chGreet||(chGreet=greetPick()))}</div>`+c.msgs.map((m,i)=>bubble(m,i,i===lastQ&&i===c.msgs.length-1)).join('');
+  let h=`<div class="bub a">${esc(chGreet||(chGreet=greetPick()))}</div>`+(chRecall&&!c.msgs.length?`<div class="bub a">${esc(chRecall)}</div>`:'')+c.msgs.map((m,i)=>bubble(m,i,i===lastQ&&i===c.msgs.length-1)).join('');
   if(chLive) h+=`<div class="bub a">${chLive.text?esc(chLive.text):esc(t('chWait'))}</div>`;
   $('chLog').innerHTML=h;
   $('chLog').querySelectorAll('[data-q]').forEach(b=>b.onclick=()=>{
@@ -2063,7 +2096,7 @@ async function sendChat(text){
   if($('chIn').value) $('chIn').focus({preventScroll:true});
 }
 function setChat(on){
-  inChat=on;chGreet=on?greetPick():''; // 창을 여는 순간 한 번 고르고, 대화 중 화면이 다시 그려져도 바뀌지 않게 둔다
+  inChat=on;chRecall=on?recallPick():'';chGreet=on?greetPick():''; // 창을 여는 순간 한 번 고르고, 대화 중 화면이 다시 그려져도 바뀌지 않게 둔다
   if(on&&!S.chatSeen){S.chatSeen=true;save()}render();
   if(on){const c=chatData();$('chIn').focus({preventScroll:true})}else $('chatFab').focus({preventScroll:true});
 }
