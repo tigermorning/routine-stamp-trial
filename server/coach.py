@@ -101,8 +101,10 @@ CLOSED_RETRY = ("[다시 쓰기] 방금 답은 오늘 시간이 지난 칸을 �
 
 
 def recommends_closed(reply, closed):
-    """시간이 지난 칸의 이름이 '내일' 없이 한 문장에 들어 있으면 그 칸을 지금 권하는 것으로 본다(근사 검사: 칸 이름을 다르게 바꿔 말하면 못 거른다)."""
-    for sentence in re.split(r"[.!?\n…]+", reply):
+    """시간이 지난 칸의 이름이 '내일' 없이 한 절에 들어 있으면 그 칸을 지금 권하는 것으로 본다.
+    절은 문장 끝(. ! ? 줄바꿈)뿐 아니라 쉼표와 '아니면'에서도 나눈다(한 문장 뒤쪽의 '내일의 루틴'이 앞쪽 권유를 가리지 못하게).
+    근사 검사다: 칸 이름을 다르게 바꿔 말하면 못 거르고, '못 하지만, 내일…'처럼 이름과 내일이 쉼표로 갈리면 다시 쓰게 될 수 있다."""
+    for sentence in re.split(r"[.!?\n…,，]+|아니면", reply):
         if any(name in sentence for name in closed) and "내일" not in sentence:
             return True
     return False

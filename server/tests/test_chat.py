@@ -352,3 +352,14 @@ def test_closed_slot_fallback_when_nothing_left_and_no_guard_without_closed():
     llm = Sequenced(["아침 먹기를 해 보세요."])  # 시간이 지난 칸이 없는 맥락(아침 8시)이면 검사하지 않는다
     _, ev = post(use(llm), "안녕", context={**CLOSED_CTX, "hour": 8})
     assert len(llm.stream_calls) == 1 and reply_text(ev) == "아침 먹기를 해 보세요."
+
+
+def test_recommends_closed_splits_clauses_at_comma_and_or():
+    closed = ["아침 먹기"]
+    # 실제 배포 후 재현에서 빠져나간 답: 뒤쪽 '내일의 루틴'이 앞쪽 권유를 가리면 안 된다
+    assert coach.recommends_closed("이제 아침 먹기 칸도 새로 시작해 볼까요, 아니면 내일의 루틴을 고민해 보실래요?", closed)
+    assert coach.recommends_closed("몸 움직이기는 잘하셨어요, 아침 먹기도 해 보세요", closed)
+    assert coach.recommends_closed("오늘은 쉬어도 좋고 아니면 아침 먹기를 해 봐도 좋아요", closed)
+    # 이름과 '내일'이 같은 절에 있으면 통과
+    assert not coach.recommends_closed("몸 움직이기는 잘하셨어요, 아침 먹기는 내일 다시 해요", closed)
+    assert not coach.recommends_closed("아니면 내일 아침 먹기를 해 봐요", closed)
