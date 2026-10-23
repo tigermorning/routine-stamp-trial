@@ -277,3 +277,27 @@ def test_hour_bands_and_numbers_allow_current_hour():
     ctx = {"slots": ["달리기"], "days": 1, "hour": 16}
     assert coach.numbers_ok("지금 4시쯤이니 가볍게 걸어 봐요.", [], [], ctx, [])
     assert not coach.numbers_ok("지금 5시쯤이니 가볍게 걸어 봐요.", [], [], ctx, [])
+
+
+def test_closed_slots_are_told_and_encouraged_not_recommended():
+    ctx = {"slots": ["일어나기", "아침 먹기", "몸 움직이기", "내 칸"], "days": 3, "today": [0, 0, 0, 0], "until": [11, 11, None, None]}
+    llm = Scripted({"mode": "listen", "card_ids": []}, ["네."])
+    post(use(llm), "그래서 뭐 하지?", context={**ctx, "hour": 16}, todos=[])
+    system = llm.stream_calls[0][0]["content"]
+    assert "[오늘 이미 시간이 지난 칸" in system and "일어나기, 아침 먹기" in system
+    assert "몸 움직이기" not in system.split("[오늘 이미 시간이 지난 칸")[1].split("\n")[0]  # 하루 종일 가능한 칸·내 칸은 지난 칸에 넣지 않는다
+    assert "그래도 오늘은 아직 남았어요" in system and "내일 다시 하면" in system and "한 번만 눌러 봐도 충분해요" in system
+    assert "못 했네요" in system  # 쓰지 말라는 예시로만 들어 있다
+    # 아침 8시면 아직 시간이 지난 칸이 없다
+    llm2 = Scripted({"mode": "listen", "card_ids": []}, ["네."])
+    post(use(llm2), "그래서 뭐 하지?", context={**ctx, "hour": 8}, todos=[])
+    assert "[오늘 이미 시간이 지난 칸" not in llm2.stream_calls[0][0]["content"]
+
+
+def test_until_is_validated_and_needs_hour():
+    base = {"slots": ["일어나기", "아침 먹기"], "days": 1}
+    assert "closed" not in coach.clean_context({**base, "until": [11, 11]})  # 시각이 없으면 판단하지 않는다
+    assert coach.clean_context({**base, "hour": 11, "until": [11, 12]})["closed"] == ["일어나기"]  # 정각 11시부터 지난 칸
+    assert "closed" not in coach.clean_context({**base, "hour": 20, "until": ["11", True]})  # 문자열·불리언은 버린다
+    assert "closed" not in coach.clean_context({**base, "hour": 20, "until": [0, 25]})  # 범위(1~24) 밖은 버린다
+    assert "closed" not in coach.clean_context({**base, "hour": 20, "until": "11"})

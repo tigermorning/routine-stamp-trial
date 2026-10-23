@@ -44,13 +44,16 @@ def clean_context(ctx):
     if not isinstance(ctx, dict):
         return None
     raw_today = ctx.get("today") if isinstance(ctx.get("today"), list) else []
-    pairs = []
+    raw_until = ctx.get("until") if isinstance(ctx.get("until"), list) else []
+    pairs, untils = [], []
     for i, s in enumerate((ctx.get("slots") or [])[:MAX_SLOTS]):
         name = " ".join(str(s).split())[:30]
         if not name:
             continue
         v = raw_today[i] if i < len(raw_today) else None
         pairs.append((name, v if v in (0, 1, 2) and not isinstance(v, bool) else None))
+        u = raw_until[i] if i < len(raw_until) else None
+        untils.append(u if isinstance(u, int) and not isinstance(u, bool) and 1 <= u <= 24 else None)
     try:
         days = max(0, min(int(ctx.get("days", 0)), 100000))
     except (TypeError, ValueError):
@@ -63,6 +66,10 @@ def clean_context(ctx):
     hour = ctx.get("hour")
     if isinstance(hour, int) and not isinstance(hour, bool) and 0 <= hour <= 23:  # 사용자 기기의 현재 시(0~23)만 받는다. 날짜·분은 받지 않는다
         out["hour"] = hour
+        # 칸마다 '몇 시까지 할 수 있는 칸인지'(until)를 앱이 보내 준다. 지금 시각이 그 시각 이상이면 시간이 지난 칸이다
+        closed = [n for (n, _), u in zip(pairs, untils) if u is not None and hour >= u]
+        if closed:
+            out["closed"] = closed
     return out
 
 
@@ -77,6 +84,16 @@ def time_note(hour):
             "권할 때는 사용자의 칸 중 지금 시간대에 어울리는 것을 고르거나, 지금부터 할 수 있는 가장 가벼운 한 걸음을 고른다. "
             "시간이 지나 못 하게 된 칸이 있어도 놓쳤다고 말하거나 탓하지 않는다. '그 칸은 내일 다시 하면 돼요, 오늘은 지금부터 가능한 걸 해 봐도 좋아요'처럼 "
             "의욕을 북돋워 오늘 전체를 포기하지 않게 돕는다. 사용자가 시각 때문에 못 한다고 말하면 그 말을 받아 주고 곧바로 지금 가능한 쪽으로 넘어간다.")
+
+
+def closed_note(closed):
+    """앱이 알려 준, 지금 시각이 이미 지난 칸. 권하지 않고, 오늘 전체를 포기하지 않도록 격려하는 말을 쓰게 한다."""
+    return ("[오늘 이미 시간이 지난 칸(이 앱이 시각으로 판단한 사실)] " + ", ".join(closed) + "\n"
+            "이 칸들은 오늘은 권하지 않고 '해 보세요'라고도 말하지 않는다. 사용자가 이 칸을 못 했다고 하면 이렇게 답한다: "
+            "① 먼저 그 마음을 받아 준다(예: '그 시간은 지나갔네요'). ② 오늘 하루가 끝난 게 아니라고 말한다(예: '그래도 오늘은 아직 남았어요'). "
+            "③ 그 칸은 내일 다시 하면 된다고 말한다. ④ 지금 시각에 아직 할 수 있는 칸(시간이 지난 칸을 뺀 나머지) 중 하나를 가볍게 권하고 "
+            "'한 번만 눌러 봐도 충분해요' 같은 부담 없는 말로 마무리한다. 남은 칸이 하나도 없으면 오늘 온 것만으로도 충분하다고 말한다. "
+            "비교하거나 탓하는 말('못 했네요', '놓쳤네요')은 쓰지 않는다.")
 
 
 TODAY_TEXT = {0: "아직 도장을 안 찍음", 1: "진한 도장(다 했어요)", 2: "연한 도장(조금 했어요)"}
@@ -186,6 +203,8 @@ def build_system(mode, cards, ctx, todos, character=None, history=None):
             info.append("[오늘 내 칸 상태(이 앱에서 읽은 사실)] " + " / ".join(f"{n}: {TODAY_TEXT[v]}" for n, v in zip(ctx["slots"], ctx["today"])))
         if ctx.get("hour") is not None:
             info.append(time_note(ctx["hour"]))
+        if ctx.get("closed"):
+            info.append(closed_note(ctx["closed"]))
     if todos:
         info.append("[내 할 일]\n" + "\n".join(f"- {t}" for t in todos))
     return "\n\n".join(parts + info)

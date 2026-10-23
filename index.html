@@ -1959,6 +1959,9 @@ let inChat=false, chBusy=false, chCtl=null, chLive=null;
 /* 도우미 첫 인사. 오늘 칸 상태(없음/일부/전부)에 맞춰 밝고 가볍게 말하고, 서버·LLM 은 부르지 않는다.
    한국어만 문구(chGr*)가 있고, 다른 언어는 예전 인사(chHello)를 그대로 쓴다. t() 는 없는 키를 한국어로 채우므로
    한국어가 아닐 때는 T[lang] 에 키가 있는지 직접 본다. 점검하거나 탓하는 말투는 쓰지 않는다(tests 에서 금지 표현을 검사한다). */
+/* 기본 칸이 '몇 시까지' 할 수 있는 칸인지(그 시 이후엔 시간이 지난 칸). 도우미가 지난 시간대 칸을 권하지 않게 서버로 함께 보낸다.
+   내가 만든 칸(key 없음)은 시간대를 모르니 null 이다. 움직이기는 하루 종일 할 수 있어 넣지 않는다. */
+const SLOT_UNTIL={wakeup:11,breakfast:11};
 let chGreetN=0, chGreet='';
 function greetPick(){
   const todo=S.slots.filter(s=>!get(todayStr,s.id)); // 오늘 아직 안 찍은 칸(연한 도장도 찍은 걸로 친다)
@@ -2060,7 +2063,7 @@ async function sendChat(text){
   }
   const um={r:'u',c:text};c.msgs.push(um);
   chBusy=true;chLive={text:''};renderChat();
-  const body={messages:chatHistory(c),context:{slots:S.slots.map(slotLabel),days:stampDays(),today:S.slots.map(s=>get(todayStr,s.id)),hour:new Date().getHours()},todos:[]}; // hour: 지금 시(0~23)만. 이미 지난 시간대의 활동을 권하지 않게 하려고 보낸다
+  const body={messages:chatHistory(c),context:{slots:S.slots.map(slotLabel),days:stampDays(),today:S.slots.map(s=>get(todayStr,s.id)),hour:new Date().getHours(),until:S.slots.map(s=>SLOT_UNTIL[s.key]??null)},todos:[]}; // hour: 지금 시(0~23)만. 이미 지난 시간대의 활동을 권하지 않게 하려고 보낸다
   const hc=helperChar();if(Object.keys(hc).length) body.character=hc; // 고른 것만 보낸다(안 고르면 서버 기본 동작)
   const ctl=chCtl=new AbortController();
   const timer=setTimeout(()=>ctl.abort(),CHAT_TIMEOUT);
