@@ -2,6 +2,7 @@ name: ci
 
 on:
   pull_request:
+  workflow_call:   # 배포 워크플로가 배포 전에 이 검사를 불러 쓴다
 
 permissions:
   contents: read
