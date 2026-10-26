@@ -1,0 +1,14 @@
+# 이미지에 넣지 않을 파일 목록이다. index.html 은 서버가 내보내므로 넣지 않는다.
+.env
+.venv/
+.git/
+.github/
+__pycache__/
+*.pyc
+node_modules/
+tests/
+package.json
+package-lock.json
+PRD.md
+README.md
+routine-app-pain-points.md

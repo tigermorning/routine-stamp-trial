@@ -41,4 +41,4 @@ jobs:
           env_vars: |
             COMMIT_SHA=${{ github.sha }}
             ENV=${{ vars.ENV }}
-          flags: --no-allow-unauthenticated --service-account=${{ vars.RUNTIME_SA }} --build-service-account=projects/${{ vars.GCP_PROJECT_ID }}/serviceAccounts/${{ vars.BUILD_SA }}
+          flags: --no-allow-unauthenticated --service-account=${{ vars.RUNTIME_SA }} --build-service-account=projects/${{ vars.GCP_PROJECT_ID }}/serviceAccounts/${{ vars.BUILD_SA }} --clear-base-image
