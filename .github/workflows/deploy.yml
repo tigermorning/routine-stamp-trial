@@ -2,15 +2,20 @@ name: deploy
 
 on:
   push:
-    branches: [main]
+    branches: [staging, main]
 
 permissions:
   contents: read
   id-token: write
 
 jobs:
+  test:
+    uses: ./.github/workflows/ci.yml
+
   deploy:
+    needs: test
     runs-on: ubuntu-latest
+    environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
     steps:
       - name: 저장소 코드 내려받기
         uses: actions/checkout@v7
@@ -30,8 +35,10 @@ jobs:
       - name: Cloud Run 배포
         uses: google-github-actions/deploy-cloudrun@v3
         with:
-          service: routine-stamp-trial
+          service: ${{ vars.SERVICE }}
           region: us-central1
           source: .
-          env_vars: COMMIT_SHA=${{ github.sha }}
+          env_vars: |
+            COMMIT_SHA=${{ github.sha }}
+            ENV=${{ vars.ENV }}
           flags: --no-allow-unauthenticated --service-account=${{ vars.RUNTIME_SA }} --build-service-account=projects/${{ vars.GCP_PROJECT_ID }}/serviceAccounts/${{ vars.BUILD_SA }}
