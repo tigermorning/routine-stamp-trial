@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name == 'main' && 'production' || 'staging' }}
     env:
-      IMAGE: ${{ vars.AR_REPO }}/routine-stamp-trial:${{ github.sha }}
+      STAGING_SERVICE: routine-stamp-trial-staging
     steps:
       - name: 저장소 코드 내려받기
         uses: actions/checkout@v7
@@ -36,12 +36,32 @@ jobs:
           sed -i "s/__COMMIT__/${GITHUB_SHA::7}/" index.html
           grep -q "v='${GITHUB_SHA::7}'" index.html
 
-      - name: 이미지 만들기와 올리기
+      # 1. staging 브랜치에서만 이미지를 만들고, 이미지 이름과 커밋을 다음 단계로 넘긴다
+      - name: 이미지 만들기와 올리기 (staging)
+        if: github.ref_name != 'main'
         run: |
+          IMAGE="${{ vars.AR_REPO }}/routine-stamp-trial:${{ github.sha }}"
           gcloud auth configure-docker us-central1-docker.pkg.dev --quiet
           docker build --tag "$IMAGE" .
           docker push "$IMAGE"
+          echo "IMAGE=$IMAGE" >> "$GITHUB_ENV"
+          echo "COMMIT=${{ github.sha }}" >> "$GITHUB_ENV"
 
+      # 2. main 브랜치에서는 이미지를 만들지 않고, staging 리비전의 다이제스트와 커밋을 찾는다
+      - name: staging 이미지 찾기 (production 승격)
+        if: github.ref_name == 'main'
+        run: |
+          REV=$(gcloud run services describe "$STAGING_SERVICE" --project "${{ vars.GCP_PROJECT_ID }}" --region us-central1 --format json | jq -r '.status.traffic | max_by(.percent) | .revisionName')
+          gcloud run revisions describe "$REV" --project "${{ vars.GCP_PROJECT_ID }}" --region us-central1 --format json > rev.json
+          IMAGE=$(jq -r '.status.imageDigest' rev.json)
+          COMMIT=$(jq -r '.spec.containers[0].env[] | select(.name=="COMMIT_SHA") | .value' rev.json)
+          case "$IMAGE" in *@sha256:*) ;; *) echo "staging 이미지 다이제스트를 찾지 못했다: $IMAGE"; exit 1;; esac
+          [ -n "$COMMIT" ] && [ "$COMMIT" != "null" ] || { echo "staging COMMIT_SHA 를 찾지 못했다"; exit 1; }
+          echo "IMAGE=$IMAGE" >> "$GITHUB_ENV"
+          echo "COMMIT=$COMMIT" >> "$GITHUB_ENV"
+          echo "staging 리비전 $REV 의 이미지를 승격한다"
+
+      # 3. 배포 단계는 넘겨받은 이미지와 커밋을 쓴다 (다른 줄은 그대로)
       - name: Cloud Run 배포
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v3
@@ -50,7 +70,7 @@ jobs:
           region: us-central1
           image: ${{ env.IMAGE }}
           env_vars: |
-            COMMIT_SHA=${{ github.sha }}
+            COMMIT_SHA=${{ env.COMMIT }}
             ENV=${{ vars.ENV }}
           flags: --no-allow-unauthenticated --service-account=${{ vars.RUNTIME_SA }}
 
