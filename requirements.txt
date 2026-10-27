@@ -3,3 +3,5 @@ uvicorn>=0.30
 python-multipart>=0.0.9
 pytesseract>=0.3.10
 pillow>=10.4
+pdf2image>=1.17
+pillow-heif>=0.18
