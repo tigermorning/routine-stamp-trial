@@ -1,0 +1,76 @@
+# 새 버전에 문제가 있을 때 Actions 탭의 Run workflow 버튼 하나로 이전 리비전에 트래픽 100%를 돌려놓는다.
+# 이미지를 다시 만들지 않고 트래픽 설정만 바꾼다. 되돌아갈 리비전을 비워 두면 지금 100%인 리비전을 뺀 가장 최근의 정상(Ready) 리비전으로 간다.
+# 이 워크플로는 GitHub 환경(승인)을 거치지 않는다(급할 때 승인을 기다리지 않게). 대신 버튼은 저장소에 쓰기 권한이 있는 사람만 누를 수 있다.
+# 롤백은 시작 확인을 다시 하지 않고 바깥 의존성도 보지 않으므로, 돌아간 리비전이 지금도 정상인지는 사람이 확인한다.
+# push 트리거는 GitHub 이 이 파일을 워크플로로 등록하게 하려는 용도뿐이고, 작업(job)은 버튼을 눌렀을 때만 돈다.
+name: rollback
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 되돌릴 서비스
+        type: choice
+        options: [staging, production]
+        default: staging
+      revision:
+        description: 되돌아갈 리비전 이름(비워 두면 바로 전의 정상 리비전)
+        required: false
+        default: ""
+  push:
+    branches: [staging]
+    paths: [.github/workflows/rollback.yml]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  rollback:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    env:
+      SERVICE: ${{ inputs.environment == 'production' && 'routine-stamp-trial' || 'routine-stamp-trial-staging' }}
+      REVISION_INPUT: ${{ inputs.revision }}
+    steps:
+      - uses: google-github-actions/auth@v3
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.WIF_PROVIDER }}
+          service_account: ${{ vars.DEPLOY_SA }}
+
+      - uses: google-github-actions/setup-gcloud@v3
+
+      - name: 되돌아갈 리비전 정하기
+        id: pick
+        run: |
+          # 입력은 셸 명령에 그대로 넣지 않고 환경변수로 받아 리비전 이름 모양인지 먼저 확인한다.
+          if [ -n "$REVISION_INPUT" ] && ! echo "$REVISION_INPUT" | grep -Eq '^[a-z0-9-]+$'; then
+            echo "리비전 이름 모양이 아닙니다"; exit 1
+          fi
+          CURRENT=$(gcloud run services describe "$SERVICE" --region us-central1 --project "${{ vars.GCP_PROJECT_ID }}" --format=json \
+            | jq -r '[.status.traffic[] | select(.percent==100)][0].revisionName')
+          TARGET="$REVISION_INPUT"
+          if [ -z "$TARGET" ]; then
+            TARGET=$(gcloud run revisions list --service "$SERVICE" --region us-central1 --project "${{ vars.GCP_PROJECT_ID }}" --format=json \
+              | jq -r --arg cur "$CURRENT" '[.[] | select(any(.status.conditions[]; .type=="Ready" and .status=="True")) | select(.metadata.name != $cur)] | sort_by(.metadata.creationTimestamp) | reverse | .[0].metadata.name')
+          fi
+          echo "지금 100% $CURRENT → 되돌아갈 곳 $TARGET"
+          test -n "$TARGET" && [ "$TARGET" != "null" ]
+          echo "current=$CURRENT" >> "$GITHUB_OUTPUT"
+          echo "target=$TARGET" >> "$GITHUB_OUTPUT"
+
+      - name: 트래픽 100%를 되돌아갈 리비전으로
+        run: |
+          gcloud run services update-traffic "$SERVICE" --region us-central1 --project "${{ vars.GCP_PROJECT_ID }}" --to-revisions "${{ steps.pick.outputs.target }}=100"
+
+      - name: 결과 기록
+        run: |
+          NOW=$(gcloud run services describe "$SERVICE" --region us-central1 --project "${{ vars.GCP_PROJECT_ID }}" --format=json | jq -r '[.status.traffic[] | select(.percent==100)][0].revisionName')
+          {
+            echo "### 롤백 기록"
+            echo ""
+            echo "| 서비스 | 롤백 전 100% | 롤백 후 100% |"
+            echo "| --- | --- | --- |"
+            echo "| $SERVICE | ${{ steps.pick.outputs.current }} | $NOW |"
+          } >> "$GITHUB_STEP_SUMMARY"
