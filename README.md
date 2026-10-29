@@ -39,3 +39,5 @@
 
 - `main` 에 머지하면 GitHub Actions(`.github/workflows/deploy.yml`)가 Cloud Run 서비스 `routine-stamp-trial` 에 자동 배포함
 - 서비스는 비공개(인증 필요). 배포 권한은 키 파일 없이 Workload Identity Federation 으로 이 저장소에만 줌
+
+> 배포는 새 리비전을 0%로 올려 태그 URL 스모크 테스트를 통과한 뒤에만 전환한다(.github/workflows/deploy.yml). 문제가 생기면 rollback 워크플로로 되돌린다.
