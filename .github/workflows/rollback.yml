@@ -1,5 +1,5 @@
 # 새 버전에 문제가 있을 때 Actions 탭의 Run workflow 버튼 하나로 이전 리비전에 트래픽 100%를 돌려놓는다.
-# 이미지를 다시 만들지 않고 트래픽 설정만 바꾼다. 되돌아갈 리비전을 비워 두면 지금 100%인 리비전을 뺀 가장 최근의 정상(Ready) 리비전으로 간다.
+# 이미지를 다시 만들지 않고 트래픽 설정만 바꾼다. 되돌아갈 리비전을 비워 두면 지금 100%인 리비전보다 먼저 만들어진 가장 최근의 정상(Ready) 리비전으로 간다.
 # 이 워크플로는 GitHub 환경(승인)을 거치지 않는다(급할 때 승인을 기다리지 않게). 대신 버튼은 저장소에 쓰기 권한이 있는 사람만 누를 수 있다.
 # 롤백은 시작 확인을 다시 하지 않고 바깥 의존성도 보지 않으므로, 돌아간 리비전이 지금도 정상인지는 사람이 확인한다.
 # push 트리거는 GitHub 이 이 파일을 워크플로로 등록하게 하려는 용도뿐이고, 작업(job)은 버튼을 눌렀을 때만 돈다.
@@ -52,8 +52,11 @@ jobs:
             | jq -r '[.status.traffic[] | select(.percent==100)][0].revisionName')
           TARGET="$REVISION_INPUT"
           if [ -z "$TARGET" ]; then
-            TARGET=$(gcloud run revisions list --service "$SERVICE" --region us-central1 --project "${{ vars.GCP_PROJECT_ID }}" --format=json \
-              | jq -r --arg cur "$CURRENT" '[.[] | select(any(.status.conditions[]; .type=="Ready" and .status=="True")) | select(.metadata.name != $cur)] | sort_by(.metadata.creationTimestamp) | reverse | .[0].metadata.name')
+            # 지금 100%인 리비전보다 먼저 만들어진 정상(Ready) 리비전 중 가장 최근 것.
+            # 나중에 만든 0% 리비전은 아직 전환 전이라 검증되지 않았으니 고르지 않는다.
+            REVS=$(gcloud run revisions list --service "$SERVICE" --region us-central1 --project "${{ vars.GCP_PROJECT_ID }}" --format=json)
+            CUR_TS=$(echo "$REVS" | jq -r --arg cur "$CURRENT" '.[] | select(.metadata.name==$cur) | .metadata.creationTimestamp')
+            TARGET=$(echo "$REVS" | jq -r --arg cur "$CURRENT" --arg ts "$CUR_TS" '[.[] | select(any(.status.conditions[]; .type=="Ready" and .status=="True")) | select(.metadata.name != $cur) | select(.metadata.creationTimestamp < $ts)] | sort_by(.metadata.creationTimestamp) | reverse | .[0].metadata.name')
           fi
           echo "지금 100% $CURRENT → 되돌아갈 곳 $TARGET"
           test -n "$TARGET" && [ "$TARGET" != "null" ]
