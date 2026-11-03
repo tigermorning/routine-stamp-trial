@@ -244,7 +244,8 @@ def test_listen_replies_with_made_up_numbers_are_flagged_but_user_and_app_number
 
 def test_listen_rule_bans_efficacy_claims_and_made_up_numbers():
     r = policy.MODE_RULES["listen"]
-    assert "효능 주장도 하지 않고" in r and "지어내지 않는다" in r
+    # 2026-11-03 v3(노드 11 실험)에서 '효능 주장도 하지 않고'를 '효과·효능 단정을 하지 않고'로 넓혔다(금지 표현 목록이 늘었다)
+    assert "효과·효능 단정을 하지 않고" in r and "지어내지 않는다" in r
 
 
 # ---- 2026-10-21 사용자 결정: '내 할 일' 목록을 화면에서 없앤다 ----

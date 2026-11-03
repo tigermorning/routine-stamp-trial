@@ -6,6 +6,7 @@
 - 계측이 실패해도 대답은 그대로 나간다(모든 호출을 감싼다). 사용자 키(BYOK)는 어디에도 남기지 않는다.
 - 환경변수: ENV(기본 local → Langfuse environment), K_REVISION(Cloud Run 이 넣어 줌 → release), LANGFUSE_BASE_URL(미국 리전 https://us.cloud.langfuse.com).
 """
+import inspect
 import logging
 import os
 import re
@@ -82,16 +83,32 @@ class Obs:
                 log.warning("tracing update failed: %s", type(error).__name__)
 
     def end(self, **kw):
-        if self.raw is not None:
+        """닫는다. 이미 닫았으면 아무 일도 하지 않는다(SDK 가 "Calling end() on an ended span" 경고를 내지 않게)."""
+        if self.raw is not None and not getattr(self, "ended", False):
+            self.ended = True
             try:
                 self.raw.update(**kw)
                 self.raw.end()
             except Exception as error:
                 log.warning("tracing end failed: %s", type(error).__name__)
 
+    def mark_error(self, error):
+        """닫지 않고 오류 표시만 한다(실패해도 다음 단계로 이어 가는 경우, 나중에 결과를 덧붙여 닫는다)."""
+        self.update(level="ERROR", status_message=type(error).__name__)
+
     def fail(self, error):
-        """오류 종류만 남긴다(메시지는 제공사 문구·입력이 섞일 수 있어 남기지 않는다)."""
+        """오류 종류만 남기고 닫는다(메시지는 제공사 문구·입력이 섞일 수 있어 남기지 않는다)."""
         self.end(level="ERROR", status_message=type(error).__name__)
+
+
+def usage_kw(fn, usage):
+    """LLM 함수가 usage 인자(토큰 수를 채울 dict)를 받을 수 있으면 {"usage": usage}, 아니면 {}(인자가 없는 시험용 가짜 LLM)."""
+    try:
+        params = inspect.signature(fn).parameters.values()
+    except (TypeError, ValueError):
+        return {}
+    ok = any(p.name == "usage" or p.kind is inspect.Parameter.VAR_KEYWORD for p in params)
+    return {"usage": usage} if ok else {}
 
 
 def text(value):
@@ -105,7 +122,8 @@ def start_turn(byok=False):
     if client is None:
         return Obs()
     try:
-        return Obs(client.start_observation(name="chat-turn", as_type="span", metadata={"byok": bool(byok)}), client)
+        # 한 턴의 흐름(듣기·조언·위기 등)을 모델이 고르므로 agent 종류로 둔다(Langfuse 에이전트 그래프에 한 마디로 보인다)
+        return Obs(client.start_observation(name="chat-turn", as_type="agent", metadata={"byok": bool(byok)}), client)
     except Exception as error:
         log.warning("tracing start failed: %s", type(error).__name__)
         return Obs()

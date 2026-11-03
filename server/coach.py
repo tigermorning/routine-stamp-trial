@@ -5,6 +5,7 @@
 import re
 
 import cards as cardlib
+import prompts
 
 from policy import *  # noqa: F401,F403  범위·페르소나·안전 규칙·한도는 policy.py 한 곳에 있다
 
@@ -15,8 +16,15 @@ def is_crisis(text):
 
 
 def plan_messages(history, todos_n=0):  # todos_n: 이전 버전 화면과의 호환용 인자. 이제 분류에는 쓰지 않는다(할 일 목록이 없어졌다)
+    system, user, _ = plan_messages_with_prompt(history)
+    return system, user
+
+
+def plan_messages_with_prompt(history):
+    """모드 고르기 지시문을 Langfuse(stamp-plan, 라벨)에서 가져온다. 셋째 값은 generation 에 연결할 prompt 객체(없으면 None)."""
+    system, prompt = prompts.get("stamp-plan", PLAN_SYSTEM)
     convo = "\n".join(f"{'사용자' if m['role'] == 'user' else '도우미'}: {m['content']}" for m in history)
-    return PLAN_SYSTEM, f"[카드 목록]\n{cardlib.catalogue()}\n\n[대화]\n{convo}"
+    return system, f"[카드 목록]\n{cardlib.catalogue()}\n\n[대화]\n{convo}", prompt
 
 
 def clean_history(raw):
@@ -89,6 +97,27 @@ def ends_with_question(text):
     return text.strip().rstrip(" 😊🌟✨🙂😄😉👍💪🏃‍♂️🎉").endswith(("?", "？"))
 
 
+# 한국어 제안은 '~해 볼까요?', '~어때요?'처럼 물음표로 끝난다. 이것은 되묻기가 아니라 다음 한 걸음 제안이다
+# (2026-11-03 사람 라벨: 직전이 질문이었는데 '…가져보는 건 어떠세요? …참여해 보실래요?'를 통과로 봄).
+_PROPOSAL = re.compile(r"(볼까요|볼래요|볼까|볼래|할까요|할까|어때요|어떨까요|어떠세요|어때|어떨까)\s*[?？]$")
+
+
+def is_proposal(text):
+    """물음표로 끝나도 '~해 볼까요?/~어때요?'처럼 무엇을 해 보자고 권하는 문장이면 True."""
+    return bool(_PROPOSAL.search(EMOJI.sub("", text).strip().rstrip(" ~")))
+
+
+# '혹시 요즘은 물 마시기 쪽이 제일 걸리나요?'처럼 사용자가 이미 말한 일이 걸리는지 되묻는 문장은 언제나 빼는 문장이다
+# (2026-11-03 사용자: 계속 어기면 당연히 걸린다, 의미 없는 질문). 옛 지시문 v1 의 예시를 모델이 따라 하며 생겼고,
+# 지시문에서 금지한 v3 에서도 다시 나와서(실험 D) 코드로 지운다.
+_BANNED = re.compile(r"(제일|가장)\s*(마음에\s*)?걸리")
+
+
+def is_banned(text):
+    """화면에 절대 내보내지 않는 문장이면 True."""
+    return bool(_BANNED.search(text))
+
+
 def variation_hint(history):
     """직전 도우미 말이 질문으로 끝났으면 이번에는 질문으로 끝내지 않게 한다(같은 형태 되풀이 방지).
     모델의 판단에 맡기지 않고 서버가 직전 말을 보고 정한다."""
@@ -152,12 +181,19 @@ def with_tone_reminder(history, character, extra=""):
 APP_NUMBERS = set(re.findall(r"\d+(?:[.,]\d+)?", APP_GUIDE))  # 앱 안내에 나오는 숫자(3·28·60·6·10 …). 앱 이야기에서만 말해도 된다
 
 
-def build_system(mode, cards, ctx, todos, character=None, history=None):
-    """규칙(안전·범위·카드·위기)은 캐릭터 설정보다 앞에 있고, 설정으로 바뀌지 않는다. 설정은 말투 줄과 이름 칸만 바꾼다."""
+def build_system(mode, cards, ctx, todos, character=None, history=None, used_prompts=None):
+    """규칙(안전·범위·카드·위기)은 캐릭터 설정보다 앞에 있고, 설정으로 바뀌지 않는다. 설정은 말투 줄과 이름 칸만 바꾼다.
+    듣기 모드 규칙은 Langfuse(stamp-listen-rule)에서 가져오고, 가져온 prompt 객체를 used_prompts 에 담는다."""
     parts = [fixed_rules(tone_for(character), with_character=bool(character))]
     if name_block(character):
         parts.append(name_block(character))
-    parts.append(MODE_RULES[mode])
+    if mode == "listen":
+        rule, prompt = prompts.get("stamp-listen-rule", MODE_RULES["listen"])
+        if prompt is not None and used_prompts is not None:
+            used_prompts.append(prompt)
+        parts.append(rule)
+    else:
+        parts.append(MODE_RULES[mode])
     if mode in ("advise", "quest") and cards:
         parts.append("[근거 카드]\n" + cardlib.card_block(cards))
     parts.append(APP_GUIDE)
@@ -215,3 +251,94 @@ class Limiter:
             piece, self.done = piece[:room], True
         self.out += piece
         return piece
+
+    def finish(self):
+        return ""
+
+
+_SENT_END = re.compile(r"[.!?。！？\n]")
+
+
+class ReplyGate:
+    """대화 모드(listen·app·general) 답을 문장 단위로 내보내며, 지시문으로는 지켜지지 않던 규칙을 코드로 지킨다(2026-11-03, 노드 11 실험).
+
+    - 질문은 하나만: 첫 질문 문장은 내보내고, 두 번째 질문부터는 버린다(질문이 아닌 문장은 계속 내보낸다).
+      처음에는 첫 질문에서 멈췄는데, 첫 문장이 되받는 질문이면 답이 그 한 줄로 끝나 버려서(실험 C-1 new-morning) 바꿨다.
+    - 직전 도우미 말이 질문이었으면 되묻는 질문 문장을 내보내지 않는다(되묻기 되풀이 방지, variation_hint 와 같은 조건).
+      '~해 볼까요?' 같은 제안형 물음(is_proposal)은 되묻기가 아니므로 내보낸다.
+    - 숫자 검사를 통과하지 못한 문장은 내보내지 않는다(근거 없는 '5분' 같은 숫자를 화면에 나가기 전에 거른다).
+    - '~가 제일 걸리나요?' 꼴의 되묻기(is_banned)는 언제나 지운다.
+    모두 걸러져 빈 답이 되면 처음 걸러 둔 문장 하나를 내보낸다(빈 답보다 낫다). 길이 상한은 안쪽 Limiter 가 지킨다.
+    """
+
+    def __init__(self, limiter, no_question=False, number_ok=None):
+        self.limiter, self.no_question, self.number_ok = limiter, no_question, number_ok or (lambda s: True)
+        self.buf, self.questions, self.held, self.stopped = "", 0, None, False
+
+    @property
+    def out(self):
+        return self.limiter.out
+
+    @property
+    def done(self):
+        return self.stopped or self.limiter.done
+
+    def _hold(self, sentence):
+        if self.held is None:
+            self.held = sentence
+        return ""
+
+    def _judge(self, sentence):
+        core = sentence.strip()
+        if not core or not any(ch.isalnum() for ch in core):  # 공백·이모지만 남은 조각은 그대로
+            return self.limiter.feed(sentence)
+        if is_banned(core):  # 빈 답 대신 내보낼 문장으로도 남기지 않는다
+            return ""
+        if ends_with_question(core):
+            # 직전이 질문이면 되묻는 질문은 버리되, '~해 볼까요?' 같은 제안은 내보낸다(버리면 답이 맞장구 한 줄만 남았다: 실험 D)
+            if (self.no_question and not is_proposal(core)) or self.questions >= 1 or not self.number_ok(core):
+                return self._hold(sentence)
+            self.questions += 1
+            return self.limiter.feed(sentence)
+        if not self.number_ok(core):
+            return self._hold(sentence)
+        return self.limiter.feed(sentence)
+
+    def feed(self, piece):
+        if self.done:
+            return ""
+        self.buf += piece
+        out = ""
+        while not self.done:
+            m = _SENT_END.search(self.buf)
+            if not m:
+                break
+            sentence, self.buf = self.buf[:m.end()], self.buf[m.end():]
+            out += self._judge(sentence)
+        return out
+
+    def finish(self):
+        """스트림이 끝났을 때 남은 조각을 판정하고, 아무것도 못 내보냈으면 걸러 둔 문장 하나를 내보낸다."""
+        out = ""
+        if not self.done and self.buf.strip():
+            out += self._judge(self.buf)
+        self.buf = ""
+        if not self.limiter.out.strip() and self.held:
+            out += self.limiter.feed(self.held)
+        return out
+
+
+def gate_on():
+    """REPLY_GATE=off 이면 문장 걸러 내기를 끈다(실험에서 지시문만 바꾼 효과와 코드의 효과를 나눠 재려고)."""
+    import os
+    return os.environ.get("REPLY_GATE", "on").strip().lower() != "off"
+
+
+def reply_filter(mode, picked, history, ctx, todos):
+    """답을 걸러 낼 객체(feed/finish/out/done). 대화 모드는 ReplyGate, 그 밖(조언·퀘스트)은 Limiter 그대로."""
+    limiter = Limiter(MAX_QUEST if mode == "quest" else MAX_REPLY, one_line=(mode == "quest"))
+    if mode not in CHAT_MODES or not gate_on():
+        return limiter
+    extra = APP_NUMBERS if mode in ("app", "listen") else ()
+    return ReplyGate(limiter, no_question=bool(variation_hint(history)),
+                     number_ok=lambda s: numbers_ok(s, picked, history, ctx, todos, extra))

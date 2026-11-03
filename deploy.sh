@@ -5,6 +5,7 @@
 #   ./deploy.sh                       점검과 스냅샷만 하고 실행할 배포 명령을 보여 준다(배포하지 않는다)
 #   ./deploy.sh --deploy              점검 → 스냅샷 → 배포 → 라이브 확인
 #   ./deploy.sh --deploy --smoke-chat 라이브 확인에 도우미 대화 한 번을 더한다(모델 비용이 조금 든다)
+#   ./deploy.sh --eval-gate           점검에 평가 관문(도우미 품질 실험, 노드 11)을 더한다(모델 비용이 든다)
 #
 # 환경변수(선택): PROJECT REGION SERVICE FEEDBACK_USER, STAMP_TOOLS(화면 시험 스크립트가 든 폴더. 있으면 5종을 돌린다)
 # 스냅샷으로 배포하는 이유: 다른 세션이 파일을 고치는 도중에 올라가지 않게, 올릴 파일만 복사해 둔 사본에서 배포한다.
@@ -18,10 +19,12 @@ HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 DO_DEPLOY=0
 SMOKE=0
+EVAL_GATE=0
 for arg in "$@"; do
   case "$arg" in
     --deploy) DO_DEPLOY=1 ;;
     --smoke-chat) SMOKE=1 ;;
+    --eval-gate) EVAL_GATE=1 ;;
     *) echo "알 수 없는 옵션: $arg (사용법은 파일 맨 위 주석)" >&2; exit 2 ;;
   esac
 done
@@ -48,6 +51,14 @@ ok "비밀 2개가 있어요(값은 읽지 않아요)"
 
 (cd "$HERE/server" && python -m pytest tests -q) || fail "서버 시험이 실패했어요"
 ok "서버 시험 통과"
+
+# 노드 11 평가 관문: 도우미 답의 품질을 실험으로 재고 바닥값(server/evals/gate_thresholds.json)에 못 미치면 멈춘다.
+# 진짜 LLM 을 부르므로(실험 한 번에 OpenAI 33번·Claude 36번 정도) 지시문·대화 코드를 바꿨을 때만 --eval-gate 로 돌린다.
+# 필요: LANGFUSE_*, LLM_*(도우미), JUDGE_API_KEY·JUDGE_MODEL(Claude 심사) 환경변수
+if [ "$EVAL_GATE" = 1 ]; then
+  (cd "$HERE/server" && ENV=development python evals/eval_gate.py --runs 2) || fail "평가 관문 탈락(바닥값 아래)"
+  ok "평가 관문 통과"
+fi
 
 node -e "
 const h=require('fs').readFileSync(process.argv[1],'utf8');

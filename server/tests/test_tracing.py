@@ -79,12 +79,12 @@ def test_normal_turn_steps(monkeypatch):
     ev = chat("어제 하루 빠졌어 fake:advise")
     assert [e["type"] for e in ev][-1] == "done"
     names = [(o.name, o.as_type) for o in c.rec]
-    assert names == [("chat-turn", "span"), ("safety", "span"), ("plan-mode", "generation"), ("reply", "generation"), ("numbers-check", "span")]
+    assert names == [("chat-turn", "agent"), ("check-safety", "guardrail"), ("choose-mode", "generation"), ("generate-reply", "generation"), ("check-numbers", "guardrail")]
     assert all(o.ended for o in c.rec)
     assert c.flushed == 1
     plan = c.rec[2].updates[-1]["metadata"]
     assert plan["mode"] == "advise" and plan["card_ids"] == ["missed-one-day"] and plan["asked_cards"] == 3
-    reply = next(o for o in c.rec if o.name == "reply")
+    reply = next(o for o in c.rec if o.name == "generate-reply")
     assert any("completion_start_time" in u for u in reply.updates)  # 첫 글자 시각
 
 
@@ -103,7 +103,7 @@ def test_crisis_stops_before_model(monkeypatch):
     use_tracing(monkeypatch, c)
     ev = chat("죽고 싶다")
     assert [e["type"] for e in ev] == ["crisis"]
-    assert [o.name for o in c.rec] == ["chat-turn", "safety"]  # 모델을 부르는 단계가 없다
+    assert [o.name for o in c.rec] == ["chat-turn", "check-safety"]  # 모델을 부르는 단계가 없다
     assert c.rec[0].ended and c.flushed == 1
 
 
@@ -124,9 +124,49 @@ def test_stream_error_marks_error_level(monkeypatch):
     use_tracing(monkeypatch, c)
     ev = chat("fake:error")
     assert ev[-1]["type"] == "error"
-    reply = next(o for o in c.rec if o.name == "reply")
+    reply = next(o for o in c.rec if o.name == "generate-reply")
     assert any(u.get("level") == "ERROR" and u.get("status_message") == "RuntimeError" for u in reply.updates)
     assert "fake stream error" not in everything(c)  # 오류 문구는 남기지 않고 종류만
+
+
+def test_plan_failure_marked_once_and_keeps_fallback_mode(monkeypatch):
+    c = FakeClient()
+    use_tracing(monkeypatch, c)
+    ev = chat("fake:planerror")
+    assert ev[-1]["type"] == "done"  # 계획이 실패해도 듣기 모드로 답한다
+    plan = next(o for o in c.rec if o.name == "choose-mode")
+    assert plan.ended
+    assert any(u.get("level") == "ERROR" for u in plan.updates)
+    assert plan.updates[-1]["metadata"]["mode"] == "listen"  # 오류 표시 뒤에 고른 모드를 덧붙여 한 번만 닫았다
+
+
+class UsageLLM(FakeLLM):
+    """진짜 제공사처럼 넘겨받은 dict 에 토큰 수를 채우는 가짜."""
+
+    def complete_json(self, system, user, usage=None):
+        usage.update(input=11, output=7)
+        return super().complete_json(system, user)
+
+    def chat_stream(self, messages, usage=None):
+        yield from super().chat_stream(messages)
+        usage.update(input=120, output=40)
+
+
+def test_usage_details_on_generations(monkeypatch):
+    c = FakeClient()
+    use_tracing(monkeypatch, c)
+    main.app.dependency_overrides[main.get_llm] = lambda: UsageLLM(delay=0)
+    TestClient(main.app).post("/api/chat", json={"messages": [{"role": "user", "content": "어제 하루 빠졌어 fake:advise"}]})
+    used = {o.name: next((u["usage_details"] for u in o.updates if u.get("usage_details")), None) for o in c.rec}
+    assert used["choose-mode"] == {"input": 11, "output": 7}
+    assert used["generate-reply"] == {"input": 120, "output": 40}
+
+
+def test_usage_kw_only_when_accepted():
+    box = {}
+    assert tracing.usage_kw(lambda system, user: None, box) == {}  # usage 인자가 없는 옛 가짜 LLM
+    assert tracing.usage_kw(lambda system, user, usage=None: None, box) == {"usage": box}
+    assert tracing.usage_kw(lambda *a, **k: None, box) == {"usage": box}  # 평가 실행기의 호출 수 세기 감싸개
 
 
 def test_mask_patterns():

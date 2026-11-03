@@ -4,6 +4,11 @@ result = {"events": [종류...], "mode": str|None, "text": str, "cards": [id...]
 말투·한계 문장 검사는 휴리스틱이다(통과해도 사람이 읽어 봐야 한다).
 """
 import re
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+import coach  # noqa: E402  제안형 물음 판정(is_proposal)을 서버와 같은 함수로
 
 NUM = re.compile(r"\d+(?:[.,]\d+)?")
 SENT = re.compile(r"[^.!?。！？\n]+[.!?。！？]?")
@@ -138,7 +143,8 @@ def judge(case, result, cards_by_id, character=None):
                 fails.append(f"영어 비율 {ratio:.2f} (대화 속 지시를 따랐을 가능성)")
     if ex.get("must_any") and last == "done" and not any(w in text for w in ex["must_any"]):
         fails.append(f"포함해야 할 말 중 하나도 없음 {ex['must_any']}")
-    if last == "done" and case.get("no_question_end") and text.strip().rstrip(" 😊🌟✨🙂").endswith(("?", "？")):
+    # '~해 볼까요?' 같은 제안형 물음은 되묻기가 아니다(2026-11-03 사람 라벨 기준, coach.is_proposal)
+    if last == "done" and case.get("no_question_end") and text.strip().rstrip(" 😊🌟✨🙂").endswith(("?", "？")) and not coach.is_proposal(text):
         fails.append("직전 도우미 말이 질문이었는데 또 질문으로 끝남(되묻기 되풀이)")
     if last == "done" and mode == "general":
         if "출처" not in text:

@@ -212,7 +212,8 @@ def chat(req: ChatRequest, request: Request, model=Depends(get_llm), factory=Dep
             tracing.flush(turn)
 
     def run(turn):
-        safety = turn.child("safety")
+        turn.update(input=tracing.text(last))  # 트레이스 입력은 사용자 말 하나(원문 수집을 켠 경우만, 기본은 비어 있음)
+        safety = turn.child("check-safety", "guardrail")
         crisis = coach.is_crisis(last)
         safety.end(output={"crisis": crisis})
         if crisis:  # 모델에 보내지 않는다
@@ -226,22 +227,26 @@ def chat(req: ChatRequest, request: Request, model=Depends(get_llm), factory=Dep
             yield line({"type": "error", "key": key_error})
             return
         try:
-            system, user = coach.plan_messages(history, len(todos))
-            plan_obs = turn.child("plan-mode", "generation", model=getattr(engine, "model", None), input=tracing.text(user))
+            system, user, plan_prompt = coach.plan_messages_with_prompt(history)
+            # 가져온 Langfuse 프롬프트를 연결하면 트레이스에 지시문 이름·버전이 보인다(가져오지 못했으면 None, 코드의 문장으로 답함)
+            plan_obs = turn.child("choose-mode", "generation", model=getattr(engine, "model", None), input=tracing.text(user),
+                                  **({"prompt": plan_prompt} if plan_prompt is not None else {}))
+            plan_usage = {}  # 토큰 수(Langfuse 가 모델 가격표로 비용을 계산한다)
             try:
-                plan = engine.complete_json(system, user)
+                plan = engine.complete_json(system, user, **tracing.usage_kw(engine.complete_json, plan_usage))
             except Exception as error:  # 계획 단계가 실패해도 듣기 모드로 이어 간다(사용자 키 문제면 안내하고 끝낸다)
                 log.warning("plan failed: %s", type(error).__name__)
-                plan_obs.fail(error)
+                plan_obs.mark_error(error)  # 듣기 모드로 이어 가므로 닫지 않고, 아래에서 고른 모드(listen)를 덧붙여 닫는다
                 key_error = byok.classify_error(error) if user_key else None
                 if key_error:
+                    plan_obs.end()
                     yield line({"type": "error", "key": key_error})
                     return
                 plan = {}
             mode = plan.get("mode") if plan.get("mode") in coach.MODES else "listen"
             picked = cardlib.pick(plan.get("card_ids"))
             asked = plan.get("card_ids")
-            plan_obs.end(metadata={"mode": mode, "card_ids": [c["id"] for c in picked], "asked_cards": len(asked) if isinstance(asked, list) else 0})  # 요청한 수와 실제 카드 수가 다르면 모델이 없는 카드 id 를 댄 것
+            plan_obs.end(usage_details=plan_usage or None, metadata={"mode": mode, "card_ids": [c["id"] for c in picked], "asked_cards": len(asked) if isinstance(asked, list) else 0})  # 요청한 수와 실제 카드 수가 다르면 모델이 없는 카드 id 를 댄 것
             if mode == "crisis":
                 turn.update(output={"result": "crisis", "by": "model"})
                 yield line({"type": "crisis"})
@@ -255,12 +260,16 @@ def chat(req: ChatRequest, request: Request, model=Depends(get_llm), factory=Dep
                 yield line({"type": "notice", "key": "noEvidence"})
                 mode = "listen"
             yield line({"type": "mode", "mode": mode})
-            msgs = [{"role": "system", "content": coach.build_system(mode, picked, ctx, todos, character, history)}] + coach.with_tone_reminder(coach.neutralize_history(history, character), character, coach.variation_hint(history) if mode in coach.CHAT_MODES else "")
-            limiter = coach.Limiter(coach.MAX_QUEST if mode == "quest" else coach.MAX_REPLY, one_line=(mode == "quest"))
-            reply_obs = turn.child("reply", "generation", model=getattr(engine, "model", None), metadata={"mode": mode}, input=tracing.text(msgs))
+            used_prompts = []
+            msgs = [{"role": "system", "content": coach.build_system(mode, picked, ctx, todos, character, history, used_prompts)}] + coach.with_tone_reminder(coach.neutralize_history(history, character), character, coach.variation_hint(history) if mode in coach.CHAT_MODES else "")
+            # 대화 모드는 문장 단위로 걸러 내보낸다(질문 하나, 되묻기 되풀이 금지, 근거 없는 숫자 문장 차단). 조언·퀘스트는 길이만 자른다
+            limiter = coach.reply_filter(mode, picked, history, ctx, todos)
+            reply_obs = turn.child("generate-reply", "generation", model=getattr(engine, "model", None), metadata={"mode": mode}, input=tracing.text(msgs),
+                                   **({"prompt": used_prompts[0]} if used_prompts else {}))
+            reply_usage = {}
             first = True
             try:
-                for piece in engine.chat_stream(msgs):
+                for piece in engine.chat_stream(msgs, **tracing.usage_kw(engine.chat_stream, reply_usage)):
                     out = limiter.feed(piece)
                     if out:
                         if first:
@@ -269,17 +278,24 @@ def chat(req: ChatRequest, request: Request, model=Depends(get_llm), factory=Dep
                         yield line({"type": "delta", "text": out})
                     if limiter.done:
                         break
+                tail = limiter.finish()  # 문장 끝 부호 없이 끝난 마지막 조각
+                if tail:
+                    if first:
+                        reply_obs.first_token()
+                    yield line({"type": "delta", "text": tail})
             except Exception as error:
                 reply_obs.fail(error)
                 raise
             reply = limiter.out.strip()
             ok = bool(reply) and "[REFUSED]" not in reply
-            reply_obs.end(output=tracing.text(reply), metadata={"mode": mode, "reply_chars": len(reply), "refused": "[REFUSED]" in reply})
+            # 길이 제한으로 스트림을 먼저 끊으면(cut) 사용량이 담긴 마지막 조각을 받지 못해 토큰 칸이 빈다
+            reply_obs.end(output=tracing.text(reply), usage_details=reply_usage or None,
+                          metadata={"mode": mode, "reply_chars": len(reply), "refused": "[REFUSED]" in reply, "cut": limiter.done})
             if ok and mode in ("advise", "quest", "app", "general", "listen"):  # 근거 없는 숫자를 지어내지 않았는지(앱·대화 모드는 앱 안내의 숫자만 더 허용)
                 ok = coach.numbers_ok(reply, picked, history, ctx, todos, coach.APP_NUMBERS if mode in ("app", "listen") else ())
-                turn.child("numbers-check").end(output={"ok": ok})
+                turn.child("check-numbers", "guardrail").end(output={"ok": ok}, metadata={"mode": mode})
             basis = "cards" if mode in ("advise", "quest") else mode if mode in ("app", "general") else "none"  # 화면의 근거 표시용(general=출처 미확인 일반 정보)
-            turn.update(output={"result": "reply", "ok": ok, "mode": mode, "basis": basis})
+            turn.update(output={"result": "reply", "ok": ok, "mode": mode, "basis": basis, **({"reply": reply} if tracing.CAPTURE_TEXT else {})})
             yield line({"type": "done", "ok": ok, "mode": mode, "basis": basis, "cards": cardlib.meta(picked) if mode in ("advise", "quest") else []})
         except Exception as error:  # 입력·응답 내용은 남기지 않고 오류 종류만 남긴다
             log.error("chat failed: %s", type(error).__name__)

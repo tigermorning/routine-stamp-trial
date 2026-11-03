@@ -13,6 +13,18 @@ REPLY_TOKENS = 450
 SVG_TOKENS = 2500
 
 
+def fill_usage(usage, raw, input_key, output_key):
+    """호출한 쪽이 넘긴 dict 에 토큰 수를 채운다(Langfuse usage_details 키: input, output). 사용량이 없거나 dict 를 안 넘겼으면 그대로 둔다.
+
+    LLM 객체는 요청끼리 공유되므로 사용량을 객체 속성에 두지 않고, 요청마다 새 dict 를 받아 채운다.
+    """
+    if usage is None or raw is None:
+        return
+    tokens_in, tokens_out = getattr(raw, input_key, None), getattr(raw, output_key, None)
+    if isinstance(tokens_in, int) and isinstance(tokens_out, int):
+        usage.update(input=tokens_in, output=tokens_out)
+
+
 def parse_json_object(text):
     match = re.search(r"\{.*\}", text, re.S)
     if not match:
@@ -26,21 +38,26 @@ class OpenAICompatibleLLM:
 
         self.client = OpenAI(api_key=api_key, base_url=base_url, timeout=TIMEOUT)
         self.model = model
+        self.base_url = base_url
 
-    def complete_json(self, system, user):
+    def complete_json(self, system, user, usage=None):
         r = self.client.chat.completions.create(
             model=self.model, messages=[{"role": "system", "content": system}, {"role": "user", "content": user}],
             response_format={"type": "json_object"}, max_tokens=PLAN_TOKENS)
+        fill_usage(usage, getattr(r, "usage", None), "prompt_tokens", "completion_tokens")
         return json.loads(r.choices[0].message.content)
 
     def complete_text(self, messages, max_tokens):
         r = self.client.chat.completions.create(model=self.model, messages=messages, max_tokens=max_tokens)
         return r.choices[0].message.content or ""
 
-    def chat_stream(self, messages):
+    def chat_stream(self, messages, usage=None):
+        # 스트리밍 사용량은 마지막 조각에만 온다. OpenAI 본 주소에서만 요청한다(Gemini 호환 주소의 동작은 확인하지 못했다).
+        extra = {"stream_options": {"include_usage": True}} if usage is not None and self.base_url is None else {}
         response = self.client.chat.completions.create(model=self.model, messages=messages, stream=True,
-                                                       max_tokens=REPLY_TOKENS)
+                                                       max_tokens=REPLY_TOKENS, **extra)
         for event in response:
+            fill_usage(usage, getattr(event, "usage", None), "prompt_tokens", "completion_tokens")
             if event.choices and event.choices[0].delta.content:
                 yield event.choices[0].delta.content
 
@@ -61,9 +78,10 @@ class ClaudeLLM:
         return dict(model=self.model, max_tokens=max_tokens, system=system, messages=turns,
                     output_config=self.OUTPUT_CONFIG, betas=self.BETAS, fallbacks="default")
 
-    def complete_json(self, system, user):
+    def complete_json(self, system, user, usage=None):
         system = system + "\n\n반드시 JSON 객체 하나만 출력한다. 설명이나 코드 블록 표시는 붙이지 않는다."
         r = self.client.beta.messages.create(**self._request(system, [{"role": "user", "content": user}], PLAN_TOKENS))
+        fill_usage(usage, getattr(r, "usage", None), "input_tokens", "output_tokens")
         if r.stop_reason == "refusal":
             raise ValueError("Claude가 요청을 거절했습니다.")
         return parse_json_object("".join(b.text for b in r.content if b.type == "text"))
@@ -76,7 +94,7 @@ class ClaudeLLM:
             raise ValueError("Claude가 요청을 거절했습니다.")
         return "".join(b.text for b in r.content if b.type == "text")
 
-    def chat_stream(self, messages):
+    def chat_stream(self, messages, usage=None):
         system = "\n\n".join(m["content"] for m in messages if m["role"] == "system")
         turns = [m for m in messages if m["role"] != "system"]
         with self.client.beta.messages.stream(**self._request(system, turns, REPLY_TOKENS)) as stream:
@@ -84,7 +102,9 @@ class ClaudeLLM:
             for text in stream.text_stream:
                 sent = True
                 yield text
-            if stream.get_final_message().stop_reason == "refusal" and not sent:
+            final = stream.get_final_message()
+            fill_usage(usage, getattr(final, "usage", None), "input_tokens", "output_tokens")
+            if final.stop_reason == "refusal" and not sent:
                 yield self.REFUSAL
 
 
@@ -103,7 +123,7 @@ class FakeLLM:
     def _last_user(text):
         return text.rsplit("사용자:", 1)[-1]
 
-    def complete_json(self, system, user):
+    def complete_json(self, system, user, usage=None):  # 가짜라 사용량을 채우지 않는다(가격표에 없는 모델)
         last = self._last_user(user)
         if "fake:planerror" in last:
             raise RuntimeError("fake plan error")
@@ -157,7 +177,7 @@ class FakeLLM:
             raise RuntimeError("fake svg error")
         return "설명 먼저 " + self.FAKE_SVG + " 끝"
 
-    def chat_stream(self, messages):
+    def chat_stream(self, messages, usage=None):
         text = self._reply(messages)
         for i in range(0, len(text), 3):
             time.sleep(self.delay)
