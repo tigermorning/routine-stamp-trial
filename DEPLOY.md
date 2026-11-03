@@ -22,6 +22,11 @@
 - ☐ 바뀐 부분을 라이브에서 직접 눌러 확인했다(스크립트는 화면이 뜨는지만 본다)
 - ☐ 트래픽이 새 리비전에 100% 인지 확인했다
 
+## 관측(Langfuse, 선택)
+기본은 꺼져 있다(키가 없으면 아무 일도 하지 않음). 켜는 방법, 남기는 것, 원문을 보내지 않는 이유는 `OBSERVABILITY.md`.
+- 켜려면 Secret Manager 에 `langfuse-secret-key` 를 콘솔에서 직접 만들고(값을 명령 기록에 남기지 않는다), 서비스에 `--update-env-vars LANGFUSE_PUBLIC_KEY=…,LANGFUSE_BASE_URL=https://us.cloud.langfuse.com,ENV=production` 과 `--update-secrets LANGFUSE_SECRET_KEY=langfuse-secret-key:latest` 를 준다. `--set-env-vars` 는 기존 값을 지우므로 쓰지 않는다. `deploy.sh` 는 이 시크릿을 아직 점검하지 않는다.
+- `LANGFUSE_CAPTURE_TEXT=on` 은 개인정보 안내(`index.html` privBody)가 «말은 이 앱 서버에 저장되지 않아요»라고 하므로, 문구를 먼저 고치기 전에는 켜지 않는다.
+
 ## 되돌리기
 리비전은 남아 있어서 다시 빌드하지 않고 트래픽만 돌린다.
 ```

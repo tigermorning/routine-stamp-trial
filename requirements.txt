@@ -2,3 +2,4 @@ fastapi>=0.115
 uvicorn>=0.30
 openai>=1.60
 anthropic>=1.15
+langfuse==5.1.0
