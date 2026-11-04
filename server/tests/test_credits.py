@@ -478,3 +478,11 @@ def test_space_and_donut_design_themes_are_sold_with_matching_css():
 def test_diary_dialog_and_button_exist_in_page():
     html = (Path(__file__).resolve().parents[2] / "index.html").read_text(encoding="utf-8")
     assert 'id="diaryBtn"' in html and 'id="diaryDlg"' in html and "S.diary" in html
+
+
+def test_paper_pack_item_and_css_for_each_paper():
+    item = creditlib.ITEMS["paper_pack"]
+    assert item["kind"] == "paper" and item["amount"] > 0 and item["desc"]
+    html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
+    for pid in ("lined", "grid", "dot", "kraft", "sticky", "letter"):
+        assert f"{{id:'{pid}'" in html and f".paper-{pid}{{" in html  # 화면 목록과 CSS가 어긋나지 않는다

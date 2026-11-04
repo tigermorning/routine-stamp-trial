@@ -261,7 +261,17 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 .dytabs{display:flex;gap:6px;margin:8px 0}.dytabs .btn{flex:1}.dytabs .btn[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 .dynav{display:flex;gap:6px;align-items:center;justify-content:space-between;margin-bottom:8px}#dyPick{flex:1;min-width:0;border:2px solid var(--line);border-radius:10px;padding:5px 8px;font:inherit;background:var(--card);color:var(--ink)}
 #dyBody.five{max-height:none;overflow:visible}#dyBody.five .dyrow{display:grid;grid-template-columns:52px 1fr;gap:8px;align-items:start}#dyBody.five textarea{height:56px;min-height:0;resize:none}#dyBody.five .dyrow label{padding-top:8px;margin:0;font-size:14px}
-#dyBody{max-height:52vh;overflow:auto}
+#dyBody{max-height:44vh;overflow:auto}
+.dychips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px}.dychips .btn{padding:3px 10px;font-size:14px}.dychips .btn[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.dyarea{position:relative}.dystk{position:absolute;font-size:28px;line-height:1;touch-action:none;user-select:none;cursor:grab;transform:translate(-50%,-50%)}
+.dystk.sel{outline:2px dashed var(--accent);outline-offset:2px;border-radius:6px}.dystk .x{position:absolute;right:-12px;top:-14px;width:20px;height:20px;border-radius:50%;border:0;background:var(--accent);color:var(--accent-ink);font-size:12px;line-height:20px;padding:0;cursor:pointer}
+#dyBody textarea[class*="paper-"]:not(.paper-plain){color:#3b2f22;border-color:#c9b8a0}
+#dyBody .paper-lined{background:#fffdf6 repeating-linear-gradient(transparent 0 27px,#9ec5e8 27px 28px) local;line-height:28px}
+#dyBody .paper-grid{background:#fcfff9 linear-gradient(#bfe0c8 1px,transparent 1px) 0 0/20px 20px,linear-gradient(90deg,#bfe0c8 1px,transparent 1px) 0 0/20px 20px local}
+#dyBody .paper-dot{background:#fffdf6 radial-gradient(circle,#c9b8a0 1.2px,transparent 1.6px) 0 0/18px 18px local}
+#dyBody .paper-kraft{background:#dcc09a;border-color:#a98558}
+#dyBody .paper-sticky{background:#fff3a0;border-color:#e3cf5a}
+#dyBody .paper-letter{background:#fff4f7;border:2px dashed #f0a0b8}
 .dyrow{margin:0 0 8px}.dyrow label{display:block;font-size:13px;color:var(--soft);margin-bottom:2px}.dyrow.today label{color:var(--accent);font-weight:700}
 #dyBody textarea{width:100%;box-sizing:border-box;border:2px solid var(--line);border-radius:10px;padding:6px 8px;font:inherit;background:var(--card);color:var(--ink);resize:vertical}
 .hcal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:12px 0 6px;text-align:center}
@@ -518,7 +528,12 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
   <div class="dynav"><button type="button" class="btn" id="dyPrev" aria-label="이전">‹</button><input type="date" id="dyPick" aria-label="날짜 고르기"><button type="button" class="btn" id="dyNext" aria-label="다음">›</button><button type="button" class="btn" id="dyToday">오늘</button></div>
   <p class="stat" id="dyCap" style="margin:0 0 8px;text-align:center"></p>
   <div id="dyBody"></div>
-  <div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn" id="dyClose" type="button">닫기</button></div>
+  <div id="dyDeco" hidden>
+    <div class="dychips" id="dyPapers" aria-label="메모지 종류"></div>
+    <div class="dychips" id="dyTray" aria-label="스티커"></div>
+    <p class="stat" id="dyPv" hidden><span id="dyPvTxt"></span> <button class="btn main" id="dyBuy" type="button"></button></p>
+  </div>
+  <div class="row" style="justify-content:space-between;margin-top:10px"><button class="btn" id="dyDecoBtn" type="button" aria-expanded="false">🎀 꾸미기</button><button class="btn" id="dyClose" type="button">닫기</button></div>
 </dialog>
 
 <dialog id="histDlg" aria-labelledby="histTitle">
@@ -2126,18 +2141,59 @@ let dyMode='day',dyDate=todayStr;
 const dyAdd=(ds,n)=>{const d=new Date(ds+'T00:00');d.setDate(d.getDate()+n);return fmt(d)};
 const dyFmt=(ds,o)=>new Intl.DateTimeFormat(LOCALE[lang],o).format(new Date(ds+'T00:00'));
 function dySet(ds,v){if(!S.diary)S.diary={};if(v.trim())S.diary[ds]=v.slice(0,1000);else delete S.diary[ds];save()}
-function dyRow(ds,label,rows){
+const PAPERS=[{id:'plain',name:'기본'},{id:'lined',name:'줄 노트'},{id:'grid',name:'모눈'},{id:'dot',name:'점 격자'},{id:'kraft',name:'크라프트'},{id:'sticky',name:'노란 메모'},{id:'letter',name:'편지지'}]; // plain 말고는 상점 «메모지 6종»(paper_pack)
+let dyDeco=false,dyPaperPv=null,dySel=-1;
+const dyPaper=()=>dyPaperPv||(OWNED.has('paper_pack')&&PAPERS.some(x=>x.id===S.dyPaper)?S.dyPaper:'plain');
+function dyRow(ds,label,rows,withStk){
   const d=document.createElement('div');d.className='dyrow'+(ds===todayStr?' today':'');
-  const l=document.createElement('label');l.textContent=label;const ta=document.createElement('textarea');
-  ta.rows=rows;ta.maxLength=1000;ta.value=(S.diary&&S.diary[ds])||'';ta.setAttribute('aria-label',label);
-  ta.oninput=()=>dySet(ds,ta.value);d.appendChild(l);d.appendChild(ta);return d;
+  const l=document.createElement('label');if(withStk&&S.dyHl&&S.dyHl[ds]){l.innerHTML=`<span class="dn hl-${esc(S.dyHl[ds].slice(3))}">${esc(label)}</span>`}else l.textContent=label;
+  const area=document.createElement('div');area.className='dyarea';const ta=document.createElement('textarea');
+  ta.rows=rows;ta.maxLength=1000;ta.value=(S.diary&&S.diary[ds])||'';ta.setAttribute('aria-label',label);ta.className='paper-'+dyPaper();
+  ta.oninput=()=>dySet(ds,ta.value);area.appendChild(ta);d.appendChild(l);d.appendChild(area);
+  if(withStk) dyStickers(area,ds);
+  return d;
+}
+function dyStickers(area,ds){ // 붙인 스티커를 글 칸 위에 올린다: 끌어서 옮기고, 눌러 고르면 ✕로 지운다
+  const list=(S.dyDeco&&S.dyDeco[ds])||[];
+  list.forEach((st,i)=>{
+    const el=document.createElement('span');el.className='dystk'+(i===dySel?' sel':'');el.textContent=st.e;el.style.left=st.x+'%';el.style.top=st.y+'%';
+    el.onpointerdown=ev=>{
+      ev.preventDefault();el.setPointerCapture(ev.pointerId);const r=area.getBoundingClientRect();let moved=false;
+      el.onpointermove=m=>{const x=Math.min(96,Math.max(4,(m.clientX-r.left)/r.width*100)),y=Math.min(96,Math.max(4,(m.clientY-r.top)/r.height*100));if(Math.abs(x-st.x)+Math.abs(y-st.y)>1)moved=true;st.x=Math.round(x);st.y=Math.round(y);el.style.left=st.x+'%';el.style.top=st.y+'%'};
+      el.onpointerup=()=>{el.onpointermove=el.onpointerup=null;save();if(!moved){dySel=dySel===i?-1:i;renderDiary()}};
+    };
+    if(i===dySel){const x=document.createElement('button');x.type='button';x.className='x';x.textContent='✕';x.setAttribute('aria-label','스티커 지우기');x.onpointerdown=e=>e.stopPropagation();x.onclick=e=>{e.stopPropagation();list.splice(i,1);if(!list.length)delete S.dyDeco[ds];dySel=-1;save();renderDiary()};el.appendChild(x)}
+    area.appendChild(el);
+  });
+}
+function renderDyDeco(){
+  const panel=$('dyDeco');panel.hidden=!dyDeco;$('dyDecoBtn').setAttribute('aria-expanded',String(dyDeco));if(!dyDeco)return;
+  const has=OWNED.has('paper_pack'),pp=$('dyPapers');pp.textContent='';
+  PAPERS.forEach(p=>{
+    const b=document.createElement('button');b.type='button';b.className='btn';b.setAttribute('aria-pressed',String(dyPaper()===p.id));
+    b.textContent=(p.id==='plain'||has?'':'🔒 ')+p.name;
+    b.onclick=()=>{if(p.id==='plain'||has){dyPaperPv=null;S.dyPaper=p.id;save()}else dyPaperPv=p.id;renderDiary()};
+    pp.appendChild(b);
+  });
+  const pv=$('dyPv');pv.hidden=!dyPaperPv;
+  if(dyPaperPv){$('dyPvTxt').textContent='“'+PAPERS.find(x=>x.id===dyPaperPv).name+'” 메모지 미리 보는 중 — 메모지 6종 묶음이에요.';$('dyBuy').textContent='1,000원에 사기';$('dyBuy').onclick=()=>{$('diaryDlg').close();buyCredits('paper_pack')}}
+  const tray=$('dyTray');tray.textContent='';
+  const packs=Object.keys(STICKER_PACKS).filter(id=>OWNED.has(id)),dayMode=dyMode==='day';
+  if(!packs.length){tray.innerHTML='<span class="stat">스티커 팩이 있으면 기록에도 붙일 수 있어요. </span>';const sb=document.createElement('button');sb.type='button';sb.className='btn';sb.textContent='상점 보기';sb.onclick=()=>{$('diaryDlg').close();openCredits()};tray.appendChild(sb);return}
+  if(!dayMode){tray.innerHTML='<span class="stat">스티커는 «하루» 탭에서 붙여요.</span>';return}
+  packs.forEach(id=>STICKER_PACKS[id].list.forEach(e=>{
+    const b=document.createElement('button');b.type='button';b.className='btn';
+    if(e.startsWith('hl:')){b.innerHTML=stkFace(e);b.title='날짜에 '+stkName(e);b.setAttribute('aria-pressed',String(!!(S.dyHl&&S.dyHl[dyDate]===e)));b.onclick=()=>{S.dyHl=S.dyHl||{};if(S.dyHl[dyDate]===e)delete S.dyHl[dyDate];else S.dyHl[dyDate]=e;save();renderDiary()}}
+    else{b.textContent=e;b.title='붙이기';b.onclick=()=>{S.dyDeco=S.dyDeco||{};const l=S.dyDeco[dyDate]=S.dyDeco[dyDate]||[];if(l.length>=12)return;l.push({e,x:20+Math.round(Math.random()*60),y:20+Math.round(Math.random()*60)});dySel=l.length-1;save();renderDiary()}}
+    tray.appendChild(b);
+  }));
 }
 function renderDiary(){
   document.querySelectorAll('#diaryDlg .dytabs .btn').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.m===dyMode)));
   const body=$('dyBody');body.textContent='';body.className=dyMode==='five'?'five':'';$('dyPick').value=dyDate;
   if(dyMode==='day'){
     $('dyCap').textContent=dyFmt(dyDate,{year:'numeric',month:'long',day:'numeric',weekday:'short'});
-    body.appendChild(dyRow(dyDate,'오늘의 메모·일기',8));
+    body.appendChild(dyRow(dyDate,'오늘의 메모·일기',8,true));
   }else if(dyMode==='week'){
     const sun=dyAdd(dyDate,-new Date(dyDate+'T00:00').getDay());
     $('dyCap').textContent=dyFmt(sun,{month:'long',day:'numeric'})+' ~ '+dyFmt(dyAdd(sun,6),{month:'long',day:'numeric'});
@@ -2147,14 +2203,16 @@ function renderDiary(){
     $('dyCap').textContent=dyFmt(dyDate,{month:'long',day:'numeric'})+' · '+(d.getFullYear()-4)+'~'+d.getFullYear()+'년';
     for(let y=d.getFullYear();y>d.getFullYear()-5;y--){const ds=`${y}-${md}`;body.appendChild(dyRow(ds,y+'년',2))}
   }
+  renderDyDeco();
 }
-function openDiary(){dyDate=todayStr;dyMode='day';renderDiary();$('diaryDlg').showModal()}
+function openDiary(opt){dyDate=todayStr;dyMode='day';dySel=-1;dyPaperPv=null;dyDeco=!!(opt&&opt.deco);renderDiary();if(!$('diaryDlg').open)$('diaryDlg').showModal()}
 $('diaryBtn').onclick=openDiary;
 $('dyClose').onclick=()=>$('diaryDlg').close();
+$('dyDecoBtn').onclick=()=>{dyDeco=!dyDeco;dyPaperPv=null;renderDiary()};
 $('dyToday').onclick=()=>{dyDate=todayStr;renderDiary()};
-document.querySelectorAll('#diaryDlg .dytabs .btn').forEach(b=>b.onclick=()=>{dyMode=b.dataset.m;renderDiary()});
-const dyStep=k=>{const d=new Date(dyDate+'T00:00');if(dyMode==='day')d.setDate(d.getDate()+k);else if(dyMode==='week')d.setDate(d.getDate()+7*k);else d.setFullYear(d.getFullYear()+k);dyDate=fmt(d);renderDiary()};
-$('dyPick').onchange=()=>{if($('dyPick').value){dyDate=$('dyPick').value;renderDiary()}};
+document.querySelectorAll('#diaryDlg .dytabs .btn').forEach(b=>b.onclick=()=>{dyMode=b.dataset.m;dySel=-1;renderDiary()});
+const dyStep=k=>{const d=new Date(dyDate+'T00:00');if(dyMode==='day')d.setDate(d.getDate()+k);else if(dyMode==='week')d.setDate(d.getDate()+7*k);else d.setFullYear(d.getFullYear()+k);dyDate=fmt(d);dySel=-1;renderDiary()};
+$('dyPick').onchange=()=>{if($('dyPick').value){dyDate=$('dyPick').value;dySel=-1;renderDiary()}};
 $('dyPrev').onclick=()=>dyStep(-1);$('dyNext').onclick=()=>dyStep(1);
 function openHist(){const d=new Date();histMonth=new Date(d.getFullYear(),d.getMonth(),1);histSel=notesOpen()?todayStr:null;$('histDlg').showModal();renderHist()}
 function histMin(){
@@ -2725,7 +2783,7 @@ async function renderShop(){
       const own=j.owned.includes(it.id),row=document.createElement('div');row.className='shopitem';
       const th=it.kind==='theme'?THEMES.find(x=>x.id===it.theme):null;
       row.innerHTML=(th?`<i class="sw sw-${esc(th.id)}"></i>`:it.kind==='stamp'?'<i class="shp"></i>':it.kind==='iconpack'?iconPackPreview(it.id):'<i class="sw" style="background:var(--accent)"></i>')+
-        `<span>${esc(it.name)}<small>${it.kind==='quote'?esc(SAMPLE_QUOTE):it.kind==='sticker'?esc(((STICKER_PACKS[it.id]||{}).list||[]).map(stkName).join(' ')+(notesOpen()?'':'  (달력이 열려야 붙일 수 있어요: 누적 60일 또는 60일째 열림)')):esc((it.desc||'')+(partial?' (일부가 이미 열려 있어 남은 열림을 하나씩 사는 편이 저렴해요)':''))}</small></span>`;
+        `<span>${esc(it.name)}<small>${it.kind==='quote'?esc(SAMPLE_QUOTE):it.kind==='sticker'?esc(((STICKER_PACKS[it.id]||{}).list||[]).map(stkName).join(' ')+'  («기록»에서 바로 붙일 수 있고, 달력에는 누적 60일 또는 60일째 열림 뒤에 붙여요)'):esc((it.desc||'')+(partial?' (일부가 이미 열려 있어 남은 열림을 하나씩 사는 편이 저렴해요)':''))}</small></span>`;
       const b=document.createElement('button');b.type='button';b.className='btn';
       if(own&&th){b.textContent='쓰기';b.onclick=()=>{S.theme=th.id;save();render();$('crDlg').close()}}
       else if(own&&it.id==='history_view'){b.textContent='열기';b.onclick=()=>{$('crDlg').close();openHist()}}
@@ -2733,8 +2791,9 @@ async function renderShop(){
       else if(own&&it.kind==='iconpack'){b.textContent='고르기';b.onclick=()=>{$('crDlg').close();setView(true);$('iconRow').open=true}}
       else if(own&&it.kind==='sticker'){
         if(notesOpen()){b.textContent='달력에서 붙이기';b.onclick=()=>{$('crDlg').close();openHist()}}
-        else{b.textContent='달력이 열리면 쓸 수 있어요';b.disabled=true}
+        else{b.textContent='기록에서 꾸미기';b.onclick=()=>{$('crDlg').close();openDiary({deco:true})}}
       }
+      else if(own&&it.kind==='paper'){b.textContent='기록에서 고르기';b.onclick=()=>{$('crDlg').close();openDiary({deco:true})}}
       else if(unlockDone){b.textContent='✔ 이미 열려 있어요';b.disabled=true}
       else if(own){b.textContent='✔ 가지고 있어요';b.disabled=true}
       else if(partial){b.textContent=it.amount.toLocaleString('ko-KR')+'원';b.disabled=true}
@@ -2797,6 +2856,7 @@ const UNLOCK_COLOR={unlock_3:'peach',unlock_28:'lavender',unlock_60:'sunny',unlo
 function previewItem(it){
   endPreview(true);
   if(it.kind==='sticker'){$('crDlg').close();openStickerPreview(it);return}
+  if(it.kind==='paper'){$('crDlg').close();openDiary({deco:true});dyPaperPv='lined';renderDiary();return}
   if(it.id==='history_view'){$('crDlg').close();openHist();return} // 달력이 열린다(닫으면 상점으로 돌아가지 않음)
   if(it.id==='daily_quote'){$('crDlg').close();openCookie(true,it);return} // 실제 격언 하나를 포춘쿠키로 미리 뽑아 본다
   let text='',alt=null;

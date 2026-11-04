@@ -54,6 +54,7 @@ ITEMS = {
     "sticker_highlight": {"id": "sticker_highlight", "kind": "sticker", "name": "하이라이트 스티커 팩", "amount": 1000, "desc": "날짜에 형광펜·물결·이중·점선 밑줄과 동그라미·붓 밑줄을 그려요"},
     "sticker_office": {"id": "sticker_office", "kind": "sticker", "name": "오피스 스티커 팩", "amount": 1000, "desc": "가방·보고서·그래프·서류·클립·프린터·노트북·일정 12개"},
     # 할 일 아이콘 스타일 팩(2026-11-04): 할 일 칸의 그림 25종을 다른 분위기로 바꾼다(그림은 화면 index.html 의 GLYPHS·ICON_PACKS, id 가 같아야 함). 가격은 임시값이다(근거 없음).
+    "paper_pack": {"id": "paper_pack", "kind": "paper", "name": "메모지 6종", "amount": 1000, "desc": "기록에 쓰는 줄 노트·모눈·점 격자·크라프트·노란 메모·편지지 6가지 메모지"},
     "icons_cute": {"id": "icons_cute", "kind": "iconpack", "name": "귀여운 아이콘 팩", "amount": 1000, "desc": "할 일 그림을 표정 있는 귀여운 그림으로 바꿔요"},
     "icons_simple": {"id": "icons_simple", "kind": "iconpack", "name": "심플 선 아이콘 팩", "amount": 1000, "desc": "할 일 그림을 깔끔한 선 그림으로 바꿔요"},
     "icons_pastel": {"id": "icons_pastel", "kind": "iconpack", "name": "파스텔 스티커 아이콘 팩", "amount": 1000, "desc": "할 일 그림을 흰 테두리 파스텔 스티커로 바꿔요"},
