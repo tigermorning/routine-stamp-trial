@@ -34,9 +34,10 @@ PRODUCTS = {
 # 일회 구매(영구 소유) 상품. 크레딧(도우미 대화용 소모형)과 화폐를 나눈다: 이 상품은 크레딧을 쓰지 않고 원 단위로 한 번 산다.
 # kind 'theme' 는 화면의 색 테마(id 는 화면 THEMES 의 id), 'quote' 는 서버가 주는 «오늘의 좋은 말».
 ITEMS = {
-    "theme_ocean": {"id": "theme_ocean", "kind": "theme", "theme": "ocean", "name": "바다 테마", "amount": 1000, "desc": "색을 바꿔요"},
-    "theme_forest": {"id": "theme_forest", "kind": "theme", "theme": "forest", "name": "숲 테마", "amount": 1000, "desc": "색을 바꿔요"},
-    "theme_rose": {"id": "theme_rose", "kind": "theme", "theme": "rose", "name": "장미 테마", "amount": 1000, "desc": "색을 바꿔요"},
+    # 디자인 테마: 색뿐 아니라 배경 무늬·카드·버튼 모양까지 바꾸는 테마(화면 index.html 의 THEMES·CSS). 바다·숲·장미는 무료 색 테마로 풀었다(2026-11-04 사용자 결정). 가격은 임시값이다.
+    "theme_notebook": {"id": "theme_notebook", "kind": "theme", "theme": "notebook", "name": "공책 디자인", "amount": 1000, "desc": "줄 공책 종이 느낌으로 배경과 카드, 버튼 모양까지 바꿔요"},
+    "theme_retro": {"id": "theme_retro", "kind": "theme", "theme": "retro", "name": "레트로 디자인", "amount": 1000, "desc": "도트 배경과 굵은 테두리의 옛날 게임 느낌으로 바꿔요"},
+    "theme_cloud": {"id": "theme_cloud", "kind": "theme", "theme": "cloud", "name": "구름 디자인", "amount": 1000, "desc": "하늘빛 그라데이션과 말랑한 유리 카드 느낌으로 바꿔요"},
     "daily_quote": {"id": "daily_quote", "kind": "quote", "name": "오늘의 좋은 말", "amount": 1000, "desc": ""},
     # kind 'feature'/'stamp' 는 화면에서만 열리고 닫히는 기능이다(데이터가 이 브라우저에 있어 서버가 막을 것이 없다)
     "history_view": {"id": "history_view", "kind": "feature", "name": "지난 기록 돌아보기", "amount": 1000, "desc": "지난 달의 도장을 달력으로 돌아봐요"},
@@ -46,6 +47,11 @@ ITEMS = {
     "sticker_round": {"id": "sticker_round", "kind": "sticker", "name": "동글동글 스티커 팩", "amount": 1000, "desc": "달력 날짜에 붙이는 스티커 6개"},
     "sticker_daily": {"id": "sticker_daily", "kind": "sticker", "name": "하루 스티커 팩", "amount": 1000, "desc": "달력 날짜에 붙이는 스티커 6개"},
     "sticker_party": {"id": "sticker_party", "kind": "sticker", "name": "기념일 스티커 팩", "amount": 1000, "desc": "달력 날짜에 붙이는 스티커 6개"},
+    "sticker_life": {"id": "sticker_life", "kind": "sticker", "name": "생활 필수 스티커 팩", "amount": 1000, "desc": "병원·약·택배·은행·빨래·장보기·청소·통화·회의·메모·이동·식사 12개"},
+    "sticker_vintage": {"id": "sticker_vintage", "kind": "sticker", "name": "빈티지 스티커 팩", "amount": 1000, "desc": "라디오·시계·카메라·열쇠·편지·나침반·필름·전화 8개"},
+    "sticker_cafe": {"id": "sticker_cafe", "kind": "sticker", "name": "카페 테마 스티커 팩", "amount": 1000, "desc": "커피·차·음료·빵·디저트·카공 16개"},
+    "sticker_highlight": {"id": "sticker_highlight", "kind": "sticker", "name": "하이라이트 스티커 팩", "amount": 1000, "desc": "날짜에 형광펜·물결·이중·점선 밑줄과 동그라미·붓 밑줄을 그려요"},
+    "sticker_office": {"id": "sticker_office", "kind": "sticker", "name": "오피스 스티커 팩", "amount": 1000, "desc": "가방·보고서·그래프·서류·클립·프린터·노트북·일정 12개"},
     # 할 일 아이콘 스타일 팩(2026-11-04): 할 일 칸의 그림 25종을 다른 분위기로 바꾼다(그림은 화면 index.html 의 GLYPHS·ICON_PACKS, id 가 같아야 함). 가격은 임시값이다(근거 없음).
     "icons_cute": {"id": "icons_cute", "kind": "iconpack", "name": "귀여운 아이콘 팩", "amount": 1000, "desc": "할 일 그림을 표정 있는 귀여운 그림으로 바꿔요"},
     "icons_simple": {"id": "icons_simple", "kind": "iconpack", "name": "심플 선 아이콘 팩", "amount": 1000, "desc": "할 일 그림을 깔끔한 선 그림으로 바꿔요"},

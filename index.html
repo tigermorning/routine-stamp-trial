@@ -86,6 +86,24 @@ h2{font-family:var(--display);font-weight:400;font-size:19px;margin:0}
 .sw-ocean{background:linear-gradient(135deg,#eaf4fb 50%,#2f8fcf 50%)}
 .sw-forest{background:linear-gradient(135deg,#eef5ea 50%,#4f9a4a 50%)}
 .sw-rose{background:linear-gradient(135deg,#fbeef2 50%,#d0527a 50%)}
+
+/* 디자인 테마(상점 유료, 2026-11-04): 색만이 아니라 배경 무늬·카드 모양·버튼 모양까지 바꾼다. 바다·숲·장미는 색만 바꾸는 무료 테마다 */
+:root[data-theme="notebook"]{--bg:#f6efdc;--card:#fffdf4;--ink:#2f2a26;--soft:#76695a;--line:#e0d5b8;--accent:#3b5bdb;--accent-ink:#ffffff;--shadow:0 2px 0 rgba(120,100,60,.2);--blob1:transparent;--blob2:transparent;color-scheme:light}
+:root[data-theme="notebook"] body{background-image:repeating-linear-gradient(transparent 0 31px,rgba(90,130,200,.2) 31px 32px)}
+:root[data-theme="notebook"] .card{border-radius:6px;border:1px solid var(--line);border-left:7px double #e59a9a;background-image:repeating-linear-gradient(transparent 0 27px,rgba(90,130,200,.15) 27px 28px)}
+:root[data-theme="notebook"] .btn{border-radius:6px;border-style:dashed}
+:root[data-theme="retro"]{--bg:#ffefb8;--card:#ffffff;--ink:#222222;--soft:#555555;--line:#222222;--accent:#ff5d5d;--accent-ink:#2b0505;--shadow:5px 5px 0 #222;--blob1:transparent;--blob2:transparent;color-scheme:light}
+:root[data-theme="retro"] body{background-image:radial-gradient(rgba(0,0,0,.28) 1.3px,transparent 1.5px);background-size:18px 18px}
+:root[data-theme="retro"] .card{border-radius:4px;border:3px solid #222;box-shadow:5px 5px 0 #222}
+:root[data-theme="retro"] .btn{border-radius:4px;border:3px solid #222;box-shadow:3px 3px 0 #222}
+:root[data-theme="cloud"]{--bg:#e3f0ff;--card:rgba(255,255,255,.74);--ink:#26335c;--soft:#566594;--line:#c4d0f5;--accent:#6f8fff;--accent-ink:#0a1650;--shadow:0 12px 32px rgba(90,110,200,.22);--blob1:rgba(255,255,255,.7);--blob2:rgba(214,190,255,.5);color-scheme:light}
+:root[data-theme="cloud"] body{background-image:linear-gradient(160deg,#dcecff 0%,#efe4ff 55%,#ffe8f3 100%);background-attachment:fixed}
+:root[data-theme="cloud"] .card{border-radius:34px;border:1.5px solid rgba(255,255,255,.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+:root[data-theme="cloud"] .btn{background:rgba(255,255,255,.85)}
+:root[data-theme="cloud"] dialog{background:#f7f9ff}
+.sw-notebook{background:repeating-linear-gradient(0deg,#fffdf4 0 3px,#9ab3e8 3px 4px);border-left:3px solid #e59a9a}
+.sw-retro{background:linear-gradient(135deg,#ffefb8 50%,#ff5d5d 50%);border:2px solid #222;border-radius:3px}
+.sw-cloud{background:linear-gradient(135deg,#dcecff,#efe4ff 55%,#ffe8f3);border-radius:50%}
 .nextcolor{display:flex;align-items:center;gap:6px;margin:8px 0 0}
 .rtn{display:flex;align-items:center;gap:12px;padding:8px 0}
 .rtn+.rtn{border-top:1px solid var(--line)}
@@ -231,6 +249,17 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 .stkbtn.on{border-color:var(--accent)}
 .stkbtn:disabled{opacity:.4;cursor:default}
 .ipv{display:inline-flex;gap:2px;flex:none;align-items:center}
+#pvBar{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:70;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;background:#fff;color:#222;border:2px solid var(--accent);border-radius:18px;padding:10px 14px;box-shadow:0 8px 24px rgba(0,0,0,.28);max-width:calc(100vw - 24px)}
+#pvBar button{color:inherit}
+.dn{display:inline-block;line-height:1.25}
+.hl-marker{background:linear-gradient(transparent 50%,#fff176 50% 90%,transparent 90%)}
+.hl-wavy{text-decoration:underline wavy #ff6b6b;text-decoration-thickness:2px;text-underline-offset:3px}
+.hl-double{text-decoration:underline double #4d96ff;text-decoration-thickness:2px;text-underline-offset:3px}
+.hl-dotted{text-decoration:underline dotted #20c997;text-decoration-thickness:3px;text-underline-offset:3px}
+.hl-circle{border:2px solid #ff6b6b;border-radius:50%;padding:0 5px}
+.hl-brush{background:linear-gradient(transparent 68%,#ffa8a8 68%);border-radius:2px}
+.hcal .hd .dn{font-size:13px;font-weight:600}
+.hcal .hl-wavy,.hcal .hl-double,.hcal .hl-dotted{text-decoration-thickness:2.5px}
 .opt .ipv{margin-right:6px}
 .hcal .hd.blank{border-color:transparent}
 .hcal .hd.today{border-color:var(--accent)}
@@ -417,6 +446,8 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
   <div class="row" style="justify-content:flex-end"><button class="btn" id="crClose" type="button">닫기</button></div>
 </dialog>
 
+<div id="pvBar" hidden role="status"><span id="pvTxt"></span><button class="btn main" id="pvBuy" type="button"></button><button class="btn" id="pvEnd" type="button">원래대로</button></div>
+
 <dialog id="histDlg" aria-labelledby="histTitle">
   <div class="row"><button class="btn" id="histPrev" type="button" aria-label="이전 달">◀</button><h2 id="histTitle"></h2><button class="btn" id="histNext" type="button" aria-label="다음 달">▶</button></div>
   <div class="hcal" id="histCal"></div>
@@ -547,7 +578,7 @@ ko:{
   introClose:'닫기',
   introBtn:'안내',
   setBtn:"설정", setBack:"돌아가기", langCap:"언어", themeCap:"색 테마",
-  theme_base:"기본", theme_peach:"복숭아", theme_lavender:"라벤더", theme_sunny:"햇살", theme_ocean:"바다", theme_forest:"숲", theme_rose:"장미", themeLocked:"{d}에 열려요",
+  theme_base:"기본", theme_peach:"복숭아", theme_lavender:"라벤더", theme_sunny:"햇살", theme_ocean:"바다",theme_notebook:"공책",theme_retro:"레트로",theme_cloud:"구름", theme_forest:"숲", theme_rose:"장미", themeLocked:"{d}에 열려요",
   nextColor:"다음 색",
   privCap:"개인정보 안내", privBody:"계정도 로그인도 없어요. 도장 기록은 이 기기에만 저장돼요. 그래서 브라우저 데이터를 지우거나 폰을 바꾸면 기록이 사라져요. 도우미와 나눈 말은 답을 만들 때 AI 서비스에 전달되고, 이 앱 서버에는 저장되지 않아요. 이름·연락처 같은 개인정보는 적지 말아 주세요.",
   delCap:"내 기록 지우기", delBody:"이 기기에 저장된 도장 기록, 칸, 설정, 도우미 대화를 모두 지우고 처음 상태로 돌아가요.",
@@ -1787,9 +1818,10 @@ const KEY='routine-trial-v1';
 const MAX_SLOTS=6;
 const UNLOCKS=[3,28,60]; // 도장 찍은 누적 일수 → 칸이 하나씩 열림(PRD 2026-10-21)
 const THEMES=[{id:'base'},{id:'peach',at:UNLOCKS[0]},{id:'lavender',at:UNLOCKS[1]},{id:'sunny',at:UNLOCKS[2]},
-  {id:'ocean',shop:'theme_ocean'},{id:'forest',shop:'theme_forest'},{id:'rose',shop:'theme_rose'}];
+  {id:'ocean'},{id:'forest'},{id:'rose'}, // 바다·숲·장미는 색만 바꾸는 무료 테마(2026-11-04 사용자 결정)
+  {id:'notebook',shop:'theme_notebook'},{id:'retro',shop:'theme_retro'},{id:'cloud',shop:'theme_cloud'}]; // 디자인 테마(유료)
 let OWNED=new Set(); // 서버가 알려 준 내가 산 상품(상점). 크레딧 서버가 꺼져 있으면 비어 있다 // 칸이 열릴 때 테마도 하나씩 열림
-const THEME_BG={base:'#f2f7f5',peach:'#fbf1ea',lavender:'#f3f0fa',sunny:'#fff7df',ocean:'#eaf4fb',forest:'#eef5ea',rose:'#fbeef2'};
+const THEME_BG={base:'#f2f7f5',peach:'#fbf1ea',lavender:'#f3f0fa',sunny:'#fff7df',ocean:'#eaf4fb',forest:'#eef5ea',rose:'#fbeef2',notebook:'#f6efdc',retro:'#ffefb8',cloud:'#e3f0ff'};
 const pad=n=>String(n).padStart(2,'0');
 const fmt=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 let todayStr=fmt(new Date());
@@ -1843,8 +1875,9 @@ function currentTheme(){ // 설정에서 고른 테마(열려 있을 때). 고�
   let id='base';for(const x of THEMES)if(x.at&&themeOpen(x))id=x.id;return id}
 const SHAPES=[['round','동그라미'],['soft','둥근 네모'],['leaf','잎사귀'],['drop','물방울']]; // 도장 모양(상점 «도장 모양 바꾸기»를 산 뒤에만 적용)
 function currentShape(){return OWNED.has('stamp_shapes')&&SHAPES.some(x=>x[0]===S.shape)?S.shape:'round'}
+let previewTheme=null; // 상점에서 사기 전에 입어 보는 디자인(창을 닫으면 원래대로)
 function applyTheme(){
-  const id=currentTheme();
+  const id=previewTheme||currentTheme();
   const root=document.documentElement;
   const sh=currentShape();
   if(sh==='round') root.removeAttribute('data-shape'); else root.setAttribute('data-shape',sh);
@@ -2002,7 +2035,16 @@ const notesOpen=()=>opened(NOTES_AT);
 const STICKER_PACKS={
   sticker_round:{name:'동글동글',list:['🌸','🍀','⭐','🌈','🍓','🐥']},
   sticker_daily:{name:'하루',list:['☕','📚','🏃','💧','🛒','🎬']},
-  sticker_party:{name:'기념일',list:['🎂','🎁','✈️','💌','🎉','💖']}};
+  sticker_party:{name:'기념일',list:['🎂','🎁','✈️','💌','🎉','💖']},
+  sticker_life:{name:'생활 필수',list:['🏥','💊','📦','🏦','🧺','🛒','🧹','📞','💼','📝','🚌','🍽️']},
+  sticker_vintage:{name:'빈티지',list:['📻','🕰️','📷','🗝️','✉️','🧭','🎞️','☎️']},
+  sticker_cafe:{name:'카페',list:['☕','🍵','🧋','🥤','🍹','🥐','🍞','🥪','🥞','🍰','🧁','🍩','🍪','🍨','🍫','💻']},
+  sticker_office:{name:'오피스',list:['💼','📊','📈','🗂️','📎','🖨️','💻','📅','📌','🗒️','📧','⏰']},
+  // 하이라이트: 그림이 아니라 날짜 숫자에 그리는 꾸밈(hl:이름). 칸의 날짜 숫자에 형광펜·밑줄·동그라미가 입혀진다
+  sticker_highlight:{name:'하이라이트',list:['hl:marker','hl:wavy','hl:double','hl:dotted','hl:circle','hl:brush']}};
+const HL_NAMES={marker:'형광펜',wavy:'물결 밑줄',double:'이중 밑줄',dotted:'점선 밑줄',circle:'동그라미',brush:'붓 밑줄'};
+const stkFace=e=>e.startsWith('hl:')?`<span class="dn hl-${e.slice(3)}">가</span>`:esc(e);
+const stkName=e=>e.startsWith('hl:')?(HL_NAMES[e.slice(3)]||'하이라이트'):e;
 const STICKERS_PER_DAY=3;
 const ownedStickers=()=>Object.keys(STICKER_PACKS).filter(id=>OWNED.has(id)).flatMap(id=>STICKER_PACKS[id].list);
 let histSel=null;
@@ -2023,8 +2065,9 @@ function renderHist(){
     const ds=`${ym}-${pad(d)}`,on=hasStamp(ds);if(on)kept++;
     const dots=all.filter(s=>get(ds,s.id)>0).map(s=>`<i class="hdot v${get(ds,s.id)}" style="--c:${s.color}"></i>`).join('');
     const tag=notesOpen()?'button':'span',has=!!(S.notes&&S.notes[ds]);
-    const stk=((S.stickers&&S.stickers[ds])||[]).map(esc).join('');
-    h+=`<${tag} ${tag==='button'?`type="button" data-d="${ds}" `:''}class="hd ${on?'on':''} ${ds===todayStr?'today':''} ${ds===histSel?'sel':''}">${d}<span class="hdots">${dots}</span>${stk?`<span class="stk">${stk}</span>`:''}${has?'<span class="nt" aria-label="메모 있음">✎</span>':''}</${tag}>`;
+    const stAll=(S.stickers&&S.stickers[ds])||[];
+    const stk=stAll.filter(x=>!x.startsWith('hl:')).map(esc).join(''),hlc=stAll.filter(x=>x.startsWith('hl:')).map(x=>'hl-'+x.slice(3)).join(' ');
+    h+=`<${tag} ${tag==='button'?`type="button" data-d="${ds}" `:''}class="hd ${on?'on':''} ${ds===todayStr?'today':''} ${ds===histSel?'sel':''}"><span class="dn ${hlc}">${d}</span><span class="hdots">${dots}</span>${stk?`<span class="stk">${stk}</span>`:''}${has?'<span class="nt" aria-label="메모 있음">✎</span>':''}</${tag}>`;
   }
   $('histCal').innerHTML=h;
   $('histCal').querySelectorAll('button.hd').forEach(b=>b.onclick=()=>{histSel=b.dataset.d;renderHist();$('histNoteIn').focus({preventScroll:true})});
@@ -2044,8 +2087,8 @@ function renderStk(show){
   box.hidden=!(show&&pool.length);
   if(box.hidden) return;
   const cur=(S.stickers&&S.stickers[histSel])||[];
-  $('histStkOn').innerHTML=cur.map((e,i)=>`<button type="button" class="stkbtn on" data-i="${i}" aria-label="${esc(e)} 떼기">${esc(e)}</button>`).join('');
-  $('histStkPick').innerHTML=pool.map(e=>`<button type="button" class="stkbtn" data-e="${esc(e)}"${cur.length>=STICKERS_PER_DAY?' disabled':''} aria-label="${esc(e)} 붙이기">${esc(e)}</button>`).join('');
+  $('histStkOn').innerHTML=cur.map((e,i)=>`<button type="button" class="stkbtn on" data-i="${i}" aria-label="${esc(stkName(e))} 떼기">${stkFace(e)}</button>`).join('');
+  $('histStkPick').innerHTML=pool.map(e=>`<button type="button" class="stkbtn" data-e="${esc(e)}"${cur.length>=STICKERS_PER_DAY?' disabled':''} aria-label="${esc(stkName(e))} 붙이기" title="${esc(stkName(e))}">${stkFace(e)}</button>`).join('');
   const put=arr=>{S.stickers=Object.assign({},S.stickers);if(arr.length) S.stickers[histSel]=arr;else delete S.stickers[histSel];save();renderHist()};
   $('histStkOn').querySelectorAll('button').forEach(b=>b.onclick=()=>put(cur.filter((_,i)=>i!==+b.dataset.i)));
   $('histStkPick').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(cur.length<STICKERS_PER_DAY) put(cur.concat(b.dataset.e))});
@@ -2534,7 +2577,7 @@ async function renderShop(){
       const own=j.owned.includes(it.id),row=document.createElement('div');row.className='shopitem';
       const th=it.kind==='theme'?THEMES.find(x=>x.id===it.theme):null;
       row.innerHTML=(th?`<i class="sw sw-${esc(th.id)}"></i>`:it.kind==='stamp'?'<i class="shp"></i>':it.kind==='iconpack'?iconPackPreview(it.id):'<i class="sw" style="background:var(--accent)"></i>')+
-        `<span>${esc(it.name)}<small>${it.kind==='quote'?esc(SAMPLE_QUOTE):it.kind==='sticker'?esc(((STICKER_PACKS[it.id]||{}).list||[]).join(' ')+(notesOpen()?'':'  (달력이 열려야 붙일 수 있어요: 누적 60일 또는 60일째 열림)')):esc((it.desc||'')+(partial?' (일부가 이미 열려 있어 남은 열림을 하나씩 사는 편이 저렴해요)':''))}</small></span>`;
+        `<span>${esc(it.name)}<small>${it.kind==='quote'?esc(SAMPLE_QUOTE):it.kind==='sticker'?esc(((STICKER_PACKS[it.id]||{}).list||[]).map(stkName).join(' ')+(notesOpen()?'':'  (달력이 열려야 붙일 수 있어요: 누적 60일 또는 60일째 열림)')):esc((it.desc||'')+(partial?' (일부가 이미 열려 있어 남은 열림을 하나씩 사는 편이 저렴해요)':''))}</small></span>`;
       const b=document.createElement('button');b.type='button';b.className='btn';
       if(own&&th){b.textContent='쓰기';b.onclick=()=>{S.theme=th.id;save();render();$('crDlg').close()}}
       else if(own&&it.id==='history_view'){b.textContent='열기';b.onclick=()=>{$('crDlg').close();openHist()}}
@@ -2548,6 +2591,11 @@ async function renderShop(){
       else if(own){b.textContent='✔ 가지고 있어요';b.disabled=true}
       else if(partial){b.textContent=it.amount.toLocaleString('ko-KR')+'원';b.disabled=true}
       else{b.textContent=it.amount.toLocaleString('ko-KR')+'원';b.onclick=()=>buyCredits(it.id)}
+      if(th&&!own&&th.shop){ // 산 적 없는 디자인 테마는 미리 입어 볼 수 있다
+        const pv=document.createElement('button');pv.type='button';pv.className='btn';pv.textContent='미리 보기';
+        pv.onclick=()=>{previewTheme=th.id;applyTheme();$('crDlg').close();showPvBar(it,th)}; // 상점 창을 닫아야 화면 전체에 디자인이 보인다(창의 어두운 배경막이 색을 가린다)
+        row.appendChild(pv);
+      }
       row.appendChild(b);(it.kind==='unlock'?ub:box).appendChild(row);
     });
     $('unlockWrap').hidden=!ub.children.length;
@@ -2581,6 +2629,14 @@ async function buyCredits(pid){
 }
 $('crBtn').onclick=()=>openCredits('');
 $('chBuy').onclick=()=>openCredits('');
+const endPreview=()=>{if(previewTheme){previewTheme=null;applyTheme()}$('pvBar').hidden=true};
+function showPvBar(it,th){ // 미리 보기 중에는 화면 아래 막대로 «사기»와 «원래대로»를 고른다
+  $('pvTxt').textContent='“'+t('theme_'+th.id)+'” 디자인 미리 보는 중';
+  $('pvBuy').textContent=it.amount.toLocaleString('ko-KR')+'원에 사기';
+  $('pvBuy').onclick=()=>buyCredits(it.id);
+  $('pvBar').hidden=false;
+}
+$('pvEnd').onclick=endPreview;
 $('crClose').onclick=()=>$('crDlg').close();
 window.addEventListener('credits-refresh',loadCredits);
 loadCredits();

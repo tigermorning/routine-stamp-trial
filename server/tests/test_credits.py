@@ -242,11 +242,11 @@ def test_item_purchase_grants_ownership_not_credits(env):
     cid = str(uuid.uuid4())
     client.get("/api/credits", headers=hdr(cid))
     before = store.balance(cid)
-    o, r = pay_item(client, cid, "theme_ocean", toss)
+    o, r = pay_item(client, cid, "theme_notebook", toss)
     assert r.status_code == 200 and r.json()["kind"] == "item"
     assert store.balance(cid) == before  # 크레딧은 늘지 않는다
-    assert client.get("/api/shop", headers=hdr(cid)).json()["owned"] == ["theme_ocean"]
-    assert o["amount"] == creditlib.ITEMS["theme_ocean"]["amount"]
+    assert client.get("/api/shop", headers=hdr(cid)).json()["owned"] == ["theme_notebook"]
+    assert o["amount"] == creditlib.ITEMS["theme_notebook"]["amount"]
 
 
 def test_item_confirm_twice_owns_once(env):
@@ -261,8 +261,8 @@ def test_item_confirm_twice_owns_once(env):
 def test_owned_item_cannot_be_ordered_again(env):
     client, store, toss = env
     cid = str(uuid.uuid4())
-    pay_item(client, cid, "theme_rose", toss)
-    r = client.post("/api/orders", json={"productId": "theme_rose"}, headers=hdr(cid))
+    pay_item(client, cid, "theme_cloud", toss)
+    r = client.post("/api/orders", json={"productId": "theme_cloud"}, headers=hdr(cid))
     assert r.status_code == 409 and r.json()["error"] == "already_owned"
 
 
@@ -280,14 +280,14 @@ def test_failed_item_payment_grants_nothing(env):
     client, store, toss = env
     toss.ok = False
     cid = str(uuid.uuid4())
-    o, r = pay_item(client, cid, "theme_forest", toss)
+    o, r = pay_item(client, cid, "theme_retro", toss)
     assert r.status_code == 400 and store.owned(cid) == []
 
 
 def test_item_price_comes_from_server_table(env):
     client, store, toss = env
     cid = str(uuid.uuid4())
-    o = order(client, cid, "theme_ocean")
+    o = order(client, cid, "theme_notebook")
     r = client.post("/api/payments/confirm", json={"paymentKey": "pk_y", "orderId": o["orderId"], "amount": "1"}, headers=hdr(cid))
     assert r.status_code == 400 and store.owned(cid) == [] and toss.calls == []
 
@@ -350,7 +350,7 @@ def test_unlock_purchase_grants_ownership_without_credits(env):
 # ---- 스티커 팩: 상품·소유, 화면의 그림 목록과 id 일치 ----
 def test_sticker_packs_are_items_and_match_the_screen_list():
     packs = [i for i in creditlib.ITEMS.values() if i["kind"] == "sticker"]
-    assert len(packs) == 3 and all(i["amount"] > 0 and i["desc"] for i in packs)
+    assert len(packs) == 8 and all(i["amount"] > 0 and i["desc"] for i in packs)
     html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
     block = html[html.index("const STICKER_PACKS={"):html.index("const STICKERS_PER_DAY")]
     for i in packs:
@@ -434,3 +434,12 @@ def test_icon_packs_are_items_and_match_the_screen():
     glyphs = html[html.index("const GLYPHS={"):html.index("function glyphSVG")]
     for key in ("wake", "water", "walkrun", "read", "tooth", "orig", "origwin", "climb", "eng", "fa"):
         assert "\n" + key + ":" in glyphs  # 뜻이 불분명했던 그림과 새로 더한 그림의 모양 정의가 있다
+
+
+def test_old_color_themes_are_free_and_new_design_themes_are_sold():
+    ids = set(creditlib.ITEMS)
+    assert not ({"theme_ocean", "theme_forest", "theme_rose"} & ids)  # 바다·숲·장미는 무료 색 테마라 상품이 아니다
+    assert {"theme_notebook", "theme_retro", "theme_cloud"} <= ids
+    html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
+    for tid in ("notebook", "retro", "cloud"):
+        assert ":root[data-theme=\"" + tid + "\"]" in html  # 화면에 같은 id 의 디자인 CSS 가 있다
