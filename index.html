@@ -2738,7 +2738,7 @@ async function fetchQuote(sample){
 }
 function loadQuote(){
   const box=$('quoteBox');
-  if(!OWNED.has('daily_quote')){box.hidden=true;return}
+  if(!OWNED.has('daily_quote')||S.quoteOff){box.hidden=true;return}
   const q=S.quoteToday&&S.quoteToday.d===todayStr?S.quoteToday:null;
   box.innerHTML=q?`“${esc(q.text)}”<br><small>— ${esc(q.author)}</small> <button type="button" class="linkbtn" id="qAgain">🥠 다시 뽑기</button>`:`<button type="button" class="btn" id="qDraw">🥠 오늘의 한마디 뽑기</button>`;
   ($('qDraw')||$('qAgain')).onclick=()=>openCookie(false);
@@ -2796,10 +2796,11 @@ async function renderShop(){
       row.innerHTML=(th?`<i class="sw sw-${esc(th.id)}"></i>`:it.kind==='unlock'?unlockLadder(it.id):it.kind==='stamp'?'<i class="shp"></i>':it.kind==='iconpack'?iconPackPreview(it.id):'<i class="sw" style="background:var(--accent)"></i>')+
         `<span>${esc(it.name)}<small>${it.kind==='quote'?esc(SAMPLE_QUOTE):it.kind==='sticker'?esc(((STICKER_PACKS[it.id]||{}).list||[]).map(stkName).join(' ')+'  («기록»에서 바로 붙일 수 있고, 달력에는 누적 60일 또는 60일째 열림 뒤에 붙여요)'):esc((it.desc||'')+(partial?' (일부가 이미 열려 있어 남은 열림을 하나씩 사는 편이 저렴해요)':''))}</small></span>`;
       const b=document.createElement('button');b.type='button';b.className='btn';
-      if(own&&th){b.textContent='쓰기';b.onclick=()=>{S.theme=th.id;save();render();$('crDlg').close()}}
+      if(own&&th){const on=currentTheme()===th.id;b.textContent=on?'기본으로 돌리기':'쓰기';b.onclick=()=>{S.theme=on?'base':th.id;save();render();$('crDlg').close()}} // 산 뒤에도 언제든 기본으로 돌릴 수 있다
       else if(own&&it.id==='history_view'){b.textContent='열기';b.onclick=()=>{$('crDlg').close();openHist()}}
       else if(own&&it.id==='stamp_shapes'){b.textContent='모양 고르기';b.onclick=()=>{$('crDlg').close();setView(true);$('shapeRow').open=true}}
-      else if(own&&it.kind==='iconpack'){b.textContent='고르기';b.onclick=()=>{$('crDlg').close();setView(true);$('iconRow').open=true}}
+      else if(own&&it.kind==='iconpack'){const on=S.iconPack===it.id;b.textContent=on?'기본으로 돌리기':'쓰기';b.onclick=()=>{S.iconPack=on?'':it.id;save();render();renderShop()}}
+      else if(own&&it.id==='daily_quote'){b.textContent=S.quoteOff?'다시 켜기':'끄기';b.onclick=()=>{S.quoteOff=!S.quoteOff;save();loadQuote();renderShop()}}
       else if(own&&it.kind==='sticker'){
         if(notesOpen()){b.textContent='달력에서 붙이기';b.onclick=()=>{$('crDlg').close();openHist()}}
         else{b.textContent='기록에서 꾸미기';b.onclick=()=>{$('crDlg').close();openDiary({deco:true})}}
