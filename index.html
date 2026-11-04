@@ -208,6 +208,8 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 .miles{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:10px;font-size:13px;color:var(--soft)}
 .mile{padding:1px 10px;border-radius:999px;border:2px solid var(--accent);font-variant-numeric:tabular-nums}
 .mile.done{background:var(--accent);color:var(--accent-ink)}
+.mile.bought{border-style:dashed}
+#rhythm{margin-top:2px}
 .miles .milescap{flex-basis:100%}
 .fall{position:fixed;top:-40px;font-size:28px;pointer-events:none;z-index:99;animation:fall linear forwards}
 @keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.9}}
@@ -281,6 +283,7 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
     <h2 id="weekTitle"></h2>
     <div class="week" id="week"></div>
     <p class="stat" id="stat"></p>
+    <p class="stat" id="rhythm" hidden></p>
     <button class="btn" id="histBtn" type="button" hidden aria-haspopup="dialog">📅 지난 기록 돌아보기</button>
   </section>
 
@@ -387,6 +390,11 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
   <p class="msg" id="crWhy" role="status" hidden></p>
   <h3>꾸미기·기능 <small>(한 번 사면 계속 써요)</small></h3>
   <div id="shopList"></div>
+  <div id="unlockWrap" hidden>
+    <h3>열림 건너뛰기 <small>(기능만 먼저 열어요)</small></h3>
+    <p class="stat">건너뛰어도 달성 표시(✔)와 축하는 실제로 도장을 쌓았을 때 받아요. 앞의 열림이 열려 있을 때만 보여요.</p>
+    <div id="unlockList"></div>
+  </div>
   <h3>도우미와 대화 충전</h3>
   <p class="stat">남은 대화 크레딧: <b id="crBal">-</b>개</p>
   <p class="stat" id="crRule"></p>
@@ -1739,8 +1747,9 @@ function realDays(){let n=0;for(const d in S.log)if(hasStamp(d))n++;return n}
 function stampDays(){return realDays()+(S.gift?1:0)}
 function weekCount(){let n=0;for(let i=0;i<7;i++){const dt=new Date();dt.setDate(dt.getDate()-i);if(hasStamp(fmt(dt)))n++}return n}
 function stampCount(){let n=0;const have=new Set(ids());for(const d in S.log)for(const k in S.log[d])if(have.has(k)&&S.log[d][k]>0)n++;return n}
-function capacity(){const d=stampDays();return Math.min(MAX_SLOTS,3+UNLOCKS.filter(x=>d>=x).length)}
-function themeOpen(th){if(th.shop)return OWNED.has(th.shop);return !th.at||stampDays()>=th.at}
+function opened(at){return stampDays()>=at||OWNED.has('unlock_'+at)||OWNED.has('unlock_all')} // 열림: 일수로 도달했거나 상점에서 «열림 건너뛰기»를 샀을 때(기능만 열린다). 달성 표시(✔)와 축하는 일수만 본다
+function capacity(){return Math.min(MAX_SLOTS,3+UNLOCKS.filter(opened).length)}
+function themeOpen(th){if(th.shop)return OWNED.has(th.shop);return !th.at||opened(th.at)}
 function currentTheme(){ // 설정에서 고른 테마(열려 있을 때). 고르지 않았으면 열린 것 중 가장 나중 테마가 자동 적용
   const th=THEMES.find(x=>x.id===S.theme);if(th&&themeOpen(th))return th.id;
   let id='base';for(const x of THEMES)if(x.at&&themeOpen(x))id=x.id;return id}
@@ -1853,16 +1862,27 @@ function renderPiled(){
       :`<div class="meter" aria-hidden="true"><i style="width:${Math.min(100,Math.round(total/next*100))}%"></i></div>`;
     // 초반에는 '쌓인 일수', 다음 칸이 가까워지면(80%~) '남은 일수'를 보여 준다(Koo & Fishbach 2012 초록 기준, 전환 시점은 설계 판단)
     const soon=total===0||total/next>=0.8;
-    const msg=soon?t(left===1?'unlockLeftOne':'unlockLeft',{n:left}):t(total===1?'unlockSoFarOne':'unlockSoFar',{n:total});
+    const msg0=soon?t(left===1?'unlockLeftOne':'unlockLeft',{n:left}):t(total===1?'unlockSoFarOne':'unlockSoFar',{n:total});
+    const msg=opened(next)?`${next}일째가 되면 달성 표시가 붙어요(${left}일 남음, 구매로 이미 열려 있어요)`:msg0; // 구매로 열린 열림은 «새 칸까지 N일»이 맞지 않아 문구를 바꾼다
     const giftTag=S.gift&&next<=14?t('giftTag'):''; // 첫 방문 선물 1일이 포함돼 있음을 '쌓인 일수' 옆에 밝힌다
     h+=`<p class="unlockhd">${esc(msg+giftTag)}</p>${pips}`;
   }else if(h===hd) h+=`<p class="unlockhd">${esc(t('unlockAll'))}</p>`;
-  h+=`<div class="miles"><span class="milescap">${esc(t('milesCap'))}</span>${UNLOCKS.map(x=>`<span class="mile ${total>=x?'done':''}">${total>=x?'✔ ':''}${esc(t('routineDay',{n:x}))}</span>`).join('')}</div>`;
+  h+=`<div class="miles"><span class="milescap">${esc(t('milesCap'))}</span>${UNLOCKS.map(x=>{const got=total>=x,bought=!got&&opened(x);return `<span class="mile ${got?'done':''}${bought?' bought':''}"${bought?' title="구매로 열려 있어요. 도장이 쌓이면 ✔가 붙어요"':''}>${got?'✔ ':bought?'🔓 ':''}${esc(t('routineDay',{n:x}))}</span>`}).join('')}</div>`;
   const nt=THEMES.find(th=>th.at&&!themeOpen(th)); // 다음에 열리는 색을 한 줄로 알린다(모두 열렸으면 줄 없음)
   if(nt) h+=`<p class="stat nextcolor"><i class="sw sw-${nt.id}"></i><span>${esc(t('nextColor'))}: ${esc(t('theme_'+nt.id))} · ${esc(t('themeLocked',{d:t('routineDay',{n:nt.at})}))}</span></p>`;
   $('unlock').innerHTML=h;
 }
 
+/* 이어 온 날: 도장 찍은 날 사이가 이틀 이내(하루 빠뜨림까지 허용)로 이어진 가장 최근 구간의 도장 일수. 이틀 연속 빠뜨리면 0부터 다시 센다(사용자 결정 2026-11-04, 이틀·허용 폭은 근거 없는 설계 판단) */
+function runDays(){
+  const days=Object.keys(S.log).filter(hasStamp).sort();
+  if(!days.length) return 0;
+  const gap=(a,c)=>Math.round((new Date(c+'T00:00')-new Date(a+'T00:00'))/864e5);
+  if(gap(days[days.length-1],todayStr)>2) return 0;
+  let n=1;
+  for(let i=days.length-1;i>0;i--){if(gap(days[i-1],days[i])<=2) n++;else break}
+  return n;
+}
 function renderWeek(){
   const wf=new Intl.DateTimeFormat(LOCALE[lang],{weekday:'short'});
   let h='';
@@ -1880,13 +1900,16 @@ function renderWeek(){
   let kept=0;
   for(const d in S.log) if(d.startsWith(ym)&&hasStamp(d)) kept++;
   $('stat').textContent=t('monthStat',{n:kept});
+  const rd=runDays(),wk=weekCount(),rh=$('rhythm');
+  rh.hidden=!wk&&!rd;
+  rh.textContent=rd>1?`이번 주 ${wk}/7 · 이어 온 날 ${rd}일`:`이번 주 ${wk}/7`; // 끊겨도 단계·누적은 그대로이고 이어 온 날만 다시 센다. 쉬었다 돌아오는 안내 문구는 근거가 없어 두지 않는다
   $('histBtn').hidden=!(OWNED.has('history_view')||notesOpen()); // 상점에서 «지난 기록 돌아보기»를 샀거나 날짜 칸이 열린 뒤에 보인다
   $('histBtn').textContent=notesOpen()?'📅 달력 · 일정':'📅 지난 기록 돌아보기';
 }
 /* 지난 기록 돌아보기: 달 단위 달력에 그날 찍은 도장 색 점을 보여 준다. 읽기만 한다(날짜 칸에 할 일을 적는 것은 다음 단계) */
 let histMonth=null;
 const NOTES_AT=60; // 날짜 칸(할 일·일정)이 열리는 누적 도장 일수(사용자 결정 2026-11-04)
-const notesOpen=()=>stampDays()>=NOTES_AT;
+const notesOpen=()=>opened(NOTES_AT);
 let histSel=null;
 function openHist(){const d=new Date();histMonth=new Date(d.getFullYear(),d.getMonth(),1);histSel=notesOpen()?todayStr:null;$('histDlg').showModal();renderHist()}
 function histMin(){
@@ -2380,11 +2403,15 @@ async function loadQuote(){
     if(!r.ok){box.hidden=true;return}box.textContent='“'+(await r.json()).quote+'”';box.hidden=false}catch(e){box.hidden=true}
 }
 async function renderShop(){
-  const box=$('shopList');box.textContent='불러오는 중…';
+  const box=$('shopList'),ub=$('unlockList');box.textContent='불러오는 중…';
   try{
     const j=await (await fetch('/api/shop',{headers:{'X-Client-Id':clientId()},cache:'no-store'})).json();
-    box.textContent='';
+    box.textContent='';ub.textContent='';
     j.items.forEach(it=>{
+      if(it.kind==='unlock'){ // 이미 열린 열림과 앞이 안 열린 열림은 보이지 않는다. «모든 열림»은 셋 다 안 열렸을 때만(개별 합계보다 싼 경우)
+        const all=it.id==='unlock_all';
+        if(all?UNLOCKS.some(opened):(opened(it.at)||!UNLOCKS.filter(x=>x<it.at).every(opened))) return;
+      }
       const own=j.owned.includes(it.id),row=document.createElement('div');row.className='shopitem';
       const th=it.kind==='theme'?THEMES.find(x=>x.id===it.theme):null;
       row.innerHTML=(th?`<i class="sw sw-${esc(th.id)}"></i>`:it.kind==='stamp'?'<i class="shp"></i>':'<i class="sw" style="background:var(--accent)"></i>')+
@@ -2395,8 +2422,9 @@ async function renderShop(){
       else if(own&&it.id==='stamp_shapes'){b.textContent='모양 고르기';b.onclick=()=>{$('crDlg').close();setView(true);$('shapeRow').open=true}}
       else if(own){b.textContent='✔ 가지고 있어요';b.disabled=true}
       else{b.textContent=it.amount.toLocaleString('ko-KR')+'원';b.onclick=()=>buyCredits(it.id)}
-      row.appendChild(b);box.appendChild(row);
+      row.appendChild(b);(it.kind==='unlock'?ub:box).appendChild(row);
     });
+    $('unlockWrap').hidden=!ub.children.length;
   }catch(e){box.textContent='상점을 불러오지 못했어요.'}
 }
 async function openCredits(why){

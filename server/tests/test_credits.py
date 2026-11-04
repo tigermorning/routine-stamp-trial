@@ -315,3 +315,29 @@ def test_feature_item_purchase_grants_ownership_once(env):
     assert again.status_code == 409
     pay_item(client, cid, "stamp_shapes", toss)
     assert store.owned(cid) == ["history_view", "stamp_shapes"]
+
+
+# ---- 열림 건너뛰기(3·28·60일째, 전체): 가격 구조와 소유 ----
+def _unlocks():
+    return [creditlib.ITEMS[k] for k in ("unlock_3", "unlock_28", "unlock_60")]
+
+
+def test_unlock_prices_rise_and_all_is_cheaper_than_sum():
+    a, b, c = _unlocks()
+    assert a["amount"] < b["amount"] < c["amount"]  # 복잡해질수록 조금씩 비싸게(사용자 방향, 임시값)
+    allp = creditlib.ITEMS["unlock_all"]["amount"]
+    assert allp < a["amount"] + b["amount"] + c["amount"]  # 전체는 개별 합계보다 싸다
+    assert [i["at"] for i in _unlocks()] == [3, 28, 60] and creditlib.ITEMS["unlock_all"]["at"] == 0
+
+
+def test_unlock_purchase_grants_ownership_without_credits(env):
+    client, store, toss = env
+    cid = str(uuid.uuid4())
+    client.get("/api/credits", headers=hdr(cid))
+    before = store.balance(cid)
+    o, r = pay_item(client, cid, "unlock_28", toss)
+    assert r.status_code == 200 and o["amount"] == creditlib.ITEMS["unlock_28"]["amount"]
+    assert store.owned(cid) == ["unlock_28"] and store.balance(cid) == before
+    assert client.post("/api/orders", json={"productId": "unlock_28"}, headers=hdr(cid)).status_code == 409
+    items = {i["id"]: i for i in client.get("/api/shop", headers=hdr(cid)).json()["items"]}
+    assert items["unlock_all"]["kind"] == "unlock" and items["unlock_60"]["desc"]
