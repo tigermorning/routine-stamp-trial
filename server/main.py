@@ -12,11 +12,20 @@
       ③ 서버가 카드 id 가 실제 있는 카드인지 검사 → ④ 선택된 카드 본문만 넣고 답을 스트리밍 → ⑤ 끝나고 숫자 검사.
 대화·할 일은 저장하지도 로그에 남기지도 않는다(오류 종류만 남긴다). 도장 날짜별 기록은 받지 않는다.
 환경변수: LLM_PROVIDER(기본 fake) LLM_API_KEY LLM_MODEL. 키는 코드·화면에 넣지 않고 서버 환경(Secret Manager 등)에만 둔다.
+
+크레딧·결제(CREDITS=on 일 때만, 로컬 시험용 SQLite: credits.py). 끄면(기본) 위 동작 그대로다.
+- 화면은 localStorage 의 무작위 UUID 를 X-Client-Id 헤더로 보낸다(계정 없음). 처음 보는 id 는 무료 크레딧을 받는다.
+- /api/chat 은 운영자 키로 모델을 부르기 전에 서버에서만 1개 차감(사용자 키 BYOK 는 차감 없음), 모자라면 402 insufficient_credits.
+- GET /api/credits · GET /api/products · POST /api/orders · GET /api/orders/{id} · POST /api/payments/confirm · POST /api/payments/fail
+- GET /api/config : 토스페이먼츠 클라이언트 키(test_ 만)와 크레딧 켜짐 여부. 시크릿 키는 내려 주지 않는다.
+- GET /pay · /pay/success · /pay/fail : ../pay.html (결제위젯·성공·실패 화면)
+- 크레딧을 늘리는 곳: 결제 승인 성공(confirm_payment → Store.complete_order), 가입 무료 지급, 실패한 답의 되돌림.
 """
 import json
 import logging
 import os
 import time
+import uuid
 from collections import defaultdict, deque
 from pathlib import Path
 from typing import Any
@@ -28,13 +37,16 @@ from pydantic import BaseModel
 import byok
 import cards as cardlib
 import coach
+import credits as creditlib
 import feedback
 import llm as llm_module
 import stamp
+import toss
 import tracing
 from llm import make_llm
 
 PAGE = Path(__file__).resolve().parent.parent / "index.html"
+PAY_PAGE = Path(__file__).resolve().parent.parent / "pay.html"
 RATE_PER_IP = int(os.environ.get("RATE_PER_IP_PER_MIN", "20"))
 RATE_ALL = int(os.environ.get("RATE_ALL_PER_MIN", "120"))
 RATE_STAMP_PER_IP = int(os.environ.get("RATE_STAMP_PER_IP_PER_MIN", "5"))   # 도장 그림은 비용이 커서 훨씬 빡빡하다
@@ -69,6 +81,33 @@ def build_user_llm(key):
 def get_user_llm_factory():
     """테스트에서는 이 함수를 바꿔 끼운다."""
     return build_user_llm
+
+
+CREDITS_ON = os.environ.get("CREDITS", "off").strip().lower() == "on"
+_store = None
+
+
+def get_credit_store():
+    """크레딧 원장(켜졌을 때만, 아니면 None). 테스트에서는 이 함수를 바꿔 끼운다(임시 파일 DB)."""
+    global _store
+    if not CREDITS_ON:
+        return None
+    if _store is None:
+        _store = creditlib.Store(os.environ.get("CREDIT_DB", "").strip() or creditlib.DEFAULT_DB)
+    return _store
+
+
+def get_toss_confirm():
+    """토스페이먼츠 결제 승인 API 호출 함수. 테스트에서는 가짜로 바꿔 끼운다."""
+    return toss.confirm
+
+
+def client_id_of(request):
+    return creditlib.valid_client_id(request.headers.get("x-client-id"))
+
+
+def credits_off():
+    return JSONResponse({"error": "creditsOff"}, status_code=404)
 
 
 def pick_llm(raw_key, operator_llm, factory):
@@ -135,6 +174,169 @@ def health():
     return {"status": "ok"}
 
 
+@app.get("/pay")
+@app.get("/pay/success")
+@app.get("/pay/fail")
+def pay_page():
+    return FileResponse(PAY_PAGE, media_type="text/html; charset=utf-8", headers={"Cache-Control": "no-cache"})
+
+
+@app.get("/api/config")
+def config(store=Depends(get_credit_store)):
+    """화면에 내려 주는 설정: 크레딧 켜짐 여부와 클라이언트 키(드러나도 되는 값)뿐. 시크릿 키는 절대 넣지 않는다."""
+    return JSONResponse({"credits": store is not None, "tossClientKey": toss.client_key()}, headers={"Cache-Control": "no-store"})
+
+
+@app.get("/api/products")
+def products(store=Depends(get_credit_store)):
+    if store is None:
+        return credits_off()
+    return {"products": list(creditlib.PRODUCTS.values()), "chatCost": creditlib.CHAT_COST}
+
+
+@app.get("/api/credits")
+def get_credits(request: Request, store=Depends(get_credit_store)):
+    """잔액과 최근 기록 10줄. 처음 보는 client_id 면 무료 크레딧을 먼저 쌓는다."""
+    if store is None:
+        return credits_off()
+    cid = client_id_of(request)
+    if not cid:
+        return JSONResponse({"error": "clientId"}, status_code=400)
+    store.ensure_client(cid, client_ip(request))
+    return JSONResponse({"balance": store.balance(cid), "recent": store.recent(cid, 10), "owned": store.owned(cid)},
+                        headers={"Cache-Control": "no-store"})
+
+
+@app.get("/api/shop")
+def shop(request: Request, store=Depends(get_credit_store)):
+    """상점: 일회 구매 상품(영구 소유)과 내가 가진 것. 도우미 대화용 크레딧 상품은 /api/products 로 따로 준다."""
+    if store is None:
+        return credits_off()
+    cid = client_id_of(request)
+    if not cid:
+        return JSONResponse({"error": "clientId"}, status_code=400)
+    return JSONResponse({"items": list(creditlib.ITEMS.values()), "owned": store.owned(cid)}, headers={"Cache-Control": "no-store"})
+
+
+@app.get("/api/quote")
+def quote(request: Request, store=Depends(get_credit_store)):
+    """오늘의 좋은 말. «오늘의 좋은 말» 상품을 산 사람에게만 준다(서버가 소유를 확인)."""
+    if store is None:
+        return credits_off()
+    cid = client_id_of(request)
+    if not cid:
+        return JSONResponse({"error": "clientId"}, status_code=400)
+    if not store.has_item(cid, "daily_quote"):
+        return JSONResponse({"error": "not_owned"}, status_code=403)
+    return JSONResponse({"quote": creditlib.quote_of_day()}, headers={"Cache-Control": "no-store"})
+
+
+class OrderRequest(BaseModel):
+    productId: str = ""
+
+
+@app.post("/api/orders")
+def create_order(req: OrderRequest, request: Request, store=Depends(get_credit_store)):
+    """상품 ID만 받는다. 금액·크레딧은 서버 상품표에서 찾는다(화면이 보낸 금액은 쓰지 않음)."""
+    if store is None:
+        return credits_off()
+    cid = client_id_of(request)
+    if not cid:
+        return JSONResponse({"error": "clientId"}, status_code=400)
+    if limited(client_ip(request), "orders", 10, 60):
+        return JSONResponse({"error": "busy"}, status_code=429)
+    product = creditlib.PRODUCTS.get(req.productId) or creditlib.ITEMS.get(req.productId)
+    if not product:
+        return JSONResponse({"error": "unknown_product"}, status_code=400)
+    if product["id"] in creditlib.ITEMS and store.has_item(cid, product["id"]):
+        return JSONResponse({"error": "already_owned"}, status_code=409)  # 일회 구매 상품은 한 번만 산다
+    o = store.create_order(cid, product)
+    return JSONResponse({"orderId": o["order_id"], "amount": o["amount"], "credits": o["credits"], "orderName": product["name"]},
+                        headers={"Cache-Control": "no-store"})
+
+
+@app.get("/api/orders/{order_id}")
+def read_order(order_id: str, request: Request, store=Depends(get_credit_store)):
+    """결제 화면이 금액을 서버에서 다시 읽는다(주소의 값을 믿지 않음). 내 주문만."""
+    if store is None:
+        return credits_off()
+    o = store.get_order(order_id)
+    if not o or o["client_id"] != client_id_of(request):
+        return JSONResponse({"error": "order_not_found"}, status_code=404)
+    return JSONResponse({"orderId": o["order_id"], "amount": o["amount"], "credits": o["credits"], "status": o["status"],
+                         "orderName": (creditlib.PRODUCTS.get(o["product_id"]) or creditlib.ITEMS.get(o["product_id"]) or {}).get("name", o["product_id"]),
+                         "kind": "item" if o["product_id"] in creditlib.ITEMS else "credits"},
+                        headers={"Cache-Control": "no-store"})
+
+
+class ConfirmRequest(BaseModel):
+    paymentKey: str = ""
+    orderId: str = ""
+    amount: Any = None
+
+
+def _done_result(store, o, already):
+    return JSONResponse({"ok": True, "already": already, "orderId": o["order_id"], "credits": o["credits"],
+                         "kind": "item" if o["product_id"] in creditlib.ITEMS else "credits",
+                         "itemName": creditlib.ITEMS.get(o["product_id"], {}).get("name"),
+                         "approvedAt": o["approved_at"], "balance": store.balance(o["client_id"])}, headers={"Cache-Control": "no-store"})
+
+
+@app.post("/api/payments/confirm")
+def confirm_payment(req: ConfirmRequest, request: Request, store=Depends(get_credit_store), confirm=Depends(get_toss_confirm)):
+    """성공 페이지가 주소의 paymentKey·orderId·amount 를 보낸다. 결제로 크레딧을 늘리는 곳은 여기(승인 성공 뒤) 한 곳이다.
+    ① 내 주문인가 ② 이미 완료면 첫 결과 그대로(승인 API 다시 안 부름) ③ 대기인가 ④ 금액이 저장한 금액과 같은가
+    → 토스 승인(Idempotency-Key = order_id) → 성공이면 한 트랜잭션에서 주문 완료 + 원장 +credits(ref order:<id>)."""
+    if store is None:
+        return credits_off()
+    cid = client_id_of(request)
+    o = store.get_order(req.orderId)
+    if not cid or not o or o["client_id"] != cid:
+        return JSONResponse({"error": "order_not_found"}, status_code=404)
+    if o["status"] == "done":
+        return _done_result(store, o, True)
+    if o["status"] != "pending":
+        return JSONResponse({"error": "order_failed", "code": o["fail_code"]}, status_code=409)
+    if str(req.amount).strip() != str(o["amount"]):
+        log.warning("confirm rejected orderId=%s reason=amount_mismatch", o["order_id"])
+        return JSONResponse({"error": "amount_mismatch"}, status_code=400)
+    payment_key = str(req.paymentKey or "").strip()
+    if not payment_key or len(payment_key) > 200:
+        return JSONResponse({"error": "bad_payment_key"}, status_code=400)
+    result = confirm(payment_key, o["order_id"], o["amount"], o["order_id"])
+    body = result.get("body") or {}
+    if not result.get("ok"):
+        code = str(body.get("code") or "UNKNOWN")
+        if code in ("NOT_CONFIGURED", "NETWORK_ERROR", "IDEMPOTENT_REQUEST_PROCESSING"):
+            # 승인이 됐는지 모르는(또는 아직 못 부른) 상태 → 주문을 실패로 바꾸지 않고 대기로 둔다(같은 키로 다시 시도)
+            return JSONResponse({"error": "confirm_unavailable", "code": code, "message": str(body.get("message", ""))[:200]}, status_code=503)
+        store.fail_order(o["order_id"], code)
+        return JSONResponse({"error": "payment_failed", "code": code, "message": str(body.get("message", ""))[:200]}, status_code=400)
+    if body.get("orderId") not in (None, o["order_id"]) or body.get("totalAmount") not in (None, o["amount"]):
+        log.error("confirm response mismatch orderId=%s", o["order_id"])  # 응답이 주문과 다르면 크레딧을 주지 않는다
+        return JSONResponse({"error": "confirm_mismatch"}, status_code=502)
+    approved_at = str(body.get("approvedAt") or creditlib.now())
+    first = store.complete_order(o["order_id"], payment_key, approved_at)
+    log.info("order completed orderId=%s credited=%s", o["order_id"], first)
+    return _done_result(store, store.get_order(o["order_id"]), not first)
+
+
+class FailRequest(BaseModel):
+    orderId: str = ""
+    code: str = ""
+
+
+@app.post("/api/payments/fail")
+def payment_failed(req: FailRequest, request: Request, store=Depends(get_credit_store)):
+    """실패 페이지가 부른다: 내 대기 주문을 실패로(크레딧은 그대로)."""
+    if store is None:
+        return credits_off()
+    o = store.get_order(req.orderId)
+    if not o or o["client_id"] != client_id_of(request):
+        return JSONResponse({"error": "order_not_found"}, status_code=404)
+    return {"ok": True, "changed": store.fail_order(o["order_id"], req.code or "FAIL_PAGE")}
+
+
 class StampRequest(BaseModel):
     name: str = ""
 
@@ -192,7 +394,7 @@ def send_feedback(req: FeedbackRequest, request: Request):
 
 
 @app.post("/api/chat")
-def chat(req: ChatRequest, request: Request, model=Depends(get_llm), factory=Depends(get_user_llm_factory)):
+def chat(req: ChatRequest, request: Request, model=Depends(get_llm), factory=Depends(get_user_llm_factory), store=Depends(get_credit_store)):
     if limited(client_ip(request)):
         return JSONResponse({"error": "busy"}, status_code=429)
     history = coach.clean_history([m.model_dump() for m in req.messages])
@@ -202,16 +404,38 @@ def chat(req: ChatRequest, request: Request, model=Depends(get_llm), factory=Dep
     character = coach.clean_character(req.character)
     last = history[-1]["content"]
     raw_key = request.headers.get(byok.HEADER)
+    engine, user_key, pick_error = pick_llm(raw_key, model, factory)
+    # 크레딧: 운영자 키로 모델을 부를 때만, 부르기 전에 서버에서 차감한다(위기 키워드는 모델을 안 부르므로 차감 없음, BYOK 도 차감 없음)
+    cid, charge_ref, outcome = None, None, {"refund": False}
+    if store is not None:
+        cid = client_id_of(request)
+        if not cid:
+            return JSONResponse({"error": "clientId"}, status_code=400)
+        if not pick_error and not user_key and not coach.is_crisis(last):
+            store.ensure_client(cid, client_ip(request))
+            ref = "chat:" + uuid.uuid4().hex
+            charged, bal = store.charge(cid, ref)
+            if not charged:
+                return JSONResponse({"error": "insufficient_credits", "balance": bal,
+                                     "message": "크레딧을 다 썼어요. 도우미와 이야기하려면 크레딧을 충전해 주세요. 도장 찍기는 크레딧 없이 그대로 쓸 수 있어요."},
+                                    status_code=402)
+            charge_ref = ref
 
     def events():
         turn = tracing.start_turn()  # 한 턴 = 트레이스 하나(chat-turn). 키가 없으면 아무 일도 하지 않는다
         try:
             yield from run(turn)
+        except Exception:
+            outcome["refund"] = True
+            raise
         finally:
             turn.end()
             tracing.flush(turn)
+            if charge_ref and outcome["refund"]:  # 답을 만들지 못했으면 되돌리는 +1 줄(사용자가 연결을 끊은 경우는 되돌리지 않음)
+                store.refund(cid, charge_ref)
 
     def run(turn):
+        key_error = pick_error  # (run 안에서 다시 정하므로 지역 이름으로 받는다)
         turn.update(input=tracing.text(last))  # 트레이스 입력은 사용자 말 하나(원문 수집을 켠 경우만, 기본은 비어 있음)
         safety = turn.child("check-safety", "guardrail")
         crisis = coach.is_crisis(last)
@@ -220,7 +444,6 @@ def chat(req: ChatRequest, request: Request, model=Depends(get_llm), factory=Dep
             turn.update(output={"result": "crisis", "by": "keyword"})
             yield line({"type": "crisis"})
             return
-        engine, user_key, key_error = pick_llm(raw_key, model, factory)
         turn.update(metadata={"byok": user_key})
         if key_error:  # 키가 없거나 형식이 틀림: 운영자 키로 대신 부르지 않고 안내만
             turn.update(output={"result": "key-error"})
@@ -240,6 +463,7 @@ def chat(req: ChatRequest, request: Request, model=Depends(get_llm), factory=Dep
                 key_error = byok.classify_error(error) if user_key else None
                 if key_error:
                     plan_obs.end()
+                    outcome["refund"] = True
                     yield line({"type": "error", "key": key_error})
                     return
                 plan = {}
@@ -248,10 +472,12 @@ def chat(req: ChatRequest, request: Request, model=Depends(get_llm), factory=Dep
             asked = plan.get("card_ids")
             plan_obs.end(usage_details=plan_usage or None, metadata={"mode": mode, "card_ids": [c["id"] for c in picked], "asked_cards": len(asked) if isinstance(asked, list) else 0})  # 요청한 수와 실제 카드 수가 다르면 모델이 없는 카드 id 를 댄 것
             if mode == "crisis":
+                outcome["refund"] = True
                 turn.update(output={"result": "crisis", "by": "model"})
                 yield line({"type": "crisis"})
                 return
             if mode == "out_of_scope":
+                outcome["refund"] = True
                 turn.update(output={"result": "scope"})
                 yield line({"type": "scope"})
                 return
@@ -295,11 +521,13 @@ def chat(req: ChatRequest, request: Request, model=Depends(get_llm), factory=Dep
                 ok = coach.numbers_ok(reply, picked, history, ctx, todos, coach.APP_NUMBERS if mode in ("app", "listen") else ())
                 turn.child("check-numbers", "guardrail").end(output={"ok": ok}, metadata={"mode": mode})
             basis = "cards" if mode in ("advise", "quest") else mode if mode in ("app", "general") else "none"  # 화면의 근거 표시용(general=출처 미확인 일반 정보)
+            outcome["refund"] = not ok  # 화면이 버리는 답(ok=false)이면 되돌린다
             turn.update(output={"result": "reply", "ok": ok, "mode": mode, "basis": basis, **({"reply": reply} if tracing.CAPTURE_TEXT else {})})
             yield line({"type": "done", "ok": ok, "mode": mode, "basis": basis, "cards": cardlib.meta(picked) if mode in ("advise", "quest") else []})
         except Exception as error:  # 입력·응답 내용은 남기지 않고 오류 종류만 남긴다
             log.error("chat failed: %s", type(error).__name__)
             turn.update(level="ERROR", status_message=type(error).__name__)
+            outcome["refund"] = True
             key_error = byok.classify_error(error) if user_key else None
             yield line({"type": "error", "key": key_error} if key_error else {"type": "error"})
 

@@ -35,6 +35,9 @@
 :root[data-theme="peach"]{--bg:#fbf1ea;--card:#ffffff;--ink:#4a3631;--soft:#7d655d;--line:#efd9cc;--accent:#d06a49;--accent-ink:#2b0e05;--shadow:0 6px 18px rgba(190,110,80,.14);--blob1:rgba(208,106,73,.14);--blob2:rgba(255,214,102,.28);color-scheme:light}
 :root[data-theme="lavender"]{--bg:#f3f0fa;--card:#ffffff;--ink:#3a3350;--soft:#6f668c;--line:#dfd8f0;--accent:#8670d2;--accent-ink:#0d0620;--shadow:0 6px 18px rgba(120,100,190,.14);--blob1:rgba(134,112,210,.16);--blob2:rgba(255,214,102,.2);color-scheme:light}
 :root[data-theme="sunny"]{--bg:#fff7df;--card:#ffffff;--ink:#4a3f1f;--soft:#75683f;--line:#f0e2b8;--accent:#b98400;--accent-ink:#241a00;--shadow:0 6px 18px rgba(190,150,40,.15);--blob1:rgba(185,132,0,.14);--blob2:rgba(255,150,100,.14);color-scheme:light}
+:root[data-theme="ocean"]{--bg:#eaf4fb;--card:#ffffff;--ink:#1f3a4d;--soft:#5a7a8f;--line:#cfe3f1;--accent:#2f8fcf;--accent-ink:#04243a;--shadow:0 6px 18px rgba(47,143,207,.14);--blob1:rgba(47,143,207,.14);--blob2:rgba(120,210,230,.22);color-scheme:light}
+:root[data-theme="forest"]{--bg:#eef5ea;--card:#ffffff;--ink:#2b3d27;--soft:#667a60;--line:#d6e6cf;--accent:#4f9a4a;--accent-ink:#0a2208;--shadow:0 6px 18px rgba(79,154,74,.14);--blob1:rgba(79,154,74,.14);--blob2:rgba(200,220,110,.22);color-scheme:light}
+:root[data-theme="rose"]{--bg:#fbeef2;--card:#ffffff;--ink:#4a2a35;--soft:#80606b;--line:#f1d3dc;--accent:#d0527a;--accent-ink:#2b0412;--shadow:0 6px 18px rgba(208,82,122,.14);--blob1:rgba(208,82,122,.14);--blob2:rgba(255,190,150,.22);color-scheme:light}
 :root[data-theme="dark"]{
   --bg:#1f2b2c; --card:#2a3a3b; --ink:#e6f0ee; --soft:#a3b8b4; --line:#3d5351; --accent:#5fd1be; --accent-ink:#06302a;
   --sun-bg:#8a6d1f; --sun-ink:#fff3c9; --shadow:0 6px 18px rgba(0,0,0,.35); --blob1:rgba(95,209,190,.12); --blob2:rgba(255,214,102,.08); color-scheme:dark;
@@ -80,6 +83,9 @@ h2{font-family:var(--display);font-weight:400;font-size:19px;margin:0}
 .sw-peach{background:linear-gradient(135deg,#fbf1ea 50%,#d06a49 50%)}
 .sw-lavender{background:linear-gradient(135deg,#f3f0fa 50%,#8670d2 50%)}
 .sw-sunny{background:linear-gradient(135deg,#fff7df 50%,#b98400 50%)}
+.sw-ocean{background:linear-gradient(135deg,#eaf4fb 50%,#2f8fcf 50%)}
+.sw-forest{background:linear-gradient(135deg,#eef5ea 50%,#4f9a4a 50%)}
+.sw-rose{background:linear-gradient(135deg,#fbeef2 50%,#d0527a 50%)}
 .nextcolor{display:flex;align-items:center;gap:6px;margin:8px 0 0}
 .rtn{display:flex;align-items:center;gap:12px;padding:8px 0}
 .rtn+.rtn{border-top:1px solid var(--line)}
@@ -206,6 +212,15 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 .fall{position:fixed;top:-40px;font-size:28px;pointer-events:none;z-index:99;animation:fall linear forwards}
 @keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.9}}
 @media (prefers-reduced-motion:reduce){.pop .stamp,.banner{animation:none}.fall{display:none}.bar>i{transition:none}}
+.crrow{display:flex;justify-content:center;margin:6px 0 0}
+#crDlg{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);max-width:min(440px,calc(100vw - 32px));padding:18px;box-shadow:var(--shadow)}
+#crDlg::backdrop{background:rgba(0,0,0,.35)}
+#crList{display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.crprod{text-align:left}
+#crDlg h3{font-size:1rem;margin:14px 0 4px}
+.shopitem{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:6px}
+.shopitem .sw{flex:none}.shopitem span{flex:1}.shopitem small{display:block;color:var(--soft)}
+.quotebox{text-align:center;margin:8px 0 0;color:var(--soft);font-style:italic}
 </style>
 </head>
 <body>
@@ -218,6 +233,8 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
   <header>
     <h1><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="var(--accent)"/><circle cx="16" cy="16" r="9.5" fill="none" stroke="var(--card)" stroke-width="2.2"/><circle cx="16" cy="16" r="3" fill="var(--card)"/></svg><span id="h1"></span><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="var(--accent)"/><circle cx="16" cy="16" r="9.5" fill="none" stroke="var(--card)" stroke-width="2.2"/><circle cx="16" cy="16" r="3" fill="var(--card)"/></svg></h1>
     <p class="notice" id="notice" hidden></p>
+    <p class="crrow" id="crRow" hidden><button class="btn" id="crBtn" type="button" aria-haspopup="dialog">🛍 상점</button></p>
+    <p class="quotebox" id="quoteBox" hidden></p>
   </header>
 
   <div id="mainView">
@@ -339,6 +356,20 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
   </div>
 </div>
 
+<dialog id="crDlg" aria-labelledby="crTitle">
+  <h2 id="crTitle">상점</h2>
+  <p class="msg" id="crWhy" role="status" hidden></p>
+  <h3>꾸미기·기능 <small>(한 번 사면 계속 써요)</small></h3>
+  <div id="shopList"></div>
+  <h3>도우미와 대화 충전</h3>
+  <p class="stat">남은 대화 크레딧: <b id="crBal">-</b>개</p>
+  <p class="stat" id="crRule"></p>
+  <div id="crList"></div>
+  <p class="msg" id="crErr" role="status"></p>
+  <p class="stat">결제는 토스페이먼츠 테스트 환경에서만 진행돼요(실제로 돈이 빠져나가지 않음). 환불 기준: 아직 정하지 않았어요(정책 확정 전 자리).</p>
+  <p class="stat">계정 없이 이 브라우저로 쓰는 중이에요. 브라우저 데이터를 지우면 산 크레딧에 다시 접근할 수 없어요.</p>
+  <div class="row" style="justify-content:flex-end"><button class="btn" id="crClose" type="button">닫기</button></div>
+</dialog>
 <script>
 /* 의견 폼 주소(구글 폼 등). 비워 두면 '폼으로 보내기' 버튼이 안 보이고 복사만 쓸 수 있어요. */
 const FEEDBACK_URL='';
@@ -447,7 +478,7 @@ ko:{
   introClose:'닫기',
   introBtn:'안내',
   setBtn:"설정", setBack:"돌아가기", langCap:"언어", themeCap:"색 테마",
-  theme_base:"기본", theme_peach:"복숭아", theme_lavender:"라벤더", theme_sunny:"햇살", themeLocked:"{d}에 열려요",
+  theme_base:"기본", theme_peach:"복숭아", theme_lavender:"라벤더", theme_sunny:"햇살", theme_ocean:"바다", theme_forest:"숲", theme_rose:"장미", themeLocked:"{d}에 열려요",
   nextColor:"다음 색",
   privCap:"개인정보 안내", privBody:"계정도 로그인도 없어요. 도장 기록은 이 기기에만 저장돼요. 그래서 브라우저 데이터를 지우거나 폰을 바꾸면 기록이 사라져요. 도우미와 나눈 말은 답을 만들 때 AI 서비스에 전달되고, 이 앱 서버에는 저장되지 않아요. 이름·연락처 같은 개인정보는 적지 말아 주세요.",
   delCap:"내 기록 지우기", delBody:"이 기기에 저장된 도장 기록, 칸, 설정, 도우미 대화를 모두 지우고 처음 상태로 돌아가요.",
@@ -1615,8 +1646,10 @@ const COLORS=['#ff8f70','#ffb85c','#5fcfb0','#6cb6f5','#9a8cf2','#ffd666','#4fc3
 const KEY='routine-trial-v1';
 const MAX_SLOTS=6;
 const UNLOCKS=[3,28,60]; // 도장 찍은 누적 일수 → 칸이 하나씩 열림(PRD 2026-10-21)
-const THEMES=[{id:'base'},{id:'peach',at:UNLOCKS[0]},{id:'lavender',at:UNLOCKS[1]},{id:'sunny',at:UNLOCKS[2]}]; // 칸이 열릴 때 테마도 하나씩 열림
-const THEME_BG={base:'#f2f7f5',peach:'#fbf1ea',lavender:'#f3f0fa',sunny:'#fff7df'};
+const THEMES=[{id:'base'},{id:'peach',at:UNLOCKS[0]},{id:'lavender',at:UNLOCKS[1]},{id:'sunny',at:UNLOCKS[2]},
+  {id:'ocean',shop:'theme_ocean'},{id:'forest',shop:'theme_forest'},{id:'rose',shop:'theme_rose'}];
+let OWNED=new Set(); // 서버가 알려 준 내가 산 상품(상점). 크레딧 서버가 꺼져 있으면 비어 있다 // 칸이 열릴 때 테마도 하나씩 열림
+const THEME_BG={base:'#f2f7f5',peach:'#fbf1ea',lavender:'#f3f0fa',sunny:'#fff7df',ocean:'#eaf4fb',forest:'#eef5ea',rose:'#fbeef2'};
 const pad=n=>String(n).padStart(2,'0');
 const fmt=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 let todayStr=fmt(new Date());
@@ -1662,7 +1695,7 @@ function stampDays(){return realDays()+(S.gift?1:0)}
 function weekCount(){let n=0;for(let i=0;i<7;i++){const dt=new Date();dt.setDate(dt.getDate()-i);if(hasStamp(fmt(dt)))n++}return n}
 function stampCount(){let n=0;const have=new Set(ids());for(const d in S.log)for(const k in S.log[d])if(have.has(k)&&S.log[d][k]>0)n++;return n}
 function capacity(){const d=stampDays();return Math.min(MAX_SLOTS,3+UNLOCKS.filter(x=>d>=x).length)}
-function themeOpen(th){return !th.at||stampDays()>=th.at}
+function themeOpen(th){if(th.shop)return OWNED.has(th.shop);return !th.at||stampDays()>=th.at}
 function currentTheme(){ // 설정에서 고른 테마(열려 있을 때). 고르지 않았으면 열린 것 중 가장 나중 테마가 자동 적용
   const th=THEMES.find(x=>x.id===S.theme);if(th&&themeOpen(th))return th.id;
   let id='base';for(const x of THEMES)if(x.at&&themeOpen(x))id=x.id;return id}
@@ -2022,18 +2055,25 @@ async function sendChat(text){
   };
   try{
     const res=await fetch(CHAT_URL,{method:'POST',headers:keyHeaders({'Content-Type':'application/json'}),body:JSON.stringify(body),signal:ctl.signal});
+    if(res.status===402){ // 크레딧 부족: 서버가 준 문구와 함께 충전 팝업을 열고, 보내려던 말은 입력창에 남긴다
+      let j={};try{j=await res.json()}catch(x){}
+      end='credits';keyErr=j.message||'크레딧이 모자라요.';
+    }else{
     if(!res.ok) throw new Error('http');
     if(res.body&&res.body.getReader){
       const rd=res.body.getReader(),dec=new TextDecoder();let buf='';
       for(;;){const r=await rd.read();if(r.done)break;buf+=dec.decode(r.value,{stream:true});const parts=buf.split('\n');buf=parts.pop();parts.forEach(onLine)}
       if(buf.trim()) onLine(buf);
     }else (await res.text()).split('\n').forEach(l=>l.trim()&&onLine(l));
+    }
   }catch(e){end='error'} // 도우미를 못 부르면(서버 없음·시간 초과·끊김) 안내만 하고 앱은 그대로
   finally{clearTimeout(timer)}
   const live=chLive;chLive=null;chBusy=false;chCtl=null;
   const retry=key=>{ // 이번 말은 지우고 입력창에 되돌려 놓아 다시 보낼 수 있게 한다
     c.msgs.splice(c.msgs.indexOf(um),1);$('chIn').value=text;$('chMsg').textContent=t(key);
   };
+  if(end==='credits'){c.msgs.splice(c.msgs.indexOf(um),1);$('chIn').value=text;$('chMsg').textContent=keyErr;c.msgs=c.msgs.slice(-CHAT_KEEP);save();renderChat();openCredits(keyErr);return}
+  window.dispatchEvent(new Event('credits-refresh'));
   if(end==='crisis'||end==='scope'){um.x=true;c.msgs.push({r:'a',k:end==='crisis'?'chCrisis':'chScope',x:true})}
   else if(end==='error') retry(KEY_ERRS.includes(keyErr)?keyErr:'chBusy');
   else if(!done) retry('chCut');
@@ -2085,7 +2125,7 @@ function renderSettings(){
   $('langVal').textContent=LANG_NAMES[lang];$('themeVal').textContent=t('theme_'+cur); // 접힌 줄에 현재 값을 보여 준다
   $('themePills').innerHTML=THEMES.map(th=>{
     const open=themeOpen(th),name=esc(t('theme_'+th.id));
-    const lock=open?'':`<small>🔒 ${esc(t('themeLocked',{d:t('routineDay',{n:th.at})}))}</small>`; // 잠긴 색은 '언제 열리는지'를 보여 주는 목표
+    const lock=open?'':th.shop?'<small>🛍 상점에서 살 수 있어요</small>':`<small>🔒 ${esc(t('themeLocked',{d:t('routineDay',{n:th.at})}))}</small>`; // 잠긴 색은 '언제 열리는지'를 보여 주는 목표
     return `<button type="button" class="opt" role="radio" aria-checked="${open&&cur===th.id}" data-th="${th.id}"${open?'':' disabled'}><i class="sw sw-${th.id}"></i><span>${name} ${lock}</span></button>`}).join('');
   $('themePills').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
     if(b.disabled) return;
@@ -2183,7 +2223,90 @@ lang=LANGS.includes(S.lang)?S.lang:guessLang();
 if(!persists) $('notice').hidden=false;
 $('fb').value=S.draft||'';
 render();
+
+/* 크레딧(서버가 CREDITS=on 일 때만 보인다). 잔액·상품은 서버가 준 값을 그대로 보여 주고, 화면은 크레딧을 계산하거나 늘리지 않는다.
+   계정이 없어서 이 브라우저의 무작위 id(X-Client-Id)로 구분한다. 브라우저 데이터를 지우면 산 크레딧에 다시 접근할 수 없다. */
+const CR_ID='routine-client-id';
+function clientId(){
+  let v='';try{v=localStorage.getItem(CR_ID)||''}catch(e){}
+  if(!/^[0-9a-f-]{36}$/.test(v)){v=crypto.randomUUID();try{localStorage.setItem(CR_ID,v)}catch(e){}}
+  return v;
+}
+const _keyHeaders=keyHeaders;
+keyHeaders=function(hd){hd['X-Client-Id']=clientId();return _keyHeaders(hd)};
+let crOn=false,crBal=null;
+async function loadCredits(){
+  try{
+    const r=await fetch('/api/credits',{headers:{'X-Client-Id':clientId()},cache:'no-store'});
+    if(r.status===404){crOn=false;$('crRow').hidden=true;return}
+    const j=await r.json();crOn=true;crBal=j.balance;
+    $('crRow').hidden=false;$('crBal').textContent=j.balance; // 위쪽에는 줄어드는 숫자를 두지 않는다(PRD). 잔액은 상점 팝업의 도우미 대화 구역에만 보인다
+    setOwned(j.owned||[]);
+  }catch(e){$('crRow').hidden=true}
+}
+const SAMPLE_QUOTE='예: “오늘 한 칸이면 충분해요.”';
+function setOwned(list){
+  const n=new Set(list),changed=n.size!==OWNED.size||[...n].some(x=>!OWNED.has(x));
+  OWNED=n;if(changed){applyTheme();render()}
+  loadQuote();
+}
+async function loadQuote(){
+  const box=$('quoteBox');
+  if(!OWNED.has('daily_quote')){box.hidden=true;return}
+  try{const r=await fetch('/api/quote',{headers:{'X-Client-Id':clientId()},cache:'no-store'});
+    if(!r.ok){box.hidden=true;return}box.textContent='“'+(await r.json()).quote+'”';box.hidden=false}catch(e){box.hidden=true}
+}
+async function renderShop(){
+  const box=$('shopList');box.textContent='불러오는 중…';
+  try{
+    const j=await (await fetch('/api/shop',{headers:{'X-Client-Id':clientId()},cache:'no-store'})).json();
+    box.textContent='';
+    j.items.forEach(it=>{
+      const own=j.owned.includes(it.id),row=document.createElement('div');row.className='shopitem';
+      const th=it.kind==='theme'?THEMES.find(x=>x.id===it.theme):null;
+      row.innerHTML=(th?`<i class="sw sw-${esc(th.id)}"></i>`:'<i class="sw" style="background:var(--accent)"></i>')+
+        `<span>${esc(it.name)}<small>${it.kind==='quote'?esc(SAMPLE_QUOTE):'색을 바꿔요'}</small></span>`;
+      const b=document.createElement('button');b.type='button';b.className='btn';
+      if(own&&th){b.textContent='쓰기';b.onclick=()=>{S.theme=th.id;save();render();$('crDlg').close()}}
+      else if(own){b.textContent='✔ 가지고 있어요';b.disabled=true}
+      else{b.textContent=it.amount.toLocaleString('ko-KR')+'원';b.onclick=()=>buyCredits(it.id)}
+      row.appendChild(b);box.appendChild(row);
+    });
+  }catch(e){box.textContent='상점을 불러오지 못했어요.'}
+}
+async function openCredits(why){
+  $('crWhy').textContent=why||'';$('crWhy').hidden=!why;$('crErr').textContent='';
+  $('crDlg').showModal();
+  await loadCredits();
+  renderShop();
+  const box=$('crList');box.textContent='불러오는 중…';
+  try{
+    const j=await (await fetch('/api/products',{cache:'no-store'})).json();
+    $('crRule').textContent='도우미에게 보내는 메시지 1개에 크레딧 '+j.chatCost+'개가 쓰여요. 도장 찍기는 크레딧을 쓰지 않아요.';
+    box.textContent='';
+    j.products.forEach(p=>{
+      const b=document.createElement('button');b.type='button';b.className='btn crprod';b.dataset.id=p.id;
+      b.textContent=p.name+' · '+p.amount.toLocaleString('ko-KR')+'원 (1개 '+(Math.round(p.amount/p.credits*10)/10)+'원)';
+      b.onclick=()=>buyCredits(p.id);box.appendChild(b);
+    });
+  }catch(e){box.textContent='상품 목록을 불러오지 못했어요.'}
+}
+async function buyCredits(pid){
+  $('crErr').textContent='';
+  try{
+    const r=await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json','X-Client-Id':clientId()},body:JSON.stringify({productId:pid})});
+    const j=await r.json();
+    if(r.status===409){$('crErr').textContent='이미 가지고 있어요.';renderShop();return}
+    if(!r.ok) throw new Error(j.error||'order');
+    location.href='/pay?orderId='+encodeURIComponent(j.orderId);
+  }catch(e){$('crErr').textContent='주문을 만들지 못했어요. 잠시 뒤 다시 해 주세요.'}
+}
+$('crBtn').onclick=()=>openCredits('');
+$('crClose').onclick=()=>$('crDlg').close();
+window.addEventListener('credits-refresh',loadCredits);
+loadCredits();
 </script>
+
 
 </body>
 </html>

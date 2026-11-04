@@ -3,3 +3,6 @@ __pycache__/
 .pytest_cache/
 .env
 .venv/
+
+# 크레딧 로컬 시험 DB
+server/data/
