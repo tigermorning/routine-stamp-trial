@@ -212,7 +212,28 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 .fall{position:fixed;top:-40px;font-size:28px;pointer-events:none;z-index:99;animation:fall linear forwards}
 @keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.9}}
 @media (prefers-reduced-motion:reduce){.pop .stamp,.banner{animation:none}.fall{display:none}.bar>i{transition:none}}
-.crrow{display:flex;justify-content:center;margin:6px 0 0}
+.shopbtn{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--card));font-weight:700}
+#histBtn{margin-top:8px}
+#histDlg,#celDlg{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);max-width:min(420px,calc(100vw - 32px));padding:18px;box-shadow:var(--shadow)}
+#histDlg::backdrop,#celDlg::backdrop{background:rgba(0,0,0,.35)}
+.hcal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:12px 0 6px;text-align:center}
+.hcal .wd{font-size:12px;color:var(--soft)}
+.hcal .hd{min-height:44px;border:1px solid var(--line);border-radius:8px;padding:2px 0;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.hcal button.hd{font:inherit;color:inherit;background:var(--card);cursor:pointer}
+.hcal .hd.sel{outline:3px solid var(--accent);outline-offset:1px}
+.hcal .hd .nt{font-size:10px;line-height:1;color:var(--accent)}
+#histNoteIn{width:100%;box-sizing:border-box;margin-top:4px;border:2px solid var(--line);border-radius:10px;padding:6px 8px;font:inherit;background:var(--card);color:var(--ink);resize:vertical}
+.hcal .hd.blank{border-color:transparent}
+.hcal .hd.today{border-color:var(--accent)}
+.hcal .hd.on{background:color-mix(in srgb,var(--accent) 10%,var(--card))}
+.hcal .hdots{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;max-width:36px}
+.hcal .hdot{width:8px;height:8px;border-radius:50%;background:var(--c)}
+.hcal .hdot.v2{opacity:.45}
+:root[data-shape="soft"] .stamp{border-radius:30%}
+:root[data-shape="leaf"] .stamp{border-radius:50% 10% 50% 10%}
+:root[data-shape="drop"] .stamp{border-radius:50% 50% 50% 8%}
+.shp{display:inline-block;width:22px;height:22px;border:3px solid var(--accent);background:color-mix(in srgb,var(--accent) 22%,var(--card));border-radius:50%;flex:none;vertical-align:middle;margin-right:6px}
+.shp-soft{border-radius:30%}.shp-leaf{border-radius:50% 10% 50% 10%}.shp-drop{border-radius:50% 50% 50% 8%}
 #crDlg{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);max-width:min(440px,calc(100vw - 32px));padding:18px;box-shadow:var(--shadow)}
 #crDlg::backdrop{background:rgba(0,0,0,.35)}
 #crList{display:flex;flex-direction:column;gap:8px;margin:10px 0}
@@ -227,13 +248,13 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 <div class="wrap">
   <div class="topbar">
   <button type="button" class="langbtn" id="introBtn"><span aria-hidden="true">ⓘ</span><span id="introBtnTxt"></span></button>
+  <span id="crRow" hidden><button type="button" class="langbtn shopbtn" id="crBtn" aria-haspopup="dialog"><span aria-hidden="true">🛍</span><span>상점</span></button></span>
   <button type="button" class="langbtn" id="setBtn" aria-expanded="false" aria-controls="settingsView"><span aria-hidden="true">⚙</span><span id="setBtnTxt"></span></button>
   </div>
 
   <header>
     <h1><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="var(--accent)"/><circle cx="16" cy="16" r="9.5" fill="none" stroke="var(--card)" stroke-width="2.2"/><circle cx="16" cy="16" r="3" fill="var(--card)"/></svg><span id="h1"></span><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="14" fill="var(--accent)"/><circle cx="16" cy="16" r="9.5" fill="none" stroke="var(--card)" stroke-width="2.2"/><circle cx="16" cy="16" r="3" fill="var(--card)"/></svg></h1>
     <p class="notice" id="notice" hidden></p>
-    <p class="crrow" id="crRow" hidden><button class="btn" id="crBtn" type="button" aria-haspopup="dialog">🛍 상점</button></p>
     <p class="quotebox" id="quoteBox" hidden></p>
   </header>
 
@@ -260,6 +281,7 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
     <h2 id="weekTitle"></h2>
     <div class="week" id="week"></div>
     <p class="stat" id="stat"></p>
+    <button class="btn" id="histBtn" type="button" hidden aria-haspopup="dialog">📅 지난 기록 돌아보기</button>
   </section>
 
   <section class="card" id="piled">
@@ -311,6 +333,10 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
     <details class="setrow" id="themeRow">
       <summary><span class="sethd" id="themeCap"></span><span class="val" id="themeVal"></span></summary>
       <div class="pillrow" id="themePills" role="radiogroup"></div>
+    </details>
+    <details class="setrow" id="shapeRow" hidden>
+      <summary><span class="sethd">도장 모양</span><span class="val" id="shapeVal"></span></summary>
+      <div class="pillrow" id="shapePills" role="radiogroup"></div>
     </details>
     <details class="setrow" id="fbCard">
       <summary><h2 id="fbTitle"></h2></summary>
@@ -369,6 +395,24 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
   <p class="stat">결제는 토스페이먼츠 테스트 환경에서만 진행돼요(실제로 돈이 빠져나가지 않음). 환불 기준: 아직 정하지 않았어요(정책 확정 전 자리).</p>
   <p class="stat">계정 없이 이 브라우저로 쓰는 중이에요. 브라우저 데이터를 지우면 산 크레딧에 다시 접근할 수 없어요.</p>
   <div class="row" style="justify-content:flex-end"><button class="btn" id="crClose" type="button">닫기</button></div>
+</dialog>
+
+<dialog id="histDlg" aria-labelledby="histTitle">
+  <div class="row"><button class="btn" id="histPrev" type="button" aria-label="이전 달">◀</button><h2 id="histTitle"></h2><button class="btn" id="histNext" type="button" aria-label="다음 달">▶</button></div>
+  <div class="hcal" id="histCal"></div>
+  <div id="histNote" hidden>
+    <label class="stat" for="histNoteIn" id="histNoteCap"></label>
+    <textarea id="histNoteIn" maxlength="120" rows="2" placeholder="이 날의 할 일·일정"></textarea>
+  </div>
+  <p class="stat" id="histStat"></p>
+  <div class="row" style="justify-content:flex-end"><button class="btn" id="histClose" type="button">닫기</button></div>
+</dialog>
+
+<dialog id="celDlg" aria-labelledby="celTitle">
+  <h2 id="celTitle"></h2>
+  <p class="msg" id="celBody"></p>
+  <p class="stat" id="celGift"></p>
+  <div class="row" style="justify-content:flex-end"><button class="btn main" id="celClose" type="button">고마워요</button></div>
 </dialog>
 <script>
 /* 의견 폼 주소(구글 폼 등). 비워 두면 '폼으로 보내기' 버튼이 안 보이고 복사만 쓸 수 있어요. */
@@ -1680,6 +1724,7 @@ function load(){
     return s;
   });
   if(fresh){S.gift=true;save()}
+  if(S.cel===undefined) S.cel=UNLOCKS.filter(x=>stampDays()>=x).length; // 이미 열린 칸은 축하하지 않는다(앞으로 열리는 순간만)
 }
 function save(){try{store.set(KEY,JSON.stringify(S));return true}catch(e){return false}}
 function probe(){try{store.set('__p','1');return store.get('__p')==='1'}catch(e){return false}}
@@ -1699,9 +1744,13 @@ function themeOpen(th){if(th.shop)return OWNED.has(th.shop);return !th.at||stamp
 function currentTheme(){ // 설정에서 고른 테마(열려 있을 때). 고르지 않았으면 열린 것 중 가장 나중 테마가 자동 적용
   const th=THEMES.find(x=>x.id===S.theme);if(th&&themeOpen(th))return th.id;
   let id='base';for(const x of THEMES)if(x.at&&themeOpen(x))id=x.id;return id}
+const SHAPES=[['round','동그라미'],['soft','둥근 네모'],['leaf','잎사귀'],['drop','물방울']]; // 도장 모양(상점 «도장 모양 바꾸기»를 산 뒤에만 적용)
+function currentShape(){return OWNED.has('stamp_shapes')&&SHAPES.some(x=>x[0]===S.shape)?S.shape:'round'}
 function applyTheme(){
   const id=currentTheme();
   const root=document.documentElement;
+  const sh=currentShape();
+  if(sh==='round') root.removeAttribute('data-shape'); else root.setAttribute('data-shape',sh);
   if(id==='base') root.removeAttribute('data-theme'); else root.setAttribute('data-theme',id);
   const m=document.querySelector('meta[name="theme-color"]');
   if(m) m.setAttribute('content',THEME_BG[id]);
@@ -1737,6 +1786,19 @@ function toggle(date,id){
   lastPop=date+'|'+id;
   render();
   if(before==='none'&&dayStatus(date)!=='none') confetti();
+  celebrate();
+}
+/* 칸이 열리는 순간(3·28·60일): 축하와 그때 열리는 색을 알린다. 결제 제안은 붙이지 않는다(PRD: 압박하지 않는다) */
+function celebrate(){
+  const cnt=UNLOCKS.filter(x=>stampDays()>=x).length;
+  if(S.cel===undefined){S.cel=cnt;save();return}
+  if(cnt<=S.cel) return;
+  S.cel=cnt;save();
+  const n=UNLOCKS[cnt-1],th=THEMES.find(x=>x.at===n);
+  $('celTitle').textContent='🎉 '+t('unlockSoFar',{n});
+  $('celBody').textContent=t('unlockOpen');
+  $('celGift').textContent=(th?'선물로 새 색 “'+t('theme_'+th.id)+'”도 열렸어요. 설정에서 바꿔 쓸 수 있어요.':'')+(n===NOTES_AT?' 달력에서 날짜마다 할 일·일정도 적을 수 있어요.':'');
+  if(!$('celDlg').open) $('celDlg').showModal();
 }
 
 function applyStatic(){
@@ -1818,7 +1880,59 @@ function renderWeek(){
   let kept=0;
   for(const d in S.log) if(d.startsWith(ym)&&hasStamp(d)) kept++;
   $('stat').textContent=t('monthStat',{n:kept});
+  $('histBtn').hidden=!(OWNED.has('history_view')||notesOpen()); // 상점에서 «지난 기록 돌아보기»를 샀거나 날짜 칸이 열린 뒤에 보인다
+  $('histBtn').textContent=notesOpen()?'📅 달력 · 일정':'📅 지난 기록 돌아보기';
 }
+/* 지난 기록 돌아보기: 달 단위 달력에 그날 찍은 도장 색 점을 보여 준다. 읽기만 한다(날짜 칸에 할 일을 적는 것은 다음 단계) */
+let histMonth=null;
+const NOTES_AT=60; // 날짜 칸(할 일·일정)이 열리는 누적 도장 일수(사용자 결정 2026-11-04)
+const notesOpen=()=>stampDays()>=NOTES_AT;
+let histSel=null;
+function openHist(){const d=new Date();histMonth=new Date(d.getFullYear(),d.getMonth(),1);histSel=notesOpen()?todayStr:null;$('histDlg').showModal();renderHist()}
+function histMin(){
+  let m=String(S.first||todayStr).slice(0,7);
+  for(const d in S.log) if(d.slice(0,7)<m) m=d.slice(0,7);
+  return m;
+}
+function renderHist(){
+  const y=histMonth.getFullYear(),m=histMonth.getMonth(),ym=`${y}-${pad(m+1)}`;
+  $('histTitle').textContent=new Intl.DateTimeFormat(LOCALE[lang],{year:'numeric',month:'long'}).format(histMonth);
+  const wf=new Intl.DateTimeFormat(LOCALE[lang],{weekday:'narrow'}),all=S.slots.concat(S.shelf);
+  let h='',kept=0;
+  for(let i=0;i<7;i++) h+=`<span class="wd">${esc(wf.format(new Date(2023,0,1+i)))}</span>`; // 2023-01-01 은 일요일
+  for(let i=0;i<new Date(y,m,1).getDay();i++) h+='<span class="hd blank"></span>';
+  for(let d=1,n=new Date(y,m+1,0).getDate();d<=n;d++){
+    const ds=`${ym}-${pad(d)}`,on=hasStamp(ds);if(on)kept++;
+    const dots=all.filter(s=>get(ds,s.id)>0).map(s=>`<i class="hdot v${get(ds,s.id)}" style="--c:${s.color}"></i>`).join('');
+    const tag=notesOpen()?'button':'span',has=!!(S.notes&&S.notes[ds]);
+    h+=`<${tag} ${tag==='button'?`type="button" data-d="${ds}" `:''}class="hd ${on?'on':''} ${ds===todayStr?'today':''} ${ds===histSel?'sel':''}">${d}<span class="hdots">${dots}</span>${has?'<span class="nt" aria-label="메모 있음">✎</span>':''}</${tag}>`;
+  }
+  $('histCal').innerHTML=h;
+  $('histCal').querySelectorAll('button.hd').forEach(b=>b.onclick=()=>{histSel=b.dataset.d;renderHist();$('histNoteIn').focus({preventScroll:true})});
+  const nv=notesOpen()&&histSel&&histSel.slice(0,7)===ym;
+  $('histNote').hidden=!nv;
+  if(nv){
+    $('histNoteCap').textContent=new Intl.DateTimeFormat(LOCALE[lang],{month:'long',day:'numeric',weekday:'short'}).format(new Date(histSel+'T00:00'))+' 할 일·일정';
+    if(document.activeElement!==$('histNoteIn')) $('histNoteIn').value=(S.notes&&S.notes[histSel])||'';
+  }
+  $('histStat').textContent=t('monthStat',{n:kept});
+  $('histPrev').disabled=ym<=histMin();const mx=new Date(todayStr+'T00:00');if(notesOpen())mx.setMonth(mx.getMonth()+12);
+  $('histNext').disabled=ym>=`${mx.getFullYear()}-${pad(mx.getMonth()+1)}`; // 일정은 앞으로 열두 달까지
+}
+$('histNoteIn').oninput=()=>{
+  if(!histSel||!notesOpen()) return;
+  const v=$('histNoteIn').value.trim();
+  S.notes=Object.assign({},S.notes);
+  if(v) S.notes[histSel]=v.slice(0,120); else delete S.notes[histSel];
+  save();
+  const c=$('histCal').querySelector(`[data-d="${histSel}"]`),has=!!v;
+  if(c){let m=c.querySelector('.nt');if(has&&!m){m=document.createElement('span');m.className='nt';m.textContent='✎';c.appendChild(m)}else if(!has&&m)m.remove()}
+};
+$('histBtn').onclick=openHist;
+$('histClose').onclick=()=>$('histDlg').close();
+$('histPrev').onclick=()=>{histMonth=new Date(histMonth.getFullYear(),histMonth.getMonth()-1,1);renderHist()};
+$('histNext').onclick=()=>{histMonth=new Date(histMonth.getFullYear(),histMonth.getMonth()+1,1);renderHist()};
+$('celClose').onclick=()=>$('celDlg').close();
 
 function renderEdit(){
   $('edit').hidden=!editOpen;
@@ -2132,6 +2246,15 @@ function renderSettings(){
     S.theme=b.dataset.th;save();render();
     const sel=$('themePills').querySelector('[aria-checked="true"]');if(sel)sel.focus({preventScroll:true});
   });
+  const ownShape=OWNED.has('stamp_shapes');$('shapeRow').hidden=!ownShape;
+  if(ownShape){
+    const cs=currentShape();$('shapeVal').textContent=SHAPES.find(x=>x[0]===cs)[1];
+    $('shapePills').innerHTML=SHAPES.map(([v,nm])=>`<button type="button" class="opt" role="radio" aria-checked="${cs===v}" data-v="${v}"><i class="shp shp-${v}"></i>${esc(nm)}</button>`).join('');
+    $('shapePills').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+      S.shape=b.dataset.v;save();render();
+      const sel=$('shapePills').querySelector('[aria-checked="true"]');if(sel)sel.focus({preventScroll:true});
+    });
+  }
   renderHelperRow();
   renderKeyRow();
 }
@@ -2264,10 +2387,12 @@ async function renderShop(){
     j.items.forEach(it=>{
       const own=j.owned.includes(it.id),row=document.createElement('div');row.className='shopitem';
       const th=it.kind==='theme'?THEMES.find(x=>x.id===it.theme):null;
-      row.innerHTML=(th?`<i class="sw sw-${esc(th.id)}"></i>`:'<i class="sw" style="background:var(--accent)"></i>')+
-        `<span>${esc(it.name)}<small>${it.kind==='quote'?esc(SAMPLE_QUOTE):'색을 바꿔요'}</small></span>`;
+      row.innerHTML=(th?`<i class="sw sw-${esc(th.id)}"></i>`:it.kind==='stamp'?'<i class="shp"></i>':'<i class="sw" style="background:var(--accent)"></i>')+
+        `<span>${esc(it.name)}<small>${it.kind==='quote'?esc(SAMPLE_QUOTE):esc(it.desc||'')}</small></span>`;
       const b=document.createElement('button');b.type='button';b.className='btn';
       if(own&&th){b.textContent='쓰기';b.onclick=()=>{S.theme=th.id;save();render();$('crDlg').close()}}
+      else if(own&&it.id==='history_view'){b.textContent='열기';b.onclick=()=>{$('crDlg').close();openHist()}}
+      else if(own&&it.id==='stamp_shapes'){b.textContent='모양 고르기';b.onclick=()=>{$('crDlg').close();setView(true);$('shapeRow').open=true}}
       else if(own){b.textContent='✔ 가지고 있어요';b.disabled=true}
       else{b.textContent=it.amount.toLocaleString('ko-KR')+'원';b.onclick=()=>buyCredits(it.id)}
       row.appendChild(b);box.appendChild(row);

@@ -30,10 +30,13 @@ PRODUCTS = {
 # 일회 구매(영구 소유) 상품. 크레딧(도우미 대화용 소모형)과 화폐를 나눈다: 이 상품은 크레딧을 쓰지 않고 원 단위로 한 번 산다.
 # kind 'theme' 는 화면의 색 테마(id 는 화면 THEMES 의 id), 'quote' 는 서버가 주는 «오늘의 좋은 말».
 ITEMS = {
-    "theme_ocean": {"id": "theme_ocean", "kind": "theme", "theme": "ocean", "name": "바다 테마", "amount": 1000},
-    "theme_forest": {"id": "theme_forest", "kind": "theme", "theme": "forest", "name": "숲 테마", "amount": 1000},
-    "theme_rose": {"id": "theme_rose", "kind": "theme", "theme": "rose", "name": "장미 테마", "amount": 1000},
-    "daily_quote": {"id": "daily_quote", "kind": "quote", "name": "오늘의 좋은 말", "amount": 1000},
+    "theme_ocean": {"id": "theme_ocean", "kind": "theme", "theme": "ocean", "name": "바다 테마", "amount": 1000, "desc": "색을 바꿔요"},
+    "theme_forest": {"id": "theme_forest", "kind": "theme", "theme": "forest", "name": "숲 테마", "amount": 1000, "desc": "색을 바꿔요"},
+    "theme_rose": {"id": "theme_rose", "kind": "theme", "theme": "rose", "name": "장미 테마", "amount": 1000, "desc": "색을 바꿔요"},
+    "daily_quote": {"id": "daily_quote", "kind": "quote", "name": "오늘의 좋은 말", "amount": 1000, "desc": ""},
+    # kind 'feature'/'stamp' 는 화면에서만 열리고 닫히는 기능이다(데이터가 이 브라우저에 있어 서버가 막을 것이 없다)
+    "history_view": {"id": "history_view", "kind": "feature", "name": "지난 기록 돌아보기", "amount": 1000, "desc": "지난 달의 도장을 달력으로 돌아봐요"},
+    "stamp_shapes": {"id": "stamp_shapes", "kind": "stamp", "name": "도장 모양 바꾸기", "amount": 1000, "desc": "동그라미 말고 네 가지 모양 중에 골라요"},
 }
 
 # 오늘의 좋은 말(날짜로 하나를 고름). 유명인 말을 옮기지 않고 이 앱이 쓴 짧은 응원 문장이다.

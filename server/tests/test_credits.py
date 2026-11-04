@@ -292,3 +292,26 @@ def test_quote_of_day_is_stable_per_day():
     import datetime
     d = datetime.date(2026, 11, 4)
     assert creditlib.quote_of_day(d) == creditlib.quote_of_day(d) and len(set(creditlib.QUOTES)) == len(creditlib.QUOTES)
+
+
+# ---- 화면 기능 상품: 지난 기록 돌아보기, 도장 모양 바꾸기 ----
+def test_feature_items_listed_with_description(env):
+    client, store, toss = env
+    cid = str(uuid.uuid4())
+    items = {i["id"]: i for i in client.get("/api/shop", headers=hdr(cid)).json()["items"]}
+    assert items["history_view"]["kind"] == "feature" and items["stamp_shapes"]["kind"] == "stamp"
+    assert all(i["desc"] for k, i in items.items() if k != "daily_quote")  # 좋은 말은 화면이 예시 문장을 직접 보여 준다
+
+
+def test_feature_item_purchase_grants_ownership_once(env):
+    client, store, toss = env
+    cid = str(uuid.uuid4())
+    client.get("/api/credits", headers=hdr(cid))
+    before = store.balance(cid)
+    o, r = pay_item(client, cid, "history_view", toss)
+    assert r.status_code == 200 and r.json()["kind"] == "item" and o["amount"] == creditlib.ITEMS["history_view"]["amount"]
+    assert store.owned(cid) == ["history_view"] and store.balance(cid) == before
+    again = client.post("/api/orders", json={"productId": "history_view"}, headers=hdr(cid))
+    assert again.status_code == 409
+    pay_item(client, cid, "stamp_shapes", toss)
+    assert store.owned(cid) == ["history_view", "stamp_shapes"]
