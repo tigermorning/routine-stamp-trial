@@ -266,14 +266,41 @@ def test_owned_item_cannot_be_ordered_again(env):
     assert r.status_code == 409 and r.json()["error"] == "already_owned"
 
 
-def test_quote_requires_ownership_on_server(env):
+SAMPLE_QUOTES = [
+    {"ko": "천 리 길도 한 걸음부터.", "author": "한국 속담", "source": "견본", "source_url": "https://example.test/1", "verified": True},
+    {"ko": "시작이 반이다.", "author": "한국 속담", "source": "견본", "source_url": "https://example.test/2", "verified": True},
+]
+
+
+def test_quote_requires_ownership_and_comes_from_the_quote_db(env):
     client, store, toss = env
+    store.seed_quotes(SAMPLE_QUOTES)
     cid = str(uuid.uuid4())
     assert client.get("/api/quote", headers=hdr(cid)).status_code == 403
     pay_item(client, cid, "daily_quote", toss)
     r = client.get("/api/quote", headers=hdr(cid))
-    assert r.status_code == 200 and r.json()["quote"] == creditlib.quote_of_day()
+    j = r.json()
+    import quotes
+    pool = {q["ko"] for q in SAMPLE_QUOTES} | {q["ko"] for q in quotes.load_quotes()}  # 저장소가 quotes.json도 함께 싣는다
+    assert r.status_code == 200 and j["text"] in pool and j["author"] and j["source_url"]
     assert client.get("/api/quote", headers=hdr(str(uuid.uuid4()))).status_code == 403  # 남의 소유는 쓸 수 없다
+
+
+def test_quote_exclude_skips_recently_seen_and_sample_is_public(env):
+    client, store, _ = env
+    store.seed_quotes(SAMPLE_QUOTES)
+    first = client.get("/api/quote/sample").json()  # 소유 확인 없이 미리 보기
+    other = client.get("/api/quote/sample", params={"exclude": str(first["id"])}).json()
+    assert other["id"] != first["id"]
+    assert client.get("/api/quote/sample", params={"exclude": "1,2"}).status_code == 200  # 다 피하면 전체에서 뽑는다
+
+
+def test_quote_file_has_only_verified_entries_with_sources():
+    import quotes
+    items = quotes.load_quotes()
+    for i in items:
+        assert i["verified"] is True and i["author"] and i["source"] and i["source_url"].startswith("http")
+    assert len({(i["ko"], i["author"]) for i in items}) == len(items)  # 같은 문장이 두 번 들어 있지 않다
 
 
 def test_failed_item_payment_grants_nothing(env):
@@ -291,11 +318,6 @@ def test_item_price_comes_from_server_table(env):
     r = client.post("/api/payments/confirm", json={"paymentKey": "pk_y", "orderId": o["orderId"], "amount": "1"}, headers=hdr(cid))
     assert r.status_code == 400 and store.owned(cid) == [] and toss.calls == []
 
-
-def test_quote_of_day_is_stable_per_day():
-    import datetime
-    d = datetime.date(2026, 11, 4)
-    assert creditlib.quote_of_day(d) == creditlib.quote_of_day(d) and len(set(creditlib.QUOTES)) == len(creditlib.QUOTES)
 
 
 # ---- 화면 기능 상품: 지난 기록 돌아보기, 도장 모양 바꾸기 ----
@@ -443,3 +465,11 @@ def test_old_color_themes_are_free_and_new_design_themes_are_sold():
     html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
     for tid in ("notebook", "retro", "cloud"):
         assert ":root[data-theme=\"" + tid + "\"]" in html  # 화면에 같은 id 의 디자인 CSS 가 있다
+
+
+def test_space_and_donut_design_themes_are_sold_with_matching_css():
+    assert {"theme_space", "theme_donut"} <= set(creditlib.ITEMS)
+    html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
+    for tid in ("space", "donut"):
+        assert ":root[data-theme=\"" + tid + "\"]" in html
+    assert "--bg:#081033" in html and "%23ff7b1c" in html and "%232d6cff" in html  # 우주 테마: 짙은 남색 바탕, 쨍한 주황 행성과 파란 행성 색이 들어 있다

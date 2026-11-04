@@ -38,7 +38,9 @@ ITEMS = {
     "theme_notebook": {"id": "theme_notebook", "kind": "theme", "theme": "notebook", "name": "공책 디자인", "amount": 1000, "desc": "줄 공책 종이 느낌으로 배경과 카드, 버튼 모양까지 바꿔요"},
     "theme_retro": {"id": "theme_retro", "kind": "theme", "theme": "retro", "name": "레트로 디자인", "amount": 1000, "desc": "도트 배경과 굵은 테두리의 옛날 게임 느낌으로 바꿔요"},
     "theme_cloud": {"id": "theme_cloud", "kind": "theme", "theme": "cloud", "name": "구름 디자인", "amount": 1000, "desc": "하늘빛 그라데이션과 말랑한 유리 카드 느낌으로 바꿔요"},
-    "daily_quote": {"id": "daily_quote", "kind": "quote", "name": "오늘의 좋은 말", "amount": 1000, "desc": ""},
+    "theme_space": {"id": "theme_space", "kind": "theme", "theme": "space", "name": "우주 행성 디자인", "amount": 1000, "desc": "검은 우주 바탕에 빈티지한 주황 행성과 별이 떠 있어요"},
+    "theme_donut": {"id": "theme_donut", "kind": "theme", "theme": "donut", "name": "도넛 디자인", "amount": 1000, "desc": "분홍 스프링클 바탕과 도넛, 초콜릿색 둥근 카드로 바꿔요"},
+    "daily_quote": {"id": "daily_quote", "kind": "quote", "name": "오늘의 한마디", "amount": 1000, "desc": "실제 격언과 속담을 포춘쿠키로 뽑아 봐요"},
     # kind 'feature'/'stamp' 는 화면에서만 열리고 닫히는 기능이다(데이터가 이 브라우저에 있어 서버가 막을 것이 없다)
     "history_view": {"id": "history_view", "kind": "feature", "name": "지난 기록 돌아보기", "amount": 1000, "desc": "지난 달의 도장을 달력으로 돌아봐요"},
     "stamp_shapes": {"id": "stamp_shapes", "kind": "stamp", "name": "도장 모양 바꾸기", "amount": 1000, "desc": "동그라미 말고 네 가지 모양 중에 골라요"},
@@ -64,27 +66,6 @@ ITEMS = {
     "unlock_60": {"id": "unlock_60", "kind": "unlock", "at": 60, "name": "60일째 열림 건너뛰기", "amount": 3500, "desc": "6번째 칸, 햇살 색, 달력·일정 메모가 바로 열려요"},
     "unlock_all": {"id": "unlock_all", "kind": "unlock", "at": 0, "name": "모든 열림 건너뛰기", "amount": 6500, "desc": "3·28·60일째 열림을 한 번에 열어요(개별로 사는 것보다 1,000원 저렴)"},
 }
-
-# 오늘의 좋은 말(날짜로 하나를 고름). 유명인 말을 옮기지 않고 이 앱이 쓴 짧은 응원 문장이다.
-QUOTES = [
-    "오늘 한 칸이면 충분해요.", "빠뜨린 날이 있어도 쌓은 도장은 그대로예요.", "작게 해도 한 것은 한 거예요.",
-    "어제보다 한 칸만 더 가벼워지면 돼요.", "쉬어 간 날도 내일의 힘이 돼요.", "완벽한 하루보다 이어지는 하루가 좋아요.",
-    "시작이 반이라면, 오늘 도장이 그 반이에요.", "천천히 쌓는 사람이 오래 가요.", "오늘의 나에게 도장 하나 선물해요.",
-    "해야 할 일보다 할 수 있는 일부터요.", "마음이 무거운 날엔 가장 쉬운 칸부터요.", "도장은 쌓이고, 쌓인 것은 사라지지 않아요.",
-    "비교는 어제의 나하고만 해요.", "조금씩, 그래도 계속.", "오늘 해낸 것을 먼저 세어 봐요.",
-    "쉬운 날도 어려운 날도 한 칸은 한 칸이에요.", "지금 이 순간이 새로 시작하기 좋은 때예요.", "나를 재촉하지 않아도 괜찮아요.",
-    "한 칸 한 칸이 모여 나만의 길이 돼요.", "오늘은 오늘만큼만 해요.", "해낸 날이 많아질수록 마음도 단단해져요.",
-    "잠깐 멈춰도 길은 그대로 있어요.", "작은 도장이 큰 하루를 만들어요.", "오늘의 나는 어제보다 한 걸음 앞에 있어요.",
-    "잘하고 있어요, 지금 이대로도.", "기분이 어떻든 도장은 찍을 수 있어요.", "조급해하지 말고 꾸준히 가요.",
-    "오늘의 한 칸이 내일의 습관이 돼요.", "이어 가는 마음이 가장 큰 재주예요.", "오늘도 여기 와 준 것만으로 반은 했어요.",
-    "내 속도가 내 정답이에요.",
-]
-
-
-def quote_of_day(day=None):
-    d = day or dt.date.today()
-    return QUOTES[d.toordinal() % len(QUOTES)]
-
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS orders (
@@ -127,6 +108,16 @@ CREATE TABLE IF NOT EXISTS chat_usage (
   n INTEGER NOT NULL,
   PRIMARY KEY (scope, key, day)
 );
+CREATE TABLE IF NOT EXISTS quotes (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  ko TEXT NOT NULL,
+  original TEXT,
+  author TEXT NOT NULL,
+  source TEXT NOT NULL,
+  source_url TEXT NOT NULL,
+  category TEXT,
+  UNIQUE (ko, author)
+);
 """
 
 
@@ -161,6 +152,11 @@ class Store:
             c.executescript(SCHEMA)
         finally:
             c.close()
+        try:  # 서버를 켤 때마다 격언 파일의 검증된 항목을 DB 표에 넣는다
+            import quotes as _quotes
+            self.seed_quotes(_quotes.load_quotes())
+        except Exception:
+            pass
 
     def _conn(self):
         c = sqlite3.connect(self.path, timeout=15, isolation_level=None)  # 트랜잭션은 직접 BEGIN 한다
@@ -213,6 +209,34 @@ class Store:
             if c.in_transaction:
                 c.execute("ROLLBACK")
             raise
+        finally:
+            c.close()
+
+    # ---- 오늘의 한마디(실제 격언 DB) ----
+    def seed_quotes(self, items):
+        """검증된 격언을 표에 넣는다(같은 문장·같은 사람은 한 번만). 넣은 개수를 돌려준다."""
+        c = self._conn()
+        try:
+            n = 0
+            for i in items:
+                cur = c.execute("INSERT OR IGNORE INTO quotes(ko, original, author, source, source_url, category) VALUES (?,?,?,?,?,?)",
+                                (i["ko"], i.get("original", ""), i["author"], i["source"], i["source_url"], i.get("category", "")))
+                n += cur.rowcount
+            return n
+        finally:
+            c.close()
+
+    def random_quote(self, exclude=()):
+        """무작위 한 개. exclude 의 id 는 피한다(다 피하면 전체에서 뽑는다). 표가 비었으면 None."""
+        c = self._conn()
+        try:
+            ex = [int(x) for x in exclude if str(x).isdigit()][:50]
+            row = None
+            if ex:
+                row = c.execute("SELECT id, ko, author, source, source_url, category FROM quotes WHERE id NOT IN (%s) ORDER BY RANDOM() LIMIT 1" % ",".join("?" * len(ex)), ex).fetchone()
+            if row is None:
+                row = c.execute("SELECT id, ko, author, source, source_url, category FROM quotes ORDER BY RANDOM() LIMIT 1").fetchone()
+            return None if row is None else {"id": row["id"], "text": row["ko"], "author": row["author"], "source": row["source"], "source_url": row["source_url"], "category": row["category"]}
         finally:
             c.close()
 

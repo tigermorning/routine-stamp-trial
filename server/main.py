@@ -217,9 +217,13 @@ def shop(request: Request, store=Depends(get_credit_store)):
     return JSONResponse({"items": list(creditlib.ITEMS.values()), "owned": store.owned(cid)}, headers={"Cache-Control": "no-store"})
 
 
+def _exclude(request: Request):
+    return [x for x in request.query_params.get("exclude", "").split(",") if x.strip().isdigit()][:50]
+
+
 @app.get("/api/quote")
 def quote(request: Request, store=Depends(get_credit_store)):
-    """오늘의 좋은 말. «오늘의 좋은 말» 상품을 산 사람에게만 준다(서버가 소유를 확인)."""
+    """오늘의 한마디: 실제 격언·속담 DB 에서 무작위 한 개(exclude=최근에 본 id 들은 피함). «오늘의 한마디» 상품을 산 사람에게만 준다(서버가 소유를 확인)."""
     if store is None:
         return credits_off()
     cid = client_id_of(request)
@@ -227,7 +231,23 @@ def quote(request: Request, store=Depends(get_credit_store)):
         return JSONResponse({"error": "clientId"}, status_code=400)
     if not store.has_item(cid, "daily_quote"):
         return JSONResponse({"error": "not_owned"}, status_code=403)
-    return JSONResponse({"quote": creditlib.quote_of_day()}, headers={"Cache-Control": "no-store"})
+    q = store.random_quote(_exclude(request))
+    if q is None:
+        return JSONResponse({"error": "no_quotes"}, status_code=503)
+    return JSONResponse(q, headers={"Cache-Control": "no-store"})
+
+
+@app.get("/api/quote/sample")
+def quote_sample(request: Request, store=Depends(get_credit_store)):
+    """사기 전 미리 보기용 무작위 격언 하나(소유 확인 없음, 같은 DB 에서 뽑는다)."""
+    if store is None:
+        return credits_off()
+    if limited(client_ip(request), "quote-sample", 30, 60):
+        return JSONResponse({"error": "busy"}, status_code=429)
+    q = store.random_quote(_exclude(request))
+    if q is None:
+        return JSONResponse({"error": "no_quotes"}, status_code=503)
+    return JSONResponse(q, headers={"Cache-Control": "no-store"})
 
 
 class OrderRequest(BaseModel):

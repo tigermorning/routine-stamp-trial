@@ -96,14 +96,34 @@ h2{font-family:var(--display);font-weight:400;font-size:19px;margin:0}
 :root[data-theme="retro"] body{background-image:radial-gradient(rgba(0,0,0,.28) 1.3px,transparent 1.5px);background-size:18px 18px}
 :root[data-theme="retro"] .card{border-radius:4px;border:3px solid #222;box-shadow:5px 5px 0 #222}
 :root[data-theme="retro"] .btn{border-radius:4px;border:3px solid #222;box-shadow:3px 3px 0 #222}
-:root[data-theme="cloud"]{--bg:#e3f0ff;--card:rgba(255,255,255,.74);--ink:#26335c;--soft:#566594;--line:#c4d0f5;--accent:#6f8fff;--accent-ink:#0a1650;--shadow:0 12px 32px rgba(90,110,200,.22);--blob1:rgba(255,255,255,.7);--blob2:rgba(214,190,255,.5);color-scheme:light}
-:root[data-theme="cloud"] body{background-image:linear-gradient(160deg,#dcecff 0%,#efe4ff 55%,#ffe8f3 100%);background-attachment:fixed}
+:root[data-theme="cloud"]{--bg:#e3f0ff;--card:rgba(255,255,255,.58);--ink:#26335c;--soft:#566594;--line:#c4d0f5;--accent:#6f8fff;--accent-ink:#0a1650;--shadow:0 12px 32px rgba(90,110,200,.22);--blob1:rgba(255,255,255,.7);--blob2:rgba(214,190,255,.5);color-scheme:light}
+/* 구름 디자인: 하늘 그라데이션 위에 흰 구름 모양을 깔고 천천히 흘려 보낸다(움직임 줄이기 설정에서는 멈춤) */
+:root[data-theme="cloud"] body{background-image:linear-gradient(180deg,#a9d4ff 0%,#cfe6ff 42%,#ece6ff 78%,#ffe8f3 100%);background-attachment:fixed}
+:root[data-theme="cloud"] body::before{content:"";position:fixed;inset:-6vw;z-index:-1;pointer-events:none;background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20200%20100'%3E%3Cg%20fill='white'%20fill-opacity='.95'%3E%3Ccircle%20cx='58'%20cy='62'%20r='26'/%3E%3Ccircle%20cx='92'%20cy='46'%20r='34'/%3E%3Ccircle%20cx='134'%20cy='58'%20r='28'/%3E%3Ccircle%20cx='162'%20cy='68'%20r='20'/%3E%3Crect%20x='38'%20y='62'%20width='144'%20height='28'%20rx='14'/%3E%3C/g%3E%3C/svg%3E") 6% 6%/250px auto no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20200%20100'%3E%3Cg%20fill='white'%20fill-opacity='.95'%3E%3Ccircle%20cx='58'%20cy='62'%20r='26'/%3E%3Ccircle%20cx='92'%20cy='46'%20r='34'/%3E%3Ccircle%20cx='134'%20cy='58'%20r='28'/%3E%3Ccircle%20cx='162'%20cy='68'%20r='20'/%3E%3Crect%20x='38'%20y='62'%20width='144'%20height='28'%20rx='14'/%3E%3C/g%3E%3C/svg%3E") 90% 14%/190px auto no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20200%20100'%3E%3Cg%20fill='white'%20fill-opacity='.95'%3E%3Ccircle%20cx='58'%20cy='62'%20r='26'/%3E%3Ccircle%20cx='92'%20cy='46'%20r='34'/%3E%3Ccircle%20cx='134'%20cy='58'%20r='28'/%3E%3Ccircle%20cx='162'%20cy='68'%20r='20'/%3E%3Crect%20x='38'%20y='62'%20width='144'%20height='28'%20rx='14'/%3E%3C/g%3E%3C/svg%3E") 16% 36%/320px auto no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20200%20100'%3E%3Cg%20fill='white'%20fill-opacity='.95'%3E%3Ccircle%20cx='58'%20cy='62'%20r='26'/%3E%3Ccircle%20cx='92'%20cy='46'%20r='34'/%3E%3Ccircle%20cx='134'%20cy='58'%20r='28'/%3E%3Ccircle%20cx='162'%20cy='68'%20r='20'/%3E%3Crect%20x='38'%20y='62'%20width='144'%20height='28'%20rx='14'/%3E%3C/g%3E%3C/svg%3E") 86% 50%/270px auto no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20200%20100'%3E%3Cg%20fill='white'%20fill-opacity='.95'%3E%3Ccircle%20cx='58'%20cy='62'%20r='26'/%3E%3Ccircle%20cx='92'%20cy='46'%20r='34'/%3E%3Ccircle%20cx='134'%20cy='58'%20r='28'/%3E%3Ccircle%20cx='162'%20cy='68'%20r='20'/%3E%3Crect%20x='38'%20y='62'%20width='144'%20height='28'%20rx='14'/%3E%3C/g%3E%3C/svg%3E") 6% 66%/230px auto no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20200%20100'%3E%3Cg%20fill='white'%20fill-opacity='.95'%3E%3Ccircle%20cx='58'%20cy='62'%20r='26'/%3E%3Ccircle%20cx='92'%20cy='46'%20r='34'/%3E%3Ccircle%20cx='134'%20cy='58'%20r='28'/%3E%3Ccircle%20cx='162'%20cy='68'%20r='20'/%3E%3Crect%20x='38'%20y='62'%20width='144'%20height='28'%20rx='14'/%3E%3C/g%3E%3C/svg%3E") 68% 80%/340px auto no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20200%20100'%3E%3Cg%20fill='white'%20fill-opacity='.95'%3E%3Ccircle%20cx='58'%20cy='62'%20r='26'/%3E%3Ccircle%20cx='92'%20cy='46'%20r='34'/%3E%3Ccircle%20cx='134'%20cy='58'%20r='28'/%3E%3Ccircle%20cx='162'%20cy='68'%20r='20'/%3E%3Crect%20x='38'%20y='62'%20width='144'%20height='28'%20rx='14'/%3E%3C/g%3E%3C/svg%3E") 40% 97%/210px auto no-repeat}
+@media (prefers-reduced-motion:no-preference){:root[data-theme="cloud"] body::before{animation:cloudDrift 60s ease-in-out infinite alternate}}
+@keyframes cloudDrift{from{transform:translateX(-4vw)}to{transform:translateX(4vw)}}
 :root[data-theme="cloud"] .card{border-radius:34px;border:1.5px solid rgba(255,255,255,.95);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 :root[data-theme="cloud"] .btn{background:rgba(255,255,255,.85)}
 :root[data-theme="cloud"] dialog{background:#f7f9ff}
 .sw-notebook{background:repeating-linear-gradient(0deg,#fffdf4 0 3px,#9ab3e8 3px 4px);border-left:3px solid #e59a9a}
 .sw-retro{background:linear-gradient(135deg,#ffefb8 50%,#ff5d5d 50%);border:2px solid #222;border-radius:3px}
-.sw-cloud{background:linear-gradient(135deg,#dcecff,#efe4ff 55%,#ffe8f3);border-radius:50%}
+/* 우주 행성 디자인(유료): 빈티지 레트로 포스터 느낌. 아주 짙은 남색에서 쨍한 코발트 블루로 밝아지는 우주 바탕에 쨍한 주황 행성(크림·파랑 고리)과 푸른 행성, 별, 하프톤 점 */
+:root[data-theme="space"]{--bg:#081033;--card:rgba(9,20,78,.8);--ink:#fff1dc;--soft:#b4c4ff;--line:#2f56d6;--accent:#ff7b1c;--accent-ink:#1a0900;--shadow:0 10px 28px rgba(0,8,50,.6);--blob1:transparent;--blob2:transparent;--sun-bg:#a34400;--sun-ink:#ffe9cf;color-scheme:dark}
+:root[data-theme="space"] body{background-color:#081033;background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='16'%20height='16'%3E%3Ccircle%20cx='4'%20cy='4'%20r='1.3'%20fill='white'%20fill-opacity='.07'/%3E%3Ccircle%20cx='12'%20cy='12'%20r='1.3'%20fill='white'%20fill-opacity='.07'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='240'%20height='240'%3E%0A%3Cg%20fill='%23fff1dc'%3E%3Ccircle%20cx='20'%20cy='30'%20r='1.4'/%3E%3Ccircle%20cx='120'%20cy='54'%20r='1.6'/%3E%3Ccircle%20cx='222'%20cy='70'%20r='1.3'/%3E%3Ccircle%20cx='96'%20cy='120'%20r='1.5'/%3E%3Ccircle%20cx='14'%20cy='168'%20r='1.2'/%3E%3Ccircle%20cx='176'%20cy='210'%20r='1.3'/%3E%3Ccircle%20cx='64'%20cy='196'%20r='1.6'/%3E%3Ccircle%20cx='208'%20cy='140'%20r='1.7'/%3E%3C/g%3E%0A%3Cg%20fill='%23ff9b3d'%3E%3Cpath%20d='M70%2020l2.2%205.4%205.4%202.2-5.4%202.2L70%2035l-2.2-5.2-5.4-2.2%205.4-2.2z'/%3E%3Cpath%20d='M180%20108l2%204.8%204.8%202-4.8%202-2%204.8-2-4.8-4.8-2%204.8-2z'/%3E%3Cpath%20d='M40%20120l1.8%204.4%204.4%201.8-4.4%201.8L40%20132l-1.8-4-4.4-1.8%204.4-1.8z'/%3E%3C/g%3E%0A%3Cg%20fill='%237fb2ff'%3E%3Cpath%20d='M150%20180l2%204.8%204.8%202-4.8%202-2%204.8-2-4.8-4.8-2%204.8-2z'/%3E%3Cpath%20d='M222%2020l1.6%204%204%201.6-4%201.6-1.6%204-1.6-4-4-1.6%204-1.6z'/%3E%3C/g%3E%3C/svg%3E"),linear-gradient(180deg,#040820 0%,#0a1a62 52%,#1a4fd6 100%);background-size:16px 16px,240px 240px,auto;background-attachment:fixed}
+:root[data-theme="space"] body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3Cdefs%3E%3CclipPath%20id='c'%3E%3Ccircle%20cx='150'%20cy='150'%20r='92'/%3E%3C/clipPath%3E%3C/defs%3E%0A%3Cpath%20d='M8%20150a142%2036%200%200%201%20284%200'%20fill='none'%20stroke='%23ffd9a0'%20stroke-width='11'%20transform='rotate%28-20%20150%20150%29'/%3E%0A%3Cpath%20d='M26%20150a124%2029%200%200%201%20248%200'%20fill='none'%20stroke='%232d6cff'%20stroke-width='4'%20transform='rotate%28-20%20150%20150%29'/%3E%0A%3Ccircle%20cx='150'%20cy='150'%20r='92'%20fill='%23ff7b1c'/%3E%0A%3Cg%20clip-path='url%28%23c%29'%3E%3Crect%20x='50'%20y='94'%20width='200'%20height='16'%20fill='%23e8560a'/%3E%3Crect%20x='50'%20y='126'%20width='200'%20height='30'%20fill='%23ffb347'/%3E%3Crect%20x='50'%20y='172'%20width='200'%20height='14'%20fill='%23e8560a'/%3E%0A%3Ccircle%20cx='214'%20cy='196'%20r='96'%20fill='%237a2a00'%20opacity='.3'/%3E%3C/g%3E%0A%3Ccircle%20cx='112'%20cy='112'%20r='13'%20fill='%23e8560a'/%3E%3Ccircle%20cx='186'%20cy='104'%20r='7'%20fill='%23e8560a'/%3E%3Ccircle%20cx='128'%20cy='198'%20r='8'%20fill='%23c94a08'/%3E%0A%3Cpath%20d='M8%20150a142%2036%200%200%200%20284%200'%20fill='none'%20stroke='%23ffd9a0'%20stroke-width='11'%20transform='rotate%28-20%20150%20150%29'/%3E%0A%3Cpath%20d='M26%20150a124%2029%200%200%200%20248%200'%20fill='none'%20stroke='%232d6cff'%20stroke-width='4'%20transform='rotate%28-20%20150%20150%29'/%3E%3C/svg%3E") right -10px top -50px/300px auto no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20200%20200'%3E%3Cdefs%3E%3CclipPath%20id='b'%3E%3Ccircle%20cx='100'%20cy='100'%20r='58'/%3E%3C/clipPath%3E%3C/defs%3E%0A%3Cpath%20d='M10%20100a92%2022%200%200%201%20180%200'%20fill='none'%20stroke='%23ff7b1c'%20stroke-width='8'%20transform='rotate%2818%20100%20100%29'/%3E%0A%3Ccircle%20cx='100'%20cy='100'%20r='58'%20fill='%232d6cff'/%3E%0A%3Cg%20clip-path='url%28%23b%29'%3E%3Crect%20x='30'%20y='70'%20width='140'%20height='12'%20fill='%237fb2ff'/%3E%3Crect%20x='30'%20y='96'%20width='140'%20height='20'%20fill='%231a45c4'/%3E%3Crect%20x='30'%20y='124'%20width='140'%20height='10'%20fill='%237fb2ff'/%3E%3Ccircle%20cx='132'%20cy='128'%20r='60'%20fill='%23001a66'%20opacity='.3'/%3E%3C/g%3E%0A%3Ccircle%20cx='80'%20cy='84'%20r='7'%20fill='%231a45c4'/%3E%0A%3Cpath%20d='M10%20100a92%2022%200%200%200%20180%200'%20fill='none'%20stroke='%23ff7b1c'%20stroke-width='8'%20transform='rotate%2818%20100%20100%29'/%3E%3C/svg%3E") left -24px top 64px/150px auto no-repeat}
+@media (max-width:560px){:root[data-theme="space"] body::before{background-position:right -46px top -34px,left -30px top 74px;background-size:220px auto,110px auto}}
+:root[data-theme="space"] dialog{background:#0d1a5c;color:#fff1dc}
+:root[data-theme="space"] #pvBar{background:#0d1a5c;color:#fff1dc}
+:root[data-theme="space"] .btn{border-color:#ff7b1c;background:rgba(9,20,78,.9)}
+/* 도넛 디자인(유료): 분홍 바탕에 스프링클, 모서리에 도넛, 초콜릿색 굵은 테두리의 둥근 카드와 버튼 */
+:root[data-theme="donut"]{--bg:#ffe3ec;--card:rgba(255,248,239,.8);--ink:#5a3a2a;--soft:#8b6b5a;--line:#e8c9b8;--accent:#ff6fa5;--accent-ink:#3a0f20;--shadow:0 6px 0 rgba(139,90,60,.28);--blob1:transparent;--blob2:transparent;color-scheme:light}
+:root[data-theme="donut"] body{background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='140'%20height='140'%3E%3Cg%20stroke-linecap='round'%20stroke-width='4'%20opacity='.55'%3E%0A%3Cpath%20d='M16%2020l8-3'%20stroke='%23ff6fa5'/%3E%3Cpath%20d='M72%2014l3%208'%20stroke='%237cc6ff'/%3E%3Cpath%20d='M112%2036l8%203'%20stroke='%23ffd166'/%3E%3Cpath%20d='M40%2064l7%204'%20stroke='%23a8e6a1'/%3E%0A%3Cpath%20d='M96%2084l-3%208'%20stroke='%23ff6fa5'/%3E%3Cpath%20d='M20%20108l8-2'%20stroke='%23ffd166'/%3E%3Cpath%20d='M64%20118l7%203'%20stroke='%237cc6ff'/%3E%3Cpath%20d='M128%20112l-2%208'%20stroke='%23a8e6a1'/%3E%3C/g%3E%3C/svg%3E");background-size:140px 140px}
+:root[data-theme="donut"] body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20120%20120'%3E%3Ccircle%20cx='60'%20cy='60'%20r='52'%20fill='%23e0a964'/%3E%3Cpath%20d='M60%2013c21%200%2037%2015%2041%2033%204%2020-6%2040-25%2048-14%206-31%204-43-6C20%2078%2015%2060%2019%2046%2025%2028%2041%2013%2060%2013z'%20fill='%23ff8fb8'/%3E%3Ccircle%20cx='60'%20cy='60'%20r='16'%20fill='%23ffe3ec'/%3E%3Ccircle%20cx='60'%20cy='60'%20r='16'%20fill='none'%20stroke='%23e0a964'%20stroke-width='4'/%3E%3Cg%20stroke-linecap='round'%20stroke-width='4.5'%3E%3Cpath%20d='M34%2038l6-3'%20stroke='%23fff'/%3E%3Cpath%20d='M82%2034l5%204'%20stroke='%237cc6ff'/%3E%3Cpath%20d='M92%2058l1%207'%20stroke='%23fff3b0'/%3E%3Cpath%20d='M80%2086l-6%203'%20stroke='%23fff'/%3E%3Cpath%20d='M44%2090l-5-4'%20stroke='%237cc6ff'/%3E%3Cpath%20d='M26%2062l-1-6'%20stroke='%23fff3b0'/%3E%3Cpath%20d='M58%2024l7%201'%20stroke='%23a8e6a1'/%3E%3Cpath%20d='M62%2098l7-2'%20stroke='%23fff3b0'/%3E%3C/g%3E%3C/svg%3E") 94% 4%/150px auto no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20120%20120'%3E%3Ccircle%20cx='60'%20cy='60'%20r='52'%20fill='%23e0a964'/%3E%3Cpath%20d='M60%2013c21%200%2037%2015%2041%2033%204%2020-6%2040-25%2048-14%206-31%204-43-6C20%2078%2015%2060%2019%2046%2025%2028%2041%2013%2060%2013z'%20fill='%238b5a3c'/%3E%3Ccircle%20cx='60'%20cy='60'%20r='16'%20fill='%23ffe3ec'/%3E%3Ccircle%20cx='60'%20cy='60'%20r='16'%20fill='none'%20stroke='%23e0a964'%20stroke-width='4'/%3E%3Cg%20stroke-linecap='round'%20stroke-width='4.5'%3E%3Cpath%20d='M34%2038l6-3'%20stroke='%23fff'/%3E%3Cpath%20d='M82%2034l5%204'%20stroke='%237cc6ff'/%3E%3Cpath%20d='M92%2058l1%207'%20stroke='%23fff3b0'/%3E%3Cpath%20d='M80%2086l-6%203'%20stroke='%23fff'/%3E%3Cpath%20d='M44%2090l-5-4'%20stroke='%237cc6ff'/%3E%3Cpath%20d='M26%2062l-1-6'%20stroke='%23fff3b0'/%3E%3Cpath%20d='M58%2024l7%201'%20stroke='%23a8e6a1'/%3E%3Cpath%20d='M62%2098l7-2'%20stroke='%23fff3b0'/%3E%3C/g%3E%3C/svg%3E") 2% 44%/120px auto no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20120%20120'%3E%3Ccircle%20cx='60'%20cy='60'%20r='52'%20fill='%23e0a964'/%3E%3Cpath%20d='M60%2013c21%200%2037%2015%2041%2033%204%2020-6%2040-25%2048-14%206-31%204-43-6C20%2078%2015%2060%2019%2046%2025%2028%2041%2013%2060%2013z'%20fill='%239fe3c4'/%3E%3Ccircle%20cx='60'%20cy='60'%20r='16'%20fill='%23ffe3ec'/%3E%3Ccircle%20cx='60'%20cy='60'%20r='16'%20fill='none'%20stroke='%23e0a964'%20stroke-width='4'/%3E%3Cg%20stroke-linecap='round'%20stroke-width='4.5'%3E%3Cpath%20d='M34%2038l6-3'%20stroke='%23fff'/%3E%3Cpath%20d='M82%2034l5%204'%20stroke='%237cc6ff'/%3E%3Cpath%20d='M92%2058l1%207'%20stroke='%23fff3b0'/%3E%3Cpath%20d='M80%2086l-6%203'%20stroke='%23fff'/%3E%3Cpath%20d='M44%2090l-5-4'%20stroke='%237cc6ff'/%3E%3Cpath%20d='M26%2062l-1-6'%20stroke='%23fff3b0'/%3E%3Cpath%20d='M58%2024l7%201'%20stroke='%23a8e6a1'/%3E%3Cpath%20d='M62%2098l7-2'%20stroke='%23fff3b0'/%3E%3C/g%3E%3C/svg%3E") 90% 70%/170px auto no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20120%20120'%3E%3Ccircle%20cx='60'%20cy='60'%20r='52'%20fill='%23e0a964'/%3E%3Cpath%20d='M60%2013c21%200%2037%2015%2041%2033%204%2020-6%2040-25%2048-14%206-31%204-43-6C20%2078%2015%2060%2019%2046%2025%2028%2041%2013%2060%2013z'%20fill='%23ff8fb8'/%3E%3Ccircle%20cx='60'%20cy='60'%20r='16'%20fill='%23ffe3ec'/%3E%3Ccircle%20cx='60'%20cy='60'%20r='16'%20fill='none'%20stroke='%23e0a964'%20stroke-width='4'/%3E%3Cg%20stroke-linecap='round'%20stroke-width='4.5'%3E%3Cpath%20d='M34%2038l6-3'%20stroke='%23fff'/%3E%3Cpath%20d='M82%2034l5%204'%20stroke='%237cc6ff'/%3E%3Cpath%20d='M92%2058l1%207'%20stroke='%23fff3b0'/%3E%3Cpath%20d='M80%2086l-6%203'%20stroke='%23fff'/%3E%3Cpath%20d='M44%2090l-5-4'%20stroke='%237cc6ff'/%3E%3Cpath%20d='M26%2062l-1-6'%20stroke='%23fff3b0'/%3E%3Cpath%20d='M58%2024l7%201'%20stroke='%23a8e6a1'/%3E%3Cpath%20d='M62%2098l7-2'%20stroke='%23fff3b0'/%3E%3C/g%3E%3C/svg%3E") 8% 94%/130px auto no-repeat}
+:root[data-theme="donut"] .card{border-radius:30px;border:3px solid #8b5a3c}
+:root[data-theme="donut"] .btn{border:3px solid #8b5a3c;background:#fff8ef}
+.sw-space{background:radial-gradient(circle at 60% 40%,#ff7b1c 0 26%,transparent 28%),linear-gradient(180deg,#040820,#1a4fd6);border-radius:50%}
+.sw-donut{background:radial-gradient(circle,#ffe3ec 0 22%,#ff8fb8 24% 60%,#e0a964 62%);border-radius:50%}
+.sw-cloud{background:radial-gradient(circle at 35% 62%,#fff 0 28%,transparent 30%),radial-gradient(circle at 62% 55%,#fff 0 32%,transparent 34%),linear-gradient(180deg,#a9d4ff,#e3e8ff);border-radius:50%}
 .nextcolor{display:flex;align-items:center;gap:6px;margin:8px 0 0}
 .rtn{display:flex;align-items:center;gap:12px;padding:8px 0}
 .rtn+.rtn{border-top:1px solid var(--line)}
@@ -234,8 +254,8 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 @media (prefers-reduced-motion:reduce){.pop .stamp,.banner{animation:none}.fall{display:none}.bar>i{transition:none}}
 .shopbtn{border-color:var(--accent);background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:16px;padding:7px 18px;box-shadow:var(--shadow)}
 #histBtn{margin-top:8px}
-#histDlg,#celDlg{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);max-width:min(420px,calc(100vw - 32px));padding:18px;box-shadow:var(--shadow)}
-#histDlg::backdrop,#celDlg::backdrop{background:rgba(0,0,0,.35)}
+#histDlg,#celDlg,#stkPrevDlg{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);max-width:min(420px,calc(100vw - 32px));padding:18px;box-shadow:var(--shadow)}
+#histDlg::backdrop,#celDlg::backdrop,#stkPrevDlg::backdrop{background:rgba(0,0,0,.35)}
 .hcal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:12px 0 6px;text-align:center}
 .hcal .wd{font-size:12px;color:var(--soft)}
 .hcal .hd{min-height:44px;border:1px solid var(--line);border-radius:8px;padding:2px 0;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:2px}
@@ -251,6 +271,19 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 .ipv{display:inline-flex;gap:2px;flex:none;align-items:center}
 #pvBar{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:70;display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:center;background:#fff;color:#222;border:2px solid var(--accent);border-radius:18px;padding:10px 14px;box-shadow:0 8px 24px rgba(0,0,0,.28);max-width:calc(100vw - 24px)}
 #pvBar button{color:inherit}
+.crrow2{display:flex;gap:8px;align-items:center}.crrow2 .crprod{flex:1}
+#cookieDlg{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);width:min(380px,calc(100vw - 32px));padding:18px;box-shadow:var(--shadow)}
+#cookieDlg::backdrop{background:rgba(0,0,0,.35)}
+#ckStage{display:flex;flex-direction:column;align-items:center;gap:8px;min-height:190px}
+#ckCookie{background:none;border:0;cursor:pointer;padding:0;width:190px}
+#ckCookie svg{width:100%;height:auto;overflow:visible}
+#ckCookie .hl,#ckCookie .hr{transform-origin:80px 70px;transition:transform .55s cubic-bezier(.2,1.4,.4,1)}
+#cookieDlg.open #ckCookie .hl{transform:translate(-22px,8px) rotate(-16deg)}
+#cookieDlg.open #ckCookie .hr{transform:translate(22px,8px) rotate(16deg)}
+#ckSlip{width:100%;background:#fffdf5;color:#3a2f22;border:1px dashed #d9c9a3;border-radius:6px;padding:12px 14px;text-align:center;opacity:0;transform:translateY(-12px);transition:opacity .5s .15s,transform .5s .15s}
+#cookieDlg.open #ckSlip{opacity:1;transform:none}
+#ckSlip p{margin:0}#ckSlip #ckText{font-size:17px;line-height:1.55;word-break:keep-all}#ckSlip .stat{color:#7a6a52;margin-top:6px}
+@media (prefers-reduced-motion:reduce){#ckCookie .hl,#ckCookie .hr,#ckSlip{transition:none}}
 .dn{display:inline-block;line-height:1.25}
 .hl-marker{background:linear-gradient(transparent 50%,#fff176 50% 90%,transparent 90%)}
 .hl-wavy{text-decoration:underline wavy #ff6b6b;text-decoration-thickness:2px;text-underline-offset:3px}
@@ -446,7 +479,29 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
   <div class="row" style="justify-content:flex-end"><button class="btn" id="crClose" type="button">닫기</button></div>
 </dialog>
 
-<div id="pvBar" hidden role="status"><span id="pvTxt"></span><button class="btn main" id="pvBuy" type="button"></button><button class="btn" id="pvEnd" type="button">원래대로</button></div>
+<dialog id="cookieDlg" aria-labelledby="ckTitle">
+  <h2 id="ckTitle">오늘의 한마디</h2>
+  <p class="stat" id="ckHint"></p>
+  <div id="ckStage">
+    <button type="button" id="ckCookie" aria-label="포춘쿠키 열기">
+      <svg viewBox="0 0 160 110" aria-hidden="true">
+        <g class="hl"><path d="M80 28C50 20 20 36 16 66c22 22 46 26 64 16z" fill="#f3c66f" stroke="#b9782a" stroke-width="3" stroke-linejoin="round"/><path d="M80 28C64 40 60 64 80 82" fill="none" stroke="#d99a45" stroke-width="3" stroke-linecap="round"/></g>
+        <g class="hr"><path d="M80 28c30-8 60 8 64 38-22 22-46 26-64 16z" fill="#f6cf82" stroke="#b9782a" stroke-width="3" stroke-linejoin="round"/><path d="M80 28c16 12 20 36 0 54" fill="none" stroke="#d99a45" stroke-width="3" stroke-linecap="round"/></g>
+      </svg>
+    </button>
+    <div id="ckSlip" hidden><p id="ckText"></p><p class="stat" id="ckBy"></p></div>
+  </div>
+  <div class="row" style="justify-content:flex-end;gap:8px"><button class="btn" id="ckAgain" type="button" hidden>🥠 다시 뽑기</button><button class="btn main" id="ckBuy" type="button" hidden></button><button class="btn" id="ckClose" type="button">닫기</button></div>
+</dialog>
+
+<div id="pvBar" hidden role="status"><span id="pvTxt"></span><button class="btn" id="pvAlt" type="button" hidden></button><button class="btn main" id="pvBuy" type="button"></button><button class="btn" id="pvEnd" type="button">원래대로</button></div>
+
+<dialog id="stkPrevDlg" aria-labelledby="spTitle">
+  <h2 id="spTitle"></h2>
+  <p class="stat" id="spNote"></p>
+  <div class="hcal" id="spGrid"></div>
+  <div class="row" style="justify-content:flex-end;gap:8px"><button class="btn main" id="spBuy" type="button"></button><button class="btn" id="spClose" type="button">닫기</button></div>
+</dialog>
 
 <dialog id="histDlg" aria-labelledby="histTitle">
   <div class="row"><button class="btn" id="histPrev" type="button" aria-label="이전 달">◀</button><h2 id="histTitle"></h2><button class="btn" id="histNext" type="button" aria-label="다음 달">▶</button></div>
@@ -578,7 +633,7 @@ ko:{
   introClose:'닫기',
   introBtn:'안내',
   setBtn:"설정", setBack:"돌아가기", langCap:"언어", themeCap:"색 테마",
-  theme_base:"기본", theme_peach:"복숭아", theme_lavender:"라벤더", theme_sunny:"햇살", theme_ocean:"바다",theme_notebook:"공책",theme_retro:"레트로",theme_cloud:"구름", theme_forest:"숲", theme_rose:"장미", themeLocked:"{d}에 열려요",
+  theme_base:"기본", theme_peach:"복숭아", theme_lavender:"라벤더", theme_sunny:"햇살", theme_ocean:"바다",theme_notebook:"공책",theme_retro:"레트로",theme_cloud:"구름",theme_space:"우주 행성",theme_donut:"도넛", theme_forest:"숲", theme_rose:"장미", themeLocked:"{d}에 열려요",
   nextColor:"다음 색",
   privCap:"개인정보 안내", privBody:"계정도 로그인도 없어요. 도장 기록은 이 기기에만 저장돼요. 그래서 브라우저 데이터를 지우거나 폰을 바꾸면 기록이 사라져요. 도우미와 나눈 말은 답을 만들 때 AI 서비스에 전달되고, 이 앱 서버에는 저장되지 않아요. 이름·연락처 같은 개인정보는 적지 말아 주세요.",
   delCap:"내 기록 지우기", delBody:"이 기기에 저장된 도장 기록, 칸, 설정, 도우미 대화를 모두 지우고 처음 상태로 돌아가요.",
@@ -1791,7 +1846,7 @@ function glyphSVG(g,st){
 Object.keys(GLYPHS).forEach(k=>{if(!ICONS[k]) ICONS[k]=glyphSVG(GLYPHS[k],'flat')});
 const ICON_PACKS={icons_cute:{name:'귀여운',style:'cute'},icons_simple:{name:'심플 선',style:'simple'},icons_pastel:{name:'파스텔 스티커',style:'pastel'}};
 const ICON_PREVIEW=['wake','water','read','tooth'];
-function currentIconStyle(){const p=ICON_PACKS[S.iconPack];return p&&OWNED.has(S.iconPack)?p.style:''}
+function currentIconStyle(){if(previewIcon&&ICON_PACKS[previewIcon]) return ICON_PACKS[previewIcon].style;const p=ICON_PACKS[S.iconPack];return p&&OWNED.has(S.iconPack)?p.style:''}
 const iconBody=k=>{const st=currentIconStyle();return (st&&GLYPHS[k])?glyphSVG(GLYPHS[k],st):ICONS[k]};
 const iconPrev=(st,k)=>`<svg viewBox="0 0 64 64" width="26" height="26" aria-hidden="true">${st&&GLYPHS[k]?glyphSVG(GLYPHS[k],st):ICONS[k]}</svg>`;
 const iconPackPreview=id=>'<span class="ipv">'+ICON_PREVIEW.map(k=>iconPrev(ICON_PACKS[id].style,k)).join('')+'</span>';
@@ -1819,9 +1874,9 @@ const MAX_SLOTS=6;
 const UNLOCKS=[3,28,60]; // 도장 찍은 누적 일수 → 칸이 하나씩 열림(PRD 2026-10-21)
 const THEMES=[{id:'base'},{id:'peach',at:UNLOCKS[0]},{id:'lavender',at:UNLOCKS[1]},{id:'sunny',at:UNLOCKS[2]},
   {id:'ocean'},{id:'forest'},{id:'rose'}, // 바다·숲·장미는 색만 바꾸는 무료 테마(2026-11-04 사용자 결정)
-  {id:'notebook',shop:'theme_notebook'},{id:'retro',shop:'theme_retro'},{id:'cloud',shop:'theme_cloud'}]; // 디자인 테마(유료)
+  {id:'notebook',shop:'theme_notebook'},{id:'retro',shop:'theme_retro'},{id:'cloud',shop:'theme_cloud'},{id:'space',shop:'theme_space'},{id:'donut',shop:'theme_donut'}]; // 디자인 테마(유료)
 let OWNED=new Set(); // 서버가 알려 준 내가 산 상품(상점). 크레딧 서버가 꺼져 있으면 비어 있다 // 칸이 열릴 때 테마도 하나씩 열림
-const THEME_BG={base:'#f2f7f5',peach:'#fbf1ea',lavender:'#f3f0fa',sunny:'#fff7df',ocean:'#eaf4fb',forest:'#eef5ea',rose:'#fbeef2',notebook:'#f6efdc',retro:'#ffefb8',cloud:'#e3f0ff'};
+const THEME_BG={base:'#f2f7f5',peach:'#fbf1ea',lavender:'#f3f0fa',sunny:'#fff7df',ocean:'#eaf4fb',forest:'#eef5ea',rose:'#fbeef2',notebook:'#f6efdc',retro:'#ffefb8',cloud:'#e3f0ff',space:'#0b0b10',donut:'#ffe3ec'};
 const pad=n=>String(n).padStart(2,'0');
 const fmt=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 let todayStr=fmt(new Date());
@@ -1874,8 +1929,8 @@ function currentTheme(){ // 설정에서 고른 테마(열려 있을 때). 고�
   const th=THEMES.find(x=>x.id===S.theme);if(th&&themeOpen(th))return th.id;
   let id='base';for(const x of THEMES)if(x.at&&themeOpen(x))id=x.id;return id}
 const SHAPES=[['round','동그라미'],['soft','둥근 네모'],['leaf','잎사귀'],['drop','물방울']]; // 도장 모양(상점 «도장 모양 바꾸기»를 산 뒤에만 적용)
-function currentShape(){return OWNED.has('stamp_shapes')&&SHAPES.some(x=>x[0]===S.shape)?S.shape:'round'}
-let previewTheme=null; // 상점에서 사기 전에 입어 보는 디자인(창을 닫으면 원래대로)
+function currentShape(){if(previewShape) return previewShape;return OWNED.has('stamp_shapes')&&SHAPES.some(x=>x[0]===S.shape)?S.shape:'round'}
+let previewTheme=null,previewIcon=null,previewShape=null; // 상점에서 사기 전에 입어 보는 것들(디자인·아이콘 스타일·도장 모양). «원래대로»를 누르면 돌아간다
 function applyTheme(){
   const id=previewTheme||currentTheme();
   const root=document.documentElement;
@@ -2553,18 +2608,58 @@ async function loadCredits(){
     setOwned(j.owned||[]);
   }catch(e){$('crRow').hidden=true}
 }
-const SAMPLE_QUOTE='예: “오늘 한 칸이면 충분해요.”';
+const SAMPLE_QUOTE='실제 격언·속담을 포춘쿠키로 뽑아요';
 function setOwned(list){
   const n=new Set(list),changed=n.size!==OWNED.size||[...n].some(x=>!OWNED.has(x));
   OWNED=n;if(changed){applyTheme();render()}
   loadQuote();
 }
-async function loadQuote(){
+/* 오늘의 한마디(포춘쿠키): 실제 격언·속담 DB(서버)에서 무작위로 하나를 뽑는다. 오늘 뽑은 것은 이 브라우저에 기억해 맨 위에 보여 준다 */
+async function fetchQuote(sample){
+  const ex=(S.quoteSeen||[]).slice(-20).join(',');
+  const r=await fetch((sample?'/api/quote/sample':'/api/quote')+(ex?'?exclude='+ex:''),{headers:{'X-Client-Id':clientId()},cache:'no-store'});
+  if(!r.ok) throw new Error('quote');
+  return r.json();
+}
+function loadQuote(){
   const box=$('quoteBox');
   if(!OWNED.has('daily_quote')){box.hidden=true;return}
-  try{const r=await fetch('/api/quote',{headers:{'X-Client-Id':clientId()},cache:'no-store'});
-    if(!r.ok){box.hidden=true;return}box.textContent='“'+(await r.json()).quote+'”';box.hidden=false}catch(e){box.hidden=true}
+  const q=S.quoteToday&&S.quoteToday.d===todayStr?S.quoteToday:null;
+  box.innerHTML=q?`“${esc(q.text)}”<br><small>— ${esc(q.author)}</small> <button type="button" class="linkbtn" id="qAgain">🥠 다시 뽑기</button>`:`<button type="button" class="btn" id="qDraw">🥠 오늘의 한마디 뽑기</button>`;
+  ($('qDraw')||$('qAgain')).onclick=()=>openCookie(false);
+  box.hidden=false;
 }
+let ckMode={preview:false,item:null},ckBusy=false;
+function openCookie(preview,item){
+  ckMode={preview,item};
+  const d=$('cookieDlg');
+  d.classList.remove('open');$('ckSlip').hidden=true;$('ckAgain').hidden=true;
+  $('ckTitle').textContent=preview?'오늘의 한마디 미리 보기':'오늘의 한마디';
+  $('ckHint').textContent='쿠키를 눌러 열어 보세요';
+  $('ckBuy').hidden=!preview;
+  if(preview) $('ckBuy').textContent=item.amount.toLocaleString('ko-KR')+'원에 사기';
+  d.showModal();
+}
+async function crackCookie(){
+  if(ckBusy) return;
+  ckBusy=true;
+  const d=$('cookieDlg');
+  try{
+    d.classList.remove('open');
+    const q=await fetchQuote(ckMode.preview);
+    $('ckText').textContent='“'+q.text+'”';
+    $('ckBy').textContent='— '+q.author+(q.source?', '+q.source:'');
+    $('ckSlip').hidden=false;$('ckHint').textContent='';$('ckAgain').hidden=false;
+    requestAnimationFrame(()=>d.classList.add('open'));
+    if(!ckMode.preview){S.quoteToday={d:todayStr,id:q.id,text:q.text,author:q.author,source:q.source};S.quoteSeen=(S.quoteSeen||[]).concat(q.id).slice(-60);save();loadQuote()}
+    else{S.quoteSeen=(S.quoteSeen||[]).concat(q.id).slice(-60);save()}
+  }catch(e){$('ckHint').textContent='한마디를 불러오지 못했어요. 잠시 뒤 다시 눌러 주세요.'}
+  ckBusy=false;
+}
+$('ckCookie').onclick=crackCookie;
+$('ckAgain').onclick=crackCookie;
+$('ckClose').onclick=()=>$('cookieDlg').close();
+$('ckBuy').onclick=()=>{$('cookieDlg').close();if(ckMode.item) buyCredits(ckMode.item.id)};
 async function renderShop(){
   const box=$('shopList'),ub=$('unlockList');box.textContent='불러오는 중…';
   try{
@@ -2591,9 +2686,9 @@ async function renderShop(){
       else if(own){b.textContent='✔ 가지고 있어요';b.disabled=true}
       else if(partial){b.textContent=it.amount.toLocaleString('ko-KR')+'원';b.disabled=true}
       else{b.textContent=it.amount.toLocaleString('ko-KR')+'원';b.onclick=()=>buyCredits(it.id)}
-      if(th&&!own&&th.shop){ // 산 적 없는 디자인 테마는 미리 입어 볼 수 있다
+      if(!own&&!unlockDone){ // 산 적 없는 상품은 모두 미리 볼 수 있다(디자인·아이콘·도장 모양·스티커·열림·좋은 말·지난 기록)
         const pv=document.createElement('button');pv.type='button';pv.className='btn';pv.textContent='미리 보기';
-        pv.onclick=()=>{previewTheme=th.id;applyTheme();$('crDlg').close();showPvBar(it,th)}; // 상점 창을 닫아야 화면 전체에 디자인이 보인다(창의 어두운 배경막이 색을 가린다)
+        pv.onclick=()=>previewItem(it);
         row.appendChild(pv);
       }
       row.appendChild(b);(it.kind==='unlock'?ub:box).appendChild(row);
@@ -2613,7 +2708,10 @@ async function openCredits(why){
     j.products.forEach(p=>{
       const b=document.createElement('button');b.type='button';b.className='btn crprod';b.dataset.id=p.id;
       b.textContent=p.name+' · '+p.amount.toLocaleString('ko-KR')+'원';
-      b.onclick=()=>buyCredits(p.id);box.appendChild(b);
+      b.onclick=()=>buyCredits(p.id);
+      const pv=document.createElement('button');pv.type='button';pv.className='btn';pv.textContent='미리 보기';
+      pv.onclick=()=>previewItem({id:p.id,kind:'credits',name:p.name,amount:p.amount});
+      const wrap=document.createElement('div');wrap.className='crrow2';wrap.appendChild(b);wrap.appendChild(pv);box.appendChild(wrap);
     });
   }catch(e){box.textContent='상품 목록을 불러오지 못했어요.'}
 }
@@ -2629,13 +2727,56 @@ async function buyCredits(pid){
 }
 $('crBtn').onclick=()=>openCredits('');
 $('chBuy').onclick=()=>openCredits('');
-const endPreview=()=>{if(previewTheme){previewTheme=null;applyTheme()}$('pvBar').hidden=true};
-function showPvBar(it,th){ // 미리 보기 중에는 화면 아래 막대로 «사기»와 «원래대로»를 고른다
-  $('pvTxt').textContent='“'+t('theme_'+th.id)+'” 디자인 미리 보는 중';
+const endPreview=keepBar=>{
+  previewTheme=previewIcon=previewShape=null;
+  const q=$('quoteBox');if(q.dataset.pv){delete q.dataset.pv;loadQuote()}
+  if(keepBar!==true) $('pvBar').hidden=true;
+  render();
+};
+function showPvBar(it,text,alt){ // 미리 보기 중에는 화면 아래 막대로 «사기»와 «원래대로»를 고른다
+  $('pvTxt').textContent=text;
   $('pvBuy').textContent=it.amount.toLocaleString('ko-KR')+'원에 사기';
   $('pvBuy').onclick=()=>buyCredits(it.id);
+  const a=$('pvAlt');a.hidden=!alt;if(alt){a.textContent=alt.label;a.onclick=alt.run}
   $('pvBar').hidden=false;
 }
+const UNLOCK_COLOR={unlock_3:'peach',unlock_28:'lavender',unlock_60:'sunny',unlock_all:'sunny'};
+function previewItem(it){
+  endPreview(true);
+  if(it.kind==='sticker'){$('crDlg').close();openStickerPreview(it);return}
+  if(it.id==='history_view'){$('crDlg').close();openHist();return} // 달력이 열린다(닫으면 상점으로 돌아가지 않음)
+  if(it.id==='daily_quote'){$('crDlg').close();openCookie(true,it);return} // 실제 격언 하나를 포춘쿠키로 미리 뽑아 본다
+  let text='',alt=null;
+  if(it.kind==='theme'){previewTheme=it.theme;text='“'+t('theme_'+it.theme)+'” 디자인 미리 보는 중'}
+  else if(it.kind==='iconpack'){previewIcon=it.id;text='“'+it.name+'” 그림으로 미리 보는 중 — 그림이 있는 칸(내 루틴, 도장 찍은 칸)에 적용돼요'}
+  else if(it.kind==='stamp'){
+    previewShape='soft';
+    const names=()=>'도장 모양 미리 보는 중: '+SHAPES.find(x=>x[0]===previewShape)[1]+' — 도장을 찍은 칸에 적용돼요';
+    text=names();
+    alt={label:'다른 모양',run:()=>{const o=['soft','leaf','drop','round'];previewShape=o[(o.indexOf(previewShape)+1)%o.length];$('pvTxt').textContent=names();render()}};
+  }
+  else if(it.kind==='unlock'){previewTheme=UNLOCK_COLOR[it.id]||null;text=it.desc+(previewTheme?' (그 색 미리 보는 중)':'')}
+  else{text='도우미 추가 대화권이에요 — 하루 무료 한도를 다 쓴 뒤에만 쓰이고, 대화 한 번에 1개가 쓰여요'}
+  $('crDlg').close();
+  render();
+  showPvBar(it,text,alt);
+}
+function openStickerPreview(it){ // 날짜 칸에 붙은 모습을 보여 주는 견본 달력(저장하지 않음)
+  const pk=STICKER_PACKS[it.id]||{list:[]},hl=it.id==='sticker_highlight';
+  $('spTitle').textContent=it.name+' 미리 보기';
+  $('spNote').textContent=hl?'날짜 숫자에 이렇게 꾸밈이 입혀져요.':'달력의 날짜 칸에 이렇게 붙어요. 달력은 누적 60일 또는 60일째 열림 뒤에 열려요.';
+  let h='';
+  for(let d=1;d<=14;d++){
+    const e=pk.list[(d-1)%pk.list.length]||'';
+    const on=d<=pk.list.length||d<=6;
+    h+=`<span class="hd ${on?'on':''}"><span class="dn ${hl&&on?'hl-'+e.slice(3):''}">${d}</span>${!hl&&on?`<span class="stk">${esc(e)}</span>`:''}</span>`;
+  }
+  $('spGrid').innerHTML=h;
+  $('spBuy').textContent=it.amount.toLocaleString('ko-KR')+'원에 사기';
+  $('spBuy').onclick=()=>{$('stkPrevDlg').close();buyCredits(it.id)};
+  $('stkPrevDlg').showModal();
+}
+$('spClose').onclick=()=>$('stkPrevDlg').close();
 $('pvEnd').onclick=endPreview;
 $('crClose').onclick=()=>$('crDlg').close();
 window.addEventListener('credits-refresh',loadCredits);
