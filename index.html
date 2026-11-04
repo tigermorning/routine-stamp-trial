@@ -267,7 +267,8 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 .dystk.sel{outline:2px dashed var(--accent);outline-offset:2px;border-radius:6px}.dystk .x{position:absolute;right:-12px;top:-14px;width:20px;height:20px;border-radius:50%;border:0;background:var(--accent);color:var(--accent-ink);font-size:12px;line-height:20px;padding:0;cursor:pointer}
 #dyBody textarea[class*="paper-"]:not(.paper-plain){color:#3b2f22;border-color:#c9b8a0}
 #dyBody .paper-lined{background:#fffdf6 repeating-linear-gradient(transparent 0 27px,#9ec5e8 27px 28px) local;line-height:28px}
-#dyBody .paper-grid{background:#fcfff9 linear-gradient(#bfe0c8 1px,transparent 1px) 0 0/20px 20px,linear-gradient(90deg,#bfe0c8 1px,transparent 1px) 0 0/20px 20px local}
+#dyBody .paper-grid{background-color:#fcfff9;background-image:linear-gradient(#bfe0c8 1px,transparent 1px),linear-gradient(90deg,#bfe0c8 1px,transparent 1px);background-size:20px 20px;background-attachment:local}
+#dyBody .paper-biggrid{background-color:#fbfdff;background-image:linear-gradient(#a9c4e0 1.5px,transparent 1.5px),linear-gradient(90deg,#a9c4e0 1.5px,transparent 1.5px);background-size:40px 40px;background-attachment:local;border-color:#a9c4e0}
 #dyBody .paper-dot{background:#fffdf6 radial-gradient(circle,#c9b8a0 1.2px,transparent 1.6px) 0 0/18px 18px local}
 #dyBody .paper-kraft{background:#dcc09a;border-color:#a98558}
 #dyBody .paper-sticky{background:#fff3a0;border-color:#e3cf5a}
@@ -329,7 +330,10 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 .crprod{text-align:left}
 #crDlg h3{font-size:1rem;margin:14px 0 4px}
 .shopitem{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:6px}
-.shopitem .sw{flex:none}.shopitem span{flex:1}.shopitem small{display:block;color:var(--soft)}
+.ladder{display:inline-grid;grid-template-columns:repeat(3,12px);gap:3px;align-items:center;flex:none}.ladder i{width:12px;height:12px;border-radius:50%;display:block}
+.ladder .have{background:var(--soft);opacity:.55}.ladder .new{background:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 35%,transparent)}.ladder .far{border:1.5px dashed var(--line);opacity:.5}
+.ladder .lcol{grid-column:1/-1;height:8px;border-radius:4px;border:1px solid var(--line)}
+.shopitem .sw{flex:none}.shopitem span{flex:1}.shopitem .ladder{flex:none}.shopitem small{display:block;color:var(--soft)}
 .quotebox{text-align:center;margin:8px 0 0;color:var(--soft);font-style:italic}
 </style>
 </head>
@@ -2141,7 +2145,7 @@ let dyMode='day',dyDate=todayStr;
 const dyAdd=(ds,n)=>{const d=new Date(ds+'T00:00');d.setDate(d.getDate()+n);return fmt(d)};
 const dyFmt=(ds,o)=>new Intl.DateTimeFormat(LOCALE[lang],o).format(new Date(ds+'T00:00'));
 function dySet(ds,v){if(!S.diary)S.diary={};if(v.trim())S.diary[ds]=v.slice(0,1000);else delete S.diary[ds];save()}
-const PAPERS=[{id:'plain',name:'기본'},{id:'lined',name:'줄 노트'},{id:'grid',name:'모눈'},{id:'dot',name:'점 격자'},{id:'kraft',name:'크라프트'},{id:'sticky',name:'노란 메모'},{id:'letter',name:'편지지'}]; // plain 말고는 상점 «메모지 6종»(paper_pack)
+const PAPERS=[{id:'plain',name:'기본'},{id:'lined',name:'줄 노트'},{id:'grid',name:'모눈'},{id:'dot',name:'점 격자'},{id:'biggrid',name:'그리드'},{id:'kraft',name:'크라프트'},{id:'sticky',name:'노란 메모'},{id:'letter',name:'편지지'}]; // plain 말고는 상점 «메모지 7종»(paper_pack)
 let dyDeco=false,dyPaperPv=null,dySel=-1;
 const dyPaper=()=>dyPaperPv||(OWNED.has('paper_pack')&&PAPERS.some(x=>x.id===S.dyPaper)?S.dyPaper:'plain');
 function dyRow(ds,label,rows,withStk){
@@ -2176,7 +2180,7 @@ function renderDyDeco(){
     pp.appendChild(b);
   });
   const pv=$('dyPv');pv.hidden=!dyPaperPv;
-  if(dyPaperPv){$('dyPvTxt').textContent='“'+PAPERS.find(x=>x.id===dyPaperPv).name+'” 메모지 미리 보는 중 — 메모지 6종 묶음이에요.';$('dyBuy').textContent='1,000원에 사기';$('dyBuy').onclick=()=>{$('diaryDlg').close();buyCredits('paper_pack')}}
+  if(dyPaperPv){$('dyPvTxt').textContent='“'+PAPERS.find(x=>x.id===dyPaperPv).name+'” 메모지 미리 보는 중 — 메모지 7종 묶음이에요.';$('dyBuy').textContent='1,000원에 사기';$('dyBuy').onclick=()=>{$('diaryDlg').close();buyCredits('paper_pack')}}
   const tray=$('dyTray');tray.textContent='';
   const packs=Object.keys(STICKER_PACKS).filter(id=>OWNED.has(id)),dayMode=dyMode==='day';
   if(!packs.length){tray.innerHTML='<span class="stat">스티커 팩이 있으면 기록에도 붙일 수 있어요. </span>';const sb=document.createElement('button');sb.type='button';sb.className='btn';sb.textContent='상점 보기';sb.onclick=()=>{$('diaryDlg').close();openCredits()};tray.appendChild(sb);return}
@@ -2771,6 +2775,13 @@ $('ckCookie').onclick=crackCookie;
 $('ckAgain').onclick=crackCookie;
 $('ckClose').onclick=()=>$('cookieDlg').close();
 $('ckBuy').onclick=()=>{$('cookieDlg').close();if(ckMode.item) buyCredits(ckMode.item.id)};
+const UNLOCK_STEPS={unlock_3:{n:4,from:3,col:'peach'},unlock_28:{n:5,from:4,col:'lavender'},unlock_60:{n:6,from:5,col:'sunny'},unlock_all:{n:6,from:3,col:'sunny'}};
+function unlockLadder(id){ // 칸이 몇 개로 늘어나는지를 그림으로: 이미 있는 칸은 채워서, 새로 열리는 칸은 강조해서, 아직 먼 칸은 흐리게 보여 준다
+  const u=UNLOCK_STEPS[id];if(!u)return '<i class="sw" style="background:var(--accent)"></i>';
+  let h='<span class="ladder" aria-hidden="true">';
+  for(let i=0;i<6;i++)h+=`<i class="${i<u.from?'have':i<u.n?'new':'far'}"></i>`;
+  return h+`<b class="lcol" style="background:${THEME_BG[u.col]}"></b></span>`;
+}
 async function renderShop(){
   const box=$('shopList'),ub=$('unlockList');box.textContent='불러오는 중…';
   try{
@@ -2782,7 +2793,7 @@ async function renderShop(){
       const partial=all&&!unlockDone&&UNLOCKS.some(opened); // 일부가 이미 열려 있으면 «모든 열림»이 남은 열림을 하나씩 사는 것보다 비쌀 수 있다
       const own=j.owned.includes(it.id),row=document.createElement('div');row.className='shopitem';
       const th=it.kind==='theme'?THEMES.find(x=>x.id===it.theme):null;
-      row.innerHTML=(th?`<i class="sw sw-${esc(th.id)}"></i>`:it.kind==='stamp'?'<i class="shp"></i>':it.kind==='iconpack'?iconPackPreview(it.id):'<i class="sw" style="background:var(--accent)"></i>')+
+      row.innerHTML=(th?`<i class="sw sw-${esc(th.id)}"></i>`:it.kind==='unlock'?unlockLadder(it.id):it.kind==='stamp'?'<i class="shp"></i>':it.kind==='iconpack'?iconPackPreview(it.id):'<i class="sw" style="background:var(--accent)"></i>')+
         `<span>${esc(it.name)}<small>${it.kind==='quote'?esc(SAMPLE_QUOTE):it.kind==='sticker'?esc(((STICKER_PACKS[it.id]||{}).list||[]).map(stkName).join(' ')+'  («기록»에서 바로 붙일 수 있고, 달력에는 누적 60일 또는 60일째 열림 뒤에 붙여요)'):esc((it.desc||'')+(partial?' (일부가 이미 열려 있어 남은 열림을 하나씩 사는 편이 저렴해요)':''))}</small></span>`;
       const b=document.createElement('button');b.type='button';b.className='btn';
       if(own&&th){b.textContent='쓰기';b.onclick=()=>{S.theme=th.id;save();render();$('crDlg').close()}}

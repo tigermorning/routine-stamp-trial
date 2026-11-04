@@ -54,17 +54,17 @@ ITEMS = {
     "sticker_highlight": {"id": "sticker_highlight", "kind": "sticker", "name": "하이라이트 스티커 팩", "amount": 1000, "desc": "날짜에 형광펜·물결·이중·점선 밑줄과 동그라미·붓 밑줄을 그려요"},
     "sticker_office": {"id": "sticker_office", "kind": "sticker", "name": "오피스 스티커 팩", "amount": 1000, "desc": "가방·보고서·그래프·서류·클립·프린터·노트북·일정 12개"},
     # 할 일 아이콘 스타일 팩(2026-11-04): 할 일 칸의 그림 25종을 다른 분위기로 바꾼다(그림은 화면 index.html 의 GLYPHS·ICON_PACKS, id 가 같아야 함). 가격은 임시값이다(근거 없음).
-    "paper_pack": {"id": "paper_pack", "kind": "paper", "name": "메모지 6종", "amount": 1000, "desc": "기록에 쓰는 줄 노트·모눈·점 격자·크라프트·노란 메모·편지지 6가지 메모지"},
+    "paper_pack": {"id": "paper_pack", "kind": "paper", "name": "메모지 7종", "amount": 1000, "desc": "기록에 쓰는 줄 노트·모눈·점 격자·그리드·크라프트·노란 메모·편지지 7가지 메모지"},
     "icons_cute": {"id": "icons_cute", "kind": "iconpack", "name": "귀여운 아이콘 팩", "amount": 1000, "desc": "할 일 그림을 표정 있는 귀여운 그림으로 바꿔요"},
     "icons_simple": {"id": "icons_simple", "kind": "iconpack", "name": "심플 선 아이콘 팩", "amount": 1000, "desc": "할 일 그림을 깔끔한 선 그림으로 바꿔요"},
     "icons_pastel": {"id": "icons_pastel", "kind": "iconpack", "name": "파스텔 스티커 아이콘 팩", "amount": 1000, "desc": "할 일 그림을 흰 테두리 파스텔 스티커로 바꿔요"},
     # 열림 건너뛰기(2026-11-04): 칸·색·달력이 열리는 3·28·60일째를 돈으로 먼저 연다. 기능만 열리고 달성 표시(✔)·축하는 실제 일수에만 준다.
     # 가격은 «열림이 복잡해질수록 조금씩 비싸게, 전체는 개별 합계보다 싸게» 라는 사용자 방향에 맞춘 임시값이다(근거 없음).
     # 5달러 ≈ 6,720원(환율 1,343.93원/달러, open.er-api.com 2026-11-04 조회)을 기준으로 전체를 6,500원으로 잡았다. 화면이 «이전 열림이 열려 있을 때만» 보여 준다(일수는 브라우저에만 있어 서버는 모름).
-    "unlock_3": {"id": "unlock_3", "kind": "unlock", "at": 3, "name": "3일째 열림 건너뛰기", "amount": 1500, "desc": "4번째 칸과 복숭아 색이 바로 열려요"},
-    "unlock_28": {"id": "unlock_28", "kind": "unlock", "at": 28, "name": "28일째 열림 건너뛰기", "amount": 2500, "desc": "5번째 칸과 라벤더 색이 바로 열려요"},
-    "unlock_60": {"id": "unlock_60", "kind": "unlock", "at": 60, "name": "60일째 열림 건너뛰기", "amount": 3500, "desc": "6번째 칸, 햇살 색, 달력·일정 메모가 바로 열려요"},
-    "unlock_all": {"id": "unlock_all", "kind": "unlock", "at": 0, "name": "모든 열림 건너뛰기", "amount": 6500, "desc": "3·28·60일째 열림을 한 번에 열어요(개별로 사는 것보다 1,000원 저렴)"},
+    "unlock_3": {"id": "unlock_3", "kind": "unlock", "at": 3, "name": "칸 4개 + 복숭아 색 바로 열기", "amount": 1500, "desc": "원래는 도장을 3일 쌓으면 열려요"},
+    "unlock_28": {"id": "unlock_28", "kind": "unlock", "at": 28, "name": "칸 5개 + 라벤더 색 바로 열기", "amount": 2500, "desc": "원래는 도장을 28일 쌓으면 열려요"},
+    "unlock_60": {"id": "unlock_60", "kind": "unlock", "at": 60, "name": "칸 6개 + 햇살 색 + 달력·일정 메모 바로 열기", "amount": 3500, "desc": "원래는 도장을 60일 쌓으면 열려요"},
+    "unlock_all": {"id": "unlock_all", "kind": "unlock", "at": 0, "name": "모든 단계 한 번에 열기", "amount": 6500, "desc": "칸 6개, 색 3가지, 달력·일정 메모까지 전부(따로 사는 것보다 1,000원 저렴)"},
 }
 
 SCHEMA = """
