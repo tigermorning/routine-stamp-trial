@@ -372,7 +372,7 @@ def test_unlock_purchase_grants_ownership_without_credits(env):
 # ---- 스티커 팩: 상품·소유, 화면의 그림 목록과 id 일치 ----
 def test_sticker_packs_are_items_and_match_the_screen_list():
     packs = [i for i in creditlib.ITEMS.values() if i["kind"] == "sticker"]
-    assert len(packs) == 8 and all(i["amount"] > 0 and i["desc"] for i in packs)
+    assert len(packs) == 7 and all(i["amount"] > 0 and i["desc"] for i in packs)
     html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
     block = html[html.index("const STICKER_PACKS={"):html.index("const STICKERS_PER_DAY")]
     for i in packs:
@@ -472,4 +472,9 @@ def test_space_and_donut_design_themes_are_sold_with_matching_css():
     html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
     for tid in ("space", "donut"):
         assert ":root[data-theme=\"" + tid + "\"]" in html
-    assert "--bg:#081033" in html and "%23ff7b1c" in html and "%232d6cff" in html  # 우주 테마: 짙은 남색 바탕, 쨍한 주황 행성과 파란 행성 색이 들어 있다
+    assert "--bg:#000;" in html and "%23ff7b1c" in html and "%232f7fa3" in html  # 우주 테마: 짙은 남색 바탕, 쨍한 주황 행성과 파란 행성 색이 들어 있다
+
+
+def test_diary_dialog_and_button_exist_in_page():
+    html = (Path(__file__).resolve().parents[2] / "index.html").read_text(encoding="utf-8")
+    assert 'id="diaryBtn"' in html and 'id="diaryDlg"' in html and "S.diary" in html

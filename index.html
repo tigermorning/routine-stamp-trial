@@ -52,7 +52,7 @@ h1{font-family:var(--display);font-weight:400;font-size:27px;margin:6px 0 16px;t
 .logo{width:30px;height:30px;flex:none}
 h2{font-family:var(--display);font-weight:400;font-size:19px;margin:0}
 :root[lang="zh-Hans"] h1,:root[lang="zh-Hans"] h2,:root[lang="zh-Hans"] .nums b,:root[lang="zh-Hant"] h1,:root[lang="zh-Hant"] h2,:root[lang="zh-Hant"] .nums b,:root[lang^="yue"] h1,:root[lang^="yue"] h2,:root[lang^="yue"] .nums b,:root[lang="vi"] h1,:root[lang="vi"] h2,:root[lang="vi"] .nums b{font-weight:700}
-.topbar{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:2px}
+.topbar{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px;margin-bottom:2px}.topbar .langbtn{white-space:nowrap}
 .topbar #setBtn{margin-left:auto} /* 안내 버튼이 숨겨져도 설정 버튼은 오른쪽에 둔다 */
 .introcard{border-color:var(--accent)}
 .introcard p{margin:8px 0 0}
@@ -107,21 +107,21 @@ h2{font-family:var(--display);font-weight:400;font-size:19px;margin:0}
 :root[data-theme="cloud"] dialog{background:#f7f9ff}
 .sw-notebook{background:repeating-linear-gradient(0deg,#fffdf4 0 3px,#9ab3e8 3px 4px);border-left:3px solid #e59a9a}
 .sw-retro{background:linear-gradient(135deg,#ffefb8 50%,#ff5d5d 50%);border:2px solid #222;border-radius:3px}
-/* 우주 행성 디자인(유료): 빈티지 레트로 포스터 느낌. 아주 짙은 남색에서 쨍한 코발트 블루로 밝아지는 우주 바탕에 쨍한 주황 행성(크림·파랑 고리)과 푸른 행성, 별, 하프톤 점 */
-:root[data-theme="space"]{--bg:#081033;--card:rgba(9,20,78,.8);--ink:#fff1dc;--soft:#b4c4ff;--line:#2f56d6;--accent:#ff7b1c;--accent-ink:#1a0900;--shadow:0 10px 28px rgba(0,8,50,.6);--blob1:transparent;--blob2:transparent;--sun-bg:#a34400;--sun-ink:#ffe9cf;color-scheme:dark}
-:root[data-theme="space"] body{background-color:#081033;background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='16'%20height='16'%3E%3Ccircle%20cx='4'%20cy='4'%20r='1.3'%20fill='white'%20fill-opacity='.07'/%3E%3Ccircle%20cx='12'%20cy='12'%20r='1.3'%20fill='white'%20fill-opacity='.07'/%3E%3C/svg%3E"),url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='240'%20height='240'%3E%0A%3Cg%20fill='%23fff1dc'%3E%3Ccircle%20cx='20'%20cy='30'%20r='1.4'/%3E%3Ccircle%20cx='120'%20cy='54'%20r='1.6'/%3E%3Ccircle%20cx='222'%20cy='70'%20r='1.3'/%3E%3Ccircle%20cx='96'%20cy='120'%20r='1.5'/%3E%3Ccircle%20cx='14'%20cy='168'%20r='1.2'/%3E%3Ccircle%20cx='176'%20cy='210'%20r='1.3'/%3E%3Ccircle%20cx='64'%20cy='196'%20r='1.6'/%3E%3Ccircle%20cx='208'%20cy='140'%20r='1.7'/%3E%3C/g%3E%0A%3Cg%20fill='%23ff9b3d'%3E%3Cpath%20d='M70%2020l2.2%205.4%205.4%202.2-5.4%202.2L70%2035l-2.2-5.2-5.4-2.2%205.4-2.2z'/%3E%3Cpath%20d='M180%20108l2%204.8%204.8%202-4.8%202-2%204.8-2-4.8-4.8-2%204.8-2z'/%3E%3Cpath%20d='M40%20120l1.8%204.4%204.4%201.8-4.4%201.8L40%20132l-1.8-4-4.4-1.8%204.4-1.8z'/%3E%3C/g%3E%0A%3Cg%20fill='%237fb2ff'%3E%3Cpath%20d='M150%20180l2%204.8%204.8%202-4.8%202-2%204.8-2-4.8-4.8-2%204.8-2z'/%3E%3Cpath%20d='M222%2020l1.6%204%204%201.6-4%201.6-1.6%204-1.6-4-4-1.6%204-1.6z'/%3E%3C/g%3E%3C/svg%3E"),linear-gradient(180deg,#040820 0%,#0a1a62 52%,#1a4fd6 100%);background-size:16px 16px,240px 240px,auto;background-attachment:fixed}
-:root[data-theme="space"] body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3Cdefs%3E%3CclipPath%20id='c'%3E%3Ccircle%20cx='150'%20cy='150'%20r='92'/%3E%3C/clipPath%3E%3C/defs%3E%0A%3Cpath%20d='M8%20150a142%2036%200%200%201%20284%200'%20fill='none'%20stroke='%23ffd9a0'%20stroke-width='11'%20transform='rotate%28-20%20150%20150%29'/%3E%0A%3Cpath%20d='M26%20150a124%2029%200%200%201%20248%200'%20fill='none'%20stroke='%232d6cff'%20stroke-width='4'%20transform='rotate%28-20%20150%20150%29'/%3E%0A%3Ccircle%20cx='150'%20cy='150'%20r='92'%20fill='%23ff7b1c'/%3E%0A%3Cg%20clip-path='url%28%23c%29'%3E%3Crect%20x='50'%20y='94'%20width='200'%20height='16'%20fill='%23e8560a'/%3E%3Crect%20x='50'%20y='126'%20width='200'%20height='30'%20fill='%23ffb347'/%3E%3Crect%20x='50'%20y='172'%20width='200'%20height='14'%20fill='%23e8560a'/%3E%0A%3Ccircle%20cx='214'%20cy='196'%20r='96'%20fill='%237a2a00'%20opacity='.3'/%3E%3C/g%3E%0A%3Ccircle%20cx='112'%20cy='112'%20r='13'%20fill='%23e8560a'/%3E%3Ccircle%20cx='186'%20cy='104'%20r='7'%20fill='%23e8560a'/%3E%3Ccircle%20cx='128'%20cy='198'%20r='8'%20fill='%23c94a08'/%3E%0A%3Cpath%20d='M8%20150a142%2036%200%200%200%20284%200'%20fill='none'%20stroke='%23ffd9a0'%20stroke-width='11'%20transform='rotate%28-20%20150%20150%29'/%3E%0A%3Cpath%20d='M26%20150a124%2029%200%200%200%20248%200'%20fill='none'%20stroke='%232d6cff'%20stroke-width='4'%20transform='rotate%28-20%20150%20150%29'/%3E%3C/svg%3E") right -10px top -50px/300px auto no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20200%20200'%3E%3Cdefs%3E%3CclipPath%20id='b'%3E%3Ccircle%20cx='100'%20cy='100'%20r='58'/%3E%3C/clipPath%3E%3C/defs%3E%0A%3Cpath%20d='M10%20100a92%2022%200%200%201%20180%200'%20fill='none'%20stroke='%23ff7b1c'%20stroke-width='8'%20transform='rotate%2818%20100%20100%29'/%3E%0A%3Ccircle%20cx='100'%20cy='100'%20r='58'%20fill='%232d6cff'/%3E%0A%3Cg%20clip-path='url%28%23b%29'%3E%3Crect%20x='30'%20y='70'%20width='140'%20height='12'%20fill='%237fb2ff'/%3E%3Crect%20x='30'%20y='96'%20width='140'%20height='20'%20fill='%231a45c4'/%3E%3Crect%20x='30'%20y='124'%20width='140'%20height='10'%20fill='%237fb2ff'/%3E%3Ccircle%20cx='132'%20cy='128'%20r='60'%20fill='%23001a66'%20opacity='.3'/%3E%3C/g%3E%0A%3Ccircle%20cx='80'%20cy='84'%20r='7'%20fill='%231a45c4'/%3E%0A%3Cpath%20d='M10%20100a92%2022%200%200%200%20180%200'%20fill='none'%20stroke='%23ff7b1c'%20stroke-width='8'%20transform='rotate%2818%20100%20100%29'/%3E%3C/svg%3E") left -24px top 64px/150px auto no-repeat}
+/* 우주 행성 디자인(유료): 새까만 바탕에 별은 드문드문, 단색 레트로 행성 둘(주황+파랑 고리, 파랑+주황 고리) */
+:root[data-theme="space"]{--bg:#000;--card:rgba(12,12,26,.84);--ink:#fff1dc;--soft:#b4c4ff;--line:#2f7fa3;--accent:#ff7b1c;--accent-ink:#1a0900;--shadow:0 10px 28px rgba(0,0,0,.7);--blob1:transparent;--blob2:transparent;--sun-bg:#a34400;--sun-ink:#ffe9cf;color-scheme:dark}
+:root[data-theme="space"] body{background-color:#000;background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='420'%20height='420'%3E%3Cg%20fill='%23fff1dc'%3E%3Ccircle%20cx='40'%20cy='60'%20r='1.6'/%3E%3Ccircle%20cx='250'%20cy='110'%20r='1.4'/%3E%3Ccircle%20cx='130'%20cy='260'%20r='1.6'/%3E%3Ccircle%20cx='360'%20cy='320'%20r='1.4'/%3E%3C/g%3E%3Cpath%20d='M320%2050l2.4%205.8%205.8%202.4-5.8%202.4-2.4%205.8-2.4-5.8-5.8-2.4%205.8-2.4z'%20fill='%23ff9b3d'/%3E%3Cpath%20d='M80%20350l2%204.8%204.8%202-4.8%202-2%204.8-2-4.8-4.8-2%204.8-2z'%20fill='%237fb2ff'/%3E%3C/svg%3E");background-size:420px 420px;background-attachment:fixed}
+:root[data-theme="space"] body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20300%20300'%3E%3Cellipse%20cx='150'%20cy='150'%20rx='140'%20ry='34'%20fill='none'%20stroke='%232f7fa3'%20stroke-width='12'%20transform='rotate%28-20%20150%20150%29'/%3E%3Ccircle%20cx='150'%20cy='150'%20r='92'%20fill='%23ff7b1c'/%3E%3Cpath%20d='M10%20150a140%2034%200%200%200%20280%200'%20fill='none'%20stroke='%232f7fa3'%20stroke-width='12'%20transform='rotate%28-20%20150%20150%29'/%3E%3C/svg%3E") right -10px top -50px/300px auto no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20200%20200'%3E%3Cellipse%20cx='100'%20cy='100'%20rx='92'%20ry='22'%20fill='none'%20stroke='%23ff7b1c'%20stroke-width='9'%20transform='rotate%2818%20100%20100%29'/%3E%3Ccircle%20cx='100'%20cy='100'%20r='58'%20fill='%232f7fa3'/%3E%3Cpath%20d='M8%20100a92%2022%200%200%200%20184%200'%20fill='none'%20stroke='%23ff7b1c'%20stroke-width='9'%20transform='rotate%2818%20100%20100%29'/%3E%3C/svg%3E") left -24px top 64px/150px auto no-repeat}
 @media (max-width:560px){:root[data-theme="space"] body::before{background-position:right -46px top -34px,left -30px top 74px;background-size:220px auto,110px auto}}
-:root[data-theme="space"] dialog{background:#0d1a5c;color:#fff1dc}
-:root[data-theme="space"] #pvBar{background:#0d1a5c;color:#fff1dc}
-:root[data-theme="space"] .btn{border-color:#ff7b1c;background:rgba(9,20,78,.9)}
+:root[data-theme="space"] dialog{background:#0b0b18;color:#fff1dc}
+:root[data-theme="space"] #pvBar{background:#0b0b18;color:#fff1dc}
+:root[data-theme="space"] .btn{border-color:#ff7b1c;background:rgba(12,12,26,.92)}
 /* 도넛 디자인(유료): 분홍 바탕에 스프링클, 모서리에 도넛, 초콜릿색 굵은 테두리의 둥근 카드와 버튼 */
 :root[data-theme="donut"]{--bg:#ffe3ec;--card:rgba(255,248,239,.8);--ink:#5a3a2a;--soft:#8b6b5a;--line:#e8c9b8;--accent:#ff6fa5;--accent-ink:#3a0f20;--shadow:0 6px 0 rgba(139,90,60,.28);--blob1:transparent;--blob2:transparent;color-scheme:light}
 :root[data-theme="donut"] body{background-image:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='140'%20height='140'%3E%3Cg%20stroke-linecap='round'%20stroke-width='4'%20opacity='.55'%3E%0A%3Cpath%20d='M16%2020l8-3'%20stroke='%23ff6fa5'/%3E%3Cpath%20d='M72%2014l3%208'%20stroke='%237cc6ff'/%3E%3Cpath%20d='M112%2036l8%203'%20stroke='%23ffd166'/%3E%3Cpath%20d='M40%2064l7%204'%20stroke='%23a8e6a1'/%3E%0A%3Cpath%20d='M96%2084l-3%208'%20stroke='%23ff6fa5'/%3E%3Cpath%20d='M20%20108l8-2'%20stroke='%23ffd166'/%3E%3Cpath%20d='M64%20118l7%203'%20stroke='%237cc6ff'/%3E%3Cpath%20d='M128%20112l-2%208'%20stroke='%23a8e6a1'/%3E%3C/g%3E%3C/svg%3E");background-size:140px 140px}
 :root[data-theme="donut"] body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20120%20120'%3E%3Ccircle%20cx='60'%20cy='60'%20r='52'%20fill='%23e0a964'/%3E%3Cpath%20d='M60%2013c21%200%2037%2015%2041%2033%204%2020-6%2040-25%2048-14%206-31%204-43-6C20%2078%2015%2060%2019%2046%2025%2028%2041%2013%2060%2013z'%20fill='%23ff8fb8'/%3E%3Ccircle%20cx='60'%20cy='60'%20r='16'%20fill='%23ffe3ec'/%3E%3Ccircle%20cx='60'%20cy='60'%20r='16'%20fill='none'%20stroke='%23e0a964'%20stroke-width='4'/%3E%3Cg%20stroke-linecap='round'%20stroke-width='4.5'%3E%3Cpath%20d='M34%2038l6-3'%20stroke='%23fff'/%3E%3Cpath%20d='M82%2034l5%204'%20stroke='%237cc6ff'/%3E%3Cpath%20d='M92%2058l1%207'%20stroke='%23fff3b0'/%3E%3Cpath%20d='M80%2086l-6%203'%20stroke='%23fff'/%3E%3Cpath%20d='M44%2090l-5-4'%20stroke='%237cc6ff'/%3E%3Cpath%20d='M26%2062l-1-6'%20stroke='%23fff3b0'/%3E%3Cpath%20d='M58%2024l7%201'%20stroke='%23a8e6a1'/%3E%3Cpath%20d='M62%2098l7-2'%20stroke='%23fff3b0'/%3E%3C/g%3E%3C/svg%3E") 94% 4%/150px auto no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20120%20120'%3E%3Ccircle%20cx='60'%20cy='60'%20r='52'%20fill='%23e0a964'/%3E%3Cpath%20d='M60%2013c21%200%2037%2015%2041%2033%204%2020-6%2040-25%2048-14%206-31%204-43-6C20%2078%2015%2060%2019%2046%2025%2028%2041%2013%2060%2013z'%20fill='%238b5a3c'/%3E%3Ccircle%20cx='60'%20cy='60'%20r='16'%20fill='%23ffe3ec'/%3E%3Ccircle%20cx='60'%20cy='60'%20r='16'%20fill='none'%20stroke='%23e0a964'%20stroke-width='4'/%3E%3Cg%20stroke-linecap='round'%20stroke-width='4.5'%3E%3Cpath%20d='M34%2038l6-3'%20stroke='%23fff'/%3E%3Cpath%20d='M82%2034l5%204'%20stroke='%237cc6ff'/%3E%3Cpath%20d='M92%2058l1%207'%20stroke='%23fff3b0'/%3E%3Cpath%20d='M80%2086l-6%203'%20stroke='%23fff'/%3E%3Cpath%20d='M44%2090l-5-4'%20stroke='%237cc6ff'/%3E%3Cpath%20d='M26%2062l-1-6'%20stroke='%23fff3b0'/%3E%3Cpath%20d='M58%2024l7%201'%20stroke='%23a8e6a1'/%3E%3Cpath%20d='M62%2098l7-2'%20stroke='%23fff3b0'/%3E%3C/g%3E%3C/svg%3E") 2% 44%/120px auto no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20120%20120'%3E%3Ccircle%20cx='60'%20cy='60'%20r='52'%20fill='%23e0a964'/%3E%3Cpath%20d='M60%2013c21%200%2037%2015%2041%2033%204%2020-6%2040-25%2048-14%206-31%204-43-6C20%2078%2015%2060%2019%2046%2025%2028%2041%2013%2060%2013z'%20fill='%239fe3c4'/%3E%3Ccircle%20cx='60'%20cy='60'%20r='16'%20fill='%23ffe3ec'/%3E%3Ccircle%20cx='60'%20cy='60'%20r='16'%20fill='none'%20stroke='%23e0a964'%20stroke-width='4'/%3E%3Cg%20stroke-linecap='round'%20stroke-width='4.5'%3E%3Cpath%20d='M34%2038l6-3'%20stroke='%23fff'/%3E%3Cpath%20d='M82%2034l5%204'%20stroke='%237cc6ff'/%3E%3Cpath%20d='M92%2058l1%207'%20stroke='%23fff3b0'/%3E%3Cpath%20d='M80%2086l-6%203'%20stroke='%23fff'/%3E%3Cpath%20d='M44%2090l-5-4'%20stroke='%237cc6ff'/%3E%3Cpath%20d='M26%2062l-1-6'%20stroke='%23fff3b0'/%3E%3Cpath%20d='M58%2024l7%201'%20stroke='%23a8e6a1'/%3E%3Cpath%20d='M62%2098l7-2'%20stroke='%23fff3b0'/%3E%3C/g%3E%3C/svg%3E") 90% 70%/170px auto no-repeat,url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20120%20120'%3E%3Ccircle%20cx='60'%20cy='60'%20r='52'%20fill='%23e0a964'/%3E%3Cpath%20d='M60%2013c21%200%2037%2015%2041%2033%204%2020-6%2040-25%2048-14%206-31%204-43-6C20%2078%2015%2060%2019%2046%2025%2028%2041%2013%2060%2013z'%20fill='%23ff8fb8'/%3E%3Ccircle%20cx='60'%20cy='60'%20r='16'%20fill='%23ffe3ec'/%3E%3Ccircle%20cx='60'%20cy='60'%20r='16'%20fill='none'%20stroke='%23e0a964'%20stroke-width='4'/%3E%3Cg%20stroke-linecap='round'%20stroke-width='4.5'%3E%3Cpath%20d='M34%2038l6-3'%20stroke='%23fff'/%3E%3Cpath%20d='M82%2034l5%204'%20stroke='%237cc6ff'/%3E%3Cpath%20d='M92%2058l1%207'%20stroke='%23fff3b0'/%3E%3Cpath%20d='M80%2086l-6%203'%20stroke='%23fff'/%3E%3Cpath%20d='M44%2090l-5-4'%20stroke='%237cc6ff'/%3E%3Cpath%20d='M26%2062l-1-6'%20stroke='%23fff3b0'/%3E%3Cpath%20d='M58%2024l7%201'%20stroke='%23a8e6a1'/%3E%3Cpath%20d='M62%2098l7-2'%20stroke='%23fff3b0'/%3E%3C/g%3E%3C/svg%3E") 8% 94%/130px auto no-repeat}
 :root[data-theme="donut"] .card{border-radius:30px;border:3px solid #8b5a3c}
 :root[data-theme="donut"] .btn{border:3px solid #8b5a3c;background:#fff8ef}
-.sw-space{background:radial-gradient(circle at 60% 40%,#ff7b1c 0 26%,transparent 28%),linear-gradient(180deg,#040820,#1a4fd6);border-radius:50%}
+.sw-space{background:radial-gradient(circle at 60% 40%,#ff7b1c 0 26%,transparent 28%),radial-gradient(circle at 28% 72%,#2f7fa3 0 14%,transparent 16%),#000;border-radius:50%}
 .sw-donut{background:radial-gradient(circle,#ffe3ec 0 22%,#ff8fb8 24% 60%,#e0a964 62%);border-radius:50%}
 .sw-cloud{background:radial-gradient(circle at 35% 62%,#fff 0 28%,transparent 30%),radial-gradient(circle at 62% 55%,#fff 0 32%,transparent 34%),linear-gradient(180deg,#a9d4ff,#e3e8ff);border-radius:50%}
 .nextcolor{display:flex;align-items:center;gap:6px;margin:8px 0 0}
@@ -252,10 +252,18 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 .fall{position:fixed;top:-40px;font-size:28px;pointer-events:none;z-index:99;animation:fall linear forwards}
 @keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.9}}
 @media (prefers-reduced-motion:reduce){.pop .stamp,.banner{animation:none}.fall{display:none}.bar>i{transition:none}}
+.diarybtn{border-color:#e3b968;background:#fbe8c0;color:#5c3f0b;font-weight:700;font-size:16px;padding:7px 14px;box-shadow:var(--shadow)} /* 상점(테마 색)과 다른 부드러운 살구빛 */
 .shopbtn{border-color:var(--accent);background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:16px;padding:7px 18px;box-shadow:var(--shadow)}
 #histBtn{margin-top:8px}
-#histDlg,#celDlg,#stkPrevDlg{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);max-width:min(420px,calc(100vw - 32px));padding:18px;box-shadow:var(--shadow)}
-#histDlg::backdrop,#celDlg::backdrop,#stkPrevDlg::backdrop{background:rgba(0,0,0,.35)}
+#histDlg,#celDlg,#stkPrevDlg,#diaryDlg{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);max-width:min(420px,calc(100vw - 32px));padding:18px;box-shadow:var(--shadow)}
+#histDlg::backdrop,#celDlg::backdrop,#stkPrevDlg::backdrop,#diaryDlg::backdrop{background:rgba(0,0,0,.35)}
+#diaryDlg{width:min(480px,calc(100vw - 32px))}
+.dytabs{display:flex;gap:6px;margin:8px 0}.dytabs .btn{flex:1}.dytabs .btn[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.dynav{display:flex;gap:6px;align-items:center;justify-content:space-between;margin-bottom:8px}#dyPick{flex:1;min-width:0;border:2px solid var(--line);border-radius:10px;padding:5px 8px;font:inherit;background:var(--card);color:var(--ink)}
+#dyBody.five{max-height:none;overflow:visible}#dyBody.five .dyrow{display:grid;grid-template-columns:52px 1fr;gap:8px;align-items:start}#dyBody.five textarea{height:56px;min-height:0;resize:none}#dyBody.five .dyrow label{padding-top:8px;margin:0;font-size:14px}
+#dyBody{max-height:52vh;overflow:auto}
+.dyrow{margin:0 0 8px}.dyrow label{display:block;font-size:13px;color:var(--soft);margin-bottom:2px}.dyrow.today label{color:var(--accent);font-weight:700}
+#dyBody textarea{width:100%;box-sizing:border-box;border:2px solid var(--line);border-radius:10px;padding:6px 8px;font:inherit;background:var(--card);color:var(--ink);resize:vertical}
 .hcal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:12px 0 6px;text-align:center}
 .hcal .wd{font-size:12px;color:var(--soft)}
 .hcal .hd{min-height:44px;border:1px solid var(--line);border-radius:8px;padding:2px 0;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:2px}
@@ -320,6 +328,7 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
   <div class="topbar">
   <button type="button" class="langbtn" id="introBtn"><span aria-hidden="true">ⓘ</span><span id="introBtnTxt"></span></button>
   <span id="crRow" hidden><button type="button" class="langbtn shopbtn" id="crBtn" aria-haspopup="dialog"><span aria-hidden="true">🛍</span><span>상점</span></button></span>
+  <button type="button" class="langbtn diarybtn" id="diaryBtn" aria-haspopup="dialog"><span aria-hidden="true">✎</span><span>기록</span></button>
   <button type="button" class="langbtn" id="setBtn" aria-expanded="false" aria-controls="settingsView"><span aria-hidden="true">⚙</span><span id="setBtnTxt"></span></button>
   </div>
 
@@ -501,6 +510,15 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
   <p class="stat" id="spNote"></p>
   <div class="hcal" id="spGrid"></div>
   <div class="row" style="justify-content:flex-end;gap:8px"><button class="btn main" id="spBuy" type="button"></button><button class="btn" id="spClose" type="button">닫기</button></div>
+</dialog>
+
+<dialog id="diaryDlg" aria-labelledby="dyTitle">
+  <h2 id="dyTitle">기록</h2>
+  <div class="dytabs" role="tablist"><button type="button" class="btn" data-m="day">하루</button><button type="button" class="btn" data-m="week">주간</button><button type="button" class="btn" data-m="five">5년</button></div>
+  <div class="dynav"><button type="button" class="btn" id="dyPrev" aria-label="이전">‹</button><input type="date" id="dyPick" aria-label="날짜 고르기"><button type="button" class="btn" id="dyNext" aria-label="다음">›</button><button type="button" class="btn" id="dyToday">오늘</button></div>
+  <p class="stat" id="dyCap" style="margin:0 0 8px;text-align:center"></p>
+  <div id="dyBody"></div>
+  <div class="row" style="justify-content:flex-end;margin-top:10px"><button class="btn" id="dyClose" type="button">닫기</button></div>
 </dialog>
 
 <dialog id="histDlg" aria-labelledby="histTitle">
@@ -2092,7 +2110,6 @@ const STICKER_PACKS={
   sticker_daily:{name:'하루',list:['☕','📚','🏃','💧','🛒','🎬']},
   sticker_party:{name:'기념일',list:['🎂','🎁','✈️','💌','🎉','💖']},
   sticker_life:{name:'생활 필수',list:['🏥','💊','📦','🏦','🧺','🛒','🧹','📞','💼','📝','🚌','🍽️']},
-  sticker_vintage:{name:'빈티지',list:['📻','🕰️','📷','🗝️','✉️','🧭','🎞️','☎️']},
   sticker_cafe:{name:'카페',list:['☕','🍵','🧋','🥤','🍹','🥐','🍞','🥪','🥞','🍰','🧁','🍩','🍪','🍨','🍫','💻']},
   sticker_office:{name:'오피스',list:['💼','📊','📈','🗂️','📎','🖨️','💻','📅','📌','🗒️','📧','⏰']},
   // 하이라이트: 그림이 아니라 날짜 숫자에 그리는 꾸밈(hl:이름). 칸의 날짜 숫자에 형광펜·밑줄·동그라미가 입혀진다
@@ -2103,6 +2120,42 @@ const stkName=e=>e.startsWith('hl:')?(HL_NAMES[e.slice(3)]||'하이라이트'):e
 const STICKERS_PER_DAY=3;
 const ownedStickers=()=>Object.keys(STICKER_PACKS).filter(id=>OWNED.has(id)).flatMap(id=>STICKER_PACKS[id].list);
 let histSel=null;
+
+/* 기록(2026-11-04 사용자 요청: 메모장·5년 다이어리·주간 다이어리): 날짜별 글 하나(S.diary)를 하루·주간·5년 세 가지로 보고 쓴다. 무료 */
+let dyMode='day',dyDate=todayStr;
+const dyAdd=(ds,n)=>{const d=new Date(ds+'T00:00');d.setDate(d.getDate()+n);return fmt(d)};
+const dyFmt=(ds,o)=>new Intl.DateTimeFormat(LOCALE[lang],o).format(new Date(ds+'T00:00'));
+function dySet(ds,v){if(!S.diary)S.diary={};if(v.trim())S.diary[ds]=v.slice(0,1000);else delete S.diary[ds];save()}
+function dyRow(ds,label,rows){
+  const d=document.createElement('div');d.className='dyrow'+(ds===todayStr?' today':'');
+  const l=document.createElement('label');l.textContent=label;const ta=document.createElement('textarea');
+  ta.rows=rows;ta.maxLength=1000;ta.value=(S.diary&&S.diary[ds])||'';ta.setAttribute('aria-label',label);
+  ta.oninput=()=>dySet(ds,ta.value);d.appendChild(l);d.appendChild(ta);return d;
+}
+function renderDiary(){
+  document.querySelectorAll('#diaryDlg .dytabs .btn').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.m===dyMode)));
+  const body=$('dyBody');body.textContent='';body.className=dyMode==='five'?'five':'';$('dyPick').value=dyDate;
+  if(dyMode==='day'){
+    $('dyCap').textContent=dyFmt(dyDate,{year:'numeric',month:'long',day:'numeric',weekday:'short'});
+    body.appendChild(dyRow(dyDate,'오늘의 메모·일기',8));
+  }else if(dyMode==='week'){
+    const sun=dyAdd(dyDate,-new Date(dyDate+'T00:00').getDay());
+    $('dyCap').textContent=dyFmt(sun,{month:'long',day:'numeric'})+' ~ '+dyFmt(dyAdd(sun,6),{month:'long',day:'numeric'});
+    for(let i=0;i<7;i++){const ds=dyAdd(sun,i);body.appendChild(dyRow(ds,dyFmt(ds,{month:'numeric',day:'numeric',weekday:'short'}),2))}
+  }else{
+    const d=new Date(dyDate+'T00:00'),md=`${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    $('dyCap').textContent=dyFmt(dyDate,{month:'long',day:'numeric'})+' · '+(d.getFullYear()-4)+'~'+d.getFullYear()+'년';
+    for(let y=d.getFullYear();y>d.getFullYear()-5;y--){const ds=`${y}-${md}`;body.appendChild(dyRow(ds,y+'년',2))}
+  }
+}
+function openDiary(){dyDate=todayStr;dyMode='day';renderDiary();$('diaryDlg').showModal()}
+$('diaryBtn').onclick=openDiary;
+$('dyClose').onclick=()=>$('diaryDlg').close();
+$('dyToday').onclick=()=>{dyDate=todayStr;renderDiary()};
+document.querySelectorAll('#diaryDlg .dytabs .btn').forEach(b=>b.onclick=()=>{dyMode=b.dataset.m;renderDiary()});
+const dyStep=k=>{const d=new Date(dyDate+'T00:00');if(dyMode==='day')d.setDate(d.getDate()+k);else if(dyMode==='week')d.setDate(d.getDate()+7*k);else d.setFullYear(d.getFullYear()+k);dyDate=fmt(d);renderDiary()};
+$('dyPick').onchange=()=>{if($('dyPick').value){dyDate=$('dyPick').value;renderDiary()}};
+$('dyPrev').onclick=()=>dyStep(-1);$('dyNext').onclick=()=>dyStep(1);
 function openHist(){const d=new Date();histMonth=new Date(d.getFullYear(),d.getMonth(),1);histSel=notesOpen()?todayStr:null;$('histDlg').showModal();renderHist()}
 function histMin(){
   let m=String(S.first||todayStr).slice(0,7);
