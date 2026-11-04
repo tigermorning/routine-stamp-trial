@@ -20,11 +20,15 @@ FREE_CREDITS = 20
 CHAT_COST = 1
 # 같은 주소(IP)에서 하루에 무료 크레딧을 받을 수 있는 새 client_id 수. 0 이면 제한 없음(완화책 전 상태 재현용)
 FREE_GRANTS_PER_IP_PER_DAY = int(os.environ.get("FREE_GRANTS_PER_IP_PER_DAY", "3"))
+# 도우미 대화는 무료이고 하루 한도만 둔다(사용자 결정 2026-11-04). 한도 숫자는 호출당 비용·파일럿 사용량을 재기 전의 임시값이며 근거가 없다.
+# 한 사람(client_id)당, 그리고 같은 주소(IP)당 하루 횟수. 0 이면 제한 없음. 남은 횟수는 화면에 보이지 않는다(줄어드는 숫자 금지 원칙).
+CHAT_FREE_PER_DAY = int(os.environ.get("CHAT_FREE_PER_DAY", "30"))
+CHAT_FREE_PER_IP_PER_DAY = int(os.environ.get("CHAT_FREE_PER_IP_PER_DAY", str(CHAT_FREE_PER_DAY * 3)))
 
 PRODUCTS = {
-    "credits_100": {"id": "credits_100", "name": "크레딧 100개", "amount": 1000, "credits": 100},
-    "credits_550": {"id": "credits_550", "name": "크레딧 550개", "amount": 5000, "credits": 550},
-    "credits_1200": {"id": "credits_1200", "name": "크레딧 1,200개", "amount": 10000, "credits": 1200},
+    "credits_100": {"id": "credits_100", "name": "추가 대화 100번", "amount": 1000, "credits": 100},
+    "credits_550": {"id": "credits_550", "name": "추가 대화 550번", "amount": 5000, "credits": 550},
+    "credits_1200": {"id": "credits_1200", "name": "추가 대화 1,200번", "amount": 10000, "credits": 1200},
 }
 
 # 일회 구매(영구 소유) 상품. 크레딧(도우미 대화용 소모형)과 화폐를 나눈다: 이 상품은 크레딧을 쓰지 않고 원 단위로 한 번 산다.
@@ -37,6 +41,11 @@ ITEMS = {
     # kind 'feature'/'stamp' 는 화면에서만 열리고 닫히는 기능이다(데이터가 이 브라우저에 있어 서버가 막을 것이 없다)
     "history_view": {"id": "history_view", "kind": "feature", "name": "지난 기록 돌아보기", "amount": 1000, "desc": "지난 달의 도장을 달력으로 돌아봐요"},
     "stamp_shapes": {"id": "stamp_shapes", "kind": "stamp", "name": "도장 모양 바꾸기", "amount": 1000, "desc": "동그라미 말고 네 가지 모양 중에 골라요"},
+    # 스티커 팩(2026-11-04): 누적 60일에 열리는 달력의 날짜 칸에 붙이는 스티커. 그림 목록은 화면 index.html 의 STICKER_PACKS 에 있고(id 가 같아야 함, 시험이 확인),
+    # 서버는 상품·가격·소유만 다룬다. 가격은 임시값이다(근거 없음).
+    "sticker_round": {"id": "sticker_round", "kind": "sticker", "name": "동글동글 스티커 팩", "amount": 1000, "desc": "달력 날짜에 붙이는 스티커 6개"},
+    "sticker_daily": {"id": "sticker_daily", "kind": "sticker", "name": "하루 스티커 팩", "amount": 1000, "desc": "달력 날짜에 붙이는 스티커 6개"},
+    "sticker_party": {"id": "sticker_party", "kind": "sticker", "name": "기념일 스티커 팩", "amount": 1000, "desc": "달력 날짜에 붙이는 스티커 6개"},
     # 열림 건너뛰기(2026-11-04): 칸·색·달력이 열리는 3·28·60일째를 돈으로 먼저 연다. 기능만 열리고 달성 표시(✔)·축하는 실제 일수에만 준다.
     # 가격은 «열림이 복잡해질수록 조금씩 비싸게, 전체는 개별 합계보다 싸게» 라는 사용자 방향에 맞춘 임시값이다(근거 없음).
     # 5달러 ≈ 6,720원(환율 1,343.93원/달러, open.er-api.com 2026-11-04 조회)을 기준으로 전체를 6,500원으로 잡았다. 화면이 «이전 열림이 열려 있을 때만» 보여 준다(일수는 브라우저에만 있어 서버는 모름).
@@ -101,7 +110,19 @@ CREATE TABLE IF NOT EXISTS free_grants (
   day TEXT NOT NULL,
   client_id TEXT NOT NULL UNIQUE
 );
+CREATE TABLE IF NOT EXISTS chat_usage (
+  scope TEXT NOT NULL,
+  key TEXT NOT NULL,
+  day TEXT NOT NULL,
+  n INTEGER NOT NULL,
+  PRIMARY KEY (scope, key, day)
+);
 """
+
+
+def chat_day():
+    """도우미 하루 한도의 날짜. 한국 시간(UTC+9) 기준으로 자정에 바뀐다(다른 나라 사용자에게는 임시 기준)."""
+    return (dt.datetime.now(dt.timezone.utc) + dt.timedelta(hours=9)).date().isoformat()
 
 
 def now():
@@ -182,6 +203,41 @@ class Store:
             if c.in_transaction:
                 c.execute("ROLLBACK")
             raise
+        finally:
+            c.close()
+
+    def chat_take(self, client_id, ip):
+        """도우미 대화 한 번을 하루 한도에서 센다(사람당·주소당 둘 다 통과해야 함). 통과하면 되돌릴 때 쓰는 토큰을, 한도를 넘었으면 None."""
+        day = chat_day()
+        ip_hash = hashlib.sha256(("rs-chat:" + str(ip)).encode()).hexdigest()[:32]
+        scopes = [("client", client_id, CHAT_FREE_PER_DAY), ("ip", ip_hash, CHAT_FREE_PER_IP_PER_DAY)]
+        c = self._conn()
+        try:
+            c.execute("BEGIN IMMEDIATE")
+            for scope, key, limit in scopes:
+                row = c.execute("SELECT n FROM chat_usage WHERE scope=? AND key=? AND day=?", (scope, key, day)).fetchone()
+                if limit > 0 and row and row[0] >= limit:
+                    c.execute("ROLLBACK")
+                    return None
+            for scope, key, _ in scopes:
+                c.execute("INSERT OR IGNORE INTO chat_usage(scope, key, day, n) VALUES (?,?,?,0)", (scope, key, day))
+                c.execute("UPDATE chat_usage SET n=n+1 WHERE scope=? AND key=? AND day=?", (scope, key, day))
+            c.execute("COMMIT")
+            return (day, client_id, ip_hash)
+        except Exception:
+            if c.in_transaction:
+                c.execute("ROLLBACK")
+            raise
+        finally:
+            c.close()
+
+    def chat_give_back(self, token):
+        """답을 만들지 못했을 때 센 것을 되돌린다(0 밑으로 내려가지 않음)."""
+        day, client_id, ip_hash = token
+        c = self._conn()
+        try:
+            for scope, key in (("client", client_id), ("ip", ip_hash)):
+                c.execute("UPDATE chat_usage SET n=MAX(n-1,0) WHERE scope=? AND key=? AND day=?", (scope, key, day))
         finally:
             c.close()
 

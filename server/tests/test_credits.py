@@ -48,24 +48,10 @@ def chat(client, cid, text="안녕"):
     return client.post("/api/chat", json={"messages": [{"role": "user", "content": text}]}, headers=hdr(cid))
 
 
-def drain_to(store, cid, target):
-    """원장에 -줄을 직접 쌓아 잔액을 target 으로 만든다(시험 준비)."""
-    store.ensure_client(cid, "test")
-    for _ in range(store.balance(cid) - target):
-        assert store.charge(cid, "chat:" + uuid.uuid4().hex)[0]
-
-
 def order(client, cid, pid="credits_100"):
     r = client.post("/api/orders", json={"productId": pid}, headers=hdr(cid))
     assert r.status_code == 200
     return r.json()
-
-
-def test_first_visit_gets_free_credits_once(env):
-    client, store, _ = env
-    cid = str(uuid.uuid4())
-    assert client.get("/api/credits", headers=hdr(cid)).json()["balance"] == creditlib.FREE_CREDITS
-    assert client.get("/api/credits", headers=hdr(cid)).json()["balance"] == creditlib.FREE_CREDITS  # 두 번 불러도 한 번
 
 
 def test_bad_client_id_rejected(env):
@@ -74,21 +60,11 @@ def test_bad_client_id_rejected(env):
     assert chat(client, "x").status_code == 400
 
 
-def test_one_message_costs_one_credit(env):
+def test_chat_is_free_and_stops_at_the_daily_limit(env, monkeypatch):
     client, store, _ = env
+    monkeypatch.setattr(creditlib, "CHAT_FREE_PER_DAY", 2)
+    monkeypatch.setattr(creditlib, "CHAT_FREE_PER_IP_PER_DAY", 100)
     cid = str(uuid.uuid4())
-    before = client.get("/api/credits", headers=hdr(cid)).json()["balance"]
-    r = chat(client, cid)
-    assert r.status_code == 200 and any(json.loads(x)["type"] == "done" for x in r.text.splitlines() if x)
-    after = client.get("/api/credits", headers=hdr(cid)).json()
-    assert after["balance"] == before - 1
-    assert after["recent"][0]["delta"] == -1 and after["recent"][0]["ref"].startswith("chat:")
-
-
-def test_zero_balance_gets_402_and_model_not_called(env):
-    client, store, _ = env
-    cid = str(uuid.uuid4())
-    drain_to(store, cid, 0)
     calls = []
 
     class Spy(FakeLLM):
@@ -97,33 +73,61 @@ def test_zero_balance_gets_402_and_model_not_called(env):
             return super().complete_json(*a, **k)
 
     main.app.dependency_overrides[main.get_llm] = lambda: Spy(delay=0)
+    for _ in range(2):
+        r = chat(client, cid)
+        assert r.status_code == 200 and any(json.loads(x)["type"] == "done" for x in r.text.splitlines() if x)
+    assert store.balance(cid) == 0  # 도우미 대화는 크레딧을 쓰지 않는다
+    before = len(calls)
     r = chat(client, cid)
-    assert r.status_code == 402
-    assert r.json()["error"] == "insufficient_credits" and r.json()["balance"] == 0 and r.json()["message"]
-    assert calls == []
+    assert r.status_code == 429 and r.json()["error"] == "daily_limit" and r.json()["message"]
+    assert len(calls) == before  # 한도를 넘으면 모델을 부르지 않는다
+    assert not any(ch.isdigit() for ch in r.json()["message"])  # 남은 횟수·한도 숫자를 알리지 않는다
+    assert "remaining" not in r.json() and "balance" not in r.json()
 
 
-def test_failed_reply_is_refunded(env):
-    client, store, _ = env
+def test_each_client_has_its_own_daily_limit(env, monkeypatch):
+    client, _, _ = env
+    monkeypatch.setattr(creditlib, "CHAT_FREE_PER_DAY", 1)
+    monkeypatch.setattr(creditlib, "CHAT_FREE_PER_IP_PER_DAY", 100)
+    a, b = str(uuid.uuid4()), str(uuid.uuid4())
+    assert chat(client, a).status_code == 200
+    assert chat(client, a).status_code == 429
+    assert chat(client, b).status_code == 200
+
+
+def test_same_ip_has_a_daily_limit_across_new_client_ids(env, monkeypatch):
+    client, _, _ = env
+    monkeypatch.setattr(creditlib, "CHAT_FREE_PER_DAY", 100)
+    monkeypatch.setattr(creditlib, "CHAT_FREE_PER_IP_PER_DAY", 2)
+    assert chat(client, str(uuid.uuid4())).status_code == 200
+    assert chat(client, str(uuid.uuid4())).status_code == 200
+    assert chat(client, str(uuid.uuid4())).status_code == 429  # 새 id 를 계속 만들어도 같은 주소는 막힌다
+
+
+def test_failed_reply_does_not_use_up_the_daily_count(env, monkeypatch):
+    client, _, _ = env
+    monkeypatch.setattr(creditlib, "CHAT_FREE_PER_DAY", 1)
+    monkeypatch.setattr(creditlib, "CHAT_FREE_PER_IP_PER_DAY", 100)
     cid = str(uuid.uuid4())
-    store.ensure_client(cid, "test")
     r = chat(client, cid, "fake:error")  # 가짜 LLM 이 답을 만들다 실패
     assert '"type": "error"' in r.text
-    rows = store.recent(cid)
-    assert store.balance(cid) == creditlib.FREE_CREDITS
-    assert rows[0]["reason"] == "refund" and rows[1]["reason"] == "chat"
-    assert rows[0]["ref"].split(":")[1] == rows[1]["ref"].split(":")[1]
+    assert chat(client, cid).status_code == 200  # 센 것을 되돌렸으므로 한 번은 더 된다
 
 
-def test_byok_is_not_charged(env):
-    client, store, _ = env
+def test_byok_and_crisis_are_not_counted(env, monkeypatch):
+    client, _, _ = env
+    monkeypatch.setattr(creditlib, "CHAT_FREE_PER_DAY", 1)
+    monkeypatch.setattr(creditlib, "CHAT_FREE_PER_IP_PER_DAY", 100)
     cid = str(uuid.uuid4())
-    store.ensure_client(cid, "test")
     main.app.dependency_overrides[main.get_user_llm_factory] = lambda: (lambda key: FakeLLM(delay=0))
-    r = client.post("/api/chat", json={"messages": [{"role": "user", "content": "안녕"}]},
-                    headers={**hdr(cid), "X-User-LLM-Key": "sk-" + "a" * 40})
-    assert r.status_code == 200
-    assert store.balance(cid) == creditlib.FREE_CREDITS
+    for _ in range(2):  # 내 키는 한도 밖
+        r = client.post("/api/chat", json={"messages": [{"role": "user", "content": "안녕"}]},
+                        headers={**hdr(cid), "X-User-LLM-Key": "sk-" + "a" * 40})
+        assert r.status_code == 200
+    crisis = next(w for w in ("죽고 싶어", "자살", "suicide", "kill myself") if main.coach.is_crisis(w))
+    assert chat(client, cid, crisis).status_code == 200  # 위기 안내는 모델을 안 부르므로 세지 않는다
+    assert chat(client, cid).status_code == 200  # 운영자 키 대화는 아직 한 번도 안 셌다
+    assert chat(client, cid).status_code == 429
 
 
 def test_products_come_from_server_table(env):
@@ -341,3 +345,79 @@ def test_unlock_purchase_grants_ownership_without_credits(env):
     assert client.post("/api/orders", json={"productId": "unlock_28"}, headers=hdr(cid)).status_code == 409
     items = {i["id"]: i for i in client.get("/api/shop", headers=hdr(cid)).json()["items"]}
     assert items["unlock_all"]["kind"] == "unlock" and items["unlock_60"]["desc"]
+
+
+# ---- 스티커 팩: 상품·소유, 화면의 그림 목록과 id 일치 ----
+def test_sticker_packs_are_items_and_match_the_screen_list():
+    packs = [i for i in creditlib.ITEMS.values() if i["kind"] == "sticker"]
+    assert len(packs) == 3 and all(i["amount"] > 0 and i["desc"] for i in packs)
+    html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
+    block = html[html.index("const STICKER_PACKS={"):html.index("const STICKERS_PER_DAY")]
+    for i in packs:
+        assert i["id"] + ":" in block  # 화면 STICKER_PACKS 에 같은 id 의 그림 목록이 있어야 한다
+
+
+def test_sticker_purchase_grants_ownership(env):
+    client, store, toss = env
+    cid = str(uuid.uuid4())
+    o, r = pay_item(client, cid, "sticker_round", toss)
+    assert r.status_code == 200 and store.owned(cid) == ["sticker_round"]
+    assert client.post("/api/orders", json={"productId": "sticker_round"}, headers=hdr(cid)).status_code == 409
+
+
+# ---- 무료 하루 한도를 다 쓴 뒤에만 쓰이는 추가 대화권(크레딧) ----
+def _buy_tickets(client, cid):
+    o = order(client, cid, "credits_100")
+    r = client.post("/api/payments/confirm", json={"paymentKey": "pk_" + uuid.uuid4().hex[:10], "orderId": o["orderId"],
+                                                   "amount": str(o["amount"])}, headers=hdr(cid))
+    assert r.status_code == 200
+
+
+def test_limit_response_offers_to_buy_and_has_no_numbers(env, monkeypatch):
+    client, store, _ = env
+    monkeypatch.setattr(creditlib, "CHAT_FREE_PER_DAY", 1)
+    monkeypatch.setattr(creditlib, "CHAT_FREE_PER_IP_PER_DAY", 100)
+    cid = str(uuid.uuid4())
+    assert chat(client, cid).status_code == 200
+    r = chat(client, cid)
+    assert r.status_code == 429 and r.json()["error"] == "daily_limit" and r.json()["canBuy"] is True
+    assert not any(ch.isdigit() for ch in r.json()["message"]) and "balance" not in r.json()
+
+
+def test_extra_tickets_are_used_only_after_the_free_limit(env, monkeypatch):
+    client, store, _ = env
+    monkeypatch.setattr(creditlib, "CHAT_FREE_PER_DAY", 1)
+    monkeypatch.setattr(creditlib, "CHAT_FREE_PER_IP_PER_DAY", 100)
+    cid = str(uuid.uuid4())
+    _buy_tickets(client, cid)
+    assert store.balance(cid) == 100
+    assert chat(client, cid).status_code == 200 and store.balance(cid) == 100  # 무료 한도 안이라 대화권을 쓰지 않는다
+    assert chat(client, cid).status_code == 200 and store.balance(cid) == 99   # 한도를 넘은 대화부터 1개씩
+
+
+def test_failed_reply_gives_back_the_extra_ticket(env, monkeypatch):
+    client, store, _ = env
+    monkeypatch.setattr(creditlib, "CHAT_FREE_PER_DAY", 1)
+    monkeypatch.setattr(creditlib, "CHAT_FREE_PER_IP_PER_DAY", 100)
+    cid = str(uuid.uuid4())
+    _buy_tickets(client, cid)
+    assert chat(client, cid).status_code == 200  # 무료 한 번
+    r = chat(client, cid, "fake:error")  # 대화권으로 시도했으나 답을 못 만듦
+    assert '"type": "error"' in r.text
+    assert store.balance(cid) == 100  # 되돌려졌다
+
+
+def test_no_tickets_left_stops_again(env, monkeypatch):
+    client, store, _ = env
+    monkeypatch.setattr(creditlib, "CHAT_FREE_PER_DAY", 1)
+    monkeypatch.setattr(creditlib, "CHAT_FREE_PER_IP_PER_DAY", 100)
+    cid = str(uuid.uuid4())
+    _buy_tickets(client, cid)
+    for _ in range(98):  # 대화권을 2개만 남긴다(속도 제한 시험과 섞이지 않게 원장에서 직접 줄임)
+        assert store.charge(cid, "chat:" + uuid.uuid4().hex)[0]
+    assert store.balance(cid) == 2
+    for _ in range(3):  # 무료 1번 + 대화권 2개
+        assert chat(client, cid).status_code == 200
+    assert store.balance(cid) == 0
+    r = chat(client, cid)
+    assert r.status_code == 429 and r.json()["canBuy"] is True

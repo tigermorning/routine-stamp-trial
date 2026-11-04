@@ -202,7 +202,6 @@ def get_credits(request: Request, store=Depends(get_credit_store)):
     cid = client_id_of(request)
     if not cid:
         return JSONResponse({"error": "clientId"}, status_code=400)
-    store.ensure_client(cid, client_ip(request))
     return JSONResponse({"balance": store.balance(cid), "recent": store.recent(cid, 10), "owned": store.owned(cid)},
                         headers={"Cache-Control": "no-store"})
 
@@ -405,21 +404,25 @@ def chat(req: ChatRequest, request: Request, model=Depends(get_llm), factory=Dep
     last = history[-1]["content"]
     raw_key = request.headers.get(byok.HEADER)
     engine, user_key, pick_error = pick_llm(raw_key, model, factory)
-    # 크레딧: 운영자 키로 모델을 부를 때만, 부르기 전에 서버에서 차감한다(위기 키워드는 모델을 안 부르므로 차감 없음, BYOK 도 차감 없음)
+    # 하루 한도: 도우미 대화는 무료이고, 운영자 키로 모델을 부를 때만 부르기 전에 서버에서 하루 횟수를 센다
+    # (위기 키워드는 모델을 안 부르므로 세지 않고, 내 키(BYOK)도 세지 않는다). 남은 횟수는 알려 주지 않는다.
     cid, charge_ref, outcome = None, None, {"refund": False}
     if store is not None:
         cid = client_id_of(request)
         if not cid:
             return JSONResponse({"error": "clientId"}, status_code=400)
         if not pick_error and not user_key and not coach.is_crisis(last):
-            store.ensure_client(cid, client_ip(request))
-            ref = "chat:" + uuid.uuid4().hex
-            charged, bal = store.charge(cid, ref)
-            if not charged:
-                return JSONResponse({"error": "insufficient_credits", "balance": bal,
-                                     "message": "크레딧을 다 썼어요. 도우미와 이야기하려면 크레딧을 충전해 주세요. 도장 찍기는 크레딧 없이 그대로 쓸 수 있어요."},
-                                    status_code=402)
-            charge_ref = ref
+            taken = store.chat_take(cid, client_ip(request))
+            if taken is not None:
+                charge_ref = ("free", taken)
+            else:  # 하루 무료 한도를 다 썼으면 산 추가 대화권(원장)에서 1개를 쓴다. 없으면 모델을 부르지 않고 안내만 한다(남은 숫자는 알리지 않음)
+                ref = "chat:" + uuid.uuid4().hex
+                charged, _bal = store.charge(cid, ref)
+                if not charged:
+                    return JSONResponse({"error": "daily_limit", "canBuy": True,
+                                         "message": "오늘의 무료 대화를 모두 썼어요. 내일 다시 이야기하거나, 추가 대화권을 사서 계속 이야기할 수 있어요. 설정에서 내 API 키를 넣어도 돼요. 도장 찍기는 그대로 쓸 수 있어요."},
+                                        status_code=429)
+                charge_ref = ("credit", ref)
 
     def events():
         turn = tracing.start_turn()  # 한 턴 = 트레이스 하나(chat-turn). 키가 없으면 아무 일도 하지 않는다
@@ -431,8 +434,12 @@ def chat(req: ChatRequest, request: Request, model=Depends(get_llm), factory=Dep
         finally:
             turn.end()
             tracing.flush(turn)
-            if charge_ref and outcome["refund"]:  # 답을 만들지 못했으면 되돌리는 +1 줄(사용자가 연결을 끊은 경우는 되돌리지 않음)
-                store.refund(cid, charge_ref)
+            if charge_ref and outcome["refund"]:  # 답을 만들지 못했으면 센 것을 되돌린다(사용자가 연결을 끊은 경우는 되돌리지 않음)
+                kind, ref = charge_ref
+                if kind == "free":
+                    store.chat_give_back(ref)
+                else:
+                    store.refund(cid, ref)
 
     def run(turn):
         key_error = pick_error  # (run 안에서 다시 정하므로 지역 이름으로 받는다)

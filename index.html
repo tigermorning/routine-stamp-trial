@@ -214,7 +214,7 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 .fall{position:fixed;top:-40px;font-size:28px;pointer-events:none;z-index:99;animation:fall linear forwards}
 @keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.9}}
 @media (prefers-reduced-motion:reduce){.pop .stamp,.banner{animation:none}.fall{display:none}.bar>i{transition:none}}
-.shopbtn{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--card));font-weight:700}
+.shopbtn{border-color:var(--accent);background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:16px;padding:7px 18px;box-shadow:var(--shadow)}
 #histBtn{margin-top:8px}
 #histDlg,#celDlg{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);max-width:min(420px,calc(100vw - 32px));padding:18px;box-shadow:var(--shadow)}
 #histDlg::backdrop,#celDlg::backdrop{background:rgba(0,0,0,.35)}
@@ -225,6 +225,11 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 .hcal .hd.sel{outline:3px solid var(--accent);outline-offset:1px}
 .hcal .hd .nt{font-size:10px;line-height:1;color:var(--accent)}
 #histNoteIn{width:100%;box-sizing:border-box;margin-top:4px;border:2px solid var(--line);border-radius:10px;padding:6px 8px;font:inherit;background:var(--card);color:var(--ink);resize:vertical}
+.hcal .hd .stk{font-size:12px;line-height:1;letter-spacing:-1px}
+.stkrow{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
+.stkbtn{font-size:22px;line-height:1;border:2px solid var(--line);border-radius:10px;background:var(--card);padding:3px 7px;cursor:pointer}
+.stkbtn.on{border-color:var(--accent)}
+.stkbtn:disabled{opacity:.4;cursor:default}
 .hcal .hd.blank{border-color:transparent}
 .hcal .hd.today{border-color:var(--accent)}
 .hcal .hd.on{background:color-mix(in srgb,var(--accent) 10%,var(--card))}
@@ -321,6 +326,7 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
     <div id="chMain">
       <div id="chLog" role="log" aria-live="polite"></div>
       <p class="msg" id="chMsg" role="status" aria-live="polite"></p>
+      <button type="button" class="linkbtn" id="chBuy" hidden>추가 대화권 보기</button>
       <div class="chrow"><input id="chIn" maxlength="300" autocomplete="off"><button class="btn main" id="chSend" type="button"></button></div>
     </div>
   </section>
@@ -392,16 +398,16 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
   <div id="shopList"></div>
   <div id="unlockWrap" hidden>
     <h3>열림 건너뛰기 <small>(기능만 먼저 열어요)</small></h3>
-    <p class="stat">건너뛰어도 달성 표시(✔)와 축하는 실제로 도장을 쌓았을 때 받아요. 앞의 열림이 열려 있을 때만 보여요.</p>
+    <p class="stat">건너뛰어도 달성 표시(✔)와 축하는 실제로 도장을 쌓았을 때 받아요. 열림은 하나씩 따로 살 수 있어요.</p>
     <div id="unlockList"></div>
   </div>
-  <h3>도우미와 대화 충전</h3>
-  <p class="stat">남은 대화 크레딧: <b id="crBal">-</b>개</p>
-  <p class="stat" id="crRule"></p>
+  <h3>도우미 추가 대화권</h3>
+  <p class="stat">도우미와의 대화는 하루 무료 한도 안에서는 무료예요. 한도를 다 쓴 뒤에도 이야기하고 싶을 때만 추가 대화권이 쓰이고, 대화 한 번에 1개가 쓰여요. 도장 찍기에는 쓰이지 않아요.</p>
+  <p class="stat">가진 추가 대화권: <b id="crBal">0</b>개</p>
   <div id="crList"></div>
   <p class="msg" id="crErr" role="status"></p>
   <p class="stat">결제는 토스페이먼츠 테스트 환경에서만 진행돼요(실제로 돈이 빠져나가지 않음). 환불 기준: 아직 정하지 않았어요(정책 확정 전 자리).</p>
-  <p class="stat">계정 없이 이 브라우저로 쓰는 중이에요. 브라우저 데이터를 지우면 산 크레딧에 다시 접근할 수 없어요.</p>
+  <p class="stat">계정 없이 이 브라우저로 쓰는 중이에요. 브라우저 데이터를 지우면 산 상품에 다시 접근할 수 없어요.</p>
   <div class="row" style="justify-content:flex-end"><button class="btn" id="crClose" type="button">닫기</button></div>
 </dialog>
 
@@ -411,6 +417,11 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
   <div id="histNote" hidden>
     <label class="stat" for="histNoteIn" id="histNoteCap"></label>
     <textarea id="histNoteIn" maxlength="120" rows="2" placeholder="이 날의 할 일·일정"></textarea>
+  </div>
+  <div id="histStk" hidden>
+    <p class="stat" id="histStkCap">스티커 붙이기 (하루 최대 3개, 붙인 것을 누르면 떼요)</p>
+    <div class="stkrow" id="histStkOn"></div>
+    <div class="stkrow" id="histStkPick"></div>
   </div>
   <p class="stat" id="histStat"></p>
   <div class="row" style="justify-content:flex-end"><button class="btn" id="histClose" type="button">닫기</button></div>
@@ -1910,6 +1921,13 @@ function renderWeek(){
 let histMonth=null;
 const NOTES_AT=60; // 날짜 칸(할 일·일정)이 열리는 누적 도장 일수(사용자 결정 2026-11-04)
 const notesOpen=()=>opened(NOTES_AT);
+/* 스티커 팩: id 는 서버 상품표(server/credits.py ITEMS)와 같아야 한다. 그림은 이모지로 시작했고 플랫폼마다 모양이 다르다. 하루 최대 3개는 칸 크기에 맞춘 설계 판단이다 */
+const STICKER_PACKS={
+  sticker_round:{name:'동글동글',list:['🌸','🍀','⭐','🌈','🍓','🐥']},
+  sticker_daily:{name:'하루',list:['☕','📚','🏃','💧','🛒','🎬']},
+  sticker_party:{name:'기념일',list:['🎂','🎁','✈️','💌','🎉','💖']}};
+const STICKERS_PER_DAY=3;
+const ownedStickers=()=>Object.keys(STICKER_PACKS).filter(id=>OWNED.has(id)).flatMap(id=>STICKER_PACKS[id].list);
 let histSel=null;
 function openHist(){const d=new Date();histMonth=new Date(d.getFullYear(),d.getMonth(),1);histSel=notesOpen()?todayStr:null;$('histDlg').showModal();renderHist()}
 function histMin(){
@@ -1928,7 +1946,8 @@ function renderHist(){
     const ds=`${ym}-${pad(d)}`,on=hasStamp(ds);if(on)kept++;
     const dots=all.filter(s=>get(ds,s.id)>0).map(s=>`<i class="hdot v${get(ds,s.id)}" style="--c:${s.color}"></i>`).join('');
     const tag=notesOpen()?'button':'span',has=!!(S.notes&&S.notes[ds]);
-    h+=`<${tag} ${tag==='button'?`type="button" data-d="${ds}" `:''}class="hd ${on?'on':''} ${ds===todayStr?'today':''} ${ds===histSel?'sel':''}">${d}<span class="hdots">${dots}</span>${has?'<span class="nt" aria-label="메모 있음">✎</span>':''}</${tag}>`;
+    const stk=((S.stickers&&S.stickers[ds])||[]).map(esc).join('');
+    h+=`<${tag} ${tag==='button'?`type="button" data-d="${ds}" `:''}class="hd ${on?'on':''} ${ds===todayStr?'today':''} ${ds===histSel?'sel':''}">${d}<span class="hdots">${dots}</span>${stk?`<span class="stk">${stk}</span>`:''}${has?'<span class="nt" aria-label="메모 있음">✎</span>':''}</${tag}>`;
   }
   $('histCal').innerHTML=h;
   $('histCal').querySelectorAll('button.hd').forEach(b=>b.onclick=()=>{histSel=b.dataset.d;renderHist();$('histNoteIn').focus({preventScroll:true})});
@@ -1938,9 +1957,21 @@ function renderHist(){
     $('histNoteCap').textContent=new Intl.DateTimeFormat(LOCALE[lang],{month:'long',day:'numeric',weekday:'short'}).format(new Date(histSel+'T00:00'))+' 할 일·일정';
     if(document.activeElement!==$('histNoteIn')) $('histNoteIn').value=(S.notes&&S.notes[histSel])||'';
   }
+  renderStk(nv);
   $('histStat').textContent=t('monthStat',{n:kept});
   $('histPrev').disabled=ym<=histMin();const mx=new Date(todayStr+'T00:00');if(notesOpen())mx.setMonth(mx.getMonth()+12);
   $('histNext').disabled=ym>=`${mx.getFullYear()}-${pad(mx.getMonth()+1)}`; // 일정은 앞으로 열두 달까지
+}
+function renderStk(show){
+  const pool=ownedStickers(),box=$('histStk');
+  box.hidden=!(show&&pool.length);
+  if(box.hidden) return;
+  const cur=(S.stickers&&S.stickers[histSel])||[];
+  $('histStkOn').innerHTML=cur.map((e,i)=>`<button type="button" class="stkbtn on" data-i="${i}" aria-label="${esc(e)} 떼기">${esc(e)}</button>`).join('');
+  $('histStkPick').innerHTML=pool.map(e=>`<button type="button" class="stkbtn" data-e="${esc(e)}"${cur.length>=STICKERS_PER_DAY?' disabled':''} aria-label="${esc(e)} 붙이기">${esc(e)}</button>`).join('');
+  const put=arr=>{S.stickers=Object.assign({},S.stickers);if(arr.length) S.stickers[histSel]=arr;else delete S.stickers[histSel];save();renderHist()};
+  $('histStkOn').querySelectorAll('button').forEach(b=>b.onclick=()=>put(cur.filter((_,i)=>i!==+b.dataset.i)));
+  $('histStkPick').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(cur.length<STICKERS_PER_DAY) put(cur.concat(b.dataset.e))});
 }
 $('histNoteIn').oninput=()=>{
   if(!histSel||!notesOpen()) return;
@@ -2192,9 +2223,10 @@ async function sendChat(text){
   };
   try{
     const res=await fetch(CHAT_URL,{method:'POST',headers:keyHeaders({'Content-Type':'application/json'}),body:JSON.stringify(body),signal:ctl.signal});
-    if(res.status===402){ // 크레딧 부족: 서버가 준 문구와 함께 충전 팝업을 열고, 보내려던 말은 입력창에 남긴다
-      let j={};try{j=await res.json()}catch(x){}
-      end='credits';keyErr=j.message||'크레딧이 모자라요.';
+    let lim=null;
+    if(res.status===429){try{const j=await res.clone().json();if(j.error==='daily_limit') lim=j}catch(x){}}
+    if(lim){ // 하루 한도: 서버가 준 문구만 보이고(남은 횟수 숫자 없음), 보내려던 말은 입력창에 남긴다
+      end='limit';keyErr=lim.message||'오늘은 충분히 이야기했어요. 내일 다시 이야기해요.';
     }else{
     if(!res.ok) throw new Error('http');
     if(res.body&&res.body.getReader){
@@ -2209,7 +2241,8 @@ async function sendChat(text){
   const retry=key=>{ // 이번 말은 지우고 입력창에 되돌려 놓아 다시 보낼 수 있게 한다
     c.msgs.splice(c.msgs.indexOf(um),1);$('chIn').value=text;$('chMsg').textContent=t(key);
   };
-  if(end==='credits'){c.msgs.splice(c.msgs.indexOf(um),1);$('chIn').value=text;$('chMsg').textContent=keyErr;c.msgs=c.msgs.slice(-CHAT_KEEP);save();renderChat();openCredits(keyErr);return}
+  if(end==='limit'){c.msgs.splice(c.msgs.indexOf(um),1);$('chIn').value=text;$('chMsg').textContent=keyErr;$('chBuy').hidden=false;c.msgs=c.msgs.slice(-CHAT_KEEP);save();renderChat();return}
+  $('chBuy').hidden=true;
   window.dispatchEvent(new Event('credits-refresh'));
   if(end==='crisis'||end==='scope'){um.x=true;c.msgs.push({r:'a',k:end==='crisis'?'chCrisis':'chScope',x:true})}
   else if(end==='error') retry(KEY_ERRS.includes(keyErr)?keyErr:'chBusy');
@@ -2386,7 +2419,7 @@ async function loadCredits(){
     const r=await fetch('/api/credits',{headers:{'X-Client-Id':clientId()},cache:'no-store'});
     if(r.status===404){crOn=false;$('crRow').hidden=true;return}
     const j=await r.json();crOn=true;crBal=j.balance;
-    $('crRow').hidden=false;$('crBal').textContent=j.balance; // 위쪽에는 줄어드는 숫자를 두지 않는다(PRD). 잔액은 상점 팝업의 도우미 대화 구역에만 보인다
+    $('crRow').hidden=false;$('crBal').textContent=j.balance; // 가진 추가 대화권은 상점 창 안에서만 보인다(메인 화면에는 줄어드는 숫자를 두지 않는다)
     setOwned(j.owned||[]);
   }catch(e){$('crRow').hidden=true}
 }
@@ -2408,19 +2441,24 @@ async function renderShop(){
     const j=await (await fetch('/api/shop',{headers:{'X-Client-Id':clientId()},cache:'no-store'})).json();
     box.textContent='';ub.textContent='';
     j.items.forEach(it=>{
-      if(it.kind==='unlock'){ // 이미 열린 열림과 앞이 안 열린 열림은 보이지 않는다. «모든 열림»은 셋 다 안 열렸을 때만(개별 합계보다 싼 경우)
-        const all=it.id==='unlock_all';
-        if(all?UNLOCKS.some(opened):(opened(it.at)||!UNLOCKS.filter(x=>x<it.at).every(opened))) return;
-      }
+      // 상점 상품은 루틴 성공 일수와 관계없이 항상 보인다(사용자 결정 2026-11-04: 유료 구매 고객 유치). 이미 열렸거나 아직 쓸 수 없는 것은 이유를 함께 보인다.
+      const all=it.id==='unlock_all',unlockDone=it.kind==='unlock'&&(all?UNLOCKS.every(opened):opened(it.at));
+      const partial=all&&!unlockDone&&UNLOCKS.some(opened); // 일부가 이미 열려 있으면 «모든 열림»이 남은 열림을 하나씩 사는 것보다 비쌀 수 있다
       const own=j.owned.includes(it.id),row=document.createElement('div');row.className='shopitem';
       const th=it.kind==='theme'?THEMES.find(x=>x.id===it.theme):null;
       row.innerHTML=(th?`<i class="sw sw-${esc(th.id)}"></i>`:it.kind==='stamp'?'<i class="shp"></i>':'<i class="sw" style="background:var(--accent)"></i>')+
-        `<span>${esc(it.name)}<small>${it.kind==='quote'?esc(SAMPLE_QUOTE):esc(it.desc||'')}</small></span>`;
+        `<span>${esc(it.name)}<small>${it.kind==='quote'?esc(SAMPLE_QUOTE):it.kind==='sticker'?esc(((STICKER_PACKS[it.id]||{}).list||[]).join(' ')+(notesOpen()?'':'  (달력이 열려야 붙일 수 있어요: 누적 60일 또는 60일째 열림)')):esc((it.desc||'')+(partial?' (일부가 이미 열려 있어 남은 열림을 하나씩 사는 편이 저렴해요)':''))}</small></span>`;
       const b=document.createElement('button');b.type='button';b.className='btn';
       if(own&&th){b.textContent='쓰기';b.onclick=()=>{S.theme=th.id;save();render();$('crDlg').close()}}
       else if(own&&it.id==='history_view'){b.textContent='열기';b.onclick=()=>{$('crDlg').close();openHist()}}
       else if(own&&it.id==='stamp_shapes'){b.textContent='모양 고르기';b.onclick=()=>{$('crDlg').close();setView(true);$('shapeRow').open=true}}
+      else if(own&&it.kind==='sticker'){
+        if(notesOpen()){b.textContent='달력에서 붙이기';b.onclick=()=>{$('crDlg').close();openHist()}}
+        else{b.textContent='달력이 열리면 쓸 수 있어요';b.disabled=true}
+      }
+      else if(unlockDone){b.textContent='✔ 이미 열려 있어요';b.disabled=true}
       else if(own){b.textContent='✔ 가지고 있어요';b.disabled=true}
+      else if(partial){b.textContent=it.amount.toLocaleString('ko-KR')+'원';b.disabled=true}
       else{b.textContent=it.amount.toLocaleString('ko-KR')+'원';b.onclick=()=>buyCredits(it.id)}
       row.appendChild(b);(it.kind==='unlock'?ub:box).appendChild(row);
     });
@@ -2435,11 +2473,10 @@ async function openCredits(why){
   const box=$('crList');box.textContent='불러오는 중…';
   try{
     const j=await (await fetch('/api/products',{cache:'no-store'})).json();
-    $('crRule').textContent='도우미에게 보내는 메시지 1개에 크레딧 '+j.chatCost+'개가 쓰여요. 도장 찍기는 크레딧을 쓰지 않아요.';
     box.textContent='';
     j.products.forEach(p=>{
       const b=document.createElement('button');b.type='button';b.className='btn crprod';b.dataset.id=p.id;
-      b.textContent=p.name+' · '+p.amount.toLocaleString('ko-KR')+'원 (1개 '+(Math.round(p.amount/p.credits*10)/10)+'원)';
+      b.textContent=p.name+' · '+p.amount.toLocaleString('ko-KR')+'원';
       b.onclick=()=>buyCredits(p.id);box.appendChild(b);
     });
   }catch(e){box.textContent='상품 목록을 불러오지 못했어요.'}
@@ -2455,6 +2492,7 @@ async function buyCredits(pid){
   }catch(e){$('crErr').textContent='주문을 만들지 못했어요. 잠시 뒤 다시 해 주세요.'}
 }
 $('crBtn').onclick=()=>openCredits('');
+$('chBuy').onclick=()=>openCredits('');
 $('crClose').onclick=()=>$('crDlg').close();
 window.addEventListener('credits-refresh',loadCredits);
 loadCredits();
