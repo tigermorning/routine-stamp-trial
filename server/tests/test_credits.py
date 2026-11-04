@@ -421,3 +421,16 @@ def test_no_tickets_left_stops_again(env, monkeypatch):
     assert store.balance(cid) == 0
     r = chat(client, cid)
     assert r.status_code == 429 and r.json()["canBuy"] is True
+
+
+# ---- 할 일 아이콘 스타일 팩: 상품과 화면 id 일치, 그림 모양 정의 ----
+def test_icon_packs_are_items_and_match_the_screen():
+    packs = [i for i in creditlib.ITEMS.values() if i["kind"] == "iconpack"]
+    assert len(packs) == 3 and all(i["amount"] > 0 and i["desc"] for i in packs)
+    html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
+    block = html[html.index("const ICON_PACKS={"):html.index("const ICON_PREVIEW")]
+    for i in packs:
+        assert i["id"] + ":" in block
+    glyphs = html[html.index("const GLYPHS={"):html.index("function glyphSVG")]
+    for key in ("wake", "water", "walkrun", "read", "tooth", "orig", "origwin", "climb", "eng", "fa"):
+        assert "\n" + key + ":" in glyphs  # 뜻이 불분명했던 그림과 새로 더한 그림의 모양 정의가 있다
