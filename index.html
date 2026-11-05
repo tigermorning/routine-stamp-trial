@@ -38,6 +38,8 @@
 :root[data-theme="ocean"]{--bg:#eaf4fb;--card:#ffffff;--ink:#1f3a4d;--soft:#5a7a8f;--line:#cfe3f1;--accent:#2f8fcf;--accent-ink:#04243a;--shadow:0 6px 18px rgba(47,143,207,.14);--blob1:rgba(47,143,207,.14);--blob2:rgba(120,210,230,.22);color-scheme:light}
 :root[data-theme="forest"]{--bg:#eef5ea;--card:#ffffff;--ink:#2b3d27;--soft:#667a60;--line:#d6e6cf;--accent:#4f9a4a;--accent-ink:#0a2208;--shadow:0 6px 18px rgba(79,154,74,.14);--blob1:rgba(79,154,74,.14);--blob2:rgba(200,220,110,.22);color-scheme:light}
 :root[data-theme="rose"]{--bg:#fbeef2;--card:#ffffff;--ink:#4a2a35;--soft:#80606b;--line:#f1d3dc;--accent:#d0527a;--accent-ink:#2b0412;--shadow:0 6px 18px rgba(208,82,122,.14);--blob1:rgba(208,82,122,.14);--blob2:rgba(255,190,150,.22);color-scheme:light}
+:root[data-theme="brown"]{--bg:#f6e9e2;--card:#ffffff;--ink:#3d2418;--soft:#7a5a4b;--line:#e6cdbf;--accent:#9c3d26;--accent-ink:#ffffff;--shadow:0 6px 18px rgba(130,70,45,.16);--blob1:rgba(156,61,38,.14);--blob2:rgba(190,130,80,.22);color-scheme:light}
+:root[data-theme="lime"]{--bg:#f8fae0;--card:#ffffff;--ink:#323d0d;--soft:#667230;--line:#e4ecb2;--accent:#9dc21c;--accent-ink:#1d2600;--shadow:0 6px 18px rgba(130,160,20,.16);--blob1:rgba(157,194,28,.18);--blob2:rgba(255,236,90,.3);color-scheme:light}
 :root[data-theme="dark"]{
   --bg:#1f2b2c; --card:#2a3a3b; --ink:#e6f0ee; --soft:#a3b8b4; --line:#3d5351; --accent:#5fd1be; --accent-ink:#06302a;
   --sun-bg:#8a6d1f; --sun-ink:#fff3c9; --shadow:0 6px 18px rgba(0,0,0,.35); --blob1:rgba(95,209,190,.12); --blob2:rgba(255,214,102,.08); color-scheme:dark;
@@ -83,6 +85,8 @@ h2{font-family:var(--display);font-weight:400;font-size:19px;margin:0}
 .sw-peach{background:linear-gradient(135deg,#fbf1ea 50%,#d06a49 50%)}
 .sw-lavender{background:linear-gradient(135deg,#f3f0fa 50%,#8670d2 50%)}
 .sw-sunny{background:linear-gradient(135deg,#fff7df 50%,#b98400 50%)}
+.sw-brown{background:linear-gradient(135deg,#f6e9e2 50%,#9c3d26 50%)}
+.sw-lime{background:linear-gradient(135deg,#f8fae0 50%,#9dc21c 50%)}
 .sw-ocean{background:linear-gradient(135deg,#eaf4fb 50%,#2f8fcf 50%)}
 .sw-forest{background:linear-gradient(135deg,#eef5ea 50%,#4f9a4a 50%)}
 .sw-rose{background:linear-gradient(135deg,#fbeef2 50%,#d0527a 50%)}
@@ -488,15 +492,30 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
   <h2 id="crTitle">상점</h2>
   <p class="msg" id="crWhy" role="status" hidden></p>
   <div class="shoptabs" role="tablist" aria-label="상점 분류" id="shopTabs">
-    <button type="button" role="tab" data-t="deco">꾸미기</button>
+    <button type="button" role="tab" data-t="theme">배경 디자인</button>
+    <button type="button" role="tab" data-t="stamp">도장 모양</button>
+    <button type="button" role="tab" data-t="paper">메모지</button>
+    <button type="button" role="tab" data-t="icon">아이콘</button>
     <button type="button" role="tab" data-t="stk">스티커</button>
     <button type="button" role="tab" data-t="feat">기능</button>
     <button type="button" role="tab" data-t="unlock">열림 건너뛰기</button>
     <button type="button" role="tab" data-t="chat">대화권</button>
   </div>
-  <div class="shoppane" data-t="deco" role="tabpanel">
-    <p class="stat">디자인·아이콘·도장 모양·메모지예요. 한 번 사면 계속 써요.</p>
-    <div id="shopDeco"></div>
+  <div class="shoppane" data-t="theme" role="tabpanel">
+    <p class="stat">화면 배경과 카드, 버튼 모양을 바꿔요. 무료 배경은 설정의 «색 테마»에서 골라요. 한 번 사면 계속 써요.</p>
+    <div id="shopTheme"></div>
+  </div>
+  <div class="shoppane" data-t="stamp" role="tabpanel" hidden>
+    <p class="stat">도장 모양을 바꿔요. 한 번 사면 계속 써요.</p>
+    <div id="shopStamp"></div>
+  </div>
+  <div class="shoppane" data-t="paper" role="tabpanel" hidden>
+    <p class="stat">기록에 쓰는 메모지예요. 한 번 사면 계속 써요.</p>
+    <div id="shopPaper"></div>
+  </div>
+  <div class="shoppane" data-t="icon" role="tabpanel" hidden>
+    <p class="stat">할 일 칸의 그림을 바꿔요. 한 번 사면 계속 써요.</p>
+    <div id="shopIcon"></div>
   </div>
   <div class="shoppane" data-t="stk" role="tabpanel" hidden>
     <p class="stat">달력 날짜에 붙이는 스티커 팩이에요. 한 번 사면 계속 써요.</p>
@@ -607,7 +626,7 @@ ko:{
   routineDay:"{n}일째", routineNone:"아직 시작 전", goalsCap:"열림 목표",
   pileNote:'쌓이기만 하고 줄어들지 않아요. 하루 빠져도 그대로예요.',
   unlockOpen:'새 칸이 열렸어요. 아래 "할 일 칸 바꾸기"에서 더해요.',
-  stageSlotsFree:'칸을 더 늘릴 수 있어요. 아래 "할 일 칸 바꾸기"에서 더해요.', stageAll:'모든 단계를 지났어요.', stageMiles:'단계마다 새 기능이 열려요', stageSlotLock:'도장 {t}일째부터 칸을 자유롭게 늘릴 수 있어요. 지금 {days}째예요{gift}.', stageSlotMax:'칸은 열두 개까지예요.', stageSlotAdvice:'칸이 여섯 개를 넘으면 매일 다 하기 어려울 수 있어요. 필요한 만큼만 두세요.',
+  stageSlotsFree:'칸을 더 늘릴 수 있어요. 아래 "할 일 칸 바꾸기"에서 더해요.', stageAll:'모든 단계를 지났어요.', stageMiles:'단계마다 새 기능이 열려요', stageSlotLock:'도장 {t}일째부터 칸을 원하는 만큼 늘릴 수 있어요. 지금 {days}째예요{gift}.', stageSlotMax:'칸은 열두 개까지예요.', stageSlotAdvice:'칸이 여섯 개를 넘으면 매일 다 하기 어려울 수 있어요. 필요한 만큼만 두세요.',
   unlockLeft:'새 칸까지 {n}일 남았어요',
   unlockLeftOne:'새 칸까지 {n}일 남았어요',
   unlockAll:'새 칸이 다 열렸어요.',
@@ -690,7 +709,7 @@ ko:{
   introClose:'닫기',
   introBtn:'안내',
   setBtn:"설정", setBack:"돌아가기", langCap:"언어", themeCap:"색 테마",
-  theme_base:"기본", theme_peach:"복숭아", theme_lavender:"라벤더", theme_sunny:"햇살", theme_ocean:"바다",theme_notebook:"공책",theme_retro:"레트로",theme_cloud:"구름",theme_space:"우주 행성",theme_donut:"도넛", theme_forest:"숲", theme_rose:"장미", themeLocked:"{d}에 열려요",
+  theme_base:"기본", theme_peach:"복숭아", theme_lavender:"라벤더", theme_sunny:"햇살", theme_ocean:"바다",theme_notebook:"공책",theme_retro:"레트로",theme_cloud:"구름",theme_space:"우주 행성",theme_donut:"도넛", theme_forest:"숲", theme_rose:"장미", theme_brown:"적갈색", theme_lime:"라임", themeLocked:"{d}에 열려요",
   nextColor:"다음 색",
   privCap:"개인정보 안내", privBody:"계정도 로그인도 없어요. 도장 기록은 이 기기에만 저장돼요. 그래서 브라우저 데이터를 지우거나 폰을 바꾸면 기록이 사라져요. 도우미와 나눈 말은 답을 만들 때 AI 서비스에 전달되고, 이 앱 서버에는 저장되지 않아요. 이름·연락처 같은 개인정보는 적지 말아 주세요.",
   delCap:"내 기록 지우기", delBody:"이 기기에 저장된 도장 기록, 칸, 설정, 도우미 대화를 모두 지우고 처음 상태로 돌아가요.",
@@ -1927,14 +1946,14 @@ function guessLang(){
 
 const COLORS=['#ff8f70','#ffb85c','#5fcfb0','#6cb6f5','#9a8cf2','#ffd666','#4fc3d9'];
 const KEY='routine-trial-v1';
-const MAX_SLOTS=12,RECOMMEND_SLOTS=6; // 칸은 누적 28일부터 자유롭게 늘린다(사용자 결정 2026-11-04). 12개는 화면 안전 상한이고, 6개를 넘으면 권고 문구만 보인다
+const MAX_SLOTS=12,RECOMMEND_SLOTS=6; // 칸은 누적 28일부터 원하는 만큼 늘린다(사용자 결정 2026-11-04). 12개는 화면 안전 상한이고, 6개를 넘으면 권고 문구만 보인다
 const UNLOCKS=[3,28,60]; // 도장 찍은 누적 일수 → 칸이 하나씩 열림(PRD 2026-10-21)
 const THEMES=[{id:'base'},{id:'peach'}, // 복숭아도 바다·숲·장미처럼 처음부터 무료(사용자 결정 2026-11-05, 앞서 말한 것이 기록에서 빠져 있었음)
   {id:'lavender',at:UNLOCKS[1]},{id:'sunny',at:UNLOCKS[2]},
-  {id:'ocean'},{id:'forest'},{id:'rose'}, // 바다·숲·장미는 색만 바꾸는 무료 테마(2026-11-04 사용자 결정)
+  {id:'ocean'},{id:'forest'},{id:'rose'},{id:'brown'},{id:'lime'}, // 바다·숲·장미는 색만 바꾸는 무료 테마(2026-11-04 사용자 결정)
   {id:'notebook',shop:'theme_notebook'},{id:'retro',shop:'theme_retro'},{id:'cloud',shop:'theme_cloud'},{id:'space',shop:'theme_space'},{id:'donut',shop:'theme_donut'}]; // 디자인 테마(유료)
 let OWNED=new Set(); // 서버가 알려 준 내가 산 상품(상점). 크레딧 서버가 꺼져 있으면 비어 있다 // 칸이 열릴 때 테마도 하나씩 열림
-const THEME_BG={base:'#f2f7f5',peach:'#fbf1ea',lavender:'#f3f0fa',sunny:'#fff7df',ocean:'#eaf4fb',forest:'#eef5ea',rose:'#fbeef2',notebook:'#f6efdc',retro:'#ffefb8',cloud:'#e3f0ff',space:'#0b0b10',donut:'#ffe3ec'};
+const THEME_BG={base:'#f2f7f5',peach:'#fbf1ea',lavender:'#f3f0fa',sunny:'#fff7df',ocean:'#eaf4fb',forest:'#eef5ea',rose:'#fbeef2',brown:'#f6e9e2',lime:'#f8fae0',notebook:'#f6efdc',retro:'#ffefb8',cloud:'#e3f0ff',space:'#0b0b10',donut:'#ffe3ec'};
 const pad=n=>String(n).padStart(2,'0');
 const fmt=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 let todayStr=fmt(new Date());
@@ -1981,9 +2000,9 @@ function stampDays(){return realDays()+(S.gift?1:0)}
 function weekCount(){let n=0;for(let i=0;i<7;i++){const dt=new Date();dt.setDate(dt.getDate()-i);if(hasStamp(fmt(dt)))n++}return n}
 function stampCount(){let n=0;const have=new Set(ids());for(const d in S.log)for(const k in S.log[d])if(have.has(k)&&S.log[d][k]>0)n++;return n}
 function opened(at){return stampDays()>=at||OWNED.has('unlock_'+at)||OWNED.has('unlock_all')} // 열림: 일수로 도달했거나 상점에서 «열림 건너뛰기»를 샀을 때(기능만 열린다). 달성 표시(✔)와 축하는 일수만 본다
-const STAGE_WHAT={3:'기록(메모·일기)',28:'칸 자유 추가',60:'달력·일정 메모'},STAGE_SHORT={3:'기록',28:'칸 자유',60:'달력·일정'};
-const STAGE_OPEN={3:'위쪽 «기록» 버튼에서 메모·일기를 하루·주간·5년으로 쓸 수 있어요.',28:'이제 칸을 자유롭게 늘릴 수 있어요. «할 일 칸 바꾸기»에서 더해 보세요.',60:'달력에서 지난 기록을 보고 날짜마다 할 일·일정을 적을 수 있어요.'};
-function capacity(){return Math.max(S.slots.length,opened(28)?MAX_SLOTS:3)} // 처음 3칸 → 28일째부터 자유. 이미 더 많은 칸을 가진 사람의 칸은 줄이지 않는다
+const STAGE_WHAT={3:'기록(메모·일기)',28:'칸 늘리기',60:'달력·일정 메모'},STAGE_SHORT={3:'기록',28:'칸 늘리기',60:'달력·일정'};
+const STAGE_OPEN={3:'위쪽 «기록» 버튼에서 메모·일기를 하루·주간·5년으로 쓸 수 있어요.',28:'이제 칸을 원하는 만큼 늘릴 수 있어요. «할 일 칸 바꾸기»에서 더해 보세요.',60:'달력에서 지난 기록을 보고 날짜마다 할 일·일정을 적을 수 있어요.'};
+function capacity(){return Math.max(S.slots.length,opened(28)?MAX_SLOTS:3)} // 처음 3칸 → 28일째부터 늘릴 수 있음. 이미 더 많은 칸을 가진 사람의 칸은 줄이지 않는다
 function themeOpen(th){if(th.shop)return OWNED.has(th.shop);return !th.at||opened(th.at)}
 function currentTheme(){ // 설정에서 고른 테마(열려 있을 때). 고르지 않았으면 열린 것 중 가장 나중 테마가 자동 적용
   const th=THEMES.find(x=>x.id===S.theme);if(th&&themeOpen(th))return th.id;
@@ -2829,14 +2848,14 @@ $('ckCookie').onclick=crackCookie;
 $('ckAgain').onclick=crackCookie;
 $('ckClose').onclick=()=>$('cookieDlg').close();
 $('ckBuy').onclick=()=>{$('cookieDlg').close();if(ckMode.item) buyCredits(ckMode.item.id)};
-const UNLOCK_ICON={unlock_3:'📝',unlock_28:'🧩',unlock_60:'📅',unlock_all:'🎁'}; // 열리는 기능을 한눈에(기록·칸 자유 추가·달력)
+const UNLOCK_ICON={unlock_3:'📝',unlock_28:'🧩',unlock_60:'📅',unlock_all:'🎁'}; // 열리는 기능을 한눈에(기록·칸 늘리기·달력)
 const unlockLadder=id=>`<span class="uico" aria-hidden="true">${UNLOCK_ICON[id]||'🔓'}</span>`;
 async function renderShop(){
-  const boxes={deco:$('shopDeco'),stk:$('shopStk'),feat:$('shopFeat')},box=boxes.deco,ub=$('unlockList');box.textContent='불러오는 중…';
-  const paneOf=it=>it.kind==='unlock'?'unlock':it.kind==='sticker'?'stk':(it.kind==='quote'||it.kind==='feature')?'feat':'deco'; // 상점 분류: 꾸미기(디자인·아이콘·도장 모양·메모지) / 스티커 / 기능 / 열림 건너뛰기
+  const boxes={theme:$('shopTheme'),stamp:$('shopStamp'),paper:$('shopPaper'),icon:$('shopIcon'),stk:$('shopStk'),feat:$('shopFeat')},box=boxes.theme,ub=$('unlockList');box.textContent='불러오는 중…';
+  const paneOf=it=>it.kind==='unlock'?'unlock':it.kind==='sticker'?'stk':(it.kind==='quote'||it.kind==='feature')?'feat':it.kind==='stamp'?'stamp':it.kind==='paper'?'paper':it.kind==='iconpack'?'icon':'theme'; // 상점 분류: 꾸미기(디자인·아이콘·도장 모양·메모지) / 스티커 / 기능 / 열림 건너뛰기
   try{
     const j=await (await fetch('/api/shop',{headers:{'X-Client-Id':clientId()},cache:'no-store'})).json();
-    box.textContent='';ub.textContent='';$('shopStk').textContent='';$('shopFeat').textContent='';
+    Object.values(boxes).forEach(x=>{x.textContent=''});ub.textContent='';
     j.items.forEach(it=>{
       // 상점 상품은 루틴 성공 일수와 관계없이 항상 보인다(사용자 결정 2026-11-04: 유료 구매 고객 유치). 이미 열렸거나 아직 쓸 수 없는 것은 이유를 함께 보인다.
       const all=it.id==='unlock_all',unlockDone=it.kind==='unlock'&&(all?UNLOCKS.every(opened):opened(it.at));
@@ -2869,14 +2888,14 @@ async function renderShop(){
     });
   }catch(e){box.textContent='상점을 불러오지 못했어요.'}
 }
-let shopTab='deco';
+let shopTab='theme';
 function setShopTab(t){ // 상점 분류 탭: 눌린 분류만 보인다
   shopTab=t;
   document.querySelectorAll('#shopTabs button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.t===t)));
   document.querySelectorAll('#crDlg .shoppane').forEach(p=>{p.hidden=p.dataset.t!==t});
 }
 document.querySelectorAll('#shopTabs button').forEach(b=>{b.onclick=()=>setShopTab(b.dataset.t)});
-setShopTab('deco');
+setShopTab('theme');
 async function openCredits(why){
   $('crWhy').textContent=why||'';$('crWhy').hidden=!why;$('crErr').textContent='';
   $('crDlg').showModal();
