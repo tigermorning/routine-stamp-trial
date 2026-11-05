@@ -34,23 +34,31 @@ function pad(n: number): string {
   return String(n).padStart(2, '0');
 }
 
+/**
+ * 문장에서 시간(«오전 10시 30분», «7시 반», «07:00»)을 찾아 'HH:MM' 으로 돌려주고 문장에서 지운다.
+ * 손글씨를 읽을 때 «오전/오후» 의 «오» 가 «8» 로 읽히는 일이 있어 «8전/8후» 도 오전/오후로 본다.
+ */
+export function takeTime(text: string): { time?: string; rest: string } {
+  const fixed = text.replace(/(^|\s)8([전후])(?=\s*\d)/g, '$1오$2');
+  const m = TIME.exec(fixed);
+  if (!m) return { rest: fixed.trim() };
+  let hour = Number(m[2]);
+  const minute = m[3] ? 30 : m[4] ? Number(m[4]) : 0;
+  const period = m[1];
+  if (period && ['오후', '저녁', '밤'].includes(period) && hour < 12) hour += 12;
+  if (hour > 23 || minute > 59) return { rest: fixed.trim() };
+  const rest = (fixed.slice(0, m.index) + ' ' + fixed.slice(m.index + m[0].length)).trim();
+  return { time: `${pad(hour)}:${pad(minute)}`, rest };
+}
+
 /** «월수금 07:00 스트레칭», «스트레칭 월/수/금 7시 반», «매일 저녁 9시 책 읽기» 같은 한 줄을 일정으로. 이름이 비면 null. */
 export function parseLine(line: string): ScheduleItem | null {
-  let rest = line.replace(BULLET, '').trim();
+  // OCR 은 «07:00» 의 콜론을 점(07.00)으로 읽는 일이 있어 시간 꼴로 되돌린다
+  let rest = line.replace(BULLET, '').replace(/(\d{1,2})\.(\d{2})(?!\d)/, '$1:$2').trim();
 
-  // 시간 찾기 (찾으면 문장에서 지운다)
-  let time: string | undefined;
-  const m = TIME.exec(rest);
-  if (m) {
-    let hour = Number(m[2]);
-    const minute = m[3] ? 30 : m[4] ? Number(m[4]) : 0;
-    const period = m[1];
-    if (period && ['오후', '저녁', '밤'].includes(period) && hour < 12) hour += 12;
-    if (hour <= 23 && minute <= 59) {
-      time = `${pad(hour)}:${pad(minute)}`;
-      rest = (rest.slice(0, m.index) + ' ' + rest.slice(m.index + m[0].length)).trim();
-    }
-  }
+  const taken = takeTime(rest);
+  const time = taken.time;
+  rest = taken.rest;
 
   // 요일 토큰 찾기: 공백으로 나눈 낱말 중 요일 꼴인 것만(«일기»처럼 낱말 일부는 요일로 보지 않는다)
   const days = new Set<number>();

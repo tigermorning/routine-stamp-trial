@@ -5,6 +5,7 @@ import { ActivityIndicator, Linking, Pressable, StyleSheet, TextInput } from 're
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
+import { type CalendarEvent, addEvents, describeEvent, hasDate, parseEvents } from '@/lib/events';
 import { loadServerUrl, readPhoto, saveServerUrl } from '@/lib/ocr';
 import { applySchedule, describe, parseLine, parseSchedule } from '@/lib/schedule';
 import { MAX_SLOTS, type Slot } from '@/lib/stamps';
@@ -13,6 +14,9 @@ type Props = {
   slots: readonly Slot[];
   /** 새 칸 목록을 화면·저장소에 반영한다 */
   onSlotsChange: (slots: Slot[]) => void;
+  events: readonly CalendarEvent[];
+  /** 날짜가 있는 일정을 반영한다 */
+  onEventsChange: (events: CalendarEvent[]) => void;
 };
 
 type Source = 'library' | 'camera';
@@ -21,7 +25,7 @@ type Source = 'library' | 'camera';
  * 주간 루틴표 사진(손글씨·인쇄물) → 서버에서 글자 읽기 → 줄마다 «칸 이름 + 요일 + 시간»으로 풀어 보여 줌
  * → 사용자가 확인·수정·삭제 → «루틴표 반영»을 눌러야 칸에 들어간다. 읽은 글을 바로 반영하지 않는다.
  */
-export function PhotoImport({ slots, onSlotsChange }: Props) {
+export function PhotoImport({ slots, onSlotsChange, events, onEventsChange }: Props) {
   const [serverUrl, setServerUrl] = useState('');
   useEffect(() => {
     loadServerUrl().then(setServerUrl);
@@ -36,7 +40,7 @@ export function PhotoImport({ slots, onSlotsChange }: Props) {
     setNeedSettings(false);
     // 사진을 고르기 전에 서버 주소부터 확인한다(주소가 없으면 읽어도 올릴 곳이 없다)
     if (!serverUrl.trim()) {
-      setMessage('먼저 위의 «글자 읽기 서버 주소» 칸에 노트북 주소를 입력해 주세요. 예: 192.168.185.120:8898');
+      setMessage('먼저 위의 «글자 읽기 서버 주소» 칸에 노트북 주소를 입력해 주세요. 예: 192.168.0.10:8898');
       return;
     }
     const perm =
@@ -77,7 +81,24 @@ export function PhotoImport({ slots, onSlotsChange }: Props) {
     }
   }
 
+  // 읽은 줄에 날짜(«11월 7일», «2026-03-24» 등)가 있으면 날짜 일정, 없으면 주간 루틴표로 본다
+  const eventMode = hasDate(rows);
+  const drafts = eventMode ? parseEvents(rows) : [];
+
+  function confirmEvents() {
+    const result = addEvents(events, drafts);
+    if (result.added > 0) onEventsChange(result.events);
+    const parts: string[] = [];
+    if (result.added > 0) parts.push(`${result.added}개 일정을 캘린더에 넣었어요.`);
+    if (result.duplicates > 0) parts.push(`같은 일정 ${result.duplicates}개는 건너뛰었어요.`);
+    if (result.skipped > 0) parts.push(`날짜를 못 찾은 ${result.skipped}개는 넣지 못했어요. 날짜(예: 11월 7일)를 줄에 적어 주세요.`);
+    if (parts.length === 0) parts.push('넣을 일정이 없어요.');
+    setMessage(parts.join(' '));
+    if (result.skipped === 0) setRows([]);
+  }
+
   function confirm() {
+    if (eventMode) return confirmEvents();
     const items = parseSchedule(rows);
     const result = applySchedule(slots, items);
     onSlotsChange(result.slots);
@@ -93,17 +114,17 @@ export function PhotoImport({ slots, onSlotsChange }: Props) {
 
   return (
     <ThemedView type="backgroundElement" style={styles.box}>
-      <ThemedText type="subtitle">주간 루틴표 가져오기</ThemedText>
+      <ThemedText type="subtitle">사진에서 일정 가져오기</ThemedText>
       <ThemedText type="small" themeColor="textSecondary">
-        «월수금 07:00 스트레칭» 같은 루틴표 사진을 읽어 칸의 요일·시간으로 옮겨요. 읽은 글은 확인한 뒤에만 반영돼요. (지금 {slots.length}/
-        {MAX_SLOTS}칸)
+        손으로 쓴 «11월 7일 오전 10시 30분 미용실 예약» 같은 메모는 캘린더 일정으로, «월수금 07:00 스트레칭» 같은 루틴표는 칸의 요일·시간으로
+        옮겨요. 읽은 글은 확인한 뒤에만 반영돼요. (칸 {slots.length}/{MAX_SLOTS})
       </ThemedText>
 
       <ThemedText type="smallBold">글자 읽기 서버 주소</ThemedText>
       <TextInput
         value={serverUrl}
         onChangeText={setServerUrl}
-        placeholder="예: 192.168.185.120:8898"
+        placeholder="예: 192.168.0.10:8898"
         autoCapitalize="none"
         autoCorrect={false}
         keyboardType="url"
@@ -128,8 +149,20 @@ export function PhotoImport({ slots, onSlotsChange }: Props) {
         </Pressable>
       )}
 
+      {eventMode && (
+        <ThemedView style={styles.rowBox} type="backgroundElement">
+          <ThemedText type="smallBold">날짜 일정으로 읽었어요</ThemedText>
+          {drafts.map((d, i) => (
+            <ThemedText key={i} type="small">
+              📅 {describeEvent(d)} · {d.title}
+              {d.date ? '' : '  (날짜를 못 찾았어요)'}
+            </ThemedText>
+          ))}
+        </ThemedView>
+      )}
+
       {rows.map((row, index) => {
-        const parsed = parseLine(row);
+        const parsed = eventMode ? null : parseLine(row);
         return (
           <ThemedView key={index} style={styles.rowBox} type="backgroundElement">
             <ThemedView style={styles.row} type="backgroundElement">
@@ -147,16 +180,20 @@ export function PhotoImport({ slots, onSlotsChange }: Props) {
                 <ThemedText>🗑️</ThemedText>
               </Pressable>
             </ThemedView>
-            <ThemedText type="small" themeColor="textSecondary">
-              {parsed ? `→ ${parsed.name} · ${describe(parsed)}` : '→ 칸 이름을 알 수 없어 건너뛰어요'}
-            </ThemedText>
+            {eventMode ? null : (
+              <ThemedText type="small" themeColor="textSecondary">
+                {parsed ? `→ ${parsed.name} · ${describe(parsed)}` : '→ 칸 이름을 알 수 없어 건너뛰어요'}
+              </ThemedText>
+            )}
           </ThemedView>
         );
       })}
 
       {rows.length > 0 && (
         <Pressable onPress={confirm} style={[styles.button, styles.primary]} accessibilityRole="button">
-          <ThemedText style={styles.primaryText}>루틴표 반영 ({rows.length}줄)</ThemedText>
+          <ThemedText style={styles.primaryText}>
+            {eventMode ? `캘린더에 일정 넣기 (${drafts.length}개)` : `루틴표 반영 (${rows.length}줄)`}
+          </ThemedText>
         </Pressable>
       )}
     </ThemedView>
