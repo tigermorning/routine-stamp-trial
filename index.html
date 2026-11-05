@@ -197,6 +197,13 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
       <div class="picker" id="picker"></div>
       <p class="msg" id="slotMsg"></p>
       <button class="btn" id="addSlot" type="button"></button>
+      <div id="ocrBox" hidden>
+        <input type="file" id="ocrFile" accept="image/*,.heic,.heif,application/pdf" hidden>
+        <button class="btn" id="ocrBtn" type="button"></button>
+        <p class="stat" id="ocrDesc"></p>
+        <p class="msg" id="ocrMsg" role="status"></p>
+        <div id="ocrList"></div>
+      </div>
     </div>
   </section>
 
@@ -275,6 +282,7 @@ ko:{
   dayCount:"{n}일",
   dayCountOne:"{n}일",
   addSlot:'+ 칸 더 열기',
+  ocrBtn:'📷 사진·PDF로 칸 만들기', ocrDesc:'손글씨 메모 사진이나 시간표 PDF에서 글자를 읽어 칸 이름 후보를 보여 줘요. 후보를 누르면 칸이 만들어져요.', ocrReading:'글자를 읽는 중이에요…', ocrNone:'읽은 글자가 없어요. 글자가 또렷한 사진으로 다시 해 보세요.', ocrPick:'칸으로 만들 이름을 눌러요', ocrFail:'글자를 읽지 못했어요', ocrNoRoom:'더 만들 칸이 없어요.',
   fbTitle:'의견 보내기',
   fbDesc:'써 보고 느낀 점을 편하게 적어 주세요. 막힌 곳, 헷갈린 곳, 좋았던 점 아무거나 좋아요.',
   fbPlaceholder:'예: 둘째 날부터 안 열었어요. 이유는…',
@@ -348,6 +356,7 @@ en:{
   dayCount:"{n} days",
   dayCountOne:"{n} day",
   addSlot:'+ Add a box',
+  ocrBtn:'📷 Make boxes from a photo or PDF', ocrDesc:'Reads text from a handwritten note or a timetable PDF and suggests box names. Tap a name to make a box.', ocrReading:'Reading the text…', ocrNone:'No text found. Try a clearer photo.', ocrPick:'Tap a name to make a box', ocrFail:'Could not read the text', ocrNoRoom:'No more boxes available.',
   fbTitle:'Send feedback',
   fbDesc:'Jot down how it went. Where you got stuck, what was confusing, what you liked. Anything helps.',
   fbPlaceholder:'e.g. I stopped opening it on day 2 because…',
@@ -1235,7 +1244,7 @@ function applyStatic(){
   const set=(id,k)=>{$(id).textContent=t(k)};
   set('h1','h1');set('hint1','hint1');set('hint2','hint2');set('giftNote','hintGift');set('hintOk','hintOk');
   set('piledTitle','piledTitle');set('lbDays','nDays');set('lbWeek','nWeek');set('lbStamps','nStamps');set('weekTitle','weekTitle');
-  set('editTitle','editTitle');set('editDesc','editDesc');set('addSlot','addSlot');
+  set('editTitle','editTitle');set('editDesc','editDesc');set('addSlot','addSlot');set('ocrBtn','ocrBtn');set('ocrDesc','ocrDesc');
   set('introTitle','introTitle');set('introBody','introBody');set('introAsk','introAsk');set('introLang','introLang');set('introGo','introGo');set('introClose','introClose');set('introBtnTxt','introBtn');
   set('fbTitle','fbTitle');set('fbDesc','fbDesc');set('copyBtn','copyBtn');set('formBtn','formBtn');set('fbHow','fbHow');
   $('fb').placeholder=t('fbPlaceholder');
@@ -1335,6 +1344,7 @@ function renderEdit(){
   const cap=capacity(),days=stampDays();
   const can=S.slots.length<cap;
   $('addSlot').hidden=!can;
+  $('ocrBox').hidden=!ocrOn;renderOcr();
   $('slotMsg').textContent=[shelvedMsg?t('shelved'):'',can?'':(S.slots.length>=MAX_SLOTS?t('maxSix'):t('lockMsg',{t:UNLOCK[cap-3],days:t(days===1?'dayCountOne':'dayCount',{n:days}),gift:S.gift?t('lockGift'):''}))].filter(Boolean).join(' ');
 }
 
@@ -1362,6 +1372,35 @@ $('addSlot').onclick=()=>{
   S.slots.push({id:'s'+Date.now(),key:icon,icon,color:COLORS[S.slots.length%COLORS.length]});
   shelvedMsg=false;save();render();
 };
+/* 사진·PDF 글자 읽기(OCR, Docker 실습): 서버가 /health 에서 ocr_enabled=true 라고 알릴 때만 버튼이 보인다. 서버가 없거나 꺼져 있으면 숨겨서 기존 화면은 그대로다 */
+let ocrOn=false,ocrLines=[];
+function renderOcr(){
+  $('ocrList').innerHTML=ocrLines.length?`<p class="stat">${esc(t('ocrPick'))}</p>`+ocrLines.map((x,i)=>`<button type="button" class="btn" data-i="${i}">+ ${esc(x)}</button>`).join(' '):'';
+  $('ocrList').querySelectorAll('button').forEach(b=>b.onclick=()=>{
+    if(S.slots.length>=capacity()){$('ocrMsg').textContent=t('ocrNoRoom');return}
+    const name=ocrLines[+b.dataset.i].slice(0,14);
+    const used=new Set(S.slots.map(s=>s.icon));
+    const icon=['read','yoga','strength','code','eng','zh'].find(k=>!used.has(k))||'read';
+    S.slots.push({id:'s'+Date.now(),key:icon,icon,name,color:COLORS[S.slots.length%COLORS.length]});
+    ocrLines.splice(+b.dataset.i,1);$('ocrMsg').textContent='';shelvedMsg=false;save();render();
+  });
+}
+$('ocrBtn').onclick=()=>$('ocrFile').click();
+$('ocrFile').onchange=async()=>{
+  const f=$('ocrFile').files[0];$('ocrFile').value='';
+  if(!f) return;
+  ocrLines=[];renderOcr();$('ocrMsg').textContent=t('ocrReading');
+  try{
+    const fd=new FormData();fd.append('photo',f);
+    const r=await fetch('/api/ocr',{method:'POST',body:fd});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok) throw new Error(j.detail||r.status);
+    ocrLines=[...new Set(j.lines||[])];
+    $('ocrMsg').textContent=ocrLines.length?'':t('ocrNone');
+  }catch(e){$('ocrMsg').textContent=t('ocrFail')+': '+e.message}
+  renderOcr();
+};
+if(typeof fetch==='function') fetch('/health').then(r=>r.json()).then(j=>{ocrOn=!!j.ocr_enabled;if(ocrOn)renderEdit()}).catch(()=>{});
 function setLangMenu(open){$('langList').hidden=!open;$('langBtn').setAttribute('aria-expanded',String(open))}
 $('langBtn').onclick=e=>{e.stopPropagation();setLangMenu($('langList').hidden)};
 document.querySelectorAll('#langList [data-l]').forEach(b=>b.onclick=()=>{
