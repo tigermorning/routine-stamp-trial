@@ -57,6 +57,8 @@ async def read_photo(photo: UploadFile):
     if not ocr_enabled():
         raise HTTPException(404, "사진 글자 읽기가 꺼져 있습니다")
     try:
-        return {"lines": ocr.read_lines(await photo.read())}
+        lines = ocr.read_lines(await photo.read())
+        # lines: 웹 화면용(기존), text: 모바일 앱용(줄바꿈으로 이은 글)
+        return {"lines": lines, "text": "\n".join(lines)}
     except ocr.OcrError as error:
         raise HTTPException(500, str(error)) from error
