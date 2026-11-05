@@ -486,3 +486,36 @@ def test_paper_pack_item_and_css_for_each_paper():
     html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
     for pid in ("lined", "grid", "biggrid", "dot", "kraft", "sticky", "letter"):
         assert f"{{id:'{pid}'" in html and f".paper-{pid}{{" in html  # 화면 목록과 CSS가 어긋나지 않는다
+
+
+def test_stage_gift_once_per_stage_random_decor_only(env):
+    client, store, _ = env
+    cid = str(uuid.uuid4())
+    assert client.post("/api/gift", json={"stage": 5}, headers=hdr(cid)).status_code == 400  # 단계가 아니면 거절
+    r = client.post("/api/gift", json={"stage": 3}, headers=hdr(cid))
+    j = r.json()
+    assert r.status_code == 200 and j["already"] is False and j["item"]["kind"] in creditlib.GIFT_KINDS
+    assert j["item"]["id"] in store.owned(cid)  # 선물은 소유로 기록된다
+    again = client.post("/api/gift", json={"stage": 3}, headers=hdr(cid)).json()
+    assert again["already"] is True and again["item"]["id"] == j["item"]["id"]  # 같은 단계는 한 번만
+    assert len(store.owned(cid)) == 1
+    second = client.post("/api/gift", json={"stage": 28}, headers=hdr(cid)).json()
+    assert second["item"]["id"] != j["item"]["id"]  # 이미 가진 것은 뽑지 않는다
+
+
+def test_stage_gift_pool_excludes_features_and_skips_when_everything_owned(env):
+    client, store, _ = env
+    assert all(i["kind"] in ("sticker", "iconpack", "paper", "theme") for i in creditlib.ITEMS.values() if i["kind"] in creditlib.GIFT_KINDS)
+    assert not any(i["kind"] in creditlib.GIFT_KINDS for i in creditlib.ITEMS.values() if i["id"] in ("daily_quote", "history_view", "stamp_shapes", "unlock_3"))
+    cid = str(uuid.uuid4())
+    pool = [i["id"] for i in creditlib.ITEMS.values() if i["kind"] in creditlib.GIFT_KINDS]
+    for _ in range(3):
+        client.post("/api/gift", json={"stage": 3}, headers=hdr(cid))  # 같은 단계 반복은 한 개만 준다
+    assert len(store.owned(cid)) == 1
+    # 다 가진 사람에게는 줄 것이 없어 item 이 None
+    c2 = str(uuid.uuid4())
+    conn = store._conn()
+    for iid in pool:
+        conn.execute("INSERT INTO entitlements(client_id, item_id, order_id, created_at) VALUES (?,?,?,?)", (c2, iid, "t", creditlib.now()))
+    conn.close()
+    assert client.post("/api/gift", json={"stage": 60}, headers=hdr(c2)).json()["item"] is None

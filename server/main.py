@@ -250,6 +250,28 @@ def quote_sample(request: Request, store=Depends(get_credit_store)):
     return JSONResponse(q, headers={"Cache-Control": "no-store"})
 
 
+class GiftRequest(BaseModel):
+    stage: int = 0
+
+
+@app.post("/api/gift")
+def stage_gift(req: GiftRequest, request: Request, store=Depends(get_credit_store)):
+    """도장 단계(3·28·60일)를 지났을 때 꾸미기 팩 하나를 무작위로 준다(단계당 한 번, 같은 단계를 다시 부르면 처음 받은 것을 돌려준다)."""
+    if store is None:
+        return credits_off()
+    cid = client_id_of(request)
+    if not cid:
+        return JSONResponse({"error": "clientId"}, status_code=400)
+    if req.stage not in creditlib.GIFT_STAGES:
+        return JSONResponse({"error": "stage"}, status_code=400)
+    if limited(client_ip(request), "gift", 10, 60):
+        return JSONResponse({"error": "busy"}, status_code=429)
+    g = store.stage_gift(cid, req.stage)
+    it = g["item"]
+    return JSONResponse({"item": {"id": it["id"], "name": it["name"], "kind": it["kind"]} if it else None, "already": g["already"]},
+                        headers={"Cache-Control": "no-store"})
+
+
 class OrderRequest(BaseModel):
     productId: str = ""
 

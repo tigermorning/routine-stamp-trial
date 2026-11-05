@@ -329,11 +329,13 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 #crList{display:flex;flex-direction:column;gap:8px;margin:10px 0}
 .crprod{text-align:left}
 #crDlg h3{font-size:1rem;margin:14px 0 4px}
+.shoptabs{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 10px}
+.shoptabs button{border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:5px 12px;font:inherit;font-size:14px;cursor:pointer}
+.shoptabs button[aria-selected="true"]{border-color:var(--accent);background:var(--accent);color:var(--accent-ink);font-weight:700}
+.shoptabs button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
 .shopitem{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:6px}
-.ladder{display:inline-grid;grid-template-columns:repeat(3,12px);gap:3px;align-items:center;flex:none}.ladder i{width:12px;height:12px;border-radius:50%;display:block}
-.ladder .have{background:var(--soft);opacity:.55}.ladder .new{background:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 35%,transparent)}.ladder .far{border:1.5px dashed var(--line);opacity:.5}
-.ladder .lcol{grid-column:1/-1;height:8px;border-radius:4px;border:1px solid var(--line)}
-.shopitem .sw{flex:none}.shopitem span{flex:1}.shopitem .ladder{flex:none}.shopitem small{display:block;color:var(--soft)}
+.shopitem .uico{flex:none;width:32px;font-size:26px;text-align:center}
+.shopitem .sw{flex:none}.shopitem span{flex:1}.shopitem .uico{flex:none}.shopitem small{display:block;color:var(--soft)}
 .quotebox{text-align:center;margin:8px 0 0;color:var(--soft);font-style:italic}
 </style>
 </head>
@@ -485,17 +487,34 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 <dialog id="crDlg" aria-labelledby="crTitle">
   <h2 id="crTitle">상점</h2>
   <p class="msg" id="crWhy" role="status" hidden></p>
-  <h3>꾸미기·기능 <small>(한 번 사면 계속 써요)</small></h3>
-  <div id="shopList"></div>
-  <div id="unlockWrap" hidden>
-    <h3>열림 건너뛰기 <small>(기능만 먼저 열어요)</small></h3>
-    <p class="stat">건너뛰어도 달성 표시(✔)와 축하는 실제로 도장을 쌓았을 때 받아요. 열림은 하나씩 따로 살 수 있어요.</p>
+  <div class="shoptabs" role="tablist" aria-label="상점 분류" id="shopTabs">
+    <button type="button" role="tab" data-t="deco">꾸미기</button>
+    <button type="button" role="tab" data-t="stk">스티커</button>
+    <button type="button" role="tab" data-t="feat">기능</button>
+    <button type="button" role="tab" data-t="unlock">열림 건너뛰기</button>
+    <button type="button" role="tab" data-t="chat">대화권</button>
+  </div>
+  <div class="shoppane" data-t="deco" role="tabpanel">
+    <p class="stat">디자인·아이콘·도장 모양·메모지예요. 한 번 사면 계속 써요.</p>
+    <div id="shopDeco"></div>
+  </div>
+  <div class="shoppane" data-t="stk" role="tabpanel" hidden>
+    <p class="stat">달력 날짜에 붙이는 스티커 팩이에요. 한 번 사면 계속 써요.</p>
+    <div id="shopStk"></div>
+  </div>
+  <div class="shoppane" data-t="feat" role="tabpanel" hidden>
+    <p class="stat">쓸 수 있는 기능이에요. 한 번 사면 계속 써요.</p>
+    <div id="shopFeat"></div>
+  </div>
+  <div class="shoppane" data-t="unlock" role="tabpanel" hidden>
+    <p class="stat">기능만 먼저 열어요. 건너뛰어도 달성 표시(✔)와 축하는 실제로 도장을 쌓았을 때 받아요. 열림은 하나씩 따로 살 수 있어요.</p>
     <div id="unlockList"></div>
   </div>
-  <h3>도우미 추가 대화권</h3>
-  <p class="stat">도우미와의 대화는 하루 무료 한도 안에서는 무료예요. 한도를 다 쓴 뒤에도 이야기하고 싶을 때만 추가 대화권이 쓰이고, 대화 한 번에 1개가 쓰여요. 도장 찍기에는 쓰이지 않아요.</p>
-  <p class="stat">가진 추가 대화권: <b id="crBal">0</b>개</p>
-  <div id="crList"></div>
+  <div class="shoppane" data-t="chat" role="tabpanel" hidden>
+    <p class="stat">도우미와의 대화는 하루 무료 한도 안에서는 무료예요. 한도를 다 쓴 뒤에도 이야기하고 싶을 때만 추가 대화권이 쓰이고, 대화 한 번에 1개가 쓰여요. 도장 찍기에는 쓰이지 않아요.</p>
+    <p class="stat">가진 추가 대화권: <b id="crBal">0</b>개</p>
+    <div id="crList"></div>
+  </div>
   <p class="msg" id="crErr" role="status"></p>
   <p class="stat">결제는 토스페이먼츠 테스트 환경에서만 진행돼요(실제로 돈이 빠져나가지 않음). 환불 기준: 아직 정하지 않았어요(정책 확정 전 자리).</p>
   <p class="stat">계정 없이 이 브라우저로 쓰는 중이에요. 브라우저 데이터를 지우면 산 상품에 다시 접근할 수 없어요.</p>
@@ -588,6 +607,7 @@ ko:{
   routineDay:"{n}일째", routineNone:"아직 시작 전", goalsCap:"열림 목표",
   pileNote:'쌓이기만 하고 줄어들지 않아요. 하루 빠져도 그대로예요.',
   unlockOpen:'새 칸이 열렸어요. 아래 "할 일 칸 바꾸기"에서 더해요.',
+  stageSlotsFree:'칸을 더 늘릴 수 있어요. 아래 "할 일 칸 바꾸기"에서 더해요.', stageAll:'모든 단계를 지났어요.', stageMiles:'단계마다 새 기능이 열려요', stageSlotLock:'도장 {t}일째부터 칸을 자유롭게 늘릴 수 있어요. 지금 {days}째예요{gift}.', stageSlotMax:'칸은 열두 개까지예요.', stageSlotAdvice:'칸이 여섯 개를 넘으면 매일 다 하기 어려울 수 있어요. 필요한 만큼만 두세요.',
   unlockLeft:'새 칸까지 {n}일 남았어요',
   unlockLeftOne:'새 칸까지 {n}일 남았어요',
   unlockAll:'새 칸이 다 열렸어요.',
@@ -1907,9 +1927,10 @@ function guessLang(){
 
 const COLORS=['#ff8f70','#ffb85c','#5fcfb0','#6cb6f5','#9a8cf2','#ffd666','#4fc3d9'];
 const KEY='routine-trial-v1';
-const MAX_SLOTS=6;
+const MAX_SLOTS=12,RECOMMEND_SLOTS=6; // 칸은 누적 28일부터 자유롭게 늘린다(사용자 결정 2026-11-04). 12개는 화면 안전 상한이고, 6개를 넘으면 권고 문구만 보인다
 const UNLOCKS=[3,28,60]; // 도장 찍은 누적 일수 → 칸이 하나씩 열림(PRD 2026-10-21)
-const THEMES=[{id:'base'},{id:'peach',at:UNLOCKS[0]},{id:'lavender',at:UNLOCKS[1]},{id:'sunny',at:UNLOCKS[2]},
+const THEMES=[{id:'base'},{id:'peach'}, // 복숭아도 바다·숲·장미처럼 처음부터 무료(사용자 결정 2026-11-05, 앞서 말한 것이 기록에서 빠져 있었음)
+  {id:'lavender',at:UNLOCKS[1]},{id:'sunny',at:UNLOCKS[2]},
   {id:'ocean'},{id:'forest'},{id:'rose'}, // 바다·숲·장미는 색만 바꾸는 무료 테마(2026-11-04 사용자 결정)
   {id:'notebook',shop:'theme_notebook'},{id:'retro',shop:'theme_retro'},{id:'cloud',shop:'theme_cloud'},{id:'space',shop:'theme_space'},{id:'donut',shop:'theme_donut'}]; // 디자인 테마(유료)
 let OWNED=new Set(); // 서버가 알려 준 내가 산 상품(상점). 크레딧 서버가 꺼져 있으면 비어 있다 // 칸이 열릴 때 테마도 하나씩 열림
@@ -1960,7 +1981,9 @@ function stampDays(){return realDays()+(S.gift?1:0)}
 function weekCount(){let n=0;for(let i=0;i<7;i++){const dt=new Date();dt.setDate(dt.getDate()-i);if(hasStamp(fmt(dt)))n++}return n}
 function stampCount(){let n=0;const have=new Set(ids());for(const d in S.log)for(const k in S.log[d])if(have.has(k)&&S.log[d][k]>0)n++;return n}
 function opened(at){return stampDays()>=at||OWNED.has('unlock_'+at)||OWNED.has('unlock_all')} // 열림: 일수로 도달했거나 상점에서 «열림 건너뛰기»를 샀을 때(기능만 열린다). 달성 표시(✔)와 축하는 일수만 본다
-function capacity(){return Math.min(MAX_SLOTS,3+UNLOCKS.filter(opened).length)}
+const STAGE_WHAT={3:'기록(메모·일기)',28:'칸 자유 추가',60:'달력·일정 메모'},STAGE_SHORT={3:'기록',28:'칸 자유',60:'달력·일정'};
+const STAGE_OPEN={3:'위쪽 «기록» 버튼에서 메모·일기를 하루·주간·5년으로 쓸 수 있어요.',28:'이제 칸을 자유롭게 늘릴 수 있어요. «할 일 칸 바꾸기»에서 더해 보세요.',60:'달력에서 지난 기록을 보고 날짜마다 할 일·일정을 적을 수 있어요.'};
+function capacity(){return Math.max(S.slots.length,opened(28)?MAX_SLOTS:3)} // 처음 3칸 → 28일째부터 자유. 이미 더 많은 칸을 가진 사람의 칸은 줄이지 않는다
 function themeOpen(th){if(th.shop)return OWNED.has(th.shop);return !th.at||opened(th.at)}
 function currentTheme(){ // 설정에서 고른 테마(열려 있을 때). 고르지 않았으면 열린 것 중 가장 나중 테마가 자동 적용
   const th=THEMES.find(x=>x.id===S.theme);if(th&&themeOpen(th))return th.id;
@@ -2010,17 +2033,40 @@ function toggle(date,id){
   if(before==='none'&&dayStatus(date)!=='none') confetti();
   celebrate();
 }
-/* 칸이 열리는 순간(3·28·60일): 축하와 그때 열리는 색을 알린다. 결제 제안은 붙이지 않는다(PRD: 압박하지 않는다) */
+/* 단계를 지나는 순간(3·28·60일): 무엇이 열렸는지와 단계 선물(유료 꾸미기 팩 무작위 1개)을 알린다. 결제 제안은 붙이지 않는다(PRD: 압박하지 않는다) */
 function celebrate(){
   const cnt=UNLOCKS.filter(x=>stampDays()>=x).length;
   if(S.cel===undefined){S.cel=cnt;save();return}
   if(cnt<=S.cel) return;
   S.cel=cnt;save();
   const n=UNLOCKS[cnt-1],th=THEMES.find(x=>x.at===n);
-  $('celTitle').textContent='🎉 '+t('unlockSoFar',{n});
-  $('celBody').textContent=t('unlockOpen');
-  $('celGift').textContent=(th?'선물로 새 색 “'+t('theme_'+th.id)+'”도 열렸어요. 설정에서 바꿔 쓸 수 있어요.':'')+(n===NOTES_AT?' 달력에서 날짜마다 할 일·일정도 적을 수 있어요.':'');
+  $('celTitle').textContent='🎉 '+n+'일째, '+STAGE_WHAT[n]+({3:'이',28:'가',60:'가'}[n])+' 열렸어요';
+  $('celBody').textContent=STAGE_OPEN[n];
+  $('celGift').textContent=(th?'새 색 “'+t('theme_'+th.id)+'”도 열렸어요. 설정에서 바꿔 쓸 수 있어요.':'');
   if(!$('celDlg').open) $('celDlg').showModal();
+  claimStageGifts().then(g=>{if(g.length) $('celGift').textContent+=(th?' ':'')+'🎁 단계 선물: '+g.join(', ')+' (상점에서 «쓰기»를 눌러 써 보세요)'});
+}
+/* 지나온 단계마다 꾸미기 팩 1개를 서버에서 한 번씩 받는다(서버가 단계당 1회만 줌). 이미 받았거나 서버가 꺼져 있으면 조용히 넘어간다 */
+async function claimStageGifts(showDialog){
+  const got=[];
+  for(const n of UNLOCKS){
+    if(stampDays()<n||(S.giftSeen||[]).includes(n)) continue;
+    try{
+      const r=await fetch('/api/gift',{method:'POST',headers:{'Content-Type':'application/json','X-Client-Id':clientId()},body:JSON.stringify({stage:n})});
+      if(!r.ok) continue;
+      const j=await r.json();
+      S.giftSeen=(S.giftSeen||[]).concat(n);save();
+      if(j.item&&!j.already) got.push(j.item.name);
+    }catch(e){}
+  }
+  if(got.length){await loadCredits();render()}
+  if(showDialog&&got.length&&!$('celDlg').open){
+    $('celTitle').textContent='🎁 단계 선물이 도착했어요';
+    $('celBody').textContent=got.join(', ');
+    $('celGift').textContent='상점에서 «쓰기»를 눌러 써 보세요.';
+    $('celDlg').showModal();
+  }
+  return got;
 }
 
 function applyStatic(){
@@ -2067,7 +2113,7 @@ function renderPiled(){
   const next=UNLOCKS.find(x=>total<x);
   let h=`<p class="goalscap">${esc(t('goalsCap'))}</p>`;
   const hd=h; // 캡션만 있는 상태(아래 '모두 열림' 판단용)
-  if(S.slots.length<capacity()) h+=`<p class="unlockhd">${esc(t('unlockOpen'))}</p>`;
+  if(opened(28)&&S.slots.length<capacity()) h+=`<p class="unlockhd">${esc(t('stageSlotsFree'))}</p>`;
   if(next){
     const left=next-total;
     const pips=next<=14
@@ -2075,12 +2121,12 @@ function renderPiled(){
       :`<div class="meter" aria-hidden="true"><i style="width:${Math.min(100,Math.round(total/next*100))}%"></i></div>`;
     // 초반에는 '쌓인 일수', 다음 칸이 가까워지면(80%~) '남은 일수'를 보여 준다(Koo & Fishbach 2012 초록 기준, 전환 시점은 설계 판단)
     const soon=total===0||total/next>=0.8;
-    const msg0=soon?t(left===1?'unlockLeftOne':'unlockLeft',{n:left}):t(total===1?'unlockSoFarOne':'unlockSoFar',{n:total});
+    const msg0=soon?`${STAGE_WHAT[next]}까지 ${left}일 남았어요`:`${total}일 쌓았어요 · ${next}일째에 열려요: ${STAGE_WHAT[next]}`;
     const msg=opened(next)?`${next}일째가 되면 달성 표시가 붙어요(${left}일 남음, 구매로 이미 열려 있어요)`:msg0; // 구매로 열린 열림은 «새 칸까지 N일»이 맞지 않아 문구를 바꾼다
     const giftTag=S.gift&&next<=14?t('giftTag'):''; // 첫 방문 선물 1일이 포함돼 있음을 '쌓인 일수' 옆에 밝힌다
     h+=`<p class="unlockhd">${esc(msg+giftTag)}</p>${pips}`;
-  }else if(h===hd) h+=`<p class="unlockhd">${esc(t('unlockAll'))}</p>`;
-  h+=`<div class="miles"><span class="milescap">${esc(t('milesCap'))}</span>${UNLOCKS.map(x=>{const got=total>=x,bought=!got&&opened(x);return `<span class="mile ${got?'done':''}${bought?' bought':''}"${bought?' title="구매로 열려 있어요. 도장이 쌓이면 ✔가 붙어요"':''}>${got?'✔ ':bought?'🔓 ':''}${esc(t('routineDay',{n:x}))}</span>`}).join('')}</div>`;
+  }else if(h===hd) h+=`<p class="unlockhd">${esc(t('stageAll'))}</p>`;
+  h+=`<div class="miles"><span class="milescap">${esc(t('stageMiles'))}</span>${UNLOCKS.map(x=>{const got=total>=x,bought=!got&&opened(x);return `<span class="mile ${got?'done':''}${bought?' bought':''}"${bought?' title="구매로 열려 있어요. 도장이 쌓이면 ✔가 붙어요"':''}>${got?'✔ ':bought?'🔓 ':''}${esc(x+'일째 '+STAGE_SHORT[x])}</span>`}).join('')}</div>`;
   const nt=THEMES.find(th=>th.at&&!themeOpen(th)); // 다음에 열리는 색을 한 줄로 알린다(모두 열렸으면 줄 없음)
   if(nt) h+=`<p class="stat nextcolor"><i class="sw sw-${nt.id}"></i><span>${esc(t('nextColor'))}: ${esc(t('theme_'+nt.id))} · ${esc(t('themeLocked',{d:t('routineDay',{n:nt.at})}))}</span></p>`;
   $('unlock').innerHTML=h;
@@ -2193,6 +2239,14 @@ function renderDyDeco(){
   }));
 }
 function renderDiary(){
+  const lock=!opened(3); // 기록은 도장 3일째에 열린다(상점 «기록 바로 열기»로 앞당길 수 있다)
+  document.querySelectorAll('#diaryDlg .dytabs,#diaryDlg .dynav,#dyCap,#dyDecoBtn').forEach(e=>{e.style.display=lock?'none':''});
+  if(lock){
+    $('dyDeco').hidden=true;const lb=$('dyBody');lb.textContent='';lb.className='';
+    const p=document.createElement('p');p.className='stat';p.textContent='기록은 도장 3일째에 열려요. 지금 '+stampDays()+'일 쌓았어요.';lb.appendChild(p);
+    const sb=document.createElement('button');sb.type='button';sb.className='btn';sb.textContent='상점에서 바로 열기';sb.onclick=()=>{$('diaryDlg').close();openCredits()};lb.appendChild(sb);
+    return;
+  }
   document.querySelectorAll('#diaryDlg .dytabs .btn').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.m===dyMode)));
   const body=$('dyBody');body.textContent='';body.className=dyMode==='five'?'five':'';$('dyPick').value=dyDate;
   if(dyMode==='day'){
@@ -2315,7 +2369,7 @@ function renderEdit(){
   const cap=capacity(),days=stampDays();
   const can=S.slots.length<cap;
   $('addSlot').hidden=!can;
-  $('slotMsg').textContent=[shelvedMsg?t('shelved'):'',can?'':(S.slots.length>=MAX_SLOTS?t('maxSix'):t('lockMsg',{t:UNLOCKS.find(x=>days<x),days:t(days===1?'dayCountOne':'dayCount',{n:days}),gift:S.gift?t('lockGift'):''}))].filter(Boolean).join(' ');
+  $('slotMsg').textContent=[shelvedMsg?t('shelved'):'',can?(S.slots.length>=RECOMMEND_SLOTS?t('stageSlotAdvice'):''):(S.slots.length>=MAX_SLOTS?t('stageSlotMax'):t('stageSlotLock',{t:28,days:t(days===1?'dayCountOne':'dayCount',{n:days}),gift:S.gift?t('lockGift'):''}))].filter(Boolean).join(' ');
 }
 
 function statsLine(){
@@ -2775,18 +2829,14 @@ $('ckCookie').onclick=crackCookie;
 $('ckAgain').onclick=crackCookie;
 $('ckClose').onclick=()=>$('cookieDlg').close();
 $('ckBuy').onclick=()=>{$('cookieDlg').close();if(ckMode.item) buyCredits(ckMode.item.id)};
-const UNLOCK_STEPS={unlock_3:{n:4,from:3,col:'peach'},unlock_28:{n:5,from:4,col:'lavender'},unlock_60:{n:6,from:5,col:'sunny'},unlock_all:{n:6,from:3,col:'sunny'}};
-function unlockLadder(id){ // 칸이 몇 개로 늘어나는지를 그림으로: 이미 있는 칸은 채워서, 새로 열리는 칸은 강조해서, 아직 먼 칸은 흐리게 보여 준다
-  const u=UNLOCK_STEPS[id];if(!u)return '<i class="sw" style="background:var(--accent)"></i>';
-  let h='<span class="ladder" aria-hidden="true">';
-  for(let i=0;i<6;i++)h+=`<i class="${i<u.from?'have':i<u.n?'new':'far'}"></i>`;
-  return h+`<b class="lcol" style="background:${THEME_BG[u.col]}"></b></span>`;
-}
+const UNLOCK_ICON={unlock_3:'📝',unlock_28:'🧩',unlock_60:'📅',unlock_all:'🎁'}; // 열리는 기능을 한눈에(기록·칸 자유 추가·달력)
+const unlockLadder=id=>`<span class="uico" aria-hidden="true">${UNLOCK_ICON[id]||'🔓'}</span>`;
 async function renderShop(){
-  const box=$('shopList'),ub=$('unlockList');box.textContent='불러오는 중…';
+  const boxes={deco:$('shopDeco'),stk:$('shopStk'),feat:$('shopFeat')},box=boxes.deco,ub=$('unlockList');box.textContent='불러오는 중…';
+  const paneOf=it=>it.kind==='unlock'?'unlock':it.kind==='sticker'?'stk':(it.kind==='quote'||it.kind==='feature')?'feat':'deco'; // 상점 분류: 꾸미기(디자인·아이콘·도장 모양·메모지) / 스티커 / 기능 / 열림 건너뛰기
   try{
     const j=await (await fetch('/api/shop',{headers:{'X-Client-Id':clientId()},cache:'no-store'})).json();
-    box.textContent='';ub.textContent='';
+    box.textContent='';ub.textContent='';$('shopStk').textContent='';$('shopFeat').textContent='';
     j.items.forEach(it=>{
       // 상점 상품은 루틴 성공 일수와 관계없이 항상 보인다(사용자 결정 2026-11-04: 유료 구매 고객 유치). 이미 열렸거나 아직 쓸 수 없는 것은 이유를 함께 보인다.
       const all=it.id==='unlock_all',unlockDone=it.kind==='unlock'&&(all?UNLOCKS.every(opened):opened(it.at));
@@ -2815,11 +2865,18 @@ async function renderShop(){
         pv.onclick=()=>previewItem(it);
         row.appendChild(pv);
       }
-      row.appendChild(b);(it.kind==='unlock'?ub:box).appendChild(row);
+      row.appendChild(b);(paneOf(it)==='unlock'?ub:boxes[paneOf(it)]).appendChild(row);
     });
-    $('unlockWrap').hidden=!ub.children.length;
   }catch(e){box.textContent='상점을 불러오지 못했어요.'}
 }
+let shopTab='deco';
+function setShopTab(t){ // 상점 분류 탭: 눌린 분류만 보인다
+  shopTab=t;
+  document.querySelectorAll('#shopTabs button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.t===t)));
+  document.querySelectorAll('#crDlg .shoppane').forEach(p=>{p.hidden=p.dataset.t!==t});
+}
+document.querySelectorAll('#shopTabs button').forEach(b=>{b.onclick=()=>setShopTab(b.dataset.t)});
+setShopTab('deco');
 async function openCredits(why){
   $('crWhy').textContent=why||'';$('crWhy').hidden=!why;$('crErr').textContent='';
   $('crDlg').showModal();
@@ -2905,7 +2962,7 @@ $('spClose').onclick=()=>$('stkPrevDlg').close();
 $('pvEnd').onclick=endPreview;
 $('crClose').onclick=()=>$('crDlg').close();
 window.addEventListener('credits-refresh',loadCredits);
-loadCredits();
+loadCredits().then(()=>claimStageGifts(true));
 </script>
 
 

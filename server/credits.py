@@ -61,10 +61,10 @@ ITEMS = {
     # 열림 건너뛰기(2026-11-04): 칸·색·달력이 열리는 3·28·60일째를 돈으로 먼저 연다. 기능만 열리고 달성 표시(✔)·축하는 실제 일수에만 준다.
     # 가격은 «열림이 복잡해질수록 조금씩 비싸게, 전체는 개별 합계보다 싸게» 라는 사용자 방향에 맞춘 임시값이다(근거 없음).
     # 5달러 ≈ 6,720원(환율 1,343.93원/달러, open.er-api.com 2026-11-04 조회)을 기준으로 전체를 6,500원으로 잡았다. 화면이 «이전 열림이 열려 있을 때만» 보여 준다(일수는 브라우저에만 있어 서버는 모름).
-    "unlock_3": {"id": "unlock_3", "kind": "unlock", "at": 3, "name": "칸 4개 + 복숭아 색 바로 열기", "amount": 1500, "desc": "원래는 도장을 3일 쌓으면 열려요"},
-    "unlock_28": {"id": "unlock_28", "kind": "unlock", "at": 28, "name": "칸 5개 + 라벤더 색 바로 열기", "amount": 2500, "desc": "원래는 도장을 28일 쌓으면 열려요"},
-    "unlock_60": {"id": "unlock_60", "kind": "unlock", "at": 60, "name": "칸 6개 + 햇살 색 + 달력·일정 메모 바로 열기", "amount": 3500, "desc": "원래는 도장을 60일 쌓으면 열려요"},
-    "unlock_all": {"id": "unlock_all", "kind": "unlock", "at": 0, "name": "모든 단계 한 번에 열기", "amount": 6500, "desc": "칸 6개, 색 3가지, 달력·일정 메모까지 전부(따로 사는 것보다 1,000원 저렴)"},
+    "unlock_3": {"id": "unlock_3", "kind": "unlock", "at": 3, "name": "기록 바로 열기", "amount": 1500, "desc": "메모·일기 기록을 바로 열어요. 원래는 도장을 3일 쌓으면 열려요"},
+    "unlock_28": {"id": "unlock_28", "kind": "unlock", "at": 28, "name": "칸 자유 추가 + 라벤더 색 바로 열기", "amount": 2500, "desc": "칸을 자유롭게 늘릴 수 있고 라벤더 색이 열려요. 원래는 도장을 28일 쌓으면 열려요"},
+    "unlock_60": {"id": "unlock_60", "kind": "unlock", "at": 60, "name": "달력·일정 메모 + 햇살 색 바로 열기", "amount": 3500, "desc": "달력에서 지난 기록과 날짜별 일정 메모를 쓰고 햇살 색이 열려요. 원래는 도장을 60일 쌓으면 열려요"},
+    "unlock_all": {"id": "unlock_all", "kind": "unlock", "at": 0, "name": "모든 단계 한 번에 열기", "amount": 6500, "desc": "기록, 칸 자유 추가, 달력·일정 메모와 색 3가지 전부(따로 사는 것보다 1,000원 저렴)"},
 }
 
 SCHEMA = """
@@ -100,6 +100,13 @@ CREATE TABLE IF NOT EXISTS free_grants (
   ip_hash TEXT NOT NULL,
   day TEXT NOT NULL,
   client_id TEXT NOT NULL UNIQUE
+);
+CREATE TABLE IF NOT EXISTS stage_gifts (
+  client_id TEXT NOT NULL,
+  stage INTEGER NOT NULL,
+  item_id TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  PRIMARY KEY (client_id, stage)
 );
 CREATE TABLE IF NOT EXISTS chat_usage (
   scope TEXT NOT NULL,
@@ -141,6 +148,10 @@ def valid_client_id(raw):
 def new_order_id():
     # 토스페이먼츠 orderId 규칙: 영문 대소문자·숫자·-·_·= , 6~64자(결제 승인 API 문서). token_urlsafe 는 A-Z a-z 0-9 - _ 만 쓴다
     return "ord_" + secrets.token_urlsafe(24)
+
+
+GIFT_STAGES = (3, 28, 60)  # 도장 누적 일수 단계(화면의 UNLOCKS 와 같아야 한다)
+GIFT_KINDS = ("sticker", "iconpack", "paper", "theme")  # 추첨 풀: 꾸미기 상품만(기능·도장 모양·한마디·열림 건너뛰기·대화권은 제외, 사용자 결정 2026-11-05)
 
 
 class Store:
@@ -315,6 +326,36 @@ class Store:
 
     def has_item(self, client_id, item_id):
         return item_id in self.owned(client_id)
+
+    # ---- 단계 선물: 도장 누적 3·28·60일 단계를 지나면 꾸미기 팩 하나를 무작위로 준다 ----
+    def stage_gift(self, client_id, stage):
+        """(client, stage)마다 한 번만 준다. 서버는 도장 일수를 모르므로 단계 도달은 화면 말을 믿는다(남용은 단계당 1회로만 줄임).
+        이미 받았으면 같은 결과를 돌려준다. 줄 팩이 없으면 item None."""
+        if stage not in GIFT_STAGES:
+            raise ValueError("stage")
+        c = self._conn()
+        try:
+            c.execute("BEGIN IMMEDIATE")
+            row = c.execute("SELECT item_id FROM stage_gifts WHERE client_id=? AND stage=?", (client_id, stage)).fetchone()
+            if row:
+                c.execute("ROLLBACK")
+                return {"item": ITEMS.get(row["item_id"]), "already": True}
+            have = {r[0] for r in c.execute("SELECT item_id FROM entitlements WHERE client_id=?", (client_id,))}
+            pool = [i for i in ITEMS.values() if i["kind"] in GIFT_KINDS and i["id"] not in have]
+            pick = secrets.choice(pool) if pool else None
+            c.execute("INSERT INTO stage_gifts(client_id, stage, item_id, created_at) VALUES (?,?,?,?)",
+                      (client_id, stage, pick["id"] if pick else "", now()))
+            if pick:
+                c.execute("INSERT OR IGNORE INTO entitlements(client_id, item_id, order_id, created_at) VALUES (?,?,?,?)",
+                          (client_id, pick["id"], f"gift:{stage}", now()))
+            c.execute("COMMIT")
+            return {"item": pick, "already": False}
+        except Exception:
+            if c.in_transaction:
+                c.execute("ROLLBACK")
+            raise
+        finally:
+            c.close()
 
     # ---- 주문 ----
     def create_order(self, client_id, product):
