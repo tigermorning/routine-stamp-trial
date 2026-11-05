@@ -494,17 +494,17 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
   <h2 id="crTitle">상점</h2>
   <p class="msg" id="crWhy" role="status" hidden></p>
   <div class="shoptabs" role="tablist" aria-label="상점 분류" id="shopTabs">
-    <button type="button" role="tab" data-t="theme">배경 디자인</button>
+    <button type="button" role="tab" data-t="theme">배경 바꾸기</button>
     <button type="button" role="tab" data-t="stamp">도장 모양</button>
     <button type="button" role="tab" data-t="paper">메모지</button>
     <button type="button" role="tab" data-t="icon">아이콘</button>
     <button type="button" role="tab" data-t="stk">스티커</button>
-    <button type="button" role="tab" data-t="feat">기능</button>
-    <button type="button" role="tab" data-t="unlock">열림 건너뛰기</button>
+    <button type="button" role="tab" data-t="feat">추가 기능</button>
+    <button type="button" role="tab" data-t="unlock">바로 열기</button>
     <button type="button" role="tab" data-t="chat">대화권</button>
   </div>
   <div class="shoppane" data-t="theme" role="tabpanel">
-    <p class="stat">화면 배경과 카드, 버튼 모양을 바꿔요. 무료 배경은 설정의 «색 테마»에서 골라요. 한 번 사면 계속 써요.</p>
+    <p class="stat">화면 배경을 바꿔요. 위쪽은 무료 색이고, 아래는 모양까지 바뀌는 유료 디자인이에요. 유료는 한 번 사면 계속 써요.</p>
     <div id="shopTheme"></div>
   </div>
   <div class="shoppane" data-t="stamp" role="tabpanel" hidden>
@@ -2001,7 +2001,7 @@ function realDays(){let n=0;for(const d in S.log)if(hasStamp(d))n++;return n}
 function stampDays(){return realDays()+(S.gift?1:0)}
 function weekCount(){let n=0;for(let i=0;i<7;i++){const dt=new Date();dt.setDate(dt.getDate()-i);if(hasStamp(fmt(dt)))n++}return n}
 function stampCount(){let n=0;const have=new Set(ids());for(const d in S.log)for(const k in S.log[d])if(have.has(k)&&S.log[d][k]>0)n++;return n}
-function opened(at){return stampDays()>=at||OWNED.has('unlock_'+at)||OWNED.has('unlock_all')} // 열림: 일수로 도달했거나 상점에서 «열림 건너뛰기»를 샀을 때(기능만 열린다). 달성 표시(✔)와 축하는 일수만 본다
+function opened(at){return stampDays()>=at||OWNED.has('unlock_'+at)||OWNED.has('unlock_all')} // 열림: 일수로 도달했거나 상점에서 «바로 열기»를 샀을 때(기능만 열린다). 달성 표시(✔)와 축하는 일수만 본다
 const STAGE_WHAT={3:'기록(메모·일기)',28:'칸 늘리기',60:'달력·일정 메모'},STAGE_SHORT={3:'기록',28:'칸 늘리기',60:'달력·일정'};
 const STAGE_OPEN={3:'위쪽 «기록» 버튼에서 메모·일기를 하루·주간·5년으로 쓸 수 있어요.',28:'이제 칸을 원하는 만큼 늘릴 수 있어요. «할 일 칸 바꾸기»에서 더해 보세요.',60:'달력에서 지난 기록을 보고 날짜마다 할 일·일정을 적을 수 있어요.'};
 function capacity(){return Math.max(S.slots.length,opened(28)?MAX_SLOTS:3)} // 처음 3칸 → 28일째부터 늘릴 수 있음. 이미 더 많은 칸을 가진 사람의 칸은 줄이지 않는다
@@ -2037,6 +2037,7 @@ const iconSVG=k=>{const b=iconBody(k);return b?`<svg class="ico" viewBox="0 0 64
 function hash(s){let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))|0;return h}
 const rot=(date,id)=>((hash(date+id)%15)-7)+'deg';
 function stampHTML(s,v,date){
+  if(!v&&previewShape) v=1; // 도장 모양 미리 보기 중에는 빈 칸도 도장이 찍힌 모습으로 보여 준다(찍은 도장이 없어도 모양이 보이게)
   if(!v) return `<div class="empty">＋</div>`;
   return `<div class="stamp ${v===2?'mini':''}" style="--c:${s.color};--r:${rot(date,s.id)}">${iconOf(s)}</div>`;
 }
@@ -2855,10 +2856,17 @@ const UNLOCK_ICON={unlock_3:'📝',unlock_28:'🧩',unlock_60:'📅',unlock_all:
 const unlockLadder=id=>`<span class="uico" aria-hidden="true">${UNLOCK_ICON[id]||'🔓'}</span>`;
 async function renderShop(){
   const boxes={theme:$('shopTheme'),stamp:$('shopStamp'),paper:$('shopPaper'),icon:$('shopIcon'),stk:$('shopStk'),feat:$('shopFeat')},box=boxes.theme,ub=$('unlockList');box.textContent='불러오는 중…';
-  const paneOf=it=>it.kind==='unlock'?'unlock':it.kind==='sticker'?'stk':(it.kind==='quote'||it.kind==='feature')?'feat':it.kind==='stamp'?'stamp':it.kind==='paper'?'paper':it.kind==='iconpack'?'icon':'theme'; // 상점 분류: 꾸미기(디자인·아이콘·도장 모양·메모지) / 스티커 / 기능 / 열림 건너뛰기
+  const paneOf=it=>it.kind==='unlock'?'unlock':it.kind==='sticker'?'stk':(it.kind==='quote'||it.kind==='feature')?'feat':it.kind==='stamp'?'stamp':it.kind==='paper'?'paper':it.kind==='iconpack'?'icon':'theme'; // 상점 분류: 꾸미기(디자인·아이콘·도장 모양·메모지) / 스티커 / 기능 / 바로 열기
   try{
     const j=await (await fetch('/api/shop',{headers:{'X-Client-Id':clientId()},cache:'no-store'})).json();
     Object.values(boxes).forEach(x=>{x.textContent=''});ub.textContent='';
+    THEMES.filter(th=>!th.shop&&!th.at).forEach(th=>{ // 무료 배경 색(기본·복숭아·바다·숲·장미·적갈색·라임)도 «배경 바꾸기» 탭에서 바로 고른다
+      const row=document.createElement('div');row.className='shopitem';const on=currentTheme()===th.id;
+      row.innerHTML=`<i class="sw sw-${th.id}"></i><span>${esc(t('theme_'+th.id))}<small>무료 · 같은 디자인에 색만 달라요</small></span>`;
+      const b=document.createElement('button');b.type='button';b.className='btn';b.textContent=on?'✔ 쓰는 중':'쓰기';b.disabled=on;
+      b.onclick=()=>{S.theme=th.id;save();render();$('crDlg').close()};
+      row.appendChild(b);boxes.theme.appendChild(row);
+    });
     j.items.forEach(it=>{
       // 상점 상품은 루틴 성공 일수와 관계없이 항상 보인다(사용자 결정 2026-11-04: 유료 구매 고객 유치). 이미 열렸거나 아직 쓸 수 없는 것은 이유를 함께 보인다.
       const all=it.id==='unlock_all',unlockDone=it.kind==='unlock'&&(all?UNLOCKS.every(opened):opened(it.at));
@@ -2955,7 +2963,7 @@ function previewItem(it){
   else if(it.kind==='iconpack'){previewIcon=it.id;text='“'+it.name+'” 그림으로 미리 보는 중 — 그림이 있는 칸(내 루틴, 도장 찍은 칸)에 적용돼요'}
   else if(it.kind==='stamp'){
     previewShape='soft';
-    const names=()=>'도장 모양 미리 보는 중: '+SHAPES.find(x=>x[0]===previewShape)[1]+' — 도장을 찍은 칸에 적용돼요';
+    const names=()=>'도장 모양 미리 보는 중: '+SHAPES.find(x=>x[0]===previewShape)[1]+' — 오늘 칸이 도장 찍힌 모습으로 보여요. «다른 모양»을 눌러 하나씩 바꿔 봐요';
     text=names();
     alt={label:'다른 모양',run:()=>{const o=['soft','leaf','drop','round'];previewShape=o[(o.indexOf(previewShape)+1)%o.length];$('pvTxt').textContent=names();render()}};
   }
