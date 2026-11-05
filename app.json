@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "routine-stamp-mobile",
-    "slug": "routine-stamp-mobile",
+    "name": "routine stamp",
+    "slug": "routine-stamp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -25,6 +25,13 @@
     },
     "plugins": [
       "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "손으로 쓴 루틴 목록 사진을 골라 글자를 읽기 위해 사진첩에 접근해요.",
+          "cameraPermission": "손으로 쓴 루틴 목록을 찍어 글자를 읽기 위해 카메라를 써요."
+        }
+      ],
       [
         "expo-splash-screen",
         {
