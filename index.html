@@ -2921,7 +2921,7 @@ function showPvBar(it,text,alt){ // 미리 보기 중에는 화면 아래 막대
   const a=$('pvAlt');a.hidden=!alt;if(alt){a.textContent=alt.label;a.onclick=alt.run}
   $('pvBar').hidden=false;
 }
-const UNLOCK_COLOR={unlock_3:'peach',unlock_28:'lavender',unlock_60:'sunny',unlock_all:'sunny'};
+const UNLOCK_COLOR={unlock_28:'lavender',unlock_60:'sunny',unlock_all:'sunny'}; // 복숭아는 처음부터 무료라 3일 건너뛰기에는 미리 볼 색이 없다
 function previewItem(it){
   endPreview(true);
   if(it.kind==='sticker'){$('crDlg').close();openStickerPreview(it);return}

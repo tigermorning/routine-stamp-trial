@@ -58,7 +58,7 @@ def test_app_guide_is_always_in_the_prompt_and_has_the_facts_users_asked_about()
     chat(llm, [U("안녕")])
     sys_ = llm.systems[0]
     assert policy.APP_GUIDE in sys_
-    for fact in ("3일, 28일, 60일", "최대 6칸", "연한 도장도 그날은 한 걸로", "날짜와 시간이 있는 일정이나 일정 관리", "일정관리 앱이 아니라 루틴 시작을 돕는 앱", "칸 3개에 도장만 찍는다", "언제 열지는 정해지지 않았다"):
+    for fact in ("3일이면 기록", "28일이면 칸 자유 추가", "최대 12칸", "연한 도장도 그날은 한 걸로", "시간이 있는 일정 관리", "습관 앱에서 출발해", "칸 3개에 도장만 찍는다", "언제 열지는 정해지지 않았다"):
         assert fact in policy.APP_GUIDE, fact
 
 
