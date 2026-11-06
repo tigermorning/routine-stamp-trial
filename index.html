@@ -251,6 +251,8 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 .mile{padding:1px 10px;border-radius:999px;border:2px solid var(--accent);font-variant-numeric:tabular-nums}
 .mile.done{background:var(--accent);color:var(--accent-ink)}
 .mile.bought{border-style:dashed}
+.mile.soon{border-style:dashed;border-width:1px;opacity:.7}
+.goals .phase{margin:6px 0 4px}
 #rhythm{margin-top:2px}
 .miles .milescap{flex-basis:100%}
 .fall{position:fixed;top:-40px;font-size:28px;pointer-events:none;z-index:99;animation:fall linear forwards}
@@ -625,10 +627,10 @@ ko:{
   bannerPerfect:'🌈 오늘 도장 다 찍었어요!',
   bannerMini:'🌱 연한 도장으로 이어갔어요. 조금이라도 한 게 제일 중요해요.',
   piledTitle:"내 루틴",
-  routineDay:"{n}일째", routineNone:"아직 시작 전", goalsCap:"열림 목표",
+  routineDay:"{n}일째", routineNone:"아직 시작 전", goalsCap:"성장 단계",
   pileNote:'쌓이기만 하고 줄어들지 않아요. 하루 빠져도 그대로예요.',
   unlockOpen:'새 칸이 열렸어요. 아래 "할 일 칸 바꾸기"에서 더해요.',
-  stageSlotsFree:'칸을 더 늘릴 수 있어요. 아래 "할 일 칸 바꾸기"에서 더해요.', stageAll:'모든 단계를 지났어요.', stageMiles:'단계마다 새 기능이 열려요', stageSlotLock:'도장 {t}일째부터 칸을 원하는 만큼 늘릴 수 있어요. 지금 {days}째예요{gift}.', stageSlotMax:'칸은 열두 개까지예요.', stageSlotAdvice:'칸이 여섯 개를 넘으면 매일 다 하기 어려울 수 있어요. 필요한 만큼만 두세요.',
+  stageSlotsFree:'칸을 더 늘릴 수 있어요. 아래 "할 일 칸 바꾸기"에서 더해요.', stageAll:'지금 열 수 있는 단계를 모두 지났어요. 새 기능을 만들고 있어요.', stageMiles:'단계마다 새 기능이 열려요', stageSlotLock:'도장 {t}일째부터 칸을 원하는 만큼 늘릴 수 있어요. 지금 {days}째예요{gift}.', stageSlotMax:'칸은 열두 개까지예요.', stageSlotAdvice:'칸이 여섯 개를 넘으면 매일 다 하기 어려울 수 있어요. 필요한 만큼만 두세요.',
   unlockLeft:'새 칸까지 {n}일 남았어요',
   unlockLeftOne:'새 칸까지 {n}일 남았어요',
   unlockAll:'새 칸이 다 열렸어요.',
@@ -2002,7 +2004,11 @@ function stampDays(){return realDays()+(S.gift?1:0)}
 function weekCount(){let n=0;for(let i=0;i<7;i++){const dt=new Date();dt.setDate(dt.getDate()-i);if(hasStamp(fmt(dt)))n++}return n}
 function stampCount(){let n=0;const have=new Set(ids());for(const d in S.log)for(const k in S.log[d])if(have.has(k)&&S.log[d][k]>0)n++;return n}
 function opened(at){return stampDays()>=at||OWNED.has('unlock_'+at)||OWNED.has('unlock_all')} // 열림: 일수로 도달했거나 상점에서 «바로 열기»를 샀을 때(기능만 열린다). 달성 표시(✔)와 축하는 일수만 본다
-const STAGE_WHAT={3:'기록(메모·일기)',28:'칸 늘리기',60:'달력·일정 메모'},STAGE_SHORT={3:'기록',28:'칸 늘리기',60:'달력·일정'};
+const STAGE_WHAT={3:'기록(메모·일기) 쓰기',28:'할 일 칸 늘리기',60:'달력에 일정 적기'},STAGE_SHORT={3:'기록 쓰기',28:'칸 늘리기',60:'달력·일정'};
+/* 1단계(0~59일)는 루틴을 자리 잡게 하는 기간, 60일 뒤부터는 일정표를 키우는 2단계(사용자 결정 2026-11-06). 60일은 습관이 자동화되는 시간의 중앙값 59~66일(Singh 2024, PRD 근거 표)에 맞춘 것이고 사람마다 4~335일로 다르다.
+   FUTURE_STAGES 는 아직 만들지 않은 기능의 예고 목록이다(열리는 일수 없음, 눌러도 아무 일 없음). 만들면 UNLOCKS 와 STAGE_* 에 옮긴다. */
+const SETTLE_DAYS=60;
+const FUTURE_STAGES=['시간 정하기','반복 일정','알림','일정 색 구분','여러 달력 합쳐 보기'];
 const STAGE_OPEN={3:'위쪽 «기록» 버튼에서 메모·일기를 하루·주간·5년으로 쓸 수 있어요.',28:'이제 칸을 원하는 만큼 늘릴 수 있어요. «할 일 칸 바꾸기»에서 더해 보세요.',60:'달력에서 지난 기록을 보고 날짜마다 할 일·일정을 적을 수 있어요.'};
 function capacity(){return Math.max(S.slots.length,opened(28)?MAX_SLOTS:3)} // 처음 3칸 → 28일째부터 늘릴 수 있음. 이미 더 많은 칸을 가진 사람의 칸은 줄이지 않는다
 function themeOpen(th){if(th.shop)return OWNED.has(th.shop);return !th.at||opened(th.at)}
@@ -2134,6 +2140,8 @@ function renderPiled(){
   $('pileNote').textContent=t('pileNote');
   const next=UNLOCKS.find(x=>total<x);
   let h=`<p class="goalscap">${esc(t('goalsCap'))}</p>`;
+  const settled=total>=SETTLE_DAYS;
+  h+=`<p class="stat phase"><b>${settled?'2단계 · 일정표 키우기':'1단계 · 루틴 익히기'}</b> — ${settled?'루틴이 자리 잡을 시기를 지났어요. 이제 일정표를 하나씩 키워 가요.':'도장을 60일 쌓으면 루틴이 자리 잡은 것으로 보고, 일정표를 키우는 단계가 열려요. 습관이 굳는 시간은 사람마다 달라서 60일은 평균에 가까운 기준이에요.'}</p>`;
   const hd=h; // 캡션만 있는 상태(아래 '모두 열림' 판단용)
   if(opened(28)&&S.slots.length<capacity()) h+=`<p class="unlockhd">${esc(t('stageSlotsFree'))}</p>`;
   if(next){
@@ -2143,12 +2151,13 @@ function renderPiled(){
       :`<div class="meter" aria-hidden="true"><i style="width:${Math.min(100,Math.round(total/next*100))}%"></i></div>`;
     // 초반에는 '쌓인 일수', 다음 칸이 가까워지면(80%~) '남은 일수'를 보여 준다(Koo & Fishbach 2012 초록 기준, 전환 시점은 설계 판단)
     const soon=total===0||total/next>=0.8;
-    const msg0=soon?`${STAGE_WHAT[next]}까지 ${left}일 남았어요`:`${total}일 쌓았어요 · ${next}일째에 열려요: ${STAGE_WHAT[next]}`;
+    const msg0=soon?`${STAGE_WHAT[next]}까지 ${left}일 남았어요`:`${total}일 쌓았어요 · ${next}일이 되면 열려요: ${STAGE_WHAT[next]}`;
     const msg=opened(next)?`${next}일째가 되면 달성 표시가 붙어요(${left}일 남음, 구매로 이미 열려 있어요)`:msg0; // 구매로 열린 열림은 «새 칸까지 N일»이 맞지 않아 문구를 바꾼다
     const giftTag=S.gift&&next<=14?t('giftTag'):''; // 첫 방문 선물 1일이 포함돼 있음을 '쌓인 일수' 옆에 밝힌다
     h+=`<p class="unlockhd">${esc(msg+giftTag)}</p>${pips}`;
   }else if(h===hd) h+=`<p class="unlockhd">${esc(t('stageAll'))}</p>`;
-  h+=`<div class="miles"><span class="milescap">${esc(t('stageMiles'))}</span>${UNLOCKS.map(x=>{const got=total>=x,bought=!got&&opened(x);return `<span class="mile ${got?'done':''}${bought?' bought':''}"${bought?' title="구매로 열려 있어요. 도장이 쌓이면 ✔가 붙어요"':''}>${got?'✔ ':bought?'🔓 ':''}${esc(x+'일째 '+STAGE_SHORT[x])}</span>`}).join('')}</div>`;
+  h+=`<div class="miles"><span class="milescap">${esc(t('stageMiles'))}</span>${UNLOCKS.map(x=>{const got=total>=x,bought=!got&&opened(x);return `<span class="mile ${got?'done':''}${bought?' bought':''}"${bought?' title="구매로 열려 있어요. 도장이 쌓이면 ✔가 붙어요"':''}>${got?'✔ ':bought?'🔓 ':''}${esc(x+'일 · '+STAGE_SHORT[x])}</span>`}).join('')}</div>`;
+  h+=`<div class="miles future"><span class="milescap">이어서 만들 기능 (준비 중이에요)</span>${FUTURE_STAGES.map(x=>`<span class="mile soon">${esc(x)}</span>`).join('')}</div>`;
   const nt=THEMES.find(th=>th.at&&!themeOpen(th)); // 다음에 열리는 색을 한 줄로 알린다(모두 열렸으면 줄 없음)
   if(nt) h+=`<p class="stat nextcolor"><i class="sw sw-${nt.id}"></i><span>${esc(t('nextColor'))}: ${esc(t('theme_'+nt.id))} · ${esc(t('themeLocked',{d:t('routineDay',{n:nt.at})}))}</span></p>`;
   $('unlock').innerHTML=h;
