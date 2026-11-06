@@ -615,5 +615,18 @@ def test_sticker_pack_sizes_ids_and_symbols():
     for s in seen:
         if s.startswith("sv:"):
             assert f'<symbol id="sv-{s[3:]}"' in html and f'"{s[3:]}":' in html  # 그림과 이름이 있어야 한다
+        elif s.startswith("ig:"):  # 아이콘 팩 글리프(2026-11-06 아이콘·스티커 통합): 스타일과 글리프 키가 화면에 있어야 한다
+            style, key = s[3:].split("_")
+            assert style in ("cute", "simple", "pastel") and f"\n{key}:{{p:" in html, s
         else:
             assert f".hl-{s[3:]}{{" in html or f".hl-{s[3:]}," in html
+
+
+def test_icon_and_sticker_are_merged_in_the_screen():
+    # 2026-11-06 사용자 결정: 아이콘과 스티커는 기능도 합친다 — 산 스티커·아이콘을 칸 그림으로 고르고, 아이콘 팩 글리프를 붙이는 스티커로도 쓴다
+    html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
+    block = html[html.index("const STICKER_PACKS={"):html.index("const STICKERS_PER_DAY")]
+    for pid in ("icons_cute", "icons_simple", "icons_pastel"):
+        assert pid + ":" in block and creditlib.ITEMS[pid]["kind"] == "iconpack"  # 기존 아이콘 팩 상품과 같은 id 라 산 사람은 그대로 스티커로도 쓴다
+    assert "if(b.dataset.a){s.art=b.dataset.a" in html and "내 스티커·아이콘" in html  # 칸 그림 고르기에 산 그림이 나온다
+    assert "if(s.art){const a=artSVG(s.art" in html  # 칸 그림이 s.art 를 그린다
