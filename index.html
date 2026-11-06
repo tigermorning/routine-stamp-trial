@@ -496,7 +496,8 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
   <h2 id="crTitle">상점</h2>
   <p class="msg" id="crWhy" role="status" hidden></p>
   <div class="shoptabs" role="tablist" aria-label="상점 분류" id="shopTabs">
-    <button type="button" role="tab" data-t="theme">배경 바꾸기</button>
+    <button type="button" role="tab" data-t="color">배경 색</button>
+    <button type="button" role="tab" data-t="theme">배경 디자인</button>
     <button type="button" role="tab" data-t="stamp">도장 모양</button>
     <button type="button" role="tab" data-t="paper">메모지</button>
     <button type="button" role="tab" data-t="icon">아이콘</button>
@@ -505,8 +506,12 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
     <button type="button" role="tab" data-t="unlock">바로 열기</button>
     <button type="button" role="tab" data-t="chat">대화권</button>
   </div>
-  <div class="shoppane" data-t="theme" role="tabpanel">
-    <p class="stat">화면 배경을 바꿔요. 위쪽은 무료 색이고, 아래는 모양까지 바뀌는 유료 디자인이에요. 유료는 한 번 사면 계속 써요.</p>
+  <div class="shoppane" data-t="color" role="tabpanel">
+    <p class="stat">화면 색을 바꿔요. 모두 무료예요. 같은 디자인에 색만 달라요.</p>
+    <div id="shopColor"></div>
+  </div>
+  <div class="shoppane" data-t="theme" role="tabpanel" hidden>
+    <p class="stat">모양까지 바뀌는 배경 디자인이에요. 한 번 사면 계속 써요.</p>
     <div id="shopTheme"></div>
   </div>
   <div class="shoppane" data-t="stamp" role="tabpanel" hidden>
@@ -2864,17 +2869,17 @@ $('ckBuy').onclick=()=>{$('cookieDlg').close();if(ckMode.item) buyCredits(ckMode
 const UNLOCK_ICON={unlock_3:'📝',unlock_28:'🧩',unlock_60:'📅',unlock_all:'🎁'}; // 열리는 기능을 한눈에(기록·칸 늘리기·달력)
 const unlockLadder=id=>`<span class="uico" aria-hidden="true">${UNLOCK_ICON[id]||'🔓'}</span>`;
 async function renderShop(){
-  const boxes={theme:$('shopTheme'),stamp:$('shopStamp'),paper:$('shopPaper'),icon:$('shopIcon'),stk:$('shopStk'),feat:$('shopFeat')},box=boxes.theme,ub=$('unlockList');box.textContent='불러오는 중…';
+  const boxes={color:$('shopColor'),theme:$('shopTheme'),stamp:$('shopStamp'),paper:$('shopPaper'),icon:$('shopIcon'),stk:$('shopStk'),feat:$('shopFeat')},box=boxes.theme,ub=$('unlockList');box.textContent='불러오는 중…';
   const paneOf=it=>it.kind==='unlock'?'unlock':it.kind==='sticker'?'stk':(it.kind==='quote'||it.kind==='feature')?'feat':it.kind==='stamp'?'stamp':it.kind==='paper'?'paper':it.kind==='iconpack'?'icon':'theme'; // 상점 분류: 꾸미기(디자인·아이콘·도장 모양·메모지) / 스티커 / 기능 / 바로 열기
   try{
     const j=await (await fetch('/api/shop',{headers:{'X-Client-Id':clientId()},cache:'no-store'})).json();
     Object.values(boxes).forEach(x=>{x.textContent=''});ub.textContent='';
-    THEMES.filter(th=>!th.shop&&!th.at).forEach(th=>{ // 무료 배경 색(기본·복숭아·바다·숲·장미·적갈색·라임)도 «배경 바꾸기» 탭에서 바로 고른다
+    THEMES.filter(th=>!th.shop&&!th.at).forEach(th=>{ // 무료 배경 색(기본·복숭아·바다·숲·장미·적갈색·라임)도 «배경 색» 탭에서 바로 고른다
       const row=document.createElement('div');row.className='shopitem';const on=currentTheme()===th.id;
       row.innerHTML=`<i class="sw sw-${th.id}"></i><span>${esc(t('theme_'+th.id))}<small>무료 · 같은 디자인에 색만 달라요</small></span>`;
       const b=document.createElement('button');b.type='button';b.className='btn';b.textContent=on?'✔ 쓰는 중':'쓰기';b.disabled=on;
       b.onclick=()=>{S.theme=th.id;save();render();$('crDlg').close()};
-      row.appendChild(b);boxes.theme.appendChild(row);
+      row.appendChild(b);boxes.color.appendChild(row);
     });
     j.items.forEach(it=>{
       // 상점 상품은 루틴 성공 일수와 관계없이 항상 보인다(사용자 결정 2026-11-04: 유료 구매 고객 유치). 이미 열렸거나 아직 쓸 수 없는 것은 이유를 함께 보인다.
@@ -2908,14 +2913,14 @@ async function renderShop(){
     });
   }catch(e){box.textContent='상점을 불러오지 못했어요.'}
 }
-let shopTab='theme';
+let shopTab='color';
 function setShopTab(t){ // 상점 분류 탭: 눌린 분류만 보인다
   shopTab=t;
   document.querySelectorAll('#shopTabs button').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.t===t)));
   document.querySelectorAll('#crDlg .shoppane').forEach(p=>{p.hidden=p.dataset.t!==t});
 }
 document.querySelectorAll('#shopTabs button').forEach(b=>{b.onclick=()=>setShopTab(b.dataset.t)});
-setShopTab('theme');
+setShopTab('color');
 async function openCredits(why){
   $('crWhy').textContent=why||'';$('crWhy').hidden=!why;$('crErr').textContent='';
   $('crDlg').showModal();
