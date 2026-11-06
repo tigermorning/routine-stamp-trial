@@ -33,6 +33,7 @@
 }
 /* 색 테마(칸이 열릴 때 하나씩 열림). 어두운 시스템 설정보다 뒤에 두어 고른 테마가 이긴다. 글자·강조 명암비는 WCAG 계산으로 확인(2026-10-21) */
 :root[data-theme="peach"]{--bg:#fbf1ea;--card:#ffffff;--ink:#4a3631;--soft:#7d655d;--line:#efd9cc;--accent:#d06a49;--accent-ink:#2b0e05;--shadow:0 6px 18px rgba(190,110,80,.14);--blob1:rgba(208,106,73,.14);--blob2:rgba(255,214,102,.28);color-scheme:light}
+:root[data-theme="peachpink"]{--bg:#fff1ee;--card:#ffffff;--ink:#4d2a31;--soft:#85595f;--line:#f7d4d4;--accent:#de5a72;--accent-ink:#2e0510;--shadow:0 6px 18px rgba(222,90,114,.14);--blob1:rgba(222,90,114,.14);--blob2:rgba(255,200,160,.3);color-scheme:light}
 :root[data-theme="lavender"]{--bg:#f3f0fa;--card:#ffffff;--ink:#3a3350;--soft:#6f668c;--line:#dfd8f0;--accent:#8670d2;--accent-ink:#0d0620;--shadow:0 6px 18px rgba(120,100,190,.14);--blob1:rgba(134,112,210,.16);--blob2:rgba(255,214,102,.2);color-scheme:light}
 :root[data-theme="sunny"]{--bg:#fff7df;--card:#ffffff;--ink:#4a3f1f;--soft:#75683f;--line:#f0e2b8;--accent:#b98400;--accent-ink:#241a00;--shadow:0 6px 18px rgba(190,150,40,.15);--blob1:rgba(185,132,0,.14);--blob2:rgba(255,150,100,.14);color-scheme:light}
 :root[data-theme="ocean"]{--bg:#eaf4fb;--card:#ffffff;--ink:#1f3a4d;--soft:#5a7a8f;--line:#cfe3f1;--accent:#2f8fcf;--accent-ink:#04243a;--shadow:0 6px 18px rgba(47,143,207,.14);--blob1:rgba(47,143,207,.14);--blob2:rgba(120,210,230,.22);color-scheme:light}
@@ -83,6 +84,7 @@ h2{font-family:var(--display);font-weight:400;font-size:19px;margin:0}
 .sw{width:14px;height:14px;border-radius:50%;border:1px solid var(--line);flex:none}
 .sw-base{background:linear-gradient(135deg,#f2f7f5 50%,#3fb8a5 50%)}
 .sw-peach{background:linear-gradient(135deg,#fbf1ea 50%,#d06a49 50%)}
+.sw-peachpink{background:linear-gradient(135deg,#fff1ee 50%,#de5a72 50%)}
 .sw-lavender{background:linear-gradient(135deg,#f3f0fa 50%,#8670d2 50%)}
 .sw-sunny{background:linear-gradient(135deg,#fff7df 50%,#b98400 50%)}
 .sw-brown{background:linear-gradient(135deg,#f6e9e2 50%,#9c3d26 50%)}
@@ -718,7 +720,7 @@ ko:{
   introClose:'닫기',
   introBtn:'안내',
   setBtn:"설정", setBack:"돌아가기", langCap:"언어", themeCap:"색 테마",
-  theme_base:"기본", theme_peach:"복숭아", theme_lavender:"라벤더", theme_sunny:"햇살", theme_ocean:"바다",theme_notebook:"공책",theme_retro:"레트로",theme_cloud:"구름",theme_space:"우주 행성",theme_donut:"도넛", theme_forest:"숲", theme_rose:"장미", theme_brown:"적갈색", theme_lime:"라임", themeLocked:"{d}에 열려요",
+  theme_base:"기본", theme_peachpink:"복숭아", theme_peach:"가을낙엽", theme_lavender:"라벤더", theme_sunny:"햇살", theme_ocean:"바다",theme_notebook:"공책",theme_retro:"레트로",theme_cloud:"구름",theme_space:"우주 행성",theme_donut:"도넛", theme_forest:"숲", theme_rose:"장미", theme_brown:"적갈색", theme_lime:"라임", themeLocked:"{d}에 열려요",
   nextColor:"다음 색",
   privCap:"개인정보 안내", privBody:"계정도 로그인도 없어요. 도장 기록은 이 기기에만 저장돼요. 그래서 브라우저 데이터를 지우거나 폰을 바꾸면 기록이 사라져요. 도우미와 나눈 말은 답을 만들 때 AI 서비스에 전달되고, 이 앱 서버에는 저장되지 않아요. 이름·연락처 같은 개인정보는 적지 말아 주세요.",
   delCap:"내 기록 지우기", delBody:"이 기기에 저장된 도장 기록, 칸, 설정, 도우미 대화를 모두 지우고 처음 상태로 돌아가요.",
@@ -827,7 +829,7 @@ en:{
   introClose:'Close',
   introBtn:'Guide',
   setBtn:"Settings", setBack:"Back", langCap:"Language", themeCap:"Color theme",
-  theme_base:"Default", theme_peach:"Peach", theme_lavender:"Lavender", theme_sunny:"Sunshine", themeLocked:"Opens on {d}",
+  theme_base:"Default", theme_peachpink:"Peach", theme_peach:"Autumn leaves", theme_lavender:"Lavender", theme_sunny:"Sunshine", themeLocked:"Opens on {d}",
   nextColor:"Next color",
   privCap:"Privacy", privBody:"There are no accounts or logins. Your stamps are saved only on this device, so clearing browser data or switching phones erases them. What you say to the helper is passed to an AI service to write its reply, and this app's server doesn't store it. Please don't write personal details like your name or contact info.",
   delCap:"Delete my record", delBody:"Erases the stamp record, boxes, settings and helper chat saved on this device and returns the app to its first-run state.",
@@ -936,7 +938,7 @@ en:{
   introClose:'关闭',
   introBtn:'使用说明',
   setBtn:"设置", setBack:"返回", langCap:"语言", themeCap:"颜色主题",
-  theme_base:"默认", theme_peach:"蜜桃", theme_lavender:"薰衣草", theme_sunny:"阳光", themeLocked:"{d}时开启",
+  theme_base:"默认", theme_peachpink:"蜜桃", theme_peach:"秋叶", theme_lavender:"薰衣草", theme_sunny:"阳光", themeLocked:"{d}时开启",
   nextColor:"下一个颜色",
   privCap:"隐私说明", privBody:"没有账号，也不用登录。盖章记录只保存在这台设备上，所以清除浏览器数据或换手机后记录会消失。你和小帮手说的话会在生成回答时传给 AI 服务，本应用的服务器不会保存。请不要写姓名、联系方式等个人信息。",
   delCap:"删除我的记录", delBody:"清除这台设备上保存的盖章记录、格子、设置和小帮手聊天，回到最初的状态。",
@@ -1045,7 +1047,7 @@ en:{
   introClose:'關閉',
   introBtn:'使用說明',
   setBtn:"設定", setBack:"返回", langCap:"語言", themeCap:"顏色主題",
-  theme_base:"預設", theme_peach:"蜜桃", theme_lavender:"薰衣草", theme_sunny:"陽光", themeLocked:"{d}時開啟",
+  theme_base:"預設", theme_peachpink:"蜜桃", theme_peach:"秋葉", theme_lavender:"薰衣草", theme_sunny:"陽光", themeLocked:"{d}時開啟",
   nextColor:"下一個顏色",
   privCap:"隱私說明", privBody:"沒有帳號，也不用登入。蓋章紀錄只儲存在這台裝置上，所以清除瀏覽器資料或換手機後紀錄會消失。你和小幫手說的話會在產生回答時傳給 AI 服務，本應用的伺服器不會儲存。請不要寫姓名、聯絡方式等個人資訊。",
   delCap:"刪除我的紀錄", delBody:"清除這台裝置上儲存的蓋章紀錄、格子、設定和小幫手聊天，回到最初的狀態。",
@@ -1144,7 +1146,7 @@ yue:{
   introClose:'關閉',
   introBtn:'使用說明',
   setBtn:"設定", setBack:"返回", langCap:"語言", themeCap:"顏色主題",
-  theme_base:"預設", theme_peach:"蜜桃", theme_lavender:"薰衣草", theme_sunny:"陽光", themeLocked:"{d}就開",
+  theme_base:"預設", theme_peachpink:"蜜桃", theme_peach:"秋葉", theme_lavender:"薰衣草", theme_sunny:"陽光", themeLocked:"{d}就開",
   nextColor:"下一個顏色",
   privCap:"私隱說明", privBody:"冇帳戶，亦唔使登入。印花記錄只會儲存喺呢部裝置，所以清咗瀏覽器資料或者轉咗手機，記錄就會冇晒。你同小幫手講嘅嘢會喺產生回覆嗰陣傳去 AI 服務，呢個 app 嘅伺服器唔會儲存。請唔好寫姓名、聯絡方法等個人資料。",
   delCap:"刪除我嘅記錄", delBody:"清走呢部裝置入面儲存嘅印花記錄、格仔、設定同小幫手傾偈，返到最初嘅狀態。",
@@ -1253,7 +1255,7 @@ id:{
   introClose:'Tutup',
   introBtn:'Panduan',
   setBtn:"Pengaturan", setBack:"Kembali", langCap:"Bahasa", themeCap:"Tema warna",
-  theme_base:"Bawaan", theme_peach:"Persik", theme_lavender:"Lavender", theme_sunny:"Mentari", themeLocked:"Terbuka di {d}",
+  theme_base:"Bawaan", theme_peachpink:"Persik", theme_peach:"Daun gugur", theme_lavender:"Lavender", theme_sunny:"Mentari", themeLocked:"Terbuka di {d}",
   nextColor:"Warna berikutnya",
   privCap:"Privasi", privBody:"Tidak ada akun atau login. Catatan stempelmu hanya disimpan di perangkat ini, jadi kalau data browser dihapus atau ganti HP, catatannya hilang. Ucapanmu kepada pembantu diteruskan ke layanan AI untuk membuat jawaban, dan server aplikasi ini tidak menyimpannya. Jangan menulis data pribadi seperti nama atau kontak.",
   delCap:"Hapus catatanku", delBody:"Menghapus catatan stempel, kotak, pengaturan, dan obrolan pembantu yang tersimpan di perangkat ini, lalu mengembalikan aplikasi ke keadaan awal.",
@@ -1362,7 +1364,7 @@ vi:{
   introClose:'Đóng',
   introBtn:'Hướng dẫn',
   setBtn:"Cài đặt", setBack:"Quay lại", langCap:"Ngôn ngữ", themeCap:"Chủ đề màu",
-  theme_base:"Mặc định", theme_peach:"Đào", theme_lavender:"Oải hương", theme_sunny:"Nắng", themeLocked:"Mở vào {d}",
+  theme_base:"Mặc định", theme_peachpink:"Đào", theme_peach:"Lá mùa thu", theme_lavender:"Oải hương", theme_sunny:"Nắng", themeLocked:"Mở vào {d}",
   nextColor:"Màu tiếp theo",
   privCap:"Quyền riêng tư", privBody:"Không có tài khoản hay đăng nhập. Bản ghi dấu chỉ lưu trên thiết bị này, nên xóa dữ liệu trình duyệt hoặc đổi điện thoại thì bản ghi sẽ mất. Những gì bạn nói với trợ lý được chuyển cho dịch vụ AI để tạo câu trả lời, và máy chủ của ứng dụng này không lưu lại. Vui lòng đừng viết thông tin cá nhân như tên hay liên hệ.",
   delCap:"Xóa bản ghi của tôi", delBody:"Xóa bản ghi dấu, các ô, cài đặt và cuộc trò chuyện với trợ lý lưu trên thiết bị này, đưa ứng dụng về trạng thái ban đầu.",
@@ -1471,7 +1473,7 @@ es:{
   introClose:'Cerrar',
   introBtn:'Guía',
   setBtn:"Ajustes", setBack:"Volver", langCap:"Idioma", themeCap:"Tema de color",
-  theme_base:"Predeterminado", theme_peach:"Melocotón", theme_lavender:"Lavanda", theme_sunny:"Sol", themeLocked:"Se abre el {d}",
+  theme_base:"Predeterminado", theme_peachpink:"Melocotón", theme_peach:"Hojas de otoño", theme_lavender:"Lavanda", theme_sunny:"Sol", themeLocked:"Se abre el {d}",
   nextColor:"Siguiente color",
   privCap:"Privacidad", privBody:"No hay cuentas ni inicio de sesión. Tus sellos se guardan solo en este dispositivo, así que si borras los datos del navegador o cambias de teléfono se pierden. Lo que le dices al ayudante se envía a un servicio de IA para redactar la respuesta, y el servidor de esta app no lo guarda. Por favor, no escribas datos personales como tu nombre o contacto.",
   delCap:"Borrar mi registro", delBody:"Borra el registro de sellos, las casillas, los ajustes y el chat con el ayudante guardados en este dispositivo y deja la app como al principio.",
@@ -1580,7 +1582,7 @@ fi:{
   introClose:'Sulje',
   introBtn:'Opas',
   setBtn:"Asetukset", setBack:"Takaisin", langCap:"Kieli", themeCap:"Värimaailma",
-  theme_base:"Oletus", theme_peach:"Persikka", theme_lavender:"Laventeli", theme_sunny:"Aurinko", themeLocked:"Avautuu: {d}",
+  theme_base:"Oletus", theme_peachpink:"Persikka", theme_peach:"Syyslehdet", theme_lavender:"Laventeli", theme_sunny:"Aurinko", themeLocked:"Avautuu: {d}",
   nextColor:"Seuraava väri",
   privCap:"Yksityisyys", privBody:"Tässä ei ole tiliä eikä kirjautumista. Leimamerkintäsi tallentuvat vain tälle laitteelle, joten selaimen tietojen tyhjentäminen tai puhelimen vaihto poistaa ne. Apulaiselle kirjoittamasi välitetään tekoälypalveluun vastauksen tekemistä varten, eikä tämän sovelluksen palvelin tallenna sitä. Älä kirjoita henkilötietoja, kuten nimeä tai yhteystietoja.",
   delCap:"Poista merkintäni", delBody:"Poistaa tälle laitteelle tallennetut leimamerkinnät, ruudut, asetukset ja keskustelun apulaisen kanssa ja palauttaa sovelluksen alkutilaan.",
@@ -1689,7 +1691,7 @@ sv:{
   introClose:'Stäng',
   introBtn:'Guide',
   setBtn:"Inställningar", setBack:"Tillbaka", langCap:"Språk", themeCap:"Färgtema",
-  theme_base:"Standard", theme_peach:"Persika", theme_lavender:"Lavendel", theme_sunny:"Sol", themeLocked:"Öppnas på {d}",
+  theme_base:"Standard", theme_peachpink:"Persika", theme_peach:"Höstlöv", theme_lavender:"Lavendel", theme_sunny:"Sol", themeLocked:"Öppnas på {d}",
   nextColor:"Nästa färg",
   privCap:"Integritet", privBody:"Det finns inga konton eller inloggning. Dina stämplar sparas bara på den här enheten, så om du rensar webbläsardata eller byter telefon försvinner de. Det du skriver till hjälpen skickas vidare till en AI-tjänst för att ta fram svaret, och den här appens server sparar det inte. Skriv inga personuppgifter som namn eller kontaktuppgifter.",
   delCap:"Radera mina stämplar", delBody:"Raderar stämplar, rutor, inställningar och samtalet med hjälpen som sparats på den här enheten och återställer appen till startläget.",
@@ -1957,12 +1959,13 @@ const COLORS=['#ff8f70','#ffb85c','#5fcfb0','#6cb6f5','#9a8cf2','#ffd666','#4fc3
 const KEY='routine-trial-v1';
 const MAX_SLOTS=12,RECOMMEND_SLOTS=6; // 칸은 누적 28일부터 원하는 만큼 늘린다(사용자 결정 2026-11-04). 12개는 화면 안전 상한이고, 6개를 넘으면 권고 문구만 보인다
 const UNLOCKS=[3,28,60]; // 도장 찍은 누적 일수 → 칸이 하나씩 열림(PRD 2026-10-21)
-const THEMES=[{id:'base'},{id:'peach'}, // 복숭아도 바다·숲·장미처럼 처음부터 무료(사용자 결정 2026-11-05, 앞서 말한 것이 기록에서 빠져 있었음)
+const THEMES=[{id:'base'},{id:'peachpink'},{id:'peach'}, // peach 는 옛 «복숭아»였던 갈색 계열이라 «가을낙엽»으로 이름만 바꾸고(저장된 선택 유지) 분홍 «복숭아»(peachpink)를 새로 더함(사용자 결정 2026-11-06)
+   // 복숭아도 바다·숲·장미처럼 처음부터 무료(사용자 결정 2026-11-05, 앞서 말한 것이 기록에서 빠져 있었음)
   {id:'lavender',at:UNLOCKS[1]},{id:'sunny',at:UNLOCKS[2]},
   {id:'ocean'},{id:'forest'},{id:'rose'},{id:'brown'},{id:'lime'}, // 바다·숲·장미는 색만 바꾸는 무료 테마(2026-11-04 사용자 결정)
   {id:'notebook',shop:'theme_notebook'},{id:'retro',shop:'theme_retro'},{id:'cloud',shop:'theme_cloud'},{id:'space',shop:'theme_space'},{id:'donut',shop:'theme_donut'}]; // 디자인 테마(유료)
 let OWNED=new Set(); // 서버가 알려 준 내가 산 상품(상점). 크레딧 서버가 꺼져 있으면 비어 있다 // 칸이 열릴 때 테마도 하나씩 열림
-const THEME_BG={base:'#f2f7f5',peach:'#fbf1ea',lavender:'#f3f0fa',sunny:'#fff7df',ocean:'#eaf4fb',forest:'#eef5ea',rose:'#fbeef2',brown:'#f6e9e2',lime:'#f8fae0',notebook:'#f6efdc',retro:'#ffefb8',cloud:'#e3f0ff',space:'#0b0b10',donut:'#ffe3ec'};
+const THEME_BG={base:'#f2f7f5',peach:'#fbf1ea',peachpink:'#fff1ee',lavender:'#f3f0fa',sunny:'#fff7df',ocean:'#eaf4fb',forest:'#eef5ea',rose:'#fbeef2',brown:'#f6e9e2',lime:'#f8fae0',notebook:'#f6efdc',retro:'#ffefb8',cloud:'#e3f0ff',space:'#0b0b10',donut:'#ffe3ec'};
 const pad=n=>String(n).padStart(2,'0');
 const fmt=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 let todayStr=fmt(new Date());
