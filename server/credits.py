@@ -36,40 +36,41 @@ PRODUCTS = {
 ITEMS = {
     # 디자인 테마: 색뿐 아니라 배경 무늬·카드·버튼 모양까지 바꾸는 테마(화면 index.html 의 THEMES·CSS). 가격은 임시값이다.
     # 배경 색(2026-11-06 사용자 결정): 기본·복숭아·바다만 무료이고 나머지 색은 상점에서 산다. 같은 디자인에 색만 바뀐다. 가격은 임시값이다.
-    "theme_peach": {"id": "theme_peach", "kind": "theme", "theme": "peach", "name": "가을낙엽 색", "amount": 1000, "desc": "따뜻한 갈색 계열의 가을낙엽 색으로 화면 색만 바꿔요"},
-    "theme_rose": {"id": "theme_rose", "kind": "theme", "theme": "rose", "name": "장미 색", "amount": 1000, "desc": "은은한 장미빛 분홍으로 화면 색만 바꿔요"},
-    "theme_lime": {"id": "theme_lime", "kind": "theme", "theme": "lime", "name": "라임 색", "amount": 1000, "desc": "산뜻한 라임 연두색으로 화면 색만 바꿔요"},
-    "theme_lavender": {"id": "theme_lavender", "kind": "theme", "theme": "lavender", "name": "라벤더 색", "amount": 1000, "desc": "부드러운 보라빛 라벤더 색으로 화면 색만 바꿔요"},
-    "theme_sunny": {"id": "theme_sunny", "kind": "theme", "theme": "sunny", "name": "햇살 색", "amount": 1000, "desc": "따뜻한 햇살 노랑으로 화면 색만 바꿔요"},
-    "theme_notebook": {"id": "theme_notebook", "kind": "theme", "theme": "notebook", "name": "공책 디자인", "amount": 1000, "desc": "줄 공책 종이 느낌으로 배경과 카드, 버튼 모양까지 바꿔요"},
-    "theme_retro": {"id": "theme_retro", "kind": "theme", "theme": "retro", "name": "레트로 디자인", "amount": 1000, "desc": "도트 배경과 굵은 테두리의 옛날 게임 느낌으로 바꿔요"},
-    "theme_cloud": {"id": "theme_cloud", "kind": "theme", "theme": "cloud", "name": "구름 디자인", "amount": 1000, "desc": "하늘빛 그라데이션과 말랑한 유리 카드 느낌으로 바꿔요"},
-    "theme_space": {"id": "theme_space", "kind": "theme", "theme": "space", "name": "우주 행성 디자인", "amount": 1000, "desc": "검은 우주 바탕에 레트로 주황·청록 행성이 떠 있어요"},
-    "theme_donut": {"id": "theme_donut", "kind": "theme", "theme": "donut", "name": "도넛 디자인", "amount": 1000, "desc": "분홍 스프링클 바탕과 도넛, 초콜릿색 둥근 카드로 바꿔요"},
-    "daily_quote": {"id": "daily_quote", "kind": "quote", "name": "오늘의 한마디", "amount": 1000, "desc": "실제 격언과 속담을 포춘쿠키로 뽑아 봐요"},
+    "theme_peach": {"id": "theme_peach", "kind": "theme", "theme": "peach", "name": "가을낙엽 색", "amount": 1350, "desc": "따뜻한 갈색 계열의 가을낙엽 색으로 화면 색만 바꿔요"},
+    "theme_rose": {"id": "theme_rose", "kind": "theme", "theme": "rose", "name": "장미 색", "amount": 1350, "desc": "은은한 장미빛 분홍으로 화면 색만 바꿔요"},
+    "theme_lime": {"id": "theme_lime", "kind": "theme", "theme": "lime", "name": "라임 색", "amount": 1350, "desc": "산뜻한 라임 연두색으로 화면 색만 바꿔요"},
+    "theme_lavender": {"id": "theme_lavender", "kind": "theme", "theme": "lavender", "name": "라벤더 색", "amount": 1350, "desc": "부드러운 보라빛 라벤더 색으로 화면 색만 바꿔요"},
+    "theme_sunny": {"id": "theme_sunny", "kind": "theme", "theme": "sunny", "name": "햇살 색", "amount": 1350, "desc": "따뜻한 햇살 노랑으로 화면 색만 바꿔요"},
+    "theme_notebook": {"id": "theme_notebook", "kind": "theme", "theme": "notebook", "name": "공책 디자인", "amount": 1350, "desc": "줄 공책 종이 느낌으로 배경과 카드, 버튼 모양까지 바꿔요"},
+    "theme_retro": {"id": "theme_retro", "kind": "theme", "theme": "retro", "name": "레트로 디자인", "amount": 1350, "desc": "도트 배경과 굵은 테두리의 옛날 게임 느낌으로 바꿔요"},
+    "theme_cloud": {"id": "theme_cloud", "kind": "theme", "theme": "cloud", "name": "구름 디자인", "amount": 1350, "desc": "하늘빛 그라데이션과 말랑한 유리 카드 느낌으로 바꿔요"},
+    "theme_space": {"id": "theme_space", "kind": "theme", "theme": "space", "name": "우주 행성 디자인", "amount": 1350, "desc": "검은 우주 바탕에 레트로 주황·청록 행성이 떠 있어요"},
+    "theme_donut": {"id": "theme_donut", "kind": "theme", "theme": "donut", "name": "도넛 디자인", "amount": 1350, "desc": "분홍 스프링클 바탕과 도넛, 초콜릿색 둥근 카드로 바꿔요"},
+    "daily_quote": {"id": "daily_quote", "kind": "quote", "name": "오늘의 한마디", "amount": 1350, "desc": "실제 격언과 속담을 포춘쿠키로 뽑아 봐요"},
     # kind 'feature' 는 화면에서만 열리고 닫히는 기능이다(데이터가 이 브라우저에 있어 서버가 막을 것이 없다)
-    "history_view": {"id": "history_view", "kind": "feature", "name": "지난 기록 돌아보기", "amount": 1000, "desc": "지난 달의 도장을 달력으로 돌아봐요"},
+    "history_view": {"id": "history_view", "kind": "feature", "name": "지난 기록 돌아보기", "amount": 1350, "desc": "지난 달의 도장을 달력으로 돌아봐요"},
     # 스티커 팩(2026-11-04): 누적 60일에 열리는 달력의 날짜 칸에 붙이는 스티커. 그림 목록은 화면 index.html 의 STICKER_PACKS 에 있고(id 가 같아야 함, 시험이 확인),
     # 서버는 상품·가격·소유만 다룬다. 가격은 임시값이다(근거 없음).
-    "sticker_round": {"id": "sticker_round", "kind": "sticker", "name": "동글동글 스티커 팩", "amount": 1000, "desc": "달력 날짜에 붙이는 스티커 6개"},
-    "sticker_daily": {"id": "sticker_daily", "kind": "sticker", "name": "하루 스티커 팩", "amount": 1000, "desc": "달력 날짜에 붙이는 스티커 6개"},
-    "sticker_party": {"id": "sticker_party", "kind": "sticker", "name": "기념일 스티커 팩", "amount": 1000, "desc": "달력 날짜에 붙이는 스티커 6개"},
-    "sticker_life": {"id": "sticker_life", "kind": "sticker", "name": "생활 필수 스티커 팩", "amount": 1000, "desc": "병원·약·택배·은행·빨래·장보기·청소·통화·회의·메모·이동·식사 12개"},
-    "sticker_cafe": {"id": "sticker_cafe", "kind": "sticker", "name": "카페 테마 스티커 팩", "amount": 1000, "desc": "커피·차·음료·빵·디저트·카공 16개"},
-    "sticker_highlight": {"id": "sticker_highlight", "kind": "sticker", "name": "하이라이트 스티커 팩", "amount": 1000, "desc": "날짜에 형광펜·물결·이중·점선 밑줄과 동그라미·붓 밑줄을 그려요"},
-    "sticker_office": {"id": "sticker_office", "kind": "sticker", "name": "오피스 스티커 팩", "amount": 1000, "desc": "가방·보고서·그래프·서류·클립·프린터·노트북·일정 12개"},
+    "sticker_round": {"id": "sticker_round", "kind": "sticker", "name": "동글동글 스티커 팩", "amount": 1350, "desc": "달력 날짜에 붙이는 스티커 6개"},
+    "sticker_daily": {"id": "sticker_daily", "kind": "sticker", "name": "하루 스티커 팩", "amount": 1350, "desc": "달력 날짜에 붙이는 스티커 6개"},
+    "sticker_party": {"id": "sticker_party", "kind": "sticker", "name": "기념일 스티커 팩", "amount": 1350, "desc": "달력 날짜에 붙이는 스티커 6개"},
+    "sticker_life": {"id": "sticker_life", "kind": "sticker", "name": "생활 필수 스티커 팩", "amount": 1350, "desc": "병원·약·택배·은행·빨래·장보기·청소·통화·회의·메모·이동·식사 12개"},
+    "sticker_cafe": {"id": "sticker_cafe", "kind": "sticker", "name": "카페 테마 스티커 팩", "amount": 1350, "desc": "커피·차·음료·빵·디저트·카공 16개"},
+    "sticker_highlight": {"id": "sticker_highlight", "kind": "sticker", "name": "하이라이트 스티커 팩", "amount": 1350, "desc": "날짜에 형광펜·물결·이중·점선 밑줄과 동그라미·붓 밑줄을 그려요"},
+    "sticker_office": {"id": "sticker_office", "kind": "sticker", "name": "오피스 스티커 팩", "amount": 1350, "desc": "가방·보고서·그래프·서류·클립·프린터·노트북·일정 12개"},
     # 할 일 아이콘 스타일 팩(2026-11-04): 할 일 칸의 그림 25종을 다른 분위기로 바꾼다(그림은 화면 index.html 의 GLYPHS·ICON_PACKS, id 가 같아야 함). 가격은 임시값이다(근거 없음).
-    "paper_pack": {"id": "paper_pack", "kind": "paper", "name": "메모지 7종", "amount": 1000, "desc": "기록에 쓰는 줄 노트·모눈·점 격자·그리드·크라프트·노란 메모·편지지 7가지 메모지"},
-    "icons_cute": {"id": "icons_cute", "kind": "iconpack", "name": "귀여운 아이콘 팩", "amount": 1000, "desc": "할 일 그림을 표정 있는 귀여운 그림으로 바꿔요"},
-    "icons_simple": {"id": "icons_simple", "kind": "iconpack", "name": "심플 선 아이콘 팩", "amount": 1000, "desc": "할 일 그림을 깔끔한 선 그림으로 바꿔요"},
-    "icons_pastel": {"id": "icons_pastel", "kind": "iconpack", "name": "파스텔 스티커 아이콘 팩", "amount": 1000, "desc": "할 일 그림을 흰 테두리 파스텔 스티커로 바꿔요"},
+    # 메모지(2026-11-06 사용자 결정): 7종 한 묶음 대신 4종씩 두 번들. 예전에 «메모지 7종»(paper_pack)을 산 기록은 DB 에 남고 화면이 옛 7종 소유로 읽는다
+    "paper_notes": {"id": "paper_notes", "kind": "paper", "name": "노트 메모지 4종 번들", "amount": 1350, "desc": "기록에 쓰는 줄 노트·모눈·점 격자·그리드 4가지 메모지"},
+    "paper_mood": {"id": "paper_mood", "kind": "paper", "name": "감성 메모지 4종 번들", "amount": 1350, "desc": "기록에 쓰는 크라프트·노란 메모·편지지·수채 하늘 4가지 메모지"},
+    "icons_cute": {"id": "icons_cute", "kind": "iconpack", "name": "귀여운 아이콘 팩", "amount": 1350, "desc": "할 일 그림을 표정 있는 귀여운 그림으로 바꿔요"},
+    "icons_simple": {"id": "icons_simple", "kind": "iconpack", "name": "심플 선 아이콘 팩", "amount": 1350, "desc": "할 일 그림을 깔끔한 선 그림으로 바꿔요"},
+    "icons_pastel": {"id": "icons_pastel", "kind": "iconpack", "name": "파스텔 스티커 아이콘 팩", "amount": 1350, "desc": "할 일 그림을 흰 테두리 파스텔 스티커로 바꿔요"},
     # 바로 열기(2026-11-04): 기록·칸·달력이 열리는 3·28·60일째를 돈으로 먼저 연다. 기능만 열리고 달성 표시(✔)·축하는 실제 일수에만 준다.
-    # 가격은 «열림이 복잡해질수록 조금씩 비싸게, 전체는 개별 합계보다 싸게» 라는 사용자 방향에 맞춘 임시값이다(근거 없음).
-    # 5달러 ≈ 6,720원(환율 1,343.93원/달러, open.er-api.com 2026-11-04 조회)을 기준으로 전체를 6,500원으로 잡았다. 화면이 «이전 열림이 열려 있을 때만» 보여 준다(일수는 브라우저에만 있어 서버는 모름).
-    "unlock_3": {"id": "unlock_3", "kind": "unlock", "at": 3, "name": "기록 바로 열기", "amount": 1500, "desc": "메모·일기 기록을 바로 열어요. 원래는 도장을 3일 쌓으면 열려요"},
-    "unlock_28": {"id": "unlock_28", "kind": "unlock", "at": 28, "name": "칸 늘리기 바로 열기", "amount": 2500, "desc": "칸을 원하는 만큼 늘릴 수 있어요. 원래는 도장을 28일 쌓으면 열려요"},
-    "unlock_60": {"id": "unlock_60", "kind": "unlock", "at": 60, "name": "달력·일정 메모 바로 열기", "amount": 3500, "desc": "달력에서 지난 기록과 날짜별 일정 메모를 써요. 원래는 도장을 60일 쌓으면 열려요"},
-    "unlock_all": {"id": "unlock_all", "kind": "unlock", "at": 0, "name": "모든 단계 한 번에 열기", "amount": 6500, "desc": "기록, 칸 늘리기, 달력·일정 메모 전부(따로 사는 것보다 1,000원 저렴)"},
+    # 가격(2026-11-06 사용자 결정): 모든 가격은 1달러를 기준으로 한다. 1달러 ≈ 1,344원(환율 1,343.93원/달러, open.er-api.com 2026-11-04 조회)을 원 단위로 올려 1,350원으로 둔다. 꾸미기·번들·기능은 개당 1달러, 바로 열기는 기록 1달러·칸 늘리기 2달러·달력·일정 3달러, 전체는 개별 합계(6달러)보다 싼 5달러(6,750원). 환율은 오르내리므로 정기 갱신 기준은 아직 정하지 않았다(임시값). 화면이 «이전 열림이 열려 있을 때만» 보여 준다(일수는 브라우저에만 있어 서버는 모름)
+    "unlock_3": {"id": "unlock_3", "kind": "unlock", "at": 3, "name": "기록 바로 열기", "amount": 1350, "desc": "메모·일기 기록을 바로 열어요. 원래는 도장을 3일 쌓으면 열려요"},
+    "unlock_28": {"id": "unlock_28", "kind": "unlock", "at": 28, "name": "칸 늘리기 바로 열기", "amount": 2700, "desc": "칸을 원하는 만큼 늘릴 수 있어요. 원래는 도장을 28일 쌓으면 열려요"},
+    "unlock_60": {"id": "unlock_60", "kind": "unlock", "at": 60, "name": "달력·일정 메모 바로 열기", "amount": 4050, "desc": "달력에서 지난 기록과 날짜별 일정 메모를 써요. 원래는 도장을 60일 쌓으면 열려요"},
+    "unlock_all": {"id": "unlock_all", "kind": "unlock", "at": 0, "name": "모든 단계 한 번에 열기", "amount": 6750, "desc": "기록, 칸 늘리기, 달력·일정 메모 전부(따로 사는 것보다 1,000원 저렴)"},
 }
 
 SCHEMA = """

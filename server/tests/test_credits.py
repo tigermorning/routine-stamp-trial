@@ -480,12 +480,35 @@ def test_diary_dialog_and_button_exist_in_page():
     assert 'id="diaryBtn"' in html and 'id="diaryDlg"' in html and "S.diary" in html
 
 
-def test_paper_pack_item_and_css_for_each_paper():
-    item = creditlib.ITEMS["paper_pack"]
-    assert item["kind"] == "paper" and item["amount"] > 0 and item["desc"]
+def test_paper_bundles_are_two_of_four_and_css_for_each_paper():
+    # 2026-11-06 사용자 결정: 메모지는 7종 한 묶음이 아니라 4종씩 두 번들
+    assert "paper_pack" not in creditlib.ITEMS  # 옛 «7종»은 더 팔지 않는다(산 기록만 화면이 읽는다)
+    bundles = {"paper_notes": ("lined", "grid", "dot", "biggrid"), "paper_mood": ("kraft", "sticky", "letter", "wash")}
+    for bid in bundles:
+        item = creditlib.ITEMS[bid]
+        assert item["kind"] == "paper" and item["amount"] > 0 and item["desc"]
     html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
-    for pid in ("lined", "grid", "biggrid", "dot", "kraft", "sticky", "letter"):
-        assert f"{{id:'{pid}'" in html and f".paper-{pid}{{" in html  # 화면 목록과 CSS가 어긋나지 않는다
+    for bid, pids in bundles.items():
+        assert len(pids) == 4 and f"{bid}:[" in html
+        for pid in pids:
+            assert f"{{id:'{pid}'" in html and f".paper-{pid}{{" in html  # 화면 목록과 CSS가 어긋나지 않는다
+
+
+def test_all_prices_are_based_on_one_dollar():
+    # 2026-11-06 사용자 결정: 모든 가격은 1달러 기준. 1달러 ≈ 1,344원을 올림해 1,350원. 충전(대화권)은 그대로
+    usd = 1350
+    for k, v in creditlib.ITEMS.items():
+        if v["kind"] != "unlock":
+            assert v["amount"] == usd, k
+    assert [creditlib.ITEMS[k]["amount"] for k in ("unlock_3", "unlock_28", "unlock_60", "unlock_all")] == [usd, 2 * usd, 3 * usd, 5 * usd]
+    assert {k: v["amount"] for k, v in creditlib.PRODUCTS.items()} == {"credits_100": 1000, "credits_550": 5000, "credits_1200": 10000}
+
+
+def test_roadmap_is_on_main_screen_not_in_shop():
+    html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
+    assert 'id="roadStrip"' in html and 'id="roadDlg"' in html  # 메인 맨 위 띠와 전체 로드맵 창
+    assert 'id="roadmap"' not in html[html.index('id="crDlg"'):html.index('data-t="chat"')]  # 상점 안에는 로드맵이 없다
+    assert 'id="goalCard"' not in html  # 아래쪽 성장 단계 카드는 띠로 합쳤다
 
 
 def test_stage_gift_once_per_stage_random_decor_only(env):
@@ -525,7 +548,7 @@ def test_paid_colors_are_sold_and_free_colors_are_only_three():
     colors = ("peach", "rose", "lime", "lavender", "sunny")
     for c in colors:
         it = creditlib.ITEMS["theme_" + c]
-        assert it["kind"] == "theme" and it["theme"] == c and it["amount"] == 1000 and it["desc"]
+        assert it["kind"] == "theme" and it["theme"] == c and it["amount"] == 1350 and it["desc"]
     html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
     start = html.index("const THEMES=[")
     block = html[start:html.index("let OWNED=new Set()", start)]
@@ -542,7 +565,7 @@ def test_unlock_items_do_not_mention_colors_and_stamp_shapes_are_gone():
     for k in ("unlock_28", "unlock_60", "unlock_all"):
         it = creditlib.ITEMS[k]
         assert "색" not in it["name"] + it["desc"]
-    assert creditlib.ITEMS["unlock_28"]["amount"] == 2500 and creditlib.ITEMS["unlock_60"]["amount"] == 3500
+    assert creditlib.ITEMS["unlock_28"]["amount"] == 2700 and creditlib.ITEMS["unlock_60"]["amount"] == 4050
     assert "stamp_shapes" not in creditlib.ITEMS and not any(i["kind"] == "stamp" for i in creditlib.ITEMS.values())
     html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
     for gone in ("shapeRow", "SHAPES", "currentShape", "data-shape", "themePills", "themeCap", "nextcolor"):
