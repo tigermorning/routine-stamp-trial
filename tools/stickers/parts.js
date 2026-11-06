@@ -15,6 +15,10 @@ function kit(style) {
   const uid = style.uid;
   const stroke = (w = W, c = L) => `fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"`;
   const pencil = style.material === 'pencil';
+  const water = style.material === 'watercolor';
+  const INK = style.ink ?? '#5a4a42';
+  // 수채 잉크 선: 가늘고 군데군데 끊기며, 물감과 살짝 어긋난다
+  const inkLine = (d, w, c = INK, k = 0) => `<path d="${d}" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="${14 + (k % 5) * 4} ${1.6 + (k % 3) * .6} ${7 + (k % 4) * 2} 1.4" transform="translate(.45 -.4)" opacity=".9"/>`;
   const defs = new Map();
   // 색연필: 같은 색의 빗금 무늬(바탕은 옅게), 그림자용 교차 빗금
   const hatch = (c, angle, dens = 1.9, w = 1.05, base = .3) => {
@@ -29,17 +33,31 @@ function kit(style) {
     pencil,
     // 그림 전체 감싸기: 색연필이면 무늬 정의와 종이 결 필터를 붙인다
     wrap(inner) {
+      if (water) {
+        // 물감 번짐(가장자리 일그러짐) + 종이 결(알파에 옅은 틈)
+        return `<defs><filter id="${uid}wc" filterUnits="userSpaceOnUse" x="-4" y="-4" width="56" height="56"><feTurbulence type="fractalNoise" baseFrequency="${style.bleedFreq ?? .09}" numOctaves="3" seed="${style.seed ?? 3}" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="${style.bleed ?? 1.8}" xChannelSelector="R" yChannelSelector="G" result="d"/><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="11" result="g"/><feColorMatrix in="g" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -.55 1.18" result="ga"/><feComposite in="d" in2="ga" operator="in"/></filter></defs>${inner}`;
+      }
       if (!pencil) return inner;
       const f = `${uid}grain`;
       return `<defs>${[...defs.values()].join('')}<filter id="${f}" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency="${style.grain ?? .95}" numOctaves="2" seed="${style.seed ?? 7}" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -${style.grainK ?? 1} ${style.grainB ?? 1.3}" result="a"/><feComposite in="SourceGraphic" in2="a" operator="in"/></filter></defs><g filter="url(#${f})">${inner}</g>`;
     },
     // 작은 보조 요소의 면(반짝이·하트·물방울)
     acc(d, c) {
+      if (water) return `<g filter="url(#${uid}wc)"><path d="${d}" fill="${c}" opacity=".85"/><path d="${d}" fill="none" stroke="${darken(c, .3)}" stroke-width=".8" opacity=".45"/></g>` + inkLine(d, .7, INK, ++n);
       if (!pencil) return `<path d="${d}" fill="${c}" ${stroke(WD * .85).replace('fill="none" ', '')}/>`;
       return `<path d="${d}" fill="${c}" opacity=".85"/>` + sketch(d, darken(c, .4), .9);
     },
     // 면 하나: 그림자 색을 깔고, 밝은 색을 왼쪽 위로 옮겨 모양 안에서만 덮은 뒤 윤곽선을 그린다(자동 2톤).
     obj(d, fill, o = {}) {
+      if (water) {
+        // 물감 한 겹(반투명) + 가장자리 고임 + 오른쪽 아래 덧칠 한 겹, 위에 끊긴 잉크 선
+        const id = `${uid}m${++n}`;
+        const s = o.shift ?? style.shadeShift ?? 2.4;
+        let wash = `<path d="${d}" fill="${fill}" opacity="${o.alpha ?? .82}"/>`;
+        if (!o.flat) wash += `<mask id="${id}"><path d="${d}" fill="#fff"/><path d="${d}" fill="#000" transform="translate(${-s} ${-s})"/></mask><path d="${d}" fill="${darken(fill, .25)}" opacity=".5" mask="url(#${id})"/>`;
+        wash += `<path d="${d}" fill="none" stroke="${darken(fill, .32)}" stroke-width="${o.pool ?? 1}" opacity=".42"/>`;
+        return `<g filter="url(#${uid}wc)">${wash}</g>` + (o.noline ? '' : inkLine(d, o.w ?? W, INK, n));
+      }
       if (pencil) {
         const id = `${uid}m${++n}`;
         const s = o.shift ?? style.shadeShift ?? 2.2;
@@ -59,8 +77,10 @@ function kit(style) {
     circ(cx, cy, r) { return `M${r1(cx - r)} ${cy} a${r} ${r} 0 1 0 ${r1(r * 2)} 0 a${r} ${r} 0 1 0 ${r1(-r * 2)} 0Z`; },
     ell(cx, cy, rx, ry) { return `M${r1(cx - rx)} ${cy} a${rx} ${ry} 0 1 0 ${r1(rx * 2)} 0 a${rx} ${ry} 0 1 0 ${r1(-rx * 2)} 0Z`; },
     rr(x, y, w, h, r) { r = Math.min(r, w / 2, h / 2); return `M${x + r} ${y} H${r1(x + w - r)} Q${x + w} ${y} ${x + w} ${y + r} V${r1(y + h - r)} Q${x + w} ${y + h} ${r1(x + w - r)} ${y + h} H${x + r} Q${x} ${y + h} ${x} ${r1(y + h - r)} V${y + r} Q${x} ${y} ${x + r} ${y}Z`; },
-    line(d, w = W, c = L) { return pencil ? sketch(d, c, w) : `<path d="${d}" ${stroke(w, c)}/>`; },
-    detail(d, w = WD, c = L) { return pencil ? sketch(d, c, w) : `<path d="${d}" ${stroke(w, c)}/>`; },
+    line(d, w = W, c = L) { return water ? `<g filter="url(#${uid}wc)"><path d="${d}" ${stroke(w, c)} opacity=".85"/></g>` : pencil ? sketch(d, c, w) : `<path d="${d}" ${stroke(w, c)}/>`; },
+    detail(d, w = WD, c = L) { return water ? `<path d="${d}" ${stroke(w, c)} opacity=".85"/>` : pencil ? sketch(d, c, w) : `<path d="${d}" ${stroke(w, c)}/>`; },
+    // 수채: 물감만 한 번 쓱(잉크 선 없이), 배경 번짐·물결 등에
+    wash(d, c, a = .55) { return water ? `<g filter="url(#${uid}wc)"><path d="${d}" fill="${c}" opacity="${a}"/></g>` : `<path d="${d}" fill="${c}" opacity="${a}"/>`; },
     dot(x, y, r = 1.3, c = L) { return `<circle cx="${x}" cy="${y}" r="${r}" fill="${c}"/>`; },
     // 흰 하이라이트 획(왼쪽 위 면에)
     hi(d, w = 1.5) { return `<path d="${d}" ${stroke(w, '#ffffff')} opacity=".9"/>`; },

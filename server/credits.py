@@ -52,7 +52,7 @@ ITEMS = {
     # 스티커 팩(2026-11-04): 누적 60일에 열리는 달력의 날짜 칸에 붙이는 스티커. 그림 목록은 화면 index.html 의 STICKER_PACKS 에 있고(id 가 같아야 함, 시험이 확인),
     # 서버는 상품·가격·소유만 다룬다. 가격은 임시값이다(근거 없음).
     "sticker_round": {"id": "sticker_round", "kind": "sticker", "name": "동글동글 스티커 팩", "amount": 1350, "desc": "달력 날짜에 붙이는 스티커 18개"},
-    "sticker_daily": {"id": "sticker_daily", "kind": "sticker", "name": "하루 스티커 팩", "amount": 1350, "desc": "달력 날짜에 붙이는 스티커 18개"},
+    "sticker_daily": {"id": "sticker_daily", "kind": "sticker", "name": "수채 일정 스티커 팩", "amount": 1350, "desc": "물감이 번지는 수채로 그린 링거·연꽃·수영장·금붕어 어항·해변 노을·해먹 등 일정 30종"},
     "sticker_party": {"id": "sticker_party", "kind": "sticker", "name": "기념일 스티커 팩", "amount": 1350, "desc": "달력 날짜에 붙이는 스티커 18개"},
     "sticker_life": {"id": "sticker_life", "kind": "sticker", "name": "색연필 일정 스티커 팩", "amount": 2700, "desc": "색연필로 빗금 칠한 청진기·칫솔·케틀벨·라멘·여권·빨랫줄·고양이 등 일정 30종"},
     "sticker_cafe": {"id": "sticker_cafe", "kind": "sticker", "name": "카페 테마 스티커 팩", "amount": 4050, "desc": "커피·차·음료·빵·디저트·와플·마카롱·카공 등 20개"},

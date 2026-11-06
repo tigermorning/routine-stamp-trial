@@ -8,6 +8,7 @@ const PACKS = {
   // 팩 이름: [모듈, 그림 id 접두사, 앱 팩 id, 앱 팩 이름]
   pen: ['./packs/pen', 'pn_', 'sticker_sched', '펜 일러스트'],
   pencil: ['./packs/pencil', 'cp_', 'sticker_life', '색연필'],
+  watercolor: ['./packs/watercolor', 'wc_', 'sticker_daily', '수채'],
 };
 const [, , cmd, packName, only] = process.argv;
 const def = PACKS[packName];
@@ -55,6 +56,12 @@ svg{${STICKER_CSS}}.b{width:192px;height:192px;background:#fbf8f2;border-radius:
   for (const id of new Set([...oldIds, ...ids])) inner = inner.replace(new RegExp(`,? ?"${id}": "[^"]*"`), '');
   inner = inner.replace(/^\s*,\s*/, '').replace(/,\s*$/, '') + ', ' + ids.map(id => `"${id}": "${items[id].name}"`).join(', ');
   s = s.replace(nm[0], `const SV_NAMES={${inner}};`);
+  // 팩 겉모습 CSS: 옛 팩의 꾸밈(종이 카드·톤 필터 등)을 지우고 흰 다이컷 테두리 스티커로 통일한다
+  const short = packId.replace(/^sticker_/, '');
+  s = s.replace(new RegExp(`\\n\\.sv\\.pk-${short}( [a-z]+)?\\{[^\\n]*`, 'g'), '');
+  const ci = s.indexOf('.shopitem small .sv[class*="pk-"]{');
+  if (ci < 0) throw new Error('CSS 위치 없음');
+  s = s.slice(0, ci) + `.sv.pk-${short}{${STICKER_CSS.replace(/1\.2px/g, '1px')}}\n` + s.slice(ci);
   fs.writeFileSync(p, crlf ? s.replace(/\n/g, '\r\n') : s);
   console.log('적용', packId, ids.length + '종, 지운 예전 그림', oldIds.length);
 } else {
