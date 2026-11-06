@@ -268,7 +268,7 @@ def stage_gift(req: GiftRequest, request: Request, store=Depends(get_credit_stor
         return JSONResponse({"error": "busy"}, status_code=429)
     g = store.stage_gift(cid, req.stage)
     it = g["item"]
-    return JSONResponse({"item": {"id": it["id"], "name": it["name"], "kind": it["kind"]} if it else None, "already": g["already"]},
+    return JSONResponse({"item": {"id": it["id"], "name": it["name"], "kind": it["kind"], "amount": it["amount"]} if it else None, "already": g["already"]},
                         headers={"Cache-Control": "no-store"})
 
 

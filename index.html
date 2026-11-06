@@ -2043,7 +2043,8 @@ const SETTLE_DAYS=60;
 const FUTURE_STAGES=['시간 정하기','반복 일정','알림','일정 색 구분','여러 달력 합쳐 보기'];
 const STAGE_OPEN={3:'위쪽 «기록» 버튼에서 메모·일기를 하루·주간·5년으로 쓸 수 있어요.',28:'이제 칸을 원하는 만큼 늘릴 수 있어요. «할 일 칸 바꾸기»에서 더해 보세요.',60:'달력에서 지난 기록을 보고 날짜마다 할 일·일정을 적을 수 있어요.'};
 const RM_ICON={3:'📝',28:'🧩',60:'📅'};
-const RM_REWARD={3:STAGE_OPEN[3],28:STAGE_OPEN[28],60:STAGE_OPEN[60]};
+const RM_GIFT={3:'1달러',28:'2달러',60:'3달러'}; // 단계 선물 가격대(서버 GIFT_STAGE_TIER 와 같아야 한다): 오래 지속할수록 더 비싼 팩
+const RM_REWARD=Object.fromEntries([3,28,60].map(n=>[n,STAGE_OPEN[n]+' 🎁 도착 선물: '+RM_GIFT[n]+'짜리 꾸미기 팩 1개(무작위).']));
 const RM_FUTURE=[['시간 정하기','일정에 시작 시간을 정해요.'],['반복 일정','매일·매주 되풀이되는 일정을 한 번에 적어요.'],['알림','일정 전에 알려 줘요.'],['일정 색 구분','일정을 종류별 색으로 나눠 봐요.'],['여러 달력 합쳐 보기','여러 달력을 한 화면에서 봐요.']]; // 아직 만들지 않음: 열리는 날이 없다
 function capacity(){return Math.max(S.slots.length,opened(28)?MAX_SLOTS:3)} // 처음 3칸 → 28일째부터 늘릴 수 있음. 이미 더 많은 칸을 가진 사람의 칸은 줄이지 않는다
 function themeOpen(th){return th.shop?OWNED.has(th.shop):true} // 무료 색은 늘 열려 있고 나머지는 산 것만
@@ -2113,7 +2114,7 @@ async function claimStageGifts(showDialog){
       if(!r.ok) continue;
       const j=await r.json();
       S.giftSeen=(S.giftSeen||[]).concat(n);save();
-      if(j.item&&!j.already) got.push(j.item.name);
+      if(j.item&&!j.already) got.push(j.item.name+' ('+j.item.amount.toLocaleString('ko-KR')+'원 상당)');
     }catch(e){}
   }
   if(got.length){await loadCredits();render()}
@@ -2235,7 +2236,9 @@ const PAPER_BUNDLES={paper_notes:['lined','grid','dot','biggrid'],paper_mood:['k
 const PAPER_BUNDLE_NAME={paper_notes:'노트 메모지 4종 번들',paper_mood:'감성 메모지 4종 번들'};
 const ownsPaper=id=>id==='plain'||Object.keys(PAPER_BUNDLES).some(b=>OWNED.has(b)&&PAPER_BUNDLES[b].includes(id));
 const bundleOfPaper=id=>Object.keys(PAPER_BUNDLE_NAME).find(b=>PAPER_BUNDLES[b].includes(id));
-const ITEM_PRICE_TXT='1,350원'; // 모든 가격은 1달러 기준(≈1,344원을 올림, 사용자 결정 2026-11-06). 정본은 서버 상품표다
+let SHOP_CACHE=null; // 서버 상품표(가격 정본). 가격은 1·2·3달러 세 가격대(1달러≈1,344원을 올림해 1,350원, 사용자 결정 2026-11-06)
+async function ensureShopCache(){if(SHOP_CACHE)return;try{const r=await fetch('/api/shop',{headers:{'X-Client-Id':clientId()},cache:'no-store'});if(r.ok){const j=await r.json();SHOP_CACHE=Object.fromEntries(j.items.map(i=>[i.id,i]))}}catch(e){}}
+const priceTxt=id=>SHOP_CACHE&&SHOP_CACHE[id]?SHOP_CACHE[id].amount.toLocaleString('ko-KR')+'원':'';
 let dyDeco=false,dyPaperPv=null,dySel=-1;
 const dyPaper=()=>dyPaperPv||(ownsPaper(S.dyPaper)&&PAPERS.some(x=>x.id===S.dyPaper)?S.dyPaper:'plain');
 function dyRow(ds,label,rows,withStk){
@@ -2270,7 +2273,7 @@ function renderDyDeco(){
     pp.appendChild(b);
   });
   const pv=$('dyPv');pv.hidden=!dyPaperPv;
-  if(dyPaperPv){$('dyPvTxt').textContent='“'+PAPERS.find(x=>x.id===dyPaperPv).name+'” 메모지 미리 보는 중 — «'+PAPER_BUNDLE_NAME[bundleOfPaper(dyPaperPv)]+'»에 들어 있어요.';$('dyBuy').textContent=ITEM_PRICE_TXT+'에 사기';$('dyBuy').onclick=()=>{$('diaryDlg').close();buyCredits(bundleOfPaper(dyPaperPv))}}
+  if(dyPaperPv){$('dyPvTxt').textContent='“'+PAPERS.find(x=>x.id===dyPaperPv).name+'” 메모지 미리 보는 중 — «'+PAPER_BUNDLE_NAME[bundleOfPaper(dyPaperPv)]+'»에 들어 있어요.';$('dyBuy').textContent=(priceTxt(bundleOfPaper(dyPaperPv))||'')+'에 사기';if(!SHOP_CACHE)ensureShopCache().then(()=>{if(dyPaperPv)renderDiary()});$('dyBuy').onclick=()=>{$('diaryDlg').close();buyCredits(bundleOfPaper(dyPaperPv))}}
   const tray=$('dyTray');tray.textContent='';
   const packs=Object.keys(STICKER_PACKS).filter(id=>OWNED.has(id)),dayMode=dyMode==='day';
   if(!packs.length){tray.innerHTML='<span class="stat">스티커 팩이 있으면 기록에도 붙일 수 있어요. </span>';const sb=document.createElement('button');sb.type='button';sb.className='btn';sb.textContent='상점 보기';sb.onclick=()=>{$('diaryDlg').close();openCredits()};tray.appendChild(sb);return}

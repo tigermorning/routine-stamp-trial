@@ -494,14 +494,41 @@ def test_paper_bundles_are_two_of_four_and_css_for_each_paper():
             assert f"{{id:'{pid}'" in html and f".paper-{pid}{{" in html  # 화면 목록과 CSS가 어긋나지 않는다
 
 
-def test_all_prices_are_based_on_one_dollar():
-    # 2026-11-06 사용자 결정: 모든 가격은 1달러 기준. 1달러 ≈ 1,344원을 올림해 1,350원. 충전(대화권)은 그대로
+def test_all_prices_are_multiples_of_one_dollar_in_three_decor_tiers():
+    # 2026-11-06 사용자 결정: 모든 가격은 1달러 기준(≈1,344원을 올림해 1,350원). 꾸미기는 1·2·3달러 세 가격대(단계 선물이 오래 지속할수록 더 비싼 팩을 주기 위해). 충전(대화권)은 그대로
     usd = 1350
     for k, v in creditlib.ITEMS.items():
         if v["kind"] != "unlock":
-            assert v["amount"] == usd, k
+            assert v["amount"] in (usd, 2 * usd, 3 * usd), k
+    tiers = {}
+    for v in creditlib.ITEMS.values():
+        if v["kind"] in creditlib.GIFT_KINDS:
+            tiers.setdefault(v["amount"], []).append(v["id"])
+    assert sorted(tiers) == [usd, 2 * usd, 3 * usd] and all(len(x) >= 5 for x in tiers.values())  # 가격대마다 선물로 뽑을 상품이 넉넉하다
     assert [creditlib.ITEMS[k]["amount"] for k in ("unlock_3", "unlock_28", "unlock_60", "unlock_all")] == [usd, 2 * usd, 3 * usd, 5 * usd]
     assert {k: v["amount"] for k, v in creditlib.PRODUCTS.items()} == {"credits_100": 1000, "credits_550": 5000, "credits_1200": 10000}
+
+
+def test_stage_gift_gets_pricier_the_longer_you_keep_going(env):
+    client, store, _ = env
+    assert creditlib.GIFT_STAGE_TIER == {3: 1350, 28: 2700, 60: 4050}
+    for _ in range(8):  # 무작위라 여러 번 시험해도 항상 그 단계의 가격대다(요청 횟수 제한을 피해 저장소를 직접 부른다)
+        cid = str(uuid.uuid4())
+        got = [store.stage_gift(cid, st)["item"]["amount"] for st in (3, 28, 60)]
+        assert got == [1350, 2700, 4050]
+    j = client.post("/api/gift", json={"stage": 3}, headers=hdr(str(uuid.uuid4()))).json()
+    assert j["item"]["amount"] == 1350  # 화면이 «N원 상당»으로 보여 주도록 응답에도 가격이 있다
+
+
+def test_stage_gift_falls_back_to_nearest_lower_tier_when_tier_is_owned(env):
+    client, store, _ = env
+    cid = str(uuid.uuid4())
+    conn = store._conn()
+    for i in creditlib.ITEMS.values():  # 60일 가격대(3달러)를 모두 가진 사람
+        if i["kind"] in creditlib.GIFT_KINDS and i["amount"] == 4050:
+            conn.execute("INSERT INTO entitlements(client_id, item_id, order_id, created_at) VALUES (?,?,?,?)", (cid, i["id"], "t", creditlib.now()))
+    conn.close()
+    assert client.post("/api/gift", json={"stage": 60}, headers=hdr(cid)).json()["item"]["amount"] == 2700  # 가까운 낮은 가격대
 
 
 def test_roadmap_is_on_main_screen_not_in_shop():
