@@ -2108,7 +2108,7 @@ function celebrate(){
   if(cnt<=S.cel) return;
   S.cel=cnt;save();
   const n=UNLOCKS[cnt-1];
-  $('celTitle').textContent='🎉 '+n+'일째, '+STAGE_WHAT[n]+({3:'이',28:'가',60:'가'}[n])+' 열렸어요';
+  $('celTitle').textContent='🎉 '+n+'일째, '+STAGE_WHAT[n]+'가 열렸어요';
   $('celBody').textContent=STAGE_OPEN[n];
   $('celGift').textContent='';
   if(!$('celDlg').open) $('celDlg').showModal();
