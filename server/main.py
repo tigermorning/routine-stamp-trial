@@ -221,6 +221,15 @@ def _exclude(request: Request):
     return [x for x in request.query_params.get("exclude", "").split(",") if x.strip().isdigit()][:50]
 
 
+def _pick_quote(request: Request, store):
+    """lang 이 오면 그 언어의 일상 응원 문장(affirmations.json), 없으면 예전 격언 DB."""
+    lang = request.query_params.get("lang", "").strip()
+    if lang:
+        import quotes as _q
+        return _q.pick_affirmation(lang, _exclude(request))
+    return store.random_quote(_exclude(request))
+
+
 @app.get("/api/quote")
 def quote(request: Request, store=Depends(get_credit_store)):
     """오늘의 한마디: 실제 격언·속담 DB 에서 무작위 한 개(exclude=최근에 본 id 들은 피함). «오늘의 한마디» 상품을 산 사람에게만 준다(서버가 소유를 확인)."""
@@ -231,7 +240,7 @@ def quote(request: Request, store=Depends(get_credit_store)):
         return JSONResponse({"error": "clientId"}, status_code=400)
     if not store.has_item(cid, "daily_quote"):
         return JSONResponse({"error": "not_owned"}, status_code=403)
-    q = store.random_quote(_exclude(request))
+    q = _pick_quote(request, store)
     if q is None:
         return JSONResponse({"error": "no_quotes"}, status_code=503)
     return JSONResponse(q, headers={"Cache-Control": "no-store"})
@@ -244,7 +253,7 @@ def quote_sample(request: Request, store=Depends(get_credit_store)):
         return credits_off()
     if limited(client_ip(request), "quote-sample", 30, 60):
         return JSONResponse({"error": "busy"}, status_code=429)
-    q = store.random_quote(_exclude(request))
+    q = _pick_quote(request, store)
     if q is None:
         return JSONResponse({"error": "no_quotes"}, status_code=503)
     return JSONResponse(q, headers={"Cache-Control": "no-store"})

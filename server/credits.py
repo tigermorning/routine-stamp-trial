@@ -46,7 +46,7 @@ ITEMS = {
     "theme_cloud": {"id": "theme_cloud", "kind": "theme", "theme": "cloud", "name": "구름 디자인", "amount": 4050, "desc": "하늘빛 그라데이션과 말랑한 유리 카드 느낌으로 바꿔요"},
     "theme_space": {"id": "theme_space", "kind": "theme", "theme": "space", "name": "우주 행성 디자인", "amount": 4050, "desc": "검은 우주 바탕에 레트로 주황·청록 행성이 떠 있어요"},
     "theme_donut": {"id": "theme_donut", "kind": "theme", "theme": "donut", "name": "도넛 디자인", "amount": 4050, "desc": "분홍 스프링클 바탕과 도넛, 초콜릿색 둥근 카드로 바꿔요"},
-    "daily_quote": {"id": "daily_quote", "kind": "quote", "name": "오늘의 한마디", "amount": 1350, "desc": "실제 격언과 속담을 포춘쿠키로 뽑아 봐요"},
+    "daily_quote": {"id": "daily_quote", "kind": "quote", "name": "오늘의 한마디", "amount": 1350, "desc": "하루에 도움이 되는 응원 한마디를 포춘쿠키로 뽑아 봐요"},
     # kind 'feature' 는 화면에서만 열리고 닫히는 기능이다(데이터가 이 브라우저에 있어 서버가 막을 것이 없다)
     "history_view": {"id": "history_view", "kind": "feature", "name": "지난 기록 돌아보기", "amount": 1350, "desc": "지난 달의 도장을 달력으로 돌아봐요"},
     # 스티커 팩(2026-11-04): 누적 60일에 열리는 달력의 날짜 칸에 붙이는 스티커. 그림 목록은 화면 index.html 의 STICKER_PACKS 에 있고(id 가 같아야 함, 시험이 확인),

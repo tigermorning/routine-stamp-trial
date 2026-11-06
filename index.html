@@ -2851,16 +2851,16 @@ async function loadCredits(){
     setOwned(j.owned||[]);
   }catch(e){$('crRow').hidden=true}
 }
-const SAMPLE_QUOTE='실제 격언·속담을 포춘쿠키로 뽑아요';
+const SAMPLE_QUOTE='하루에 도움이 되는 응원 한마디를 포춘쿠키로 뽑아요';
 function setOwned(list){
   const n=new Set(list),changed=n.size!==OWNED.size||[...n].some(x=>!OWNED.has(x));
   OWNED=n;if(changed){applyTheme();render();if($('diaryDlg').open)renderDiary();if($('roadDlg').open)renderRoadmap()} // 열려 있는 기록 창·로드맵 창도 새 소유로 다시 그린다
   loadQuote();
 }
-/* 오늘의 한마디(포춘쿠키): 실제 격언·속담 DB(서버)에서 무작위로 하나를 뽑는다. 오늘 뽑은 것은 이 브라우저에 기억해 맨 위에 보여 준다 */
+/* 오늘의 한마디(포춘쿠키): 지금 언어의 일상 응원 문장(서버)에서 무작위로 하나를 뽑는다. 오늘 뽑은 것은 이 브라우저에 기억해 맨 위에 보여 준다 */
 async function fetchQuote(sample){
   const ex=(S.quoteSeen||[]).slice(-20).join(',');
-  const r=await fetch((sample?'/api/quote/sample':'/api/quote')+(ex?'?exclude='+ex:''),{headers:{'X-Client-Id':clientId()},cache:'no-store'});
+  const r=await fetch((sample?'/api/quote/sample':'/api/quote')+'?lang='+encodeURIComponent(lang)+(ex?'&exclude='+ex:''),{headers:{'X-Client-Id':clientId()},cache:'no-store'});
   if(!r.ok) throw new Error('quote');
   return r.json();
 }
@@ -2868,7 +2868,7 @@ function loadQuote(){
   const box=$('quoteBox');
   if(!OWNED.has('daily_quote')||S.quoteOff){box.hidden=true;return}
   const q=S.quoteToday&&S.quoteToday.d===todayStr?S.quoteToday:null;
-  box.innerHTML=q?`“${esc(q.text)}”<br><small>— ${esc(q.author)}</small> <button type="button" class="linkbtn" id="qAgain">🥠 다시 뽑기</button>`:`<button type="button" class="btn" id="qDraw">🥠 오늘의 한마디 뽑기</button>`;
+  box.innerHTML=q?`“${esc(q.text)}”${q.author?`<br><small>— ${esc(q.author)}</small>`:''} <button type="button" class="linkbtn" id="qAgain">🥠 다시 뽑기</button>`:`<button type="button" class="btn" id="qDraw">🥠 오늘의 한마디 뽑기</button>`;
   ($('qDraw')||$('qAgain')).onclick=()=>openCookie(false);
   box.hidden=false;
 }
@@ -2891,7 +2891,7 @@ async function crackCookie(){
     d.classList.remove('open');
     const q=await fetchQuote(ckMode.preview);
     $('ckText').textContent='“'+q.text+'”';
-    $('ckBy').textContent='— '+q.author+(q.source?', '+q.source:'');
+    $('ckBy').textContent=q.author?'— '+q.author+(q.source?', '+q.source:''):'';
     $('ckSlip').hidden=false;$('ckHint').textContent='';$('ckAgain').hidden=false;
     requestAnimationFrame(()=>d.classList.add('open'));
     if(!ckMode.preview){S.quoteToday={d:todayStr,id:q.id,text:q.text,author:q.author,source:q.source};S.quoteSeen=(S.quoteSeen||[]).concat(q.id).slice(-60);save();loadQuote()}

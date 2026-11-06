@@ -630,3 +630,16 @@ def test_icon_and_sticker_are_merged_in_the_screen():
         assert pid + ":" in block and creditlib.ITEMS[pid]["kind"] == "iconpack"  # 기존 아이콘 팩 상품과 같은 id 라 산 사람은 그대로 스티커로도 쓴다
     assert "if(b.dataset.a){s.art=b.dataset.a" in html and "내 스티커·아이콘" in html  # 칸 그림 고르기에 산 그림이 나온다
     assert "if(s.art){const a=artSVG(s.art" in html  # 칸 그림이 s.art 를 그린다
+
+
+def test_affirmations_cover_every_ui_language_and_api_uses_lang(env):
+    # 2026-11-06 사용자 결정: 오늘의 한마디는 격언 대신 일상 응원 문장, 언어별로
+    import quotes
+    d = quotes.load_affirmations()
+    for lang in ("ko", "en", "zh-Hans", "zh-Hant", "yue", "id", "vi", "es", "fi", "sv"):
+        assert len(d[lang]) >= 16 and len(set(d[lang])) == len(d[lang]), lang
+    client, store, toss = env[0], env[1], env[2]
+    r = client.get("/api/quote/sample", params={"lang": "sv"}).json()
+    assert r["text"] in d["sv"] and r["id"] >= 1
+    r2 = client.get("/api/quote/sample", params={"lang": "xx", "exclude": "1"}).json()  # 모르는 언어는 영어
+    assert r2["text"] in d["en"] and r2["id"] != 1
