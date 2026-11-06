@@ -51,13 +51,13 @@ ITEMS = {
     "history_view": {"id": "history_view", "kind": "feature", "name": "지난 기록 돌아보기", "amount": 1350, "desc": "지난 달의 도장을 달력으로 돌아봐요"},
     # 스티커 팩(2026-11-04): 누적 60일에 열리는 달력의 날짜 칸에 붙이는 스티커. 그림 목록은 화면 index.html 의 STICKER_PACKS 에 있고(id 가 같아야 함, 시험이 확인),
     # 서버는 상품·가격·소유만 다룬다. 가격은 임시값이다(근거 없음).
-    "sticker_round": {"id": "sticker_round", "kind": "sticker", "name": "동글동글 스티커 팩", "amount": 1350, "desc": "달력 날짜에 붙이는 스티커 6개"},
-    "sticker_daily": {"id": "sticker_daily", "kind": "sticker", "name": "하루 스티커 팩", "amount": 1350, "desc": "달력 날짜에 붙이는 스티커 6개"},
-    "sticker_party": {"id": "sticker_party", "kind": "sticker", "name": "기념일 스티커 팩", "amount": 1350, "desc": "달력 날짜에 붙이는 스티커 6개"},
-    "sticker_life": {"id": "sticker_life", "kind": "sticker", "name": "생활 필수 스티커 팩", "amount": 2700, "desc": "병원·약·택배·은행·빨래·장보기·청소·통화·회의·메모·이동·식사 12개"},
-    "sticker_cafe": {"id": "sticker_cafe", "kind": "sticker", "name": "카페 테마 스티커 팩", "amount": 4050, "desc": "커피·차·음료·빵·디저트·카공 16개"},
-    "sticker_highlight": {"id": "sticker_highlight", "kind": "sticker", "name": "하이라이트 스티커 팩", "amount": 1350, "desc": "날짜에 형광펜·물결·이중·점선 밑줄과 동그라미·붓 밑줄을 그려요"},
-    "sticker_office": {"id": "sticker_office", "kind": "sticker", "name": "오피스 스티커 팩", "amount": 2700, "desc": "가방·보고서·그래프·서류·클립·프린터·노트북·일정 12개"},
+    "sticker_round": {"id": "sticker_round", "kind": "sticker", "name": "동글동글 스티커 팩", "amount": 1350, "desc": "달력 날짜에 붙이는 스티커 18개"},
+    "sticker_daily": {"id": "sticker_daily", "kind": "sticker", "name": "하루 스티커 팩", "amount": 1350, "desc": "달력 날짜에 붙이는 스티커 18개"},
+    "sticker_party": {"id": "sticker_party", "kind": "sticker", "name": "기념일 스티커 팩", "amount": 1350, "desc": "달력 날짜에 붙이는 스티커 18개"},
+    "sticker_life": {"id": "sticker_life", "kind": "sticker", "name": "생활 필수 스티커 팩", "amount": 2700, "desc": "병원·약·택배·은행·빨래·장보기·청소·치과·미용실·주유·분리수거 등 20개"},
+    "sticker_cafe": {"id": "sticker_cafe", "kind": "sticker", "name": "카페 테마 스티커 팩", "amount": 4050, "desc": "커피·차·음료·빵·디저트·와플·마카롱·카공 등 20개"},
+    "sticker_highlight": {"id": "sticker_highlight", "kind": "sticker", "name": "하이라이트 스티커 팩", "amount": 1350, "desc": "날짜에 형광펜(노랑·초록·파랑·분홍)·물결·이중·점선·실선·파선 밑줄과 동그라미·네모·붓 밑줄 12가지를 그려요"},
+    "sticker_office": {"id": "sticker_office", "kind": "sticker", "name": "오피스 스티커 팩", "amount": 2700, "desc": "가방·보고서·그래프·서류·클립·프린터·사원증·발표·아이디어 등 20개"},
     # 할 일 아이콘 스타일 팩(2026-11-04): 할 일 칸의 그림 25종을 다른 분위기로 바꾼다(그림은 화면 index.html 의 GLYPHS·ICON_PACKS, id 가 같아야 함). 가격은 임시값이다(근거 없음).
     # 메모지(2026-11-06 사용자 결정): 7종 한 묶음 대신 4종씩 두 번들. 예전에 «메모지 7종»(paper_pack)을 산 기록은 DB 에 남고 화면이 옛 7종 소유로 읽는다
     "paper_notes": {"id": "paper_notes", "kind": "paper", "name": "노트 메모지 4종 번들", "amount": 2700, "desc": "기록에 쓰는 줄 노트·모눈·점 격자·그리드 4가지 메모지"},

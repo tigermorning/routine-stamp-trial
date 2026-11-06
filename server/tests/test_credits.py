@@ -597,3 +597,23 @@ def test_unlock_items_do_not_mention_colors_and_stamp_shapes_are_gone():
     html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
     for gone in ("shapeRow", "SHAPES", "currentShape", "data-shape", "themePills", "themeCap", "nextcolor"):
         assert gone not in html
+
+
+def test_sticker_pack_sizes_ids_and_symbols():
+    import re
+    html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
+    block = html[html.index("const STICKER_PACKS={"):html.index("const HL_NAMES")]
+    seen = []
+    for m in re.finditer(r"(sticker_\w+):\{name:'[^']*',list:\[([^\]]*)\]", block):
+        pid, items = m.group(1), re.findall(r"'([a-z]+:[a-z0-9]+)'", m.group(2))
+        assert len(items) >= (12 if pid == "sticker_highlight" else 16), pid
+        n = re.search(r"(\d+)(?:개|가지)", creditlib.ITEMS[pid]["desc"])
+        if n:
+            assert int(n.group(1)) == len(items), pid  # 상품 설명의 개수 = 화면 목록 개수
+        seen += items
+    assert len(seen) == len(set(seen))  # 팩끼리 id 충돌 없음
+    for s in seen:
+        if s.startswith("sv:"):
+            assert f'<symbol id="sv-{s[3:]}"' in html and f'"{s[3:]}":' in html  # 그림과 이름이 있어야 한다
+        else:
+            assert f".hl-{s[3:]}{{" in html or f".hl-{s[3:]}," in html
