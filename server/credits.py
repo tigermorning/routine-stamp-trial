@@ -68,9 +68,6 @@ ITEMS = {
     "sticker_dday": {"id": "sticker_dday", "kind": "sticker", "name": "D-day 카운터 팩", "amount": 1350, "desc": "D-100·D-30·D-7·D-DAY·D+100·D+365 등 뜯는 달력·풍선·티켓·깃발 카운터 16종"},
     # 일정 모음(2026-11-06 사용자 요청): 피부관리·네일·병원·운동·모임·공부·여행·경조사까지 일상 일정 거의 전부를 한 팩에
     "sticker_sched": {"id": "sticker_sched", "kind": "sticker", "name": "일정 모음 스티커 팩", "amount": 2700, "desc": "피부관리·네일·미용실·병원·운동 14종·모임·공부·집안일·여행·경조사까지 일상 일정 89종"},
-    "sticker_sched_pastel": {"id": "sticker_sched_pastel", "kind": "sticker", "name": "일정 파스텔 스티커 팩", "amount": 1350, "desc": "일정 모음과 같은 89종 일정을 연한 파스텔 색과 부드러운 선으로 그렸어요"},
-    "sticker_sched_bold": {"id": "sticker_sched_bold", "kind": "sticker", "name": "일정 굵은 낙서 스티커 팩", "amount": 2700, "desc": "일정 89종을 굵고 살짝 떨리는 손낙서 선으로 그렸어요"},
-    "sticker_sched_line": {"id": "sticker_sched_line", "kind": "sticker", "name": "일정 가는 선 스티커 팩", "amount": 1350, "desc": "일정 89종을 흰 바탕에 가는 한 가지 색 선으로 깔끔하게 그렸어요"},
     # 화풍 더 섞기 4종(2026-11-06 사용자 요청): 낙서(삐뚤빼뚤 선), 말랑 3D(광택 입체), 손글씨 레터링(한글), 마커 표시
     "sticker_doodle": {"id": "sticker_doodle", "kind": "sticker", "name": "낙서 스티커 팩", "amount": 2700, "desc": "삐뚤빼뚤 검은 선에 색이 살짝 어긋난 손그림 커피·고양이·자전거 등 16종"},
     "sticker_glossy": {"id": "sticker_glossy", "kind": "sticker", "name": "말랑 3D 스티커 팩", "amount": 4050, "desc": "광택과 그림자가 있는 입체 하트·풍선·도넛·왕관·로켓 등 16종"},
