@@ -320,12 +320,12 @@ def test_item_price_comes_from_server_table(env):
 
 
 
-# ---- 화면 기능 상품: 지난 기록 돌아보기, 도장 모양 바꾸기 ----
+# ---- 화면 기능 상품: 지난 기록 돌아보기 (도장 모양 바꾸기는 2026-11-06 없앴다) ----
 def test_feature_items_listed_with_description(env):
     client, store, toss = env
     cid = str(uuid.uuid4())
     items = {i["id"]: i for i in client.get("/api/shop", headers=hdr(cid)).json()["items"]}
-    assert items["history_view"]["kind"] == "feature" and items["stamp_shapes"]["kind"] == "stamp"
+    assert items["history_view"]["kind"] == "feature" and "stamp_shapes" not in items  # 도장 모양 상품은 없앴다
     assert all(i["desc"] for k, i in items.items() if k != "daily_quote")  # 좋은 말은 화면이 예시 문장을 직접 보여 준다
 
 
@@ -339,8 +339,8 @@ def test_feature_item_purchase_grants_ownership_once(env):
     assert store.owned(cid) == ["history_view"] and store.balance(cid) == before
     again = client.post("/api/orders", json={"productId": "history_view"}, headers=hdr(cid))
     assert again.status_code == 409
-    pay_item(client, cid, "stamp_shapes", toss)
-    assert store.owned(cid) == ["history_view", "stamp_shapes"]
+    again2 = client.post("/api/orders", json={"productId": "stamp_shapes"}, headers=hdr(cid))
+    assert again2.status_code in (400, 404)  # 없앤 상품은 주문할 수 없다
 
 
 # ---- 열림 건너뛰기(3·28·60일째, 전체): 가격 구조와 소유 ----
@@ -460,7 +460,7 @@ def test_icon_packs_are_items_and_match_the_screen():
 
 def test_old_color_themes_are_free_and_new_design_themes_are_sold():
     ids = set(creditlib.ITEMS)
-    assert not ({"theme_ocean", "theme_forest", "theme_rose"} & ids)  # 바다·숲·장미는 무료 색 테마라 상품이 아니다
+    assert not ({"theme_ocean", "theme_forest", "theme_peachpink", "theme_base"} & ids)  # 기본·복숭아·바다는 무료 색이라 상품이 아니다
     assert {"theme_notebook", "theme_retro", "theme_cloud"} <= ids
     html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
     for tid in ("notebook", "retro", "cloud"):
@@ -506,7 +506,7 @@ def test_stage_gift_once_per_stage_random_decor_only(env):
 def test_stage_gift_pool_excludes_features_and_skips_when_everything_owned(env):
     client, store, _ = env
     assert all(i["kind"] in ("sticker", "iconpack", "paper", "theme") for i in creditlib.ITEMS.values() if i["kind"] in creditlib.GIFT_KINDS)
-    assert not any(i["kind"] in creditlib.GIFT_KINDS for i in creditlib.ITEMS.values() if i["id"] in ("daily_quote", "history_view", "stamp_shapes", "unlock_3"))
+    assert not any(i["kind"] in creditlib.GIFT_KINDS for i in creditlib.ITEMS.values() if i["id"] in ("daily_quote", "history_view", "unlock_3"))
     cid = str(uuid.uuid4())
     pool = [i["id"] for i in creditlib.ITEMS.values() if i["kind"] in creditlib.GIFT_KINDS]
     for _ in range(3):
@@ -519,3 +519,31 @@ def test_stage_gift_pool_excludes_features_and_skips_when_everything_owned(env):
         conn.execute("INSERT INTO entitlements(client_id, item_id, order_id, created_at) VALUES (?,?,?,?)", (c2, iid, "t", creditlib.now()))
     conn.close()
     assert client.post("/api/gift", json={"stage": 60}, headers=hdr(c2)).json()["item"] is None
+
+
+def test_paid_colors_are_sold_and_free_colors_are_only_three():
+    colors = ("peach", "rose", "lime", "lavender", "sunny")
+    for c in colors:
+        it = creditlib.ITEMS["theme_" + c]
+        assert it["kind"] == "theme" and it["theme"] == c and it["amount"] == 1000 and it["desc"]
+    html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
+    start = html.index("const THEMES=[")
+    block = html[start:html.index("let OWNED=new Set()", start)]
+    for c in colors:
+        assert "{id:'%s',shop:'theme_%s',col:1}" % (c, c) in block  # 화면에서도 유료 색으로 묶여 있다
+        assert ':root[data-theme="' + c + '"]' in html
+    assert block.count("col:1}") == 8 and block.count("shop:") == 10  # 색 8개(무료 3 + 유료 5), 유료 상품 10개(색 5 + 디자인 5)
+    for free in ("base", "peachpink", "ocean"):
+        assert "{id:'%s',col:1}" % free in block
+    assert "at:" not in block  # 일수로 열리는 색은 없다
+
+
+def test_unlock_items_do_not_mention_colors_and_stamp_shapes_are_gone():
+    for k in ("unlock_28", "unlock_60", "unlock_all"):
+        it = creditlib.ITEMS[k]
+        assert "색" not in it["name"] + it["desc"]
+    assert creditlib.ITEMS["unlock_28"]["amount"] == 2500 and creditlib.ITEMS["unlock_60"]["amount"] == 3500
+    assert "stamp_shapes" not in creditlib.ITEMS and not any(i["kind"] == "stamp" for i in creditlib.ITEMS.values())
+    html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
+    for gone in ("shapeRow", "SHAPES", "currentShape", "data-shape", "themePills", "themeCap", "nextcolor"):
+        assert gone not in html

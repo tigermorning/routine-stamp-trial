@@ -126,7 +126,6 @@ h2{font-family:var(--display);font-weight:400;font-size:19px;margin:0}
 .sw-space{background:radial-gradient(circle at 60% 40%,#ff7b1c 0 26%,transparent 28%),radial-gradient(circle at 28% 72%,#2f7fa3 0 14%,transparent 16%),#000;border-radius:50%}
 .sw-donut{background:radial-gradient(circle,#ffe3ec 0 22%,#ff8fb8 24% 60%,#e0a964 62%);border-radius:50%}
 .sw-cloud{background:radial-gradient(circle at 35% 62%,#fff 0 28%,transparent 30%),radial-gradient(circle at 62% 55%,#fff 0 32%,transparent 34%),linear-gradient(180deg,#a9d4ff,#e3e8ff);border-radius:50%}
-.nextcolor{display:flex;align-items:center;gap:6px;margin:8px 0 0}
 .rtn{display:flex;align-items:center;gap:12px;padding:8px 0}
 .rtn+.rtn{border-top:1px solid var(--line)}
 .rico{width:36px;height:36px;flex:none;border-radius:50%;border:2px solid var(--c);background:color-mix(in srgb,var(--c) 18%,var(--card));display:grid;place-items:center;font-size:18px}
@@ -284,7 +283,7 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 #dyBody.five{max-height:none;overflow:visible}#dyBody.five .dyrow{display:grid;grid-template-columns:52px 1fr;gap:8px;align-items:start}#dyBody.five textarea{height:56px;min-height:0;resize:none}#dyBody.five .dyrow label{padding-top:8px;margin:0;font-size:14px}
 #dyBody{max-height:44vh;overflow:auto}
 .dychips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 8px}.dychips .btn{padding:3px 10px;font-size:14px}.dychips .btn[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-.dyarea{position:relative}.dystk{position:absolute;font-size:28px;line-height:1;touch-action:none;user-select:none;cursor:grab;transform:translate(-50%,-50%)}
+.dyarea{position:relative}.dystk{position:absolute;font-size:40px;line-height:1;touch-action:none;user-select:none;cursor:grab;transform:translate(-50%,-50%)}
 .dystk.sel{outline:2px dashed var(--accent);outline-offset:2px;border-radius:6px}.dystk .x{position:absolute;right:-12px;top:-14px;width:20px;height:20px;border-radius:50%;border:0;background:var(--accent);color:var(--accent-ink);font-size:12px;line-height:20px;padding:0;cursor:pointer}
 #dyBody textarea[class*="paper-"]:not(.paper-plain){color:#3b2f22;border-color:#c9b8a0}
 #dyBody .paper-lined{background:#fffdf6 repeating-linear-gradient(transparent 0 27px,#9ec5e8 27px 28px) local;line-height:28px}
@@ -298,14 +297,33 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 #dyBody textarea{width:100%;box-sizing:border-box;border:2px solid var(--line);border-radius:10px;padding:6px 8px;font:inherit;background:var(--card);color:var(--ink);resize:vertical}
 .hcal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:12px 0 6px;text-align:center}
 .hcal .wd{font-size:12px;color:var(--soft)}
-.hcal .hd{min-height:44px;border:1px solid var(--line);border-radius:8px;padding:2px 0;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:2px}
+.hcal .hd{min-height:56px;border:1px solid var(--line);border-radius:8px;padding:2px 0;font-size:12px;display:flex;flex-direction:column;align-items:center;gap:2px}
 .hcal button.hd{font:inherit;color:inherit;background:var(--card);cursor:pointer}
 .hcal .hd.sel{outline:3px solid var(--accent);outline-offset:1px}
 .hcal .hd .nt{font-size:10px;line-height:1;color:var(--accent)}
 #histNoteIn{width:100%;box-sizing:border-box;margin-top:4px;border:2px solid var(--line);border-radius:10px;padding:6px 8px;font:inherit;background:var(--card);color:var(--ink);resize:vertical}
-.hcal .hd .stk{font-size:12px;line-height:1;letter-spacing:-1px}
+.hcal .hd .stk{font-size:12px;line-height:1;letter-spacing:-1px;display:flex;flex-wrap:wrap;justify-content:center;gap:1px}
 .stkrow{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}
-.sv{width:1.15em;height:1.15em;display:inline-block;vertical-align:-.2em}.dystk .sv{display:block;width:1.15em;height:1.15em}.shopitem small .sv{width:26px;height:26px;vertical-align:middle;margin:2px 1px}.hcal .hd .stk .sv{width:16px;height:16px;vertical-align:-.3em}
+.sv{width:1.15em;height:1.15em;display:inline-block;vertical-align:-.2em}.dystk .sv{display:block;width:1.15em;height:1.15em}.shopitem small .sv{width:26px;height:26px;vertical-align:middle;margin:2px 1px}.hcal .hd .stk .sv{width:24px;height:24px;vertical-align:-.3em}
+/* 스티커 팩별 화풍: 같은 그림이라도 팩마다 판(모양·재질)과 색 처리가 다르다 */
+.sv[class*="pk-"]{box-sizing:border-box;padding:.13em}
+.sv.pk-round{border-radius:50%;background:radial-gradient(circle at 34% 28%,#fff 0,#ffe3ee 72%);box-shadow:0 0 0 2px #fff,0 2px 7px rgba(240,110,160,.38)}
+.sv.pk-round use{filter:saturate(1.25) brightness(1.04)}
+.sv.pk-daily{border-radius:.16em;background:repeating-linear-gradient(0deg,#f3e5c8 0 5px,#efdfbd 5px 6px);box-shadow:inset 0 0 0 1.5px #c8a672,0 1px 3px rgba(90,60,20,.35);transform:rotate(-3deg)}
+.sv.pk-daily use{filter:sepia(.65) saturate(.95) contrast(1.05)}
+.sv.pk-party{border-radius:50%;background:radial-gradient(circle,#fffdf5 0 54%,transparent 56%),conic-gradient(#ffd45e,#ff8fb1,#7fd3ff,#b79bff,#7ee0a4,#ffd45e);box-shadow:0 2px 6px rgba(255,130,90,.45)}
+.sv.pk-party use{filter:saturate(1.7) contrast(1.1)}
+.sv.pk-life{border-radius:32%;background:linear-gradient(160deg,#ecfaf5,#c4eddf);box-shadow:inset 0 0 0 1.5px #6fc4a8}
+.sv.pk-life use{filter:sepia(1) hue-rotate(100deg) saturate(1.9) brightness(.92)}
+.sv.pk-cafe{border-radius:50%;background:radial-gradient(circle at 40% 32%,#6b4a37,#3f281b);box-shadow:inset 0 0 0 2px #d9b88c,0 2px 6px rgba(50,30,15,.5)}
+.sv.pk-cafe use{filter:grayscale(1) invert(1) sepia(.55) brightness(1.1) contrast(1.15)}
+.sv.pk-office{border-radius:.1em;background:linear-gradient(180deg,#25364f,#18243a);box-shadow:0 0 0 1.5px #8fa4c4,0 2px 5px rgba(20,35,60,.5)}
+.sv.pk-office use{filter:grayscale(1) invert(1) contrast(1.2) brightness(1.15)}
+.spgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0 10px;max-height:52vh;overflow:auto}
+.spgrid .spi{border:1px solid var(--line);border-radius:12px;padding:8px 2px 6px;text-align:center;font-size:11px;line-height:1.25;color:var(--soft);background:var(--card)}
+.spgrid .spi .sv{display:block;width:48px;height:48px;margin:0 auto 4px}
+.spgrid .spi .dn{display:block;font-size:22px;font-weight:700;color:var(--ink);margin:2px 0 6px}
+.shopitem small .sv[class*="pk-"]{width:32px;height:32px;margin:2px 2px}
 .stkbtn{font-size:22px;line-height:1;border:2px solid var(--line);border-radius:10px;background:var(--card);padding:3px 7px;cursor:pointer}
 .stkbtn.on{border-color:var(--accent)}
 .stkbtn:disabled{opacity:.4;cursor:default}
@@ -341,11 +359,6 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 .hcal .hdots{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;max-width:36px}
 .hcal .hdot{width:8px;height:8px;border-radius:50%;background:var(--c)}
 .hcal .hdot.v2{opacity:.45}
-:root[data-shape="soft"] .stamp{border-radius:30%}
-:root[data-shape="leaf"] .stamp{border-radius:50% 10% 50% 10%}
-:root[data-shape="drop"] .stamp{border-radius:50% 50% 50% 8%}
-.shp{display:inline-block;width:22px;height:22px;border:3px solid var(--accent);background:color-mix(in srgb,var(--accent) 22%,var(--card));border-radius:50%;flex:none;vertical-align:middle;margin-right:6px}
-.shp-soft{border-radius:30%}.shp-leaf{border-radius:50% 10% 50% 10%}.shp-drop{border-radius:50% 50% 50% 8%}
 #crDlg{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);max-width:min(440px,calc(100vw - 32px));padding:18px;box-shadow:var(--shadow)}
 #crDlg::backdrop{background:rgba(0,0,0,.35)}
 #crList{display:flex;flex-direction:column;gap:8px;margin:10px 0}
@@ -355,9 +368,9 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 .shoptabs button{border:2px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:5px 12px;font:inherit;font-size:14px;cursor:pointer}
 .shoptabs button[aria-selected="true"]{border-color:var(--accent);background:var(--accent);color:var(--accent-ink);font-weight:700}
 .shoptabs button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-.shopitem{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:6px}
+.shopitem{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;border:1px solid var(--line);border-radius:12px;padding:8px 10px;margin-bottom:6px}
 .shopitem .uico{flex:none;width:32px;font-size:26px;text-align:center}
-.shopitem .sw{flex:none}.shopitem span{flex:1}.shopitem .uico{flex:none}.shopitem small{display:block;color:var(--soft)}
+.shopitem .sw{flex:none}.shopitem span{flex:1 1 150px;min-width:0}.shopitem .uico{flex:none}.shopitem small{display:block;color:var(--soft)}
 .quotebox{text-align:center;margin:8px 0 0;color:var(--soft);font-style:italic}
 </style>
 </head>
@@ -451,17 +464,9 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
       <summary><span class="sethd" id="langCap"></span><span class="val" id="langVal"></span></summary>
       <div class="pillrow" id="langPills" role="radiogroup"></div>
     </details>
-    <details class="setrow" id="themeRow">
-      <summary><span class="sethd" id="themeCap"></span><span class="val" id="themeVal"></span></summary>
-      <div class="pillrow" id="themePills" role="radiogroup"></div>
-    </details>
     <details class="setrow" id="iconRow" hidden>
       <summary><span class="sethd">할 일 아이콘 스타일</span><span class="val" id="iconVal"></span></summary>
       <div class="pillrow" id="iconPills" role="radiogroup"></div>
-    </details>
-    <details class="setrow" id="shapeRow" hidden>
-      <summary><span class="sethd">도장 모양</span><span class="val" id="shapeVal"></span></summary>
-      <div class="pillrow" id="shapePills" role="radiogroup"></div>
     </details>
     <details class="setrow" id="fbCard">
       <summary><h2 id="fbTitle"></h2></summary>
@@ -513,7 +518,6 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
   <div class="shoptabs" role="tablist" aria-label="상점 분류" id="shopTabs">
     <button type="button" role="tab" data-t="color">배경 색</button>
     <button type="button" role="tab" data-t="theme">배경 디자인</button>
-    <button type="button" role="tab" data-t="stamp">도장 모양</button>
     <button type="button" role="tab" data-t="paper">메모지</button>
     <button type="button" role="tab" data-t="icon">아이콘</button>
     <button type="button" role="tab" data-t="stk">스티커</button>
@@ -522,16 +526,12 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
     <button type="button" role="tab" data-t="chat">대화권</button>
   </div>
   <div class="shoppane" data-t="color" role="tabpanel">
-    <p class="stat">화면 색을 바꿔요. 모두 무료예요. 같은 디자인에 색만 달라요.</p>
+    <p class="stat">화면 색을 바꿔요. 기본·복숭아·바다는 무료이고 나머지 색은 1,000원이에요. 한 번 사면 계속 써요. 같은 디자인에 색만 달라요.</p>
     <div id="shopColor"></div>
   </div>
   <div class="shoppane" data-t="theme" role="tabpanel" hidden>
     <p class="stat">모양까지 바뀌는 배경 디자인이에요. 한 번 사면 계속 써요.</p>
     <div id="shopTheme"></div>
-  </div>
-  <div class="shoppane" data-t="stamp" role="tabpanel" hidden>
-    <p class="stat">도장 모양을 바꿔요. 한 번 사면 계속 써요.</p>
-    <div id="shopStamp"></div>
   </div>
   <div class="shoppane" data-t="paper" role="tabpanel" hidden>
     <p class="stat">기록에 쓰는 메모지예요. 한 번 사면 계속 써요.</p>
@@ -587,7 +587,7 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 <dialog id="stkPrevDlg" aria-labelledby="spTitle">
   <h2 id="spTitle"></h2>
   <p class="stat" id="spNote"></p>
-  <div class="hcal" id="spGrid"></div>
+  <div class="spgrid" id="spGrid"></div>
   <div class="row" style="justify-content:flex-end;gap:8px"><button class="btn main" id="spBuy" type="button"></button><button class="btn" id="spClose" type="button">닫기</button></div>
 </dialog>
 
@@ -618,7 +618,8 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
     <div class="stkrow" id="histStkPick"></div>
   </div>
   <p class="stat" id="histStat"></p>
-  <div class="row" style="justify-content:flex-end"><button class="btn" id="histClose" type="button">닫기</button></div>
+  <p class="msg" id="histDemoNote" hidden>예시 일정이에요. 저장되지 않아요. 날짜를 눌러 어떻게 보이는지 봐요.</p>
+  <div class="row" style="justify-content:flex-end"><button class="btn main" id="histDemoBuy" type="button" hidden></button><button class="btn" id="histClose" type="button">닫기</button></div>
 </dialog>
 
 <dialog id="celDlg" aria-labelledby="celTitle">
@@ -735,9 +736,8 @@ ko:{
   introGo:'의견 쓰러 가기',
   introClose:'닫기',
   introBtn:'안내',
-  setBtn:"설정", setBack:"돌아가기", langCap:"언어", themeCap:"색 테마",
-  theme_base:"기본", theme_peachpink:"복숭아", theme_peach:"가을낙엽", theme_lavender:"라벤더", theme_sunny:"햇살", theme_ocean:"바다",theme_notebook:"공책",theme_retro:"레트로",theme_cloud:"구름",theme_space:"우주 행성",theme_donut:"도넛", theme_rose:"장미", theme_lime:"라임", themeLocked:"{d}에 열려요",
-  nextColor:"다음 색",
+  setBtn:"설정", setBack:"돌아가기", langCap:"언어",
+  theme_base:"기본", theme_peachpink:"복숭아", theme_peach:"가을낙엽", theme_lavender:"라벤더", theme_sunny:"햇살", theme_ocean:"바다",theme_notebook:"공책",theme_retro:"레트로",theme_cloud:"구름",theme_space:"우주 행성",theme_donut:"도넛", theme_rose:"장미", theme_lime:"라임",
   privCap:"개인정보 안내", privBody:"계정도 로그인도 없어요. 도장 기록은 이 기기에만 저장돼요. 그래서 브라우저 데이터를 지우거나 폰을 바꾸면 기록이 사라져요. 도우미와 나눈 말은 답을 만들 때 AI 서비스에 전달되고, 이 앱 서버에는 저장되지 않아요. 이름·연락처 같은 개인정보는 적지 말아 주세요.",
   delCap:"내 기록 지우기", delBody:"이 기기에 저장된 도장 기록, 칸, 설정, 도우미 대화를 모두 지우고 처음 상태로 돌아가요.",
   delBtn:"내 기록 지우기", delYes:"네, 모두 지울게요", delCancel:"취소", delAsk:"도장 찍은 날 {n}일, 칸 {m}개가 모두 사라지고 되돌릴 수 없어요. 정말 지울까요?",
@@ -844,9 +844,8 @@ en:{
   introGo:'Write feedback',
   introClose:'Close',
   introBtn:'Guide',
-  setBtn:"Settings", setBack:"Back", langCap:"Language", themeCap:"Color theme",
-  theme_base:"Default", theme_peachpink:"Peach", theme_peach:"Autumn leaves", theme_lavender:"Lavender", theme_sunny:"Sunshine", themeLocked:"Opens on {d}",
-  nextColor:"Next color",
+  setBtn:"Settings", setBack:"Back", langCap:"Language",
+  theme_base:"Default", theme_peachpink:"Peach", theme_peach:"Autumn leaves", theme_lavender:"Lavender", theme_sunny:"Sunshine",
   privCap:"Privacy", privBody:"There are no accounts or logins. Your stamps are saved only on this device, so clearing browser data or switching phones erases them. What you say to the helper is passed to an AI service to write its reply, and this app's server doesn't store it. Please don't write personal details like your name or contact info.",
   delCap:"Delete my record", delBody:"Erases the stamp record, boxes, settings and helper chat saved on this device and returns the app to its first-run state.",
   delBtn:"Delete my record", delYes:"Yes, delete everything", delCancel:"Cancel", delAsk:"{n} stamped days and {m} boxes will be erased for good. Delete them?",
@@ -953,9 +952,8 @@ en:{
   introGo:'去写意见',
   introClose:'关闭',
   introBtn:'使用说明',
-  setBtn:"设置", setBack:"返回", langCap:"语言", themeCap:"颜色主题",
-  theme_base:"默认", theme_peachpink:"蜜桃", theme_peach:"秋叶", theme_lavender:"薰衣草", theme_sunny:"阳光", themeLocked:"{d}时开启",
-  nextColor:"下一个颜色",
+  setBtn:"设置", setBack:"返回", langCap:"语言",
+  theme_base:"默认", theme_peachpink:"蜜桃", theme_peach:"秋叶", theme_lavender:"薰衣草", theme_sunny:"阳光",
   privCap:"隐私说明", privBody:"没有账号，也不用登录。盖章记录只保存在这台设备上，所以清除浏览器数据或换手机后记录会消失。你和小帮手说的话会在生成回答时传给 AI 服务，本应用的服务器不会保存。请不要写姓名、联系方式等个人信息。",
   delCap:"删除我的记录", delBody:"清除这台设备上保存的盖章记录、格子、设置和小帮手聊天，回到最初的状态。",
   delBtn:"删除我的记录", delYes:"是的，全部删除", delCancel:"取消", delAsk:"盖章天数 {n} 天、格子 {m} 个会全部消失，无法恢复。确定删除吗？",
@@ -1062,9 +1060,8 @@ en:{
   introGo:'去寫意見',
   introClose:'關閉',
   introBtn:'使用說明',
-  setBtn:"設定", setBack:"返回", langCap:"語言", themeCap:"顏色主題",
-  theme_base:"預設", theme_peachpink:"蜜桃", theme_peach:"秋葉", theme_lavender:"薰衣草", theme_sunny:"陽光", themeLocked:"{d}時開啟",
-  nextColor:"下一個顏色",
+  setBtn:"設定", setBack:"返回", langCap:"語言",
+  theme_base:"預設", theme_peachpink:"蜜桃", theme_peach:"秋葉", theme_lavender:"薰衣草", theme_sunny:"陽光",
   privCap:"隱私說明", privBody:"沒有帳號，也不用登入。蓋章紀錄只儲存在這台裝置上，所以清除瀏覽器資料或換手機後紀錄會消失。你和小幫手說的話會在產生回答時傳給 AI 服務，本應用的伺服器不會儲存。請不要寫姓名、聯絡方式等個人資訊。",
   delCap:"刪除我的紀錄", delBody:"清除這台裝置上儲存的蓋章紀錄、格子、設定和小幫手聊天，回到最初的狀態。",
   delBtn:"刪除我的紀錄", delYes:"是的，全部刪除", delCancel:"取消", delAsk:"蓋章天數 {n} 天、格子 {m} 個會全部消失，無法復原。確定刪除嗎？",
@@ -1161,9 +1158,8 @@ yue:{
   introGo:'去寫意見',
   introClose:'關閉',
   introBtn:'使用說明',
-  setBtn:"設定", setBack:"返回", langCap:"語言", themeCap:"顏色主題",
-  theme_base:"預設", theme_peachpink:"蜜桃", theme_peach:"秋葉", theme_lavender:"薰衣草", theme_sunny:"陽光", themeLocked:"{d}就開",
-  nextColor:"下一個顏色",
+  setBtn:"設定", setBack:"返回", langCap:"語言",
+  theme_base:"預設", theme_peachpink:"蜜桃", theme_peach:"秋葉", theme_lavender:"薰衣草", theme_sunny:"陽光",
   privCap:"私隱說明", privBody:"冇帳戶，亦唔使登入。印花記錄只會儲存喺呢部裝置，所以清咗瀏覽器資料或者轉咗手機，記錄就會冇晒。你同小幫手講嘅嘢會喺產生回覆嗰陣傳去 AI 服務，呢個 app 嘅伺服器唔會儲存。請唔好寫姓名、聯絡方法等個人資料。",
   delCap:"刪除我嘅記錄", delBody:"清走呢部裝置入面儲存嘅印花記錄、格仔、設定同小幫手傾偈，返到最初嘅狀態。",
   delBtn:"刪除我嘅記錄", delYes:"係，全部刪除", delCancel:"取消", delAsk:"有印花嘅日數 {n} 日、格仔 {m} 個會全部冇晒，冇得還原。真係要刪除？",
@@ -1270,9 +1266,8 @@ id:{
   introGo:'Tulis masukan',
   introClose:'Tutup',
   introBtn:'Panduan',
-  setBtn:"Pengaturan", setBack:"Kembali", langCap:"Bahasa", themeCap:"Tema warna",
-  theme_base:"Bawaan", theme_peachpink:"Persik", theme_peach:"Daun gugur", theme_lavender:"Lavender", theme_sunny:"Mentari", themeLocked:"Terbuka di {d}",
-  nextColor:"Warna berikutnya",
+  setBtn:"Pengaturan", setBack:"Kembali", langCap:"Bahasa",
+  theme_base:"Bawaan", theme_peachpink:"Persik", theme_peach:"Daun gugur", theme_lavender:"Lavender", theme_sunny:"Mentari",
   privCap:"Privasi", privBody:"Tidak ada akun atau login. Catatan stempelmu hanya disimpan di perangkat ini, jadi kalau data browser dihapus atau ganti HP, catatannya hilang. Ucapanmu kepada pembantu diteruskan ke layanan AI untuk membuat jawaban, dan server aplikasi ini tidak menyimpannya. Jangan menulis data pribadi seperti nama atau kontak.",
   delCap:"Hapus catatanku", delBody:"Menghapus catatan stempel, kotak, pengaturan, dan obrolan pembantu yang tersimpan di perangkat ini, lalu mengembalikan aplikasi ke keadaan awal.",
   delBtn:"Hapus catatanku", delYes:"Ya, hapus semuanya", delCancel:"Batal", delAsk:"{n} hari berstempel dan {m} kotak akan hilang selamanya. Yakin ingin menghapus?",
@@ -1379,9 +1374,8 @@ vi:{
   introGo:'Viết ý kiến',
   introClose:'Đóng',
   introBtn:'Hướng dẫn',
-  setBtn:"Cài đặt", setBack:"Quay lại", langCap:"Ngôn ngữ", themeCap:"Chủ đề màu",
-  theme_base:"Mặc định", theme_peachpink:"Đào", theme_peach:"Lá mùa thu", theme_lavender:"Oải hương", theme_sunny:"Nắng", themeLocked:"Mở vào {d}",
-  nextColor:"Màu tiếp theo",
+  setBtn:"Cài đặt", setBack:"Quay lại", langCap:"Ngôn ngữ",
+  theme_base:"Mặc định", theme_peachpink:"Đào", theme_peach:"Lá mùa thu", theme_lavender:"Oải hương", theme_sunny:"Nắng",
   privCap:"Quyền riêng tư", privBody:"Không có tài khoản hay đăng nhập. Bản ghi dấu chỉ lưu trên thiết bị này, nên xóa dữ liệu trình duyệt hoặc đổi điện thoại thì bản ghi sẽ mất. Những gì bạn nói với trợ lý được chuyển cho dịch vụ AI để tạo câu trả lời, và máy chủ của ứng dụng này không lưu lại. Vui lòng đừng viết thông tin cá nhân như tên hay liên hệ.",
   delCap:"Xóa bản ghi của tôi", delBody:"Xóa bản ghi dấu, các ô, cài đặt và cuộc trò chuyện với trợ lý lưu trên thiết bị này, đưa ứng dụng về trạng thái ban đầu.",
   delBtn:"Xóa bản ghi của tôi", delYes:"Có, xóa hết", delCancel:"Hủy", delAsk:"{n} ngày đóng dấu và {m} ô sẽ mất hẳn, không thể khôi phục. Bạn chắc chắn muốn xóa?",
@@ -1488,9 +1482,8 @@ es:{
   introGo:'Escribir opinión',
   introClose:'Cerrar',
   introBtn:'Guía',
-  setBtn:"Ajustes", setBack:"Volver", langCap:"Idioma", themeCap:"Tema de color",
-  theme_base:"Predeterminado", theme_peachpink:"Melocotón", theme_peach:"Hojas de otoño", theme_lavender:"Lavanda", theme_sunny:"Sol", themeLocked:"Se abre el {d}",
-  nextColor:"Siguiente color",
+  setBtn:"Ajustes", setBack:"Volver", langCap:"Idioma",
+  theme_base:"Predeterminado", theme_peachpink:"Melocotón", theme_peach:"Hojas de otoño", theme_lavender:"Lavanda", theme_sunny:"Sol",
   privCap:"Privacidad", privBody:"No hay cuentas ni inicio de sesión. Tus sellos se guardan solo en este dispositivo, así que si borras los datos del navegador o cambias de teléfono se pierden. Lo que le dices al ayudante se envía a un servicio de IA para redactar la respuesta, y el servidor de esta app no lo guarda. Por favor, no escribas datos personales como tu nombre o contacto.",
   delCap:"Borrar mi registro", delBody:"Borra el registro de sellos, las casillas, los ajustes y el chat con el ayudante guardados en este dispositivo y deja la app como al principio.",
   delBtn:"Borrar mi registro", delYes:"Sí, borrar todo", delCancel:"Cancelar", delAsk:"Se borrarán para siempre {n} días con sello y {m} casillas. ¿Quieres borrarlos?",
@@ -1597,9 +1590,8 @@ fi:{
   introGo:'Kirjoita palaute',
   introClose:'Sulje',
   introBtn:'Opas',
-  setBtn:"Asetukset", setBack:"Takaisin", langCap:"Kieli", themeCap:"Värimaailma",
-  theme_base:"Oletus", theme_peachpink:"Persikka", theme_peach:"Syyslehdet", theme_lavender:"Laventeli", theme_sunny:"Aurinko", themeLocked:"Avautuu: {d}",
-  nextColor:"Seuraava väri",
+  setBtn:"Asetukset", setBack:"Takaisin", langCap:"Kieli",
+  theme_base:"Oletus", theme_peachpink:"Persikka", theme_peach:"Syyslehdet", theme_lavender:"Laventeli", theme_sunny:"Aurinko",
   privCap:"Yksityisyys", privBody:"Tässä ei ole tiliä eikä kirjautumista. Leimamerkintäsi tallentuvat vain tälle laitteelle, joten selaimen tietojen tyhjentäminen tai puhelimen vaihto poistaa ne. Apulaiselle kirjoittamasi välitetään tekoälypalveluun vastauksen tekemistä varten, eikä tämän sovelluksen palvelin tallenna sitä. Älä kirjoita henkilötietoja, kuten nimeä tai yhteystietoja.",
   delCap:"Poista merkintäni", delBody:"Poistaa tälle laitteelle tallennetut leimamerkinnät, ruudut, asetukset ja keskustelun apulaisen kanssa ja palauttaa sovelluksen alkutilaan.",
   delBtn:"Poista merkintäni", delYes:"Kyllä, poista kaikki", delCancel:"Peruuta", delAsk:"{n} leimapäivää ja {m} ruutua poistetaan lopullisesti. Poistetaanko?",
@@ -1706,9 +1698,8 @@ sv:{
   introGo:'Skriv feedback',
   introClose:'Stäng',
   introBtn:'Guide',
-  setBtn:"Inställningar", setBack:"Tillbaka", langCap:"Språk", themeCap:"Färgtema",
-  theme_base:"Standard", theme_peachpink:"Persika", theme_peach:"Höstlöv", theme_lavender:"Lavendel", theme_sunny:"Sol", themeLocked:"Öppnas på {d}",
-  nextColor:"Nästa färg",
+  setBtn:"Inställningar", setBack:"Tillbaka", langCap:"Språk",
+  theme_base:"Standard", theme_peachpink:"Persika", theme_peach:"Höstlöv", theme_lavender:"Lavendel", theme_sunny:"Sol",
   privCap:"Integritet", privBody:"Det finns inga konton eller inloggning. Dina stämplar sparas bara på den här enheten, så om du rensar webbläsardata eller byter telefon försvinner de. Det du skriver till hjälpen skickas vidare till en AI-tjänst för att ta fram svaret, och den här appens server sparar det inte. Skriv inga personuppgifter som namn eller kontaktuppgifter.",
   delCap:"Radera mina stämplar", delBody:"Raderar stämplar, rutor, inställningar och samtalet med hjälpen som sparats på den här enheten och återställer appen till startläget.",
   delBtn:"Radera mina stämplar", delYes:"Ja, radera allt", delCancel:"Avbryt", delAsk:"{n} dagar med stämpel och {m} rutor raderas för alltid. Vill du radera dem?",
@@ -1975,12 +1966,10 @@ const COLORS=['#ff8f70','#ffb85c','#5fcfb0','#6cb6f5','#9a8cf2','#ffd666','#4fc3
 const KEY='routine-trial-v1';
 const MAX_SLOTS=12,RECOMMEND_SLOTS=6; // 칸은 누적 28일부터 원하는 만큼 늘린다(사용자 결정 2026-11-04). 12개는 화면 안전 상한이고, 6개를 넘으면 권고 문구만 보인다
 const UNLOCKS=[3,28,60]; // 도장 찍은 누적 일수 → 칸이 하나씩 열림(PRD 2026-10-21)
-const THEMES=[{id:'base'},{id:'peachpink'},{id:'peach'}, // peach 는 옛 «복숭아»였던 갈색 계열이라 «가을낙엽»으로 이름만 바꾸고(저장된 선택 유지) 분홍 «복숭아»(peachpink)를 새로 더함(사용자 결정 2026-11-06)
-   // 복숭아도 바다·숲·장미처럼 처음부터 무료(사용자 결정 2026-11-05, 앞서 말한 것이 기록에서 빠져 있었음)
-  {id:'lavender',at:UNLOCKS[1]},{id:'sunny',at:UNLOCKS[2]},
-  {id:'ocean'},{id:'rose'},{id:'lime'}, // 바다·장미는 색만 바꾸는 무료 테마(2026-11-04 사용자 결정, 숲·적갈색은 2026-11-06 사용자 요청으로 뺌)
-  {id:'notebook',shop:'theme_notebook'},{id:'retro',shop:'theme_retro'},{id:'cloud',shop:'theme_cloud'},{id:'space',shop:'theme_space'},{id:'donut',shop:'theme_donut'}]; // 디자인 테마(유료)
-let OWNED=new Set(); // 서버가 알려 준 내가 산 상품(상점). 크레딧 서버가 꺼져 있으면 비어 있다 // 칸이 열릴 때 테마도 하나씩 열림
+const THEMES=[{id:'base',col:1},{id:'peachpink',col:1},{id:'ocean',col:1}, // 무료 배경 색은 이 셋뿐(사용자 결정 2026-11-06). peach 는 옛 «복숭아»였던 갈색 계열이라 «가을낙엽»으로 이름만 바꿨다
+  {id:'peach',shop:'theme_peach',col:1},{id:'rose',shop:'theme_rose',col:1},{id:'lime',shop:'theme_lime',col:1},{id:'lavender',shop:'theme_lavender',col:1},{id:'sunny',shop:'theme_sunny',col:1}, // 나머지 색은 상점에서 사야 한다. 기능이 열려도(누적 일수·바로 열기) 색은 바뀌거나 열리지 않는다
+  {id:'notebook',shop:'theme_notebook'},{id:'retro',shop:'theme_retro'},{id:'cloud',shop:'theme_cloud'},{id:'space',shop:'theme_space'},{id:'donut',shop:'theme_donut'}]; // 디자인 테마(유료). col:1 은 «배경 색» 탭, 나머지는 «배경 디자인» 탭
+let OWNED=new Set(); // 서버가 알려 준 내가 산 상품(상점). 크레딧 서버가 꺼져 있으면 비어 있다. 모르는 상품 id(예: 없앤 도장 모양)는 어디서도 쓰지 않아 무시된다
 const THEME_BG={base:'#f2f7f5',peach:'#fbf1ea',peachpink:'#fff1ee',lavender:'#f3f0fa',sunny:'#fff7df',ocean:'#eaf4fb',rose:'#fbeef2',lime:'#f8fae0',notebook:'#f6efdc',retro:'#ffefb8',cloud:'#e3f0ff',space:'#0b0b10',donut:'#ffe3ec'};
 const pad=n=>String(n).padStart(2,'0');
 const fmt=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
@@ -2035,18 +2024,13 @@ const SETTLE_DAYS=60;
 const FUTURE_STAGES=['시간 정하기','반복 일정','알림','일정 색 구분','여러 달력 합쳐 보기'];
 const STAGE_OPEN={3:'위쪽 «기록» 버튼에서 메모·일기를 하루·주간·5년으로 쓸 수 있어요.',28:'이제 칸을 원하는 만큼 늘릴 수 있어요. «할 일 칸 바꾸기»에서 더해 보세요.',60:'달력에서 지난 기록을 보고 날짜마다 할 일·일정을 적을 수 있어요.'};
 function capacity(){return Math.max(S.slots.length,opened(28)?MAX_SLOTS:3)} // 처음 3칸 → 28일째부터 늘릴 수 있음. 이미 더 많은 칸을 가진 사람의 칸은 줄이지 않는다
-function themeOpen(th){if(th.shop)return OWNED.has(th.shop);return !th.at||opened(th.at)}
-function currentTheme(){ // 설정에서 고른 테마(열려 있을 때). 고르지 않았으면 열린 것 중 가장 나중 테마가 자동 적용
-  const th=THEMES.find(x=>x.id===S.theme);if(th&&themeOpen(th))return th.id;
-  let id='base';for(const x of THEMES)if(x.at&&themeOpen(x))id=x.id;return id}
-const SHAPES=[['round','동그라미'],['soft','둥근 네모'],['leaf','잎사귀'],['drop','물방울']]; // 도장 모양(상점 «도장 모양 바꾸기»를 산 뒤에만 적용)
-function currentShape(){if(previewShape) return previewShape;return OWNED.has('stamp_shapes')&&SHAPES.some(x=>x[0]===S.shape)?S.shape:'round'}
-let previewTheme=null,previewIcon=null,previewShape=null; // 상점에서 사기 전에 입어 보는 것들(디자인·아이콘 스타일·도장 모양). «원래대로»를 누르면 돌아간다
+function themeOpen(th){return th.shop?OWNED.has(th.shop):true} // 무료 색은 늘 열려 있고 나머지는 산 것만
+function currentTheme(){ // 상점에서 고른 테마. 안 산(열려 있지 않은) 색이 저장돼 있으면 기본으로 돌아간다. 기능이 열려도 색은 자동으로 바뀌지 않는다
+  const th=THEMES.find(x=>x.id===S.theme);return th&&themeOpen(th)?th.id:'base'}
+let previewTheme=null,previewIcon=null; // 상점에서 사기 전에 입어 보는 것들(디자인·아이콘 스타일). «원래대로»를 누르면 돌아간다
 function applyTheme(){
   const id=previewTheme||currentTheme();
   const root=document.documentElement;
-  const sh=currentShape();
-  if(sh==='round') root.removeAttribute('data-shape'); else root.setAttribute('data-shape',sh);
   if(id==='base') root.removeAttribute('data-theme'); else root.setAttribute('data-theme',id);
   const m=document.querySelector('meta[name="theme-color"]');
   if(m) m.setAttribute('content',THEME_BG[id]);
@@ -2067,7 +2051,6 @@ const iconSVG=k=>{const b=iconBody(k);return b?`<svg class="ico" viewBox="0 0 64
 function hash(s){let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))|0;return h}
 const rot=(date,id)=>((hash(date+id)%15)-7)+'deg';
 function stampHTML(s,v,date){
-  if(!v&&previewShape) v=1; // 도장 모양 미리 보기 중에는 빈 칸도 도장이 찍힌 모습으로 보여 준다(찍은 도장이 없어도 모양이 보이게)
   if(!v) return `<div class="empty">＋</div>`;
   return `<div class="stamp ${v===2?'mini':''}" style="--c:${s.color};--r:${rot(date,s.id)}">${iconOf(s)}</div>`;
 }
@@ -2091,12 +2074,12 @@ function celebrate(){
   if(S.cel===undefined){S.cel=cnt;save();return}
   if(cnt<=S.cel) return;
   S.cel=cnt;save();
-  const n=UNLOCKS[cnt-1],th=THEMES.find(x=>x.at===n);
+  const n=UNLOCKS[cnt-1];
   $('celTitle').textContent='🎉 '+n+'일째, '+STAGE_WHAT[n]+({3:'이',28:'가',60:'가'}[n])+' 열렸어요';
   $('celBody').textContent=STAGE_OPEN[n];
-  $('celGift').textContent=(th?'새 색 “'+t('theme_'+th.id)+'”도 열렸어요. 설정에서 바꿔 쓸 수 있어요.':'');
+  $('celGift').textContent='';
   if(!$('celDlg').open) $('celDlg').showModal();
-  claimStageGifts().then(g=>{if(g.length) $('celGift').textContent+=(th?' ':'')+'🎁 단계 선물: '+g.join(', ')+' (상점에서 «쓰기»를 눌러 써 보세요)'});
+  claimStageGifts().then(g=>{if(g.length) $('celGift').textContent+='🎁 단계 선물: '+g.join(', ')+' (상점에서 «쓰기»를 눌러 써 보세요)'});
 }
 /* 지나온 단계마다 꾸미기 팩 1개를 서버에서 한 번씩 받는다(서버가 단계당 1회만 줌). 이미 받았거나 서버가 꺼져 있으면 조용히 넘어간다 */
 async function claimStageGifts(showDialog){
@@ -2132,7 +2115,7 @@ function applyStatic(){
   set('fbTitle','fbTitle');set('fbDesc','fbDesc');set('copyBtn','copyBtn');set('formBtn','formBtn');set('fbHow','fbHow');
   $('fb').placeholder=t('fbPlaceholder');
   if(!persists) $('notice').textContent=t('storageNotice');
-  set('setBtnTxt','setBtn');set('setTitle','setBtn');set('setBack','setBack');set('langCap','langCap');set('themeCap','themeCap');
+  set('setBtnTxt','setBtn');set('setTitle','setBtn');set('setBack','setBack');set('langCap','langCap');
   set('privCap','privCap');set('privBody','privBody');set('delCap','delCap');set('delBody','delBody');
 }
 
@@ -2182,8 +2165,6 @@ function renderPiled(){
   }else if(h===hd) h+=`<p class="unlockhd">${esc(t('stageAll'))}</p>`;
   h+=`<div class="miles"><span class="milescap">${esc(t('stageMiles'))}</span>${UNLOCKS.map(x=>{const got=total>=x,bought=!got&&opened(x);return `<span class="mile ${got?'done':''}${bought?' bought':''}"${bought?' title="구매로 열려 있어요. 도장이 쌓이면 ✔가 붙어요"':''}>${got?'✔ ':bought?'🔓 ':''}${esc(x+'일 · '+STAGE_SHORT[x])}</span>`}).join('')}</div>`;
   h+=`<div class="miles future"><span class="milescap">이어서 만들 기능 (준비 중이에요)</span>${FUTURE_STAGES.map(x=>`<span class="mile soon">${esc(x)}</span>`).join('')}</div>`;
-  const nt=THEMES.find(th=>th.at&&!themeOpen(th)); // 다음에 열리는 색을 한 줄로 알린다(모두 열렸으면 줄 없음)
-  if(nt) h+=`<p class="stat nextcolor"><i class="sw sw-${nt.id}"></i><span>${esc(t('nextColor'))}: ${esc(t('theme_'+nt.id))} · ${esc(t('themeLocked',{d:t('routineDay',{n:nt.at})}))}</span></p>`;
   $('unlock').innerHTML=h;
 }
 
@@ -2236,7 +2217,8 @@ const STICKER_PACKS={
   sticker_highlight:{name:'하이라이트',list:['hl:marker','hl:wavy','hl:double','hl:dotted','hl:circle','hl:brush']}};
 const HL_NAMES={marker:'형광펜',wavy:'물결 밑줄',double:'이중 밑줄',dotted:'점선 밑줄',circle:'동그라미',brush:'붓 밑줄'};
 const SV_NAMES={"flower": "벚꽃", "clover": "네잎클로버", "star": "별", "rainbow": "무지개", "strawberry": "딸기", "chick": "병아리", "coffee": "커피", "books": "책", "sneaker": "운동화", "drop": "물방울", "cart": "장바구니", "clapper": "영화", "cake": "케이크", "gift": "선물", "plane": "비행기", "letter": "편지", "popper": "폭죽", "heart": "하트", "hospital": "병원", "pill": "알약", "parcel": "택배", "bank": "은행", "laundry": "빨래", "bag": "장보기", "broom": "청소", "phone": "통화", "meeting": "회의", "memo": "메모", "bus": "버스", "meal": "식사", "americano": "아메리카노", "tea": "차", "boba": "버블티", "soda": "탄산음료", "ade": "에이드", "croissant": "크루아상", "bread": "식빵", "sandwich": "샌드위치", "pancake": "팬케이크", "slice": "케이크 조각", "cupcake": "컵케이크", "donut": "도넛", "cookie": "쿠키", "icecream": "아이스크림", "choco": "초콜릿", "laptop": "카공", "briefcase": "서류가방", "report": "보고서", "barchart": "막대그래프", "upchart": "상승 그래프", "folder": "폴더", "clip": "클립", "printer": "프린터", "monitor": "모니터", "calendar": "달력", "pin": "압정", "notepad": "노트", "alarm": "알람시계"};
-const stkFace=e=>e.startsWith('hl:')?`<span class="dn hl-${e.slice(3)}">가</span>`:e.startsWith('sv:')?`<svg class="sv" viewBox="0 0 48 48" aria-hidden="true"><use href="#sv-${e.slice(3)}"/></svg>`:esc(e); // 'sv:이름' 은 이 앱이 직접 그린 스티커(그림은 위쪽 svSprite), 그 밖은 예전 저장본의 이모지 글자
+const PK_OF={};Object.keys(STICKER_PACKS).forEach(id=>STICKER_PACKS[id].list.forEach(e=>{PK_OF[e]=id.replace('sticker_','')})); // 그림 이름 → 팩 이름(round·daily·party·life·cafe·office). 팩마다 판 모양·색 처리가 달라 한눈에 구분된다(사용자 요청 2026-11-06)
+const stkFace=e=>e.startsWith('hl:')?`<span class="dn hl-${e.slice(3)}">가</span>`:e.startsWith('sv:')?`<svg class="sv pk-${PK_OF[e]||'x'}" viewBox="0 0 48 48" aria-hidden="true"><use href="#sv-${e.slice(3)}"/></svg>`:esc(e); // 'sv:이름' 은 이 앱이 직접 그린 스티커(그림은 위쪽 svSprite), 그 밖은 예전 저장본의 이모지 글자
 const stkName=e=>e.startsWith('hl:')?(HL_NAMES[e.slice(3)]||'하이라이트'):e.startsWith('sv:')?(SV_NAMES[e.slice(3)]||'스티커'):e;
 const STICKERS_PER_DAY=3;
 const ownedStickers=()=>Object.keys(STICKER_PACKS).filter(id=>OWNED.has(id)).flatMap(id=>STICKER_PACKS[id].list);
@@ -2328,7 +2310,16 @@ document.querySelectorAll('#diaryDlg .dytabs .btn').forEach(b=>b.onclick=()=>{dy
 const dyStep=k=>{const d=new Date(dyDate+'T00:00');if(dyMode==='day')d.setDate(d.getDate()+k);else if(dyMode==='week')d.setDate(d.getDate()+7*k);else d.setFullYear(d.getFullYear()+k);dyDate=fmt(d);dySel=-1;renderDiary()};
 $('dyPick').onchange=()=>{if($('dyPick').value){dyDate=$('dyPick').value;dySel=-1;renderDiary()}};
 $('dyPrev').onclick=()=>dyStep(-1);$('dyNext').onclick=()=>dyStep(1);
-function openHist(){const d=new Date();histMonth=new Date(d.getFullYear(),d.getMonth(),1);histSel=notesOpen()?todayStr:null;$('histDlg').showModal();renderHist()}
+/* 달력 미리 보기(사기 전): 일정 칸이 열린 것처럼 보이되 샘플 일정만 쓰고 아무것도 저장하지 않는다 */
+let histDemo=null;
+const calOn=()=>notesOpen()||!!histDemo;
+function demoNotes(){const d=new Date(),ym=`${d.getFullYear()}-${pad(d.getMonth()+1)}`;return {[ym+'-03']:'병원 예약 10시',[ym+'-08']:'친구 생일 선물 사기',[ym+'-15']:'도서관 책 반납',[ym+'-21']:'가족 모임 저녁'}}
+function openHist(o){
+  const d=new Date();histMonth=new Date(d.getFullYear(),d.getMonth(),1);
+  histDemo=o&&o.demo&&!notesOpen()?o.demo:null;
+  const ok=!!histDemo;$('histDemoNote').hidden=!ok;$('histDemoBuy').hidden=!ok;$('histNoteIn').readOnly=ok;
+  if(ok){const it=histDemo;$('histDemoBuy').textContent=it.amount.toLocaleString('ko-KR')+'원에 사기';$('histDemoBuy').onclick=()=>{$('histDlg').close();buyCredits(it.id)}}
+  histSel=calOn()?(ok?Object.keys(demoNotes())[0]:todayStr):null;$('histDlg').showModal();renderHist()}
 function histMin(){
   let m=String(S.first||todayStr).slice(0,7);
   for(const d in S.log) if(d.slice(0,7)<m) m=d.slice(0,7);
@@ -2344,22 +2335,22 @@ function renderHist(){
   for(let d=1,n=new Date(y,m+1,0).getDate();d<=n;d++){
     const ds=`${ym}-${pad(d)}`,on=hasStamp(ds);if(on)kept++;
     const dots=all.filter(s=>get(ds,s.id)>0).map(s=>`<i class="hdot v${get(ds,s.id)}" style="--c:${s.color}"></i>`).join('');
-    const tag=notesOpen()?'button':'span',has=!!(S.notes&&S.notes[ds]);
+    const dn=histDemo?demoNotes():S.notes,tag=calOn()?'button':'span',has=!!(dn&&dn[ds]);
     const stAll=(S.stickers&&S.stickers[ds])||[];
     const stk=stAll.filter(x=>!x.startsWith('hl:')).map(stkFace).join(''),hlc=stAll.filter(x=>x.startsWith('hl:')).map(x=>'hl-'+x.slice(3)).join(' ');
     h+=`<${tag} ${tag==='button'?`type="button" data-d="${ds}" `:''}class="hd ${on?'on':''} ${ds===todayStr?'today':''} ${ds===histSel?'sel':''}"><span class="dn ${hlc}">${d}</span><span class="hdots">${dots}</span>${stk?`<span class="stk">${stk}</span>`:''}${has?'<span class="nt" aria-label="메모 있음">✎</span>':''}</${tag}>`;
   }
   $('histCal').innerHTML=h;
   $('histCal').querySelectorAll('button.hd').forEach(b=>b.onclick=()=>{histSel=b.dataset.d;renderHist();$('histNoteIn').focus({preventScroll:true})});
-  const nv=notesOpen()&&histSel&&histSel.slice(0,7)===ym;
+  const nv=calOn()&&histSel&&histSel.slice(0,7)===ym;
   $('histNote').hidden=!nv;
   if(nv){
     $('histNoteCap').textContent=new Intl.DateTimeFormat(LOCALE[lang],{month:'long',day:'numeric',weekday:'short'}).format(new Date(histSel+'T00:00'))+' 할 일·일정';
-    if(document.activeElement!==$('histNoteIn')) $('histNoteIn').value=(S.notes&&S.notes[histSel])||'';
+    if(document.activeElement!==$('histNoteIn')) $('histNoteIn').value=((histDemo?demoNotes():S.notes)||{})[histSel]||'';
   }
-  renderStk(nv);
+  renderStk(nv&&!histDemo);
   $('histStat').textContent=t('monthStat',{n:kept});
-  $('histPrev').disabled=ym<=histMin();const mx=new Date(todayStr+'T00:00');if(notesOpen())mx.setMonth(mx.getMonth()+12);
+  $('histPrev').disabled=ym<=histMin();const mx=new Date(todayStr+'T00:00');if(calOn())mx.setMonth(mx.getMonth()+12);
   $('histNext').disabled=ym>=`${mx.getFullYear()}-${pad(mx.getMonth()+1)}`; // 일정은 앞으로 열두 달까지
 }
 function renderStk(show){
@@ -2374,7 +2365,7 @@ function renderStk(show){
   $('histStkPick').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(cur.length<STICKERS_PER_DAY) put(cur.concat(b.dataset.e))});
 }
 $('histNoteIn').oninput=()=>{
-  if(!histSel||!notesOpen()) return;
+  if(!histSel||!notesOpen()||histDemo) return;
   const v=$('histNoteIn').value.trim();
   S.notes=Object.assign({},S.notes);
   if(v) S.notes[histSel]=v.slice(0,120); else delete S.notes[histSel];
@@ -2384,6 +2375,7 @@ $('histNoteIn').oninput=()=>{
 };
 $('histBtn').onclick=openHist;
 $('histClose').onclick=()=>$('histDlg').close();
+$('histDlg').addEventListener('close',()=>{histDemo=null;$('histDemoNote').hidden=true;$('histDemoBuy').hidden=true;$('histNoteIn').readOnly=false});
 $('histPrev').onclick=()=>{histMonth=new Date(histMonth.getFullYear(),histMonth.getMonth()-1,1);renderHist()};
 $('histNext').onclick=()=>{histMonth=new Date(histMonth.getFullYear(),histMonth.getMonth()+1,1);renderHist()};
 $('celClose').onclick=()=>$('celDlg').close();
@@ -2691,17 +2683,7 @@ function renderSettings(){
     lang=b.dataset.l;S.lang=lang;save();$('fbMsg').textContent='';render();
     const sel=$('langPills').querySelector('[aria-checked="true"]');if(sel)sel.focus({preventScroll:true});
   });
-  const cur=currentTheme();
-  $('langVal').textContent=LANG_NAMES[lang];$('themeVal').textContent=t('theme_'+cur); // 접힌 줄에 현재 값을 보여 준다
-  $('themePills').innerHTML=THEMES.map(th=>{
-    const open=themeOpen(th),name=esc(t('theme_'+th.id));
-    const lock=open?'':th.shop?'<small>🛍 상점에서 살 수 있어요</small>':`<small>🔒 ${esc(t('themeLocked',{d:t('routineDay',{n:th.at})}))}</small>`; // 잠긴 색은 '언제 열리는지'를 보여 주는 목표
-    return `<button type="button" class="opt" role="radio" aria-checked="${open&&cur===th.id}" data-th="${th.id}"${open?'':' disabled'}><i class="sw sw-${th.id}"></i><span>${name} ${lock}</span></button>`}).join('');
-  $('themePills').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
-    if(b.disabled) return;
-    S.theme=b.dataset.th;save();render();
-    const sel=$('themePills').querySelector('[aria-checked="true"]');if(sel)sel.focus({preventScroll:true});
-  });
+  $('langVal').textContent=LANG_NAMES[lang];
   const iconIds=Object.keys(ICON_PACKS).filter(id=>OWNED.has(id));$('iconRow').hidden=!iconIds.length;
   if(iconIds.length){
     const cur=ICON_PACKS[S.iconPack]&&OWNED.has(S.iconPack)?S.iconPack:'';
@@ -2710,15 +2692,6 @@ function renderSettings(){
     $('iconPills').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
       S.iconPack=b.dataset.v;save();render();
       const sel=$('iconPills').querySelector('[aria-checked="true"]');if(sel)sel.focus({preventScroll:true});
-    });
-  }
-  const ownShape=OWNED.has('stamp_shapes');$('shapeRow').hidden=!ownShape;
-  if(ownShape){
-    const cs=currentShape();$('shapeVal').textContent=SHAPES.find(x=>x[0]===cs)[1];
-    $('shapePills').innerHTML=SHAPES.map(([v,nm])=>`<button type="button" class="opt" role="radio" aria-checked="${cs===v}" data-v="${v}"><i class="shp shp-${v}"></i>${esc(nm)}</button>`).join('');
-    $('shapePills').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
-      S.shape=b.dataset.v;save();render();
-      const sel=$('shapePills').querySelector('[aria-checked="true"]');if(sel)sel.focus({preventScroll:true});
     });
   }
   renderHelperRow();
@@ -2889,7 +2862,7 @@ const UNLOCK_ICON={unlock_3:'📝',unlock_28:'🧩',unlock_60:'📅',unlock_all:
 const unlockLadder=id=>`<span class="uico" aria-hidden="true">${UNLOCK_ICON[id]||'🔓'}</span>`;
 /* 상점 «로드맵» 탭(사용자 요청 2026-11-06: 무엇이 열리는지 알기 어렵다 → 달성은 ✔, 잠긴 것은 🔒, 구매로 먼저 연 것은 🔓, 아직 만들지 않은 기능은 «준비 중»으로 길 위에 보인다) */
 const RM_ICON={3:'📝',28:'🧩',60:'📅'};
-const RM_REWARD={3:STAGE_OPEN[3],28:STAGE_OPEN[28]+' 라벤더 색도 열려요.',60:STAGE_OPEN[60]+' 햇살 색도 열려요.'};
+const RM_REWARD={3:STAGE_OPEN[3],28:STAGE_OPEN[28],60:STAGE_OPEN[60]};
 const RM_FUTURE=[['시간 정하기','일정에 시작 시간을 정해요.'],['반복 일정','매일·매주 되풀이되는 일정을 한 번에 적어요.'],['알림','일정 전에 알려 줘요.'],['일정 색 구분','일정을 종류별 색으로 나눠 봐요.'],['여러 달력 합쳐 보기','여러 달력을 한 화면에서 봐요.']]; // 아직 만들지 않음: 열리는 날이 없다
 function renderRoadmap(){
   const el=$('roadmap');if(!el)return;
@@ -2908,12 +2881,12 @@ function renderRoadmap(){
 }
 async function renderShop(){
   renderRoadmap();
-  const boxes={color:$('shopColor'),theme:$('shopTheme'),stamp:$('shopStamp'),paper:$('shopPaper'),icon:$('shopIcon'),stk:$('shopStk'),feat:$('shopFeat')},box=boxes.theme,ub=$('unlockList');box.textContent='불러오는 중…';
-  const paneOf=it=>it.kind==='unlock'?'unlock':it.kind==='sticker'?'stk':(it.kind==='quote'||it.kind==='feature')?'feat':it.kind==='stamp'?'stamp':it.kind==='paper'?'paper':it.kind==='iconpack'?'icon':'theme'; // 상점 분류: 꾸미기(디자인·아이콘·도장 모양·메모지) / 스티커 / 기능 / 바로 열기
+  const boxes={color:$('shopColor'),theme:$('shopTheme'),paper:$('shopPaper'),icon:$('shopIcon'),stk:$('shopStk'),feat:$('shopFeat')},box=boxes.theme,ub=$('unlockList');box.textContent='불러오는 중…';
+  const paneOf=it=>it.kind==='unlock'?'unlock':it.kind==='sticker'?'stk':(it.kind==='quote'||it.kind==='feature')?'feat':it.kind==='paper'?'paper':it.kind==='iconpack'?'icon':(THEMES.find(x=>x.id===it.theme)||{}).col?'color':'theme'; // 상점 분류: 배경 색 / 배경 디자인 / 꾸미기(아이콘·메모지) / 스티커 / 기능 / 바로 열기
   try{
     const j=await (await fetch('/api/shop',{headers:{'X-Client-Id':clientId()},cache:'no-store'})).json();
     Object.values(boxes).forEach(x=>{x.textContent=''});ub.textContent='';
-    THEMES.filter(th=>!th.shop&&!th.at).forEach(th=>{ // 무료 배경 색(기본·복숭아·가을낙엽·바다·장미·라임)도 «배경 색» 탭에서 바로 고른다
+    THEMES.filter(th=>th.col&&!th.shop).forEach(th=>{ // 무료 배경 색(기본·복숭아·바다)은 «배경 색» 탭에서 바로 고른다. 유료 색은 아래 상품 목록에서 같은 탭에 나온다
       const row=document.createElement('div');row.className='shopitem';const on=currentTheme()===th.id;
       row.innerHTML=`<i class="sw sw-${th.id}"></i><span>${esc(t('theme_'+th.id))}<small>무료 · 같은 디자인에 색만 달라요</small></span>`;
       const b=document.createElement('button');b.type='button';b.className='btn';b.textContent=on?'✔ 쓰는 중':'쓰기';b.disabled=on;
@@ -2926,12 +2899,11 @@ async function renderShop(){
       const partial=all&&!unlockDone&&UNLOCKS.some(opened); // 일부가 이미 열려 있으면 «모든 열림»이 남은 열림을 하나씩 사는 것보다 비쌀 수 있다
       const own=j.owned.includes(it.id),row=document.createElement('div');row.className='shopitem';
       const th=it.kind==='theme'?THEMES.find(x=>x.id===it.theme):null;
-      row.innerHTML=(th?`<i class="sw sw-${esc(th.id)}"></i>`:it.kind==='unlock'?unlockLadder(it.id):it.kind==='stamp'?'<i class="shp"></i>':it.kind==='iconpack'?iconPackPreview(it.id):'<i class="sw" style="background:var(--accent)"></i>')+
+      row.innerHTML=(th?`<i class="sw sw-${esc(th.id)}"></i>`:it.kind==='unlock'?unlockLadder(it.id):it.kind==='iconpack'?iconPackPreview(it.id):'<i class="sw" style="background:var(--accent)"></i>')+
         `<span>${esc(it.name)}<small>${it.kind==='quote'?esc(SAMPLE_QUOTE):it.kind==='sticker'?((STICKER_PACKS[it.id]||{}).list||[]).map(stkFace).join(' ')+'<br>'+esc('«기록»에서 바로 붙일 수 있고, 달력에는 누적 60일 또는 60일째 열림 뒤에 붙여요'):esc((it.desc||'')+(partial?' (일부가 이미 열려 있어 남은 열림을 하나씩 사는 편이 저렴해요)':''))}</small></span>`;
       const b=document.createElement('button');b.type='button';b.className='btn';
       if(own&&th){const on=currentTheme()===th.id;b.textContent=on?'기본으로 돌리기':'쓰기';b.onclick=()=>{S.theme=on?'base':th.id;save();render();$('crDlg').close()}} // 산 뒤에도 언제든 기본으로 돌릴 수 있다
       else if(own&&it.id==='history_view'){b.textContent='열기';b.onclick=()=>{$('crDlg').close();openHist()}}
-      else if(own&&it.id==='stamp_shapes'){b.textContent='모양 고르기';b.onclick=()=>{$('crDlg').close();setView(true);$('shapeRow').open=true}}
       else if(own&&it.kind==='iconpack'){const on=S.iconPack===it.id;b.textContent=on?'기본으로 돌리기':'쓰기';b.onclick=()=>{S.iconPack=on?'':it.id;save();render();renderShop()}}
       else if(own&&it.id==='daily_quote'){b.textContent=S.quoteOff?'다시 켜기':'끄기';b.onclick=()=>{S.quoteOff=!S.quoteOff;save();loadQuote();renderShop()}}
       else if(own&&it.kind==='sticker'){
@@ -2943,7 +2915,7 @@ async function renderShop(){
       else if(own){b.textContent='✔ 가지고 있어요';b.disabled=true}
       else if(partial){b.textContent=it.amount.toLocaleString('ko-KR')+'원';b.disabled=true}
       else{b.textContent=it.amount.toLocaleString('ko-KR')+'원';b.onclick=()=>buyCredits(it.id)}
-      if(!own&&!unlockDone){ // 산 적 없는 상품은 모두 미리 볼 수 있다(디자인·아이콘·도장 모양·스티커·열림·좋은 말·지난 기록)
+      if(!own&&!unlockDone){ // 산 적 없는 상품은 모두 미리 볼 수 있다(색·디자인·아이콘·스티커·열림·좋은 말·지난 기록)
         const pv=document.createElement('button');pv.type='button';pv.className='btn';pv.textContent='미리 보기';
         pv.onclick=()=>previewItem(it);
         row.appendChild(pv);
@@ -2992,7 +2964,7 @@ async function buyCredits(pid){
 $('crBtn').onclick=()=>openCredits('');
 $('chBuy').onclick=()=>openCredits('');
 const endPreview=keepBar=>{
-  previewTheme=previewIcon=previewShape=null;
+  previewTheme=previewIcon=null;
   const q=$('quoteBox');if(q.dataset.pv){delete q.dataset.pv;loadQuote()}
   if(keepBar!==true) $('pvBar').hidden=true;
   render();
@@ -3004,39 +2976,27 @@ function showPvBar(it,text,alt){ // 미리 보기 중에는 화면 아래 막대
   const a=$('pvAlt');a.hidden=!alt;if(alt){a.textContent=alt.label;a.onclick=alt.run}
   $('pvBar').hidden=false;
 }
-const UNLOCK_COLOR={unlock_28:'lavender',unlock_60:'sunny',unlock_all:'sunny'}; // 복숭아는 처음부터 무료라 3일 건너뛰기에는 미리 볼 색이 없다
 function previewItem(it){
   endPreview(true);
   if(it.kind==='sticker'){$('crDlg').close();openStickerPreview(it);return}
   if(it.kind==='paper'){$('crDlg').close();openDiary({deco:true});dyPaperPv='lined';renderDiary();return}
   if(it.id==='history_view'){$('crDlg').close();openHist();return} // 달력이 열린다(닫으면 상점으로 돌아가지 않음)
+  if(it.kind==='unlock'&&(it.at===NOTES_AT||it.id==='unlock_all')){$('crDlg').close();openHist({demo:it});return} // 달력·일정 메모가 열리는 상품: 사기 전에도 샘플 일정이 달력에 보인다(저장하지 않음)
   if(it.id==='daily_quote'){$('crDlg').close();openCookie(true,it);return} // 실제 격언 하나를 포춘쿠키로 미리 뽑아 본다
   let text='',alt=null;
   if(it.kind==='theme'){previewTheme=it.theme;text='“'+t('theme_'+it.theme)+'” 디자인 미리 보는 중'}
   else if(it.kind==='iconpack'){previewIcon=it.id;text='“'+it.name+'” 그림으로 미리 보는 중 — 그림이 있는 칸(내 루틴, 도장 찍은 칸)에 적용돼요'}
-  else if(it.kind==='stamp'){
-    previewShape='soft';
-    const names=()=>'도장 모양 미리 보는 중: '+SHAPES.find(x=>x[0]===previewShape)[1]+' — 오늘 칸이 도장 찍힌 모습으로 보여요. «다른 모양»을 눌러 하나씩 바꿔 봐요';
-    text=names();
-    alt={label:'다른 모양',run:()=>{const o=['soft','leaf','drop','round'];previewShape=o[(o.indexOf(previewShape)+1)%o.length];$('pvTxt').textContent=names();render()}};
-  }
-  else if(it.kind==='unlock'){previewTheme=UNLOCK_COLOR[it.id]||null;text=it.desc+(previewTheme?' (그 색 미리 보는 중)':'')}
+  else if(it.kind==='unlock'){text=it.desc}
   else{text='도우미 추가 대화권이에요 — 하루 무료 한도를 다 쓴 뒤에만 쓰이고, 대화 한 번에 1개가 쓰여요'}
   $('crDlg').close();
   render();
   showPvBar(it,text,alt);
 }
-function openStickerPreview(it){ // 날짜 칸에 붙은 모습을 보여 주는 견본 달력(저장하지 않음)
+function openStickerPreview(it){ // 팩에 어떤 스티커가 들어 있는지 한눈에 보여 준다(사용자 요청 2026-11-06: 달력 견본이 아니라 팩 구성). 저장하지 않는다
   const pk=STICKER_PACKS[it.id]||{list:[]},hl=it.id==='sticker_highlight';
   $('spTitle').textContent=it.name+' 미리 보기';
-  $('spNote').textContent=hl?'날짜 숫자에 이렇게 꾸밈이 입혀져요.':'달력의 날짜 칸에 이렇게 붙어요. 달력은 누적 60일 또는 60일째 열림 뒤에 열려요.';
-  let h='';
-  for(let d=1;d<=14;d++){
-    const e=pk.list[(d-1)%pk.list.length]||'';
-    const on=d<=pk.list.length||d<=6;
-    h+=`<span class="hd ${on?'on':''}"><span class="dn ${hl&&on?'hl-'+e.slice(3):''}">${d}</span>${!hl&&on?`<span class="stk">${stkFace(e)}</span>`:''}</span>`;
-  }
-  $('spGrid').innerHTML=h;
+  $('spNote').textContent=(hl?'날짜 숫자에 입히는 꾸밈 '+pk.list.length+'가지가 들어 있어요.':'스티커 '+pk.list.length+'개가 들어 있어요.')+' 달력에 붙이는 건 누적 60일 또는 60일째 열림 뒤에 열려요.';
+  $('spGrid').innerHTML=pk.list.map(e=>`<div class="spi">${hl?`<span class="dn hl-${e.slice(3)}">${new Date().getDate()}</span>`:stkFace(e)}${esc(stkName(e))}</div>`).join('');
   $('spBuy').textContent=it.amount.toLocaleString('ko-KR')+'원에 사기';
   $('spBuy').onclick=()=>{$('stkPrevDlg').close();buyCredits(it.id)};
   $('stkPrevDlg').showModal();

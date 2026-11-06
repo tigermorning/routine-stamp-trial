@@ -34,7 +34,13 @@ PRODUCTS = {
 # 일회 구매(영구 소유) 상품. 크레딧(도우미 대화용 소모형)과 화폐를 나눈다: 이 상품은 크레딧을 쓰지 않고 원 단위로 한 번 산다.
 # kind 'theme' 는 화면의 색 테마(id 는 화면 THEMES 의 id), 'quote' 는 서버가 주는 «오늘의 좋은 말».
 ITEMS = {
-    # 디자인 테마: 색뿐 아니라 배경 무늬·카드·버튼 모양까지 바꾸는 테마(화면 index.html 의 THEMES·CSS). 바다·장미는 무료 색 테마로 풀었다(2026-11-04 사용자 결정). 가격은 임시값이다.
+    # 디자인 테마: 색뿐 아니라 배경 무늬·카드·버튼 모양까지 바꾸는 테마(화면 index.html 의 THEMES·CSS). 가격은 임시값이다.
+    # 배경 색(2026-11-06 사용자 결정): 기본·복숭아·바다만 무료이고 나머지 색은 상점에서 산다. 같은 디자인에 색만 바뀐다. 가격은 임시값이다.
+    "theme_peach": {"id": "theme_peach", "kind": "theme", "theme": "peach", "name": "가을낙엽 색", "amount": 1000, "desc": "따뜻한 갈색 계열의 가을낙엽 색으로 화면 색만 바꿔요"},
+    "theme_rose": {"id": "theme_rose", "kind": "theme", "theme": "rose", "name": "장미 색", "amount": 1000, "desc": "은은한 장미빛 분홍으로 화면 색만 바꿔요"},
+    "theme_lime": {"id": "theme_lime", "kind": "theme", "theme": "lime", "name": "라임 색", "amount": 1000, "desc": "산뜻한 라임 연두색으로 화면 색만 바꿔요"},
+    "theme_lavender": {"id": "theme_lavender", "kind": "theme", "theme": "lavender", "name": "라벤더 색", "amount": 1000, "desc": "부드러운 보라빛 라벤더 색으로 화면 색만 바꿔요"},
+    "theme_sunny": {"id": "theme_sunny", "kind": "theme", "theme": "sunny", "name": "햇살 색", "amount": 1000, "desc": "따뜻한 햇살 노랑으로 화면 색만 바꿔요"},
     "theme_notebook": {"id": "theme_notebook", "kind": "theme", "theme": "notebook", "name": "공책 디자인", "amount": 1000, "desc": "줄 공책 종이 느낌으로 배경과 카드, 버튼 모양까지 바꿔요"},
     "theme_retro": {"id": "theme_retro", "kind": "theme", "theme": "retro", "name": "레트로 디자인", "amount": 1000, "desc": "도트 배경과 굵은 테두리의 옛날 게임 느낌으로 바꿔요"},
     "theme_cloud": {"id": "theme_cloud", "kind": "theme", "theme": "cloud", "name": "구름 디자인", "amount": 1000, "desc": "하늘빛 그라데이션과 말랑한 유리 카드 느낌으로 바꿔요"},
@@ -43,7 +49,6 @@ ITEMS = {
     "daily_quote": {"id": "daily_quote", "kind": "quote", "name": "오늘의 한마디", "amount": 1000, "desc": "실제 격언과 속담을 포춘쿠키로 뽑아 봐요"},
     # kind 'feature'/'stamp' 는 화면에서만 열리고 닫히는 기능이다(데이터가 이 브라우저에 있어 서버가 막을 것이 없다)
     "history_view": {"id": "history_view", "kind": "feature", "name": "지난 기록 돌아보기", "amount": 1000, "desc": "지난 달의 도장을 달력으로 돌아봐요"},
-    "stamp_shapes": {"id": "stamp_shapes", "kind": "stamp", "name": "도장 모양 바꾸기", "amount": 1000, "desc": "동그라미 말고 네 가지 모양 중에 골라요"},
     # 스티커 팩(2026-11-04): 누적 60일에 열리는 달력의 날짜 칸에 붙이는 스티커. 그림 목록은 화면 index.html 의 STICKER_PACKS 에 있고(id 가 같아야 함, 시험이 확인),
     # 서버는 상품·가격·소유만 다룬다. 가격은 임시값이다(근거 없음).
     "sticker_round": {"id": "sticker_round", "kind": "sticker", "name": "동글동글 스티커 팩", "amount": 1000, "desc": "달력 날짜에 붙이는 스티커 6개"},
@@ -58,13 +63,13 @@ ITEMS = {
     "icons_cute": {"id": "icons_cute", "kind": "iconpack", "name": "귀여운 아이콘 팩", "amount": 1000, "desc": "할 일 그림을 표정 있는 귀여운 그림으로 바꿔요"},
     "icons_simple": {"id": "icons_simple", "kind": "iconpack", "name": "심플 선 아이콘 팩", "amount": 1000, "desc": "할 일 그림을 깔끔한 선 그림으로 바꿔요"},
     "icons_pastel": {"id": "icons_pastel", "kind": "iconpack", "name": "파스텔 스티커 아이콘 팩", "amount": 1000, "desc": "할 일 그림을 흰 테두리 파스텔 스티커로 바꿔요"},
-    # 바로 열기(2026-11-04): 칸·색·달력이 열리는 3·28·60일째를 돈으로 먼저 연다. 기능만 열리고 달성 표시(✔)·축하는 실제 일수에만 준다.
+    # 바로 열기(2026-11-04): 기록·칸·달력이 열리는 3·28·60일째를 돈으로 먼저 연다. 기능만 열리고 달성 표시(✔)·축하는 실제 일수에만 준다.
     # 가격은 «열림이 복잡해질수록 조금씩 비싸게, 전체는 개별 합계보다 싸게» 라는 사용자 방향에 맞춘 임시값이다(근거 없음).
     # 5달러 ≈ 6,720원(환율 1,343.93원/달러, open.er-api.com 2026-11-04 조회)을 기준으로 전체를 6,500원으로 잡았다. 화면이 «이전 열림이 열려 있을 때만» 보여 준다(일수는 브라우저에만 있어 서버는 모름).
     "unlock_3": {"id": "unlock_3", "kind": "unlock", "at": 3, "name": "기록 바로 열기", "amount": 1500, "desc": "메모·일기 기록을 바로 열어요. 원래는 도장을 3일 쌓으면 열려요"},
-    "unlock_28": {"id": "unlock_28", "kind": "unlock", "at": 28, "name": "칸 늘리기 + 라벤더 색 바로 열기", "amount": 2500, "desc": "칸을 원하는 만큼 늘릴 수 있고 라벤더 색이 열려요. 원래는 도장을 28일 쌓으면 열려요"},
-    "unlock_60": {"id": "unlock_60", "kind": "unlock", "at": 60, "name": "달력·일정 메모 + 햇살 색 바로 열기", "amount": 3500, "desc": "달력에서 지난 기록과 날짜별 일정 메모를 쓰고 햇살 색이 열려요. 원래는 도장을 60일 쌓으면 열려요"},
-    "unlock_all": {"id": "unlock_all", "kind": "unlock", "at": 0, "name": "모든 단계 한 번에 열기", "amount": 6500, "desc": "기록, 칸 늘리기, 달력·일정 메모와 색 3가지 전부(따로 사는 것보다 1,000원 저렴)"},
+    "unlock_28": {"id": "unlock_28", "kind": "unlock", "at": 28, "name": "칸 늘리기 바로 열기", "amount": 2500, "desc": "칸을 원하는 만큼 늘릴 수 있어요. 원래는 도장을 28일 쌓으면 열려요"},
+    "unlock_60": {"id": "unlock_60", "kind": "unlock", "at": 60, "name": "달력·일정 메모 바로 열기", "amount": 3500, "desc": "달력에서 지난 기록과 날짜별 일정 메모를 써요. 원래는 도장을 60일 쌓으면 열려요"},
+    "unlock_all": {"id": "unlock_all", "kind": "unlock", "at": 0, "name": "모든 단계 한 번에 열기", "amount": 6500, "desc": "기록, 칸 늘리기, 달력·일정 메모 전부(따로 사는 것보다 1,000원 저렴)"},
 }
 
 SCHEMA = """
