@@ -372,7 +372,7 @@ def test_unlock_purchase_grants_ownership_without_credits(env):
 # ---- 스티커 팩: 상품·소유, 화면의 그림 목록과 id 일치 ----
 def test_sticker_packs_are_items_and_match_the_screen_list():
     packs = [i for i in creditlib.ITEMS.values() if i["kind"] == "sticker"]
-    assert len(packs) == 7 and all(i["amount"] > 0 and i["desc"] for i in packs)
+    assert len(packs) == 13 and all(i["amount"] > 0 and i["desc"] for i in packs)
     html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
     block = html[html.index("const STICKER_PACKS={"):html.index("const STICKERS_PER_DAY")]
     for i in packs:
@@ -605,7 +605,7 @@ def test_sticker_pack_sizes_ids_and_symbols():
     block = html[html.index("const STICKER_PACKS={"):html.index("const HL_NAMES")]
     seen = []
     for m in re.finditer(r"(sticker_\w+):\{name:'[^']*',list:\[([^\]]*)\]", block):
-        pid, items = m.group(1), re.findall(r"'([a-z]+:[a-z0-9]+)'", m.group(2))
+        pid, items = m.group(1), re.findall(r"'([a-z]+:[a-z0-9_]+)'", m.group(2))
         assert len(items) >= (12 if pid == "sticker_highlight" else 16), pid
         n = re.search(r"(\d+)(?:개|가지)", creditlib.ITEMS[pid]["desc"])
         if n:
