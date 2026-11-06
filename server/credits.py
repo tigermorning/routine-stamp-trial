@@ -67,7 +67,7 @@ ITEMS = {
     "sticker_felt": {"id": "sticker_felt", "kind": "sticker", "name": "펠트 날씨 스티커 팩", "amount": 2700, "desc": "맑음·비·눈·천둥·무지개·미세먼지 등 바느질한 펠트 공예 느낌의 날씨 16종"},
     "sticker_dday": {"id": "sticker_dday", "kind": "sticker", "name": "D-day 카운터 팩", "amount": 1350, "desc": "D-100·D-30·D-7·D-DAY·D+100·D+365 등 뜯는 달력·풍선·티켓·깃발 카운터 16종"},
     # 일정 모음(2026-11-06 사용자 요청): 피부관리·네일·병원·운동·모임·공부·여행·경조사까지 일상 일정 거의 전부를 한 팩에
-    "sticker_sched": {"id": "sticker_sched", "kind": "sticker", "name": "일정 모음 스티커 팩", "amount": 2700, "desc": "피부관리·네일·미용실·병원·운동 14종·모임·공부·집안일·여행·경조사까지 일상 일정 89종"},
+    "sticker_sched": {"id": "sticker_sched", "kind": "sticker", "name": "펜 일러스트 일정 스티커 팩", "amount": 2700, "desc": "갈색 펜 선과 마커 채색으로 그린 병원·운동·카페·공부·집안일·여행·기념일 등 일정 30종"},
     # 화풍 더 섞기 4종(2026-11-06 사용자 요청): 낙서(삐뚤빼뚤 선), 말랑 3D(광택 입체), 손글씨 레터링(한글), 마커 표시
     "sticker_doodle": {"id": "sticker_doodle", "kind": "sticker", "name": "낙서 스티커 팩", "amount": 2700, "desc": "삐뚤빼뚤 검은 선에 색이 살짝 어긋난 손그림 커피·고양이·자전거 등 16종"},
     "sticker_glossy": {"id": "sticker_glossy", "kind": "sticker", "name": "말랑 3D 스티커 팩", "amount": 4050, "desc": "광택과 그림자가 있는 입체 하트·풍선·도넛·왕관·로켓 등 16종"},
