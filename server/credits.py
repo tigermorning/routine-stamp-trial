@@ -54,7 +54,7 @@ ITEMS = {
     "sticker_round": {"id": "sticker_round", "kind": "sticker", "name": "동글동글 스티커 팩", "amount": 1350, "desc": "달력 날짜에 붙이는 스티커 18개"},
     "sticker_daily": {"id": "sticker_daily", "kind": "sticker", "name": "하루 스티커 팩", "amount": 1350, "desc": "달력 날짜에 붙이는 스티커 18개"},
     "sticker_party": {"id": "sticker_party", "kind": "sticker", "name": "기념일 스티커 팩", "amount": 1350, "desc": "달력 날짜에 붙이는 스티커 18개"},
-    "sticker_life": {"id": "sticker_life", "kind": "sticker", "name": "생활 필수 스티커 팩", "amount": 2700, "desc": "병원·약·택배·은행·빨래·장보기·청소·치과·미용실·주유·분리수거 등 20개"},
+    "sticker_life": {"id": "sticker_life", "kind": "sticker", "name": "색연필 일정 스티커 팩", "amount": 2700, "desc": "색연필로 빗금 칠한 청진기·칫솔·케틀벨·라멘·여권·빨랫줄·고양이 등 일정 30종"},
     "sticker_cafe": {"id": "sticker_cafe", "kind": "sticker", "name": "카페 테마 스티커 팩", "amount": 4050, "desc": "커피·차·음료·빵·디저트·와플·마카롱·카공 등 20개"},
     "sticker_highlight": {"id": "sticker_highlight", "kind": "sticker", "name": "하이라이트 스티커 팩", "amount": 1350, "desc": "날짜에 형광펜(노랑·초록·파랑·분홍)·물결·이중·점선·실선·파선 밑줄과 동그라미·네모·붓 밑줄 12가지를 그려요"},
     "sticker_office": {"id": "sticker_office", "kind": "sticker", "name": "오피스 스티커 팩", "amount": 2700, "desc": "가방·보고서·그래프·서류·클립·프린터·사원증·발표·아이디어 등 20개"},

@@ -7,6 +7,7 @@ const ROOT = path.resolve(__dirname, '../..');
 const PACKS = {
   // 팩 이름: [모듈, 그림 id 접두사, 앱 팩 id, 앱 팩 이름]
   pen: ['./packs/pen', 'pn_', 'sticker_sched', '펜 일러스트'],
+  pencil: ['./packs/pencil', 'cp_', 'sticker_life', '색연필'],
 };
 const [, , cmd, packName, only] = process.argv;
 const def = PACKS[packName];
@@ -41,7 +42,9 @@ svg{${STICKER_CSS}}.b{width:192px;height:192px;background:#fbf8f2;border-radius:
   // 이 팩이 예전에 쓰던 그림(같은 팩 목록에 있던 sv: id)과 이 접두사의 그림을 지운다
   const m = s.match(new RegExp(`\\n  ${packId}:\\{name:'[^']*',list:\\[([^\\]]*)\\]\\},`));
   if (!m) throw new Error('팩 목록 없음: ' + packId);
-  const oldIds = [...m[1].matchAll(/'sv:([a-z0-9_]+)'/g)].map(x => x[1]);
+  // --keep-old: 예전 그림은 남긴다(이미 달력에 붙여 저장한 스티커가 빈칸이 되지 않게). 팩 목록만 바뀐다.
+  const keepOld = process.argv.includes('--keep-old');
+  const oldIds = keepOld ? [] : [...m[1].matchAll(/'sv:([a-z0-9_]+)'/g)].map(x => x[1]).filter(i => !i.startsWith(prefix));
   for (const id of new Set([...oldIds, ...ids])) s = s.replace(new RegExp(`<symbol id="sv-${id}" viewBox="0 0 48 48">[\\s\\S]*?</symbol>`), '');
   const sp = s.indexOf('<svg id="svSprite"');
   const spEnd = s.indexOf('</svg>', sp);
