@@ -35,3 +35,12 @@
   - annthurium/affirmations — MIT, Copyright (c) 2019 Tilde Ann Thurium (https://github.com/annthurium/affirmations)
   - cvcpatton/positive-affirmation-bot — MIT, Copyright (c) 2026 Catherine Patton (https://github.com/cvcpatton/positive-affirmation-bot)
 - MIT License: 이 문장과 이 고지가 모든 사본에 들어 있는 한, 제한 없이 사용·복사·수정·배포할 수 있다. 소프트웨어는 «있는 그대로» 제공되며 보증하지 않는다.
+
+## 스타일 스티커(Iconify 오픈 아이콘 세트에 색·테두리·배경을 입힘)
+- 도트·말랑·연필·파스텔 타일·배지·젤리 팩(`stk/fs`). 그림 내용은 바꾸지 않고 색칠, 흰 테두리, 배경 타일, 그림자만 더했다. 그림 한 개씩의 출처는 `tools/stickers/fs_data.json`.
+  - `mingcute` — MingCute Icon, 만든 곳: MingCute Design (https://github.com/Richard9394/MingCute), 라이선스: Apache 2.0 https://github.com/Richard9394/MingCute/blob/main/LICENSE
+  - `pepicons-pencil` — Pepicons Pencil, 만든 곳: CyCraft (https://github.com/CyCraft/pepicons), 라이선스: CC BY 4.0 https://github.com/CyCraft/pepicons/blob/dev/LICENSE
+  - `pepicons-pop` — Pepicons Pop!, 만든 곳: CyCraft (https://github.com/CyCraft/pepicons), 라이선스: CC BY 4.0 https://github.com/CyCraft/pepicons/blob/dev/LICENSE
+  - `ph` — Phosphor, 만든 곳: Phosphor Icons (https://github.com/phosphor-icons/core), 라이선스: MIT https://github.com/phosphor-icons/core/blob/main/LICENSE
+  - `pixelarticons` — Pixelarticons, 만든 곳: Gerrit Halfmann (https://github.com/halfmage/pixelarticons), 라이선스: MIT https://github.com/halfmage/pixelarticons/blob/master/LICENSE
+  - `solar` — Solar, 만든 곳: 480 Design (https://www.figma.com/community/file/1166831539721848736), 라이선스: CC BY 4.0 https://creativecommons.org/licenses/by/4.0/

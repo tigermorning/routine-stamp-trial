@@ -56,7 +56,7 @@ ITEMS = {
     "sticker_party": {"id": "sticker_party", "kind": "sticker", "name": "기념일·파티 스티커 팩", "amount": 1350, "desc": "생일·결혼식·명절·연말까지 축하하는 날 — 스티커 30개"},
     "sticker_life": {"id": "sticker_life", "kind": "sticker", "name": "운동·활동 스티커 팩", "amount": 2700, "desc": "헬스·러닝·구기 종목·겨울 스포츠까지 몸을 움직이는 날 — 스티커 53개"},
     "sticker_cafe": {"id": "sticker_cafe", "kind": "sticker", "name": "음식·카페 스티커 팩", "amount": 4050, "desc": "밥·면·고기·디저트·커피·술까지 먹고 마시는 하루 — 스티커 57개"},
-    "sticker_highlight": {"id": "sticker_highlight", "kind": "sticker", "name": "하이라이트 스티커 팩", "amount": 1350, "desc": "날짜에 형광펜(노랑·초록·파랑·분홍)·물결·이중·점선·실선·파선 밑줄과 동그라미·네모·붓 밑줄 12가지를 그려요"},
+    "sticker_highlight": {"id": "sticker_highlight", "kind": "sticker", "name": "하이라이트 스티커 팩", "amount": 1350, "desc": "날짜에 형광펜(노랑·초록·파랑·분홍·주황·보라·민트)·굵은 밑줄·줄무늬·물결·이중·점선·실선·파선 밑줄과 동그라미·네모·붓 밑줄 17가지를 그려요"},
     "sticker_office": {"id": "sticker_office", "kind": "sticker", "name": "일·공부 스티커 팩", "amount": 2700, "desc": "출근·회의·보고서·시험·자격증까지 일과 배움 — 스티커 45개"},
     # 새 팩 3종(2026-11-06 사용자 요청: 네이버 캘린더처럼 화풍이 서로 다른 스티커. 네이버 그림은 베끼지 않고 화풍 구성만 참고한 이 앱 전용 그림)
     "sticker_dojang": {"id": "sticker_dojang", "kind": "sticker", "name": "사람들 일상 스티커 팩", "amount": 2700, "desc": "학생·직장인·요리사부터 인사·발표·아이고까지 사람이 사는 모습 — 스티커 46개"},
@@ -89,6 +89,13 @@ ITEMS = {
     "sticker_garden": {"id": "sticker_garden", "kind": "sticker", "name": "정원·반려식물 스티커 팩", "amount": 2700, "desc": "화분·새싹·물주기·텃밭까지 식물 가꾸는 시간 — 스티커 37개"},
     "sticker_photo": {"id": "sticker_photo", "kind": "sticker", "name": "사진·영상·SNS 스티커 팩", "amount": 2700, "desc": "사진·브이로그·라이브·해시태그까지 남기고 나누는 시간 — 스티커 46개"},
     "sticker_cheer": {"id": "sticker_cheer", "kind": "sticker", "name": "응원·스포츠 관람 스티커 팩", "amount": 2700, "desc": "경기장·응원·메달·트로피까지 보고 응원하는 날 — 스티커 40개"},
+    # 스타일 팩(2026-11-09 사용자 요청: 구글 캘린더식 이모지에서 벗어나 팩마다 질감·색감·모양이 다르게): 도트·말랑·연필·파스텔 타일·배지·젤리
+    "st_pixel": {"id": "st_pixel", "kind": "sticker", "name": "도트 일상 스티커 팩", "amount": 2700, "desc": "도트 한 칸 한 칸 찍은 레트로 일상 스티커 — 스티커 32개"},
+    "st_pop": {"id": "st_pop", "kind": "sticker", "name": "말랑 팝 스티커 팩", "amount": 2700, "desc": "통통 튀는 색에 흰 테두리를 두른 말랑한 일상 스티커 — 스티커 25개"},
+    "st_pencil": {"id": "st_pencil", "kind": "sticker", "name": "연필 낙서 스티커 팩", "amount": 2700, "desc": "삐뚤빼뚤 연필선 위에 색 얼룩을 깐 손낙서 일상 — 스티커 25개"},
+    "st_duo": {"id": "st_duo", "kind": "sticker", "name": "파스텔 타일 스티커 팩", "amount": 2700, "desc": "부드러운 파스텔 타일에 두 겹 색으로 칠한 일상 — 스티커 40개"},
+    "st_badge": {"id": "st_badge", "kind": "sticker", "name": "동그라미 배지 스티커 팩", "amount": 2700, "desc": "진한 색 동그라미 배지에 하얀 그림을 박은 일상 — 스티커 36개"},
+    "st_jelly": {"id": "st_jelly", "kind": "sticker", "name": "젤리 글로시 스티커 팩", "amount": 2700, "desc": "반짝 광택이 도는 젤리처럼 볼록한 일상 — 스티커 32개"},
     # 할 일 아이콘 스타일 팩(2026-11-04): 할 일 칸의 그림 25종을 다른 분위기로 바꾼다(그림은 화면 index.html 의 GLYPHS·ICON_PACKS, id 가 같아야 함). 가격은 임시값이다(근거 없음).
     # 메모지(2026-11-06 사용자 결정): 7종 한 묶음 대신 4종씩 두 번들. 예전에 «메모지 7종»(paper_pack)을 산 기록은 DB 에 남고 화면이 옛 7종 소유로 읽는다
     "paper_notes": {"id": "paper_notes", "kind": "paper", "name": "노트 메모지 4종 번들", "amount": 2700, "desc": "기록에 쓰는 줄 노트·모눈·점 격자·그리드 4가지 메모지"},

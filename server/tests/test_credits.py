@@ -372,11 +372,18 @@ def test_unlock_purchase_grants_ownership_without_credits(env):
 # ---- 스티커 팩: 상품·소유, 화면의 그림 목록과 id 일치 ----
 def test_sticker_packs_are_items_and_match_the_screen_list():
     packs = [i for i in creditlib.ITEMS.values() if i["kind"] == "sticker"]
-    assert len(packs) == 35 and all(i["amount"] > 0 and i["desc"] for i in packs)  # 2026-11-09 일상 테마 확장 18 + 새 4, 아이콘 팩 3개를 스티커로 합침(사용자 결정)
+    assert len(packs) == 41 and all(i["amount"] > 0 and i["desc"] for i in packs)  # 2026-11-09 일상 테마 확장 18 + 새 4, 아이콘 팩 3개를 스티커로 합침(사용자 결정)
     html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
     block = html[html.index("const STICKER_PACKS={"):html.index("const STICKERS_PER_DAY")]
     for i in packs:
         assert i["id"] + ":" in block  # 화면 STICKER_PACKS 에 같은 id 의 그림 목록이 있어야 한다
+    import re  # 2026-11-09 사용자 요청: 스티커 팩마다 최소 15개
+    for pid, lst in re.findall(r"\n  (\w+):\{name:'[^']*',list:\[(.*?)\]\}", block, re.S):
+        if pid.startswith(("sticker_", "icons_")):
+            assert len(re.findall(r"'[^']+'", lst)) >= 15, pid
+    root = Path(__file__).resolve().parent.parent.parent
+    for k in re.findall(r"'fs:([a-z0-9_]+)'", block):
+        assert (root / "stk" / "fs" / (k + ".svg")).is_file(), k
 
 
 def test_sticker_purchase_grants_ownership(env):
@@ -609,7 +616,7 @@ def test_sticker_pack_sizes_ids_and_symbols():
     seen = []
     for m in re.finditer(r"(sticker_\w+):\{name:'[^']*',list:\[([^\]]*)\]", block):
         pid, items = m.group(1), re.findall(r"'([a-z]+:[a-z0-9_]+)'", m.group(2))
-        assert len(items) >= (12 if pid == "sticker_highlight" else 16), pid
+        assert len(items) >= (15 if pid == "sticker_highlight" else 16), pid
         n = re.search(r"(\d+)(?:개|가지)", creditlib.ITEMS[pid]["desc"])
         if n:
             assert int(n.group(1)) == len(items), pid  # 상품 설명의 개수 = 화면 목록 개수
