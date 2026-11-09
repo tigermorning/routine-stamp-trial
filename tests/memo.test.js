@@ -204,3 +204,17 @@ test('Iconify 팩(fv:)의 그림 파일·이름·출처가 모두 있고 허용 
     assert.ok(w.eval(`stkFace('fv:${keys[0]}')`).includes('/stk/fv/'));
   } finally { w.close(); }
 });
+
+test('상점 번들 미리 보기 안에서는 그 번들의 메모지 4종만 보이고, «모든 메모지»로 돌아간다', () => {
+  const { w, errors } = open({ days: 30 });
+  try {
+    w.eval("dyDeco=true;dyBundlePv='paper_mood';dyPaperPv='kraft';renderDyDeco()");
+    const names = [...w.document.querySelectorAll('#dyPapers button')].map((b) => b.textContent.replace('🔒 ', ''));
+    assert.deepEqual(names, ['‹ 모든 메모지', '크라프트', '포스트잇', '옥스포드 노트', '수채']);
+    w.eval("dyBundlePv='paper_notes';dyPaperPv='lined';renderDyDeco()");
+    assert.deepEqual([...w.document.querySelectorAll('#dyPapers button')].map((b) => b.textContent.replace('🔒 ', '')), ['‹ 모든 메모지', '줄노트', '모눈', '도트', '큰 모눈']);
+    w.document.querySelector('#dyPapers button').click();
+    assert.equal(w.document.querySelectorAll('#dyPapers button').length, 9);
+    assert.deepEqual(errors, []);
+  } finally { w.close(); }
+});

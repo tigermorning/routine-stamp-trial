@@ -33,7 +33,7 @@
 }
 /* 색 테마(칸이 열릴 때 하나씩 열림). 어두운 시스템 설정보다 뒤에 두어 고른 테마가 이긴다. 글자·강조 명암비는 WCAG 계산으로 확인(2026-10-21) */
 :root[data-theme="peach"]{--bg:#fbf1ea;--card:#ffffff;--ink:#4a3631;--soft:#7d655d;--line:#efd9cc;--accent:#d06a49;--accent-ink:#2b0e05;--shadow:0 6px 18px rgba(190,110,80,.14);--blob1:rgba(208,106,73,.14);--blob2:rgba(255,214,102,.28);color-scheme:light}
-:root[data-theme="peachpink"]{--bg:#fff1ee;--card:#ffffff;--ink:#4d2a31;--soft:#85595f;--line:#f7d4d4;--accent:#de5a72;--accent-ink:#2e0510;--shadow:0 6px 18px rgba(222,90,114,.14);--blob1:rgba(222,90,114,.14);--blob2:rgba(255,200,160,.3);color-scheme:light}
+:root[data-theme="peachpink"]{--bg:#fff6ee;--card:#ffffff;--ink:#4a2e22;--soft:#8a6552;--line:#fbdcc6;--accent:#f7a883;--accent-ink:#3a1a0c;--shadow:0 6px 18px rgba(247,168,131,.2);--blob1:rgba(247,168,131,.16);--blob2:rgba(255,222,180,.34);color-scheme:light} /* 복숭아: 장미(분홍)와 구별되게 연한 파스텔 살구빛(사용자 2026-11-09) */
 :root[data-theme="lavender"]{--bg:#f3f0fa;--card:#ffffff;--ink:#3a3350;--soft:#6f668c;--line:#dfd8f0;--accent:#8670d2;--accent-ink:#0d0620;--shadow:0 6px 18px rgba(120,100,190,.14);--blob1:rgba(134,112,210,.16);--blob2:rgba(255,214,102,.2);color-scheme:light}
 :root[data-theme="sunny"]{--bg:#fff7df;--card:#ffffff;--ink:#4a3f1f;--soft:#75683f;--line:#f0e2b8;--accent:#b98400;--accent-ink:#241a00;--shadow:0 6px 18px rgba(190,150,40,.15);--blob1:rgba(185,132,0,.14);--blob2:rgba(255,150,100,.14);color-scheme:light}
 :root[data-theme="ocean"]{--bg:#eaf4fb;--card:#ffffff;--ink:#1f3a4d;--soft:#5a7a8f;--line:#cfe3f1;--accent:#2f8fcf;--accent-ink:#04243a;--shadow:0 6px 18px rgba(47,143,207,.14);--blob1:rgba(47,143,207,.14);--blob2:rgba(120,210,230,.22);color-scheme:light}
@@ -82,7 +82,7 @@ h2{font-family:var(--display);font-weight:400;font-size:19px;margin:0}
 .sw{width:14px;height:14px;border-radius:50%;border:1px solid var(--line);flex:none}
 .sw-base{background:linear-gradient(135deg,#f2f7f5 50%,#3fb8a5 50%)}
 .sw-peach{background:linear-gradient(135deg,#fbf1ea 50%,#d06a49 50%)}
-.sw-peachpink{background:linear-gradient(135deg,#fff1ee 50%,#de5a72 50%)}
+.sw-peachpink{background:linear-gradient(135deg,#fff6ee 50%,#f7a883 50%)}
 .sw-lavender{background:linear-gradient(135deg,#f3f0fa 50%,#8670d2 50%)}
 .sw-sunny{background:linear-gradient(135deg,#fff7df 50%,#b98400 50%)}
 .sw-lime{background:linear-gradient(135deg,#f8fae0 50%,#9dc21c 50%)}
@@ -2373,13 +2373,13 @@ const dyFmt=(ds,o)=>new Intl.DateTimeFormat(LOCALE[lang],o).format(new Date(ds+'
 function dySet(ds,v){if(!S.diary)S.diary={};if(v.trim())S.diary[ds]=v.slice(0,2000);else delete S.diary[ds];save()}
 const PAPERS=[{id:'plain',name:'기본'},{id:'lined',name:'줄노트'},{id:'grid',name:'모눈'},{id:'dot',name:'도트'},{id:'biggrid',name:'큰 모눈'},{id:'kraft',name:'크라프트'},{id:'sticky',name:'포스트잇'},{id:'oxford',name:'옥스포드 노트'},{id:'wash',name:'수채'}]; // plain 말고는 상점 메모지 번들 두 개(4종씩, 사용자 결정 2026-11-06)
 const PAPER_BUNDLES={paper_notes:['lined','grid','dot','biggrid'],paper_mood:['kraft','sticky','oxford','wash'],paper_pack:['lined','grid','dot','biggrid','kraft','sticky','oxford']}; // paper_pack 은 예전 «메모지 7종» 구매 기록(산 사람은 그 7종을 그대로 쓴다)
-const PAPER_BUNDLE_NAME={paper_notes:'노트 메모지 4종 번들',paper_mood:'감성 메모지 4종 번들'};
+const PAPER_BUNDLE_NAME={paper_notes:'줄·격자 노트 4종 번들',paper_mood:'감성 종이 4종 번들'}; // 두 번들이 구별되게: 노트=선·격자가 그려진 노트, 감성=종이 느낌·분위기(사용자 2026-11-09)
 const ownsPaper=id=>id==='plain'||Object.keys(PAPER_BUNDLES).some(b=>OWNED.has(b)&&PAPER_BUNDLES[b].includes(id));
 const bundleOfPaper=id=>Object.keys(PAPER_BUNDLE_NAME).find(b=>PAPER_BUNDLES[b].includes(id));
 let SHOP_CACHE=null; // 서버 상품표(가격 정본). 가격은 1·2·3달러 세 가격대(1달러≈1,344원을 올림해 1,350원, 사용자 결정 2026-11-06)
 async function ensureShopCache(){if(SHOP_CACHE)return;try{const r=await fetch('/api/shop',{headers:{'X-Client-Id':clientId()},cache:'no-store'});if(r.ok){const j=await r.json();SHOP_CACHE=Object.fromEntries(j.items.map(i=>[i.id,i]))}}catch(e){}}
 const priceTxt=id=>SHOP_CACHE&&SHOP_CACHE[id]?SHOP_CACHE[id].amount.toLocaleString('ko-KR')+'원':'';
-let dyDeco=false,dyPaperPv=null,dySel=-1;
+let dyDeco=false,dyPaperPv=null,dyBundlePv=null,dySel=-1; // dyBundlePv: 상점에서 «미리 보기»로 들어온 번들(그 번들의 메모지만 보여 준다)
 const dyPaper=()=>dyPaperPv||(ownsPaper(S.dyPaper)&&PAPERS.some(x=>x.id===S.dyPaper)?S.dyPaper:'plain');
 /* 메모지 배경색(2026-11-09 사용자 요청): 모든 속지에서 무료. 고른 색은 S.dyBg(#rrggbb), 없으면 속지마다 정해 둔 색. 어두운 색이면 글자를 밝게 바꾼다 */
 const DY_BG=[['#fffdf6','크림'],['#fff3a0','레몬'],['#ffe3e8','분홍'],['#ffe7d1','살구'],['#e4f7e1','연두'],['#d9f2ee','민트'],['#dbeeff','하늘'],['#e9e0ff','연보라'],['#f0f0f0','연회색'],['#ffffff','흰색'],['#d6b88c','크라프트'],['#39404f','밤색 남']];
@@ -2503,7 +2503,11 @@ function dyStickers(area,ds){ // 붙인 스티커를 글 칸 위에 올린다: �
 function renderDyDeco(){
   const panel=$('dyDeco');panel.hidden=!dyDeco;$('dyDecoBtn').setAttribute('aria-expanded',String(dyDeco));if(!dyDeco)return;
   const pp=$('dyPapers');pp.textContent='';
-  PAPERS.forEach(p=>{
+  if(dyBundlePv&&PAPER_BUNDLES[dyBundlePv]){ // 번들 안: 그 번들의 메모지만 보인다
+    const back=document.createElement('button');back.type='button';back.className='btn';back.textContent='‹ 모든 메모지';back.onclick=()=>{dyBundlePv=null;dyPaperPv=null;renderDiary()};pp.appendChild(back);
+    const cap=document.createElement('span');cap.className='stat';cap.style.cssText='flex-basis:100%;margin:2px 0';cap.textContent='«'+(PAPER_BUNDLE_NAME[dyBundlePv]||'')+'»에 들어 있는 메모지예요.';pp.appendChild(cap);
+  }
+  PAPERS.filter(p=>!(dyBundlePv&&PAPER_BUNDLES[dyBundlePv])||PAPER_BUNDLES[dyBundlePv].includes(p.id)).forEach(p=>{
     const b=document.createElement('button');b.type='button';b.className='btn';b.setAttribute('aria-pressed',String(dyPaper()===p.id));
     b.textContent=(ownsPaper(p.id)?'':'🔒 ')+p.name;
     b.onclick=()=>{if(ownsPaper(p.id)){dyPaperPv=null;S.dyPaper=p.id;save()}else dyPaperPv=p.id;renderDiary()};
@@ -2556,10 +2560,10 @@ function renderDiary(){
   renderDyHl();
   renderDyDeco();
 }
-function openDiary(opt){dyDate=todayStr;dyMode='day';dySel=-1;dyPaperPv=null;dyDeco=!!(opt&&opt.deco);renderDiary();if(!$('diaryDlg').open)$('diaryDlg').showModal();loadCredits()} // 열 때 소유를 한 번 더 읽어, 방금 산 «기록 바로 열기»가 바로 반영되게 한다
+function openDiary(opt){dyDate=todayStr;dyMode='day';dySel=-1;dyPaperPv=null;dyBundlePv=null;dyDeco=!!(opt&&opt.deco);renderDiary();if(!$('diaryDlg').open)$('diaryDlg').showModal();loadCredits()} // 열 때 소유를 한 번 더 읽어, 방금 산 «기록 바로 열기»가 바로 반영되게 한다
 $('diaryBtn').onclick=openDiary;
 $('dyClose').onclick=()=>$('diaryDlg').close();
-$('dyDecoBtn').onclick=()=>{dyDeco=!dyDeco;dyPaperPv=null;renderDiary()};
+$('dyDecoBtn').onclick=()=>{dyDeco=!dyDeco;dyPaperPv=null;dyBundlePv=null;renderDiary()};
 $('dyToday').onclick=()=>{dyDate=todayStr;renderDiary()};
 document.querySelectorAll('#diaryDlg .dytabs .btn').forEach(b=>b.onclick=()=>{dyMode=b.dataset.m;dySel=-1;renderDiary()});
 const dyStep=k=>{const d=new Date(dyDate+'T00:00');if(dyMode==='day')d.setDate(d.getDate()+k);else if(dyMode==='week')d.setDate(d.getDate()+7*k);else d.setFullYear(d.getFullYear()+k);dyDate=fmt(d);dySel=-1;renderDiary()};
@@ -3296,7 +3300,7 @@ function showPvBar(it,text,alt){ // 미리 보기 중에는 화면 아래 막대
 function previewItem(it){
   endPreview(true);
   if(it.kind==='sticker'){$('crDlg').close();openStickerPreview(it);return}
-  if(it.kind==='paper'){$('crDlg').close();openDiary({deco:true});dyPaperPv=(PAPER_BUNDLES[it.id]||['lined'])[0];renderDiary();return}
+  if(it.kind==='paper'){$('crDlg').close();openDiary({deco:true});dyBundlePv=PAPER_BUNDLES[it.id]?it.id:null;dyPaperPv=(PAPER_BUNDLES[it.id]||['lined'])[0];renderDiary();return}
   if(it.id==='history_view'){$('crDlg').close();openHist();return} // 달력이 열린다(닫으면 상점으로 돌아가지 않음)
   if(it.kind==='unlock'&&(it.at===NOTES_AT||it.id==='unlock_all')){$('crDlg').close();openHist({demo:it});return} // 달력·일정 메모가 열리는 상품: 사기 전에도 샘플 일정이 달력에 보인다(저장하지 않음)
   if(it.id==='daily_quote'){$('crDlg').close();openCookie(true,it);return} // 실제 격언 하나를 포춘쿠키로 미리 뽑아 본다
