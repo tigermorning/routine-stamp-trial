@@ -9,3 +9,10 @@ __pycache__/
 server/data/
 
 tools/stickers/out/
+
+# Main Quest 08: 대화 내용이 든 파일은 올리지 않는다(과제 지시). 지어낸 대화지만 같은 규칙으로 둔다
+server/evals/quest08/run_*.json
+server/evals/quest08/replay_*.json
+server/evals/quest08/compare*.json
+server/evals/quest08/dataset.json
+server/evals/quest08/versions.json
