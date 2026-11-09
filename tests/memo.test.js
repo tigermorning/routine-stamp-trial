@@ -94,26 +94,35 @@ test('메모지 속지 4종은 새 이름이고 기본이 아닌 속지에는 �
   } finally { w.close(); }
 });
 
-test('스티커 분류: 일정 30종은 주제로, 나머지는 팩으로 나뉜다', () => {
+test('스티커 탭: 산 팩 하나가 탭 하나이고 전체가 맨 앞이다', () => {
   const { w } = open();
   try {
-    const f = (e) => w.eval(`stkCat(${JSON.stringify(e)})`);
-    assert.equal(f('sv:pn_gym'), 'health');
-    assert.equal(f('sv:cp_hospital'), 'schedule');
-    assert.equal(f('sv:wc_study'), 'study');
-    assert.equal(f('sv:wc_rest'), 'daily');
-    assert.equal(f('sv:fw_rain'), 'weather');
-    assert.equal(f('hl:marker'), 'deco');
+    const r = w.eval(`(()=>{OWNED.add('sticker_sched');OWNED.add('sticker_life');const box=document.createElement('div');const pool=ownedStickers();stkTab='all';stkTabsDraw(box,pool,()=>{});return {tabs:[...box.querySelectorAll('button')].map(b=>b.textContent),hidden:box.hidden,inSched:stkIn('fx:hospital','sticker_sched'),inLife:stkIn('fx:hospital','sticker_life'),all:stkIn('fx:hospital','all')}})()`);
+    assert.deepEqual([...r.tabs], ['전체', '건강·병원', '운동·활동']);
+    assert.equal(r.hidden, false);
+    assert.equal(r.inSched, true);
+    assert.equal(r.inLife, false);
+    assert.equal(r.all, true);
   } finally { w.close(); }
 });
 
-test('모든 스티커가 분류에 들어간다(빠진 주제 없음)', () => {
+test('산 팩이 하나뿐이면 탭 줄을 숨긴다', () => {
   const { w } = open();
   try {
-    const bad = w.eval(`Object.values(STICKER_PACKS).flatMap(p=>p.list).filter(e=>!['daily','schedule','health','study','weather','deco'].includes(stkCat(e)))`);
-    assert.deepEqual([...bad], []);
-    const topics = w.eval("STICKER_PACKS.sticker_sched.list.map(e=>e.replace(/^sv:pn_/,''))");
-    const missing = [...topics].filter((t) => !w.eval(`TOPIC_CAT[${JSON.stringify(t)}]`));
-    assert.deepEqual(missing, [], '일정 주제 분류 누락');
+    const hidden = w.eval(`(()=>{OWNED.add('sticker_sched');const box=document.createElement('div');stkTab='all';stkTabsDraw(box,ownedStickers(),()=>{});return box.hidden})()`);
+    assert.equal(hidden, true);
+  } finally { w.close(); }
+});
+
+test('외부 일러스트 팩의 그림 파일과 이름이 모두 있다', () => {
+  const { w } = open();
+  try {
+    const keys = [...w.eval(`Object.values(STICKER_PACKS).flatMap(p=>p.list).filter(e=>e.startsWith('fx:')).map(e=>e.slice(3))`)];
+    assert.ok(keys.length >= 600, '그림 수 ' + keys.length);
+    const missing = keys.filter((k) => !fs.existsSync(path.join(__dirname, '..', 'stk', 'fx', k + '.png')));
+    assert.deepEqual(missing, [], '그림 파일 없음');
+    const noName = keys.filter((k) => !w.eval(`!!FX_NAMES[${JSON.stringify(k)}]`));
+    assert.deepEqual(noName, [], '한글 이름 없음');
+    assert.equal(new Set(keys).size, keys.length, '팩끼리 같은 그림이 겹침');
   } finally { w.close(); }
 });

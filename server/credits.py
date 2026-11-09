@@ -51,28 +51,33 @@ ITEMS = {
     "history_view": {"id": "history_view", "kind": "feature", "name": "지난 기록 돌아보기", "amount": 1350, "desc": "지난 달의 도장을 달력으로 돌아봐요"},
     # 스티커 팩(2026-11-04): 누적 60일에 열리는 달력의 날짜 칸에 붙이는 스티커. 그림 목록은 화면 index.html 의 STICKER_PACKS 에 있고(id 가 같아야 함, 시험이 확인),
     # 서버는 상품·가격·소유만 다룬다. 가격은 임시값이다(근거 없음).
-    "sticker_round": {"id": "sticker_round", "kind": "sticker", "name": "동글동글 스티커 팩", "amount": 1350, "desc": "달력 날짜에 붙이는 스티커 18개"},
-    "sticker_daily": {"id": "sticker_daily", "kind": "sticker", "name": "수채 일정 스티커 팩", "amount": 1350, "desc": "물감이 번지는 수채로 그린 링거·연꽃·수영장·금붕어 어항·해변 노을·해먹 등 일정 30종"},
-    "sticker_party": {"id": "sticker_party", "kind": "sticker", "name": "기념일 스티커 팩", "amount": 1350, "desc": "달력 날짜에 붙이는 스티커 18개"},
-    "sticker_life": {"id": "sticker_life", "kind": "sticker", "name": "색연필 일정 스티커 팩", "amount": 2700, "desc": "색연필로 빗금 칠한 청진기·칫솔·케틀벨·라멘·여권·빨랫줄·고양이 등 일정 30종"},
-    "sticker_cafe": {"id": "sticker_cafe", "kind": "sticker", "name": "카페 테마 스티커 팩", "amount": 4050, "desc": "커피·차·음료·빵·디저트·와플·마카롱·카공 등 20개"},
+    "sticker_round": {"id": "sticker_round", "kind": "sticker", "name": "동물·반려 스티커 팩", "amount": 1350, "desc": "강아지·고양이부터 동물원·바다 친구들까지 — 스티커 53개"},
+    "sticker_daily": {"id": "sticker_daily", "kind": "sticker", "name": "집안일·생활 스티커 팩", "amount": 1350, "desc": "청소·빨래·택배·은행 업무까지 살림과 생활 처리 — 스티커 30개"},
+    "sticker_party": {"id": "sticker_party", "kind": "sticker", "name": "기념일·파티 스티커 팩", "amount": 1350, "desc": "생일·결혼식·명절·연말까지 축하하는 날 — 스티커 30개"},
+    "sticker_life": {"id": "sticker_life", "kind": "sticker", "name": "운동·활동 스티커 팩", "amount": 2700, "desc": "헬스·러닝·구기 종목·겨울 스포츠까지 몸을 움직이는 날 — 스티커 53개"},
+    "sticker_cafe": {"id": "sticker_cafe", "kind": "sticker", "name": "음식·카페 스티커 팩", "amount": 4050, "desc": "밥·면·고기·디저트·커피·술까지 먹고 마시는 하루 — 스티커 57개"},
     "sticker_highlight": {"id": "sticker_highlight", "kind": "sticker", "name": "하이라이트 스티커 팩", "amount": 1350, "desc": "날짜에 형광펜(노랑·초록·파랑·분홍)·물결·이중·점선·실선·파선 밑줄과 동그라미·네모·붓 밑줄 12가지를 그려요"},
-    "sticker_office": {"id": "sticker_office", "kind": "sticker", "name": "오피스 스티커 팩", "amount": 2700, "desc": "가방·보고서·그래프·서류·클립·프린터·사원증·발표·아이디어 등 20개"},
+    "sticker_office": {"id": "sticker_office", "kind": "sticker", "name": "일·공부 스티커 팩", "amount": 2700, "desc": "출근·회의·보고서·시험·자격증까지 일과 배움 — 스티커 45개"},
     # 새 팩 3종(2026-11-06 사용자 요청: 네이버 캘린더처럼 화풍이 서로 다른 스티커. 네이버 그림은 베끼지 않고 화풍 구성만 참고한 이 앱 전용 그림)
-    "sticker_dojang": {"id": "sticker_dojang", "kind": "sticker", "name": "도장이 스티커 팩", "amount": 2700, "desc": "도장이 캐릭터의 기쁨·사랑·졸림·파이팅·공부·운동 등 16가지 표정과 상황"},
+    "sticker_dojang": {"id": "sticker_dojang", "kind": "sticker", "name": "사람들 일상 스티커 팩", "amount": 2700, "desc": "학생·직장인·요리사부터 인사·발표·아이고까지 사람이 사는 모습 — 스티커 46개"},
     "sticker_seal": {"id": "sticker_seal", "kind": "sticker", "name": "참 잘했어요 도장 팩", "amount": 1350, "desc": "참 잘했어요·최고예요·100점·해냈다 등 잉크 도장 16종"},
     "sticker_washi": {"id": "sticker_washi", "kind": "sticker", "name": "마스킹테이프 팩", "amount": 2700, "desc": "줄무늬·깅엄·별·하트·무지개 등 다이어리 꾸미기 테이프 16종"},
     # 감정·날씨·D-day 팩(2026-11-06 사용자 요청): 과일 캐릭터 감정, 펠트 바느질 날씨, 뜯는 달력·풍선·티켓·깃발 카운터
-    "sticker_fruit": {"id": "sticker_fruit", "kind": "sticker", "name": "과일 감정 스티커 팩", "amount": 2700, "desc": "수박은 신남, 레몬은 시큼, 블루베리는 우울처럼 감정을 과일 캐릭터로 담은 16가지"},
-    "sticker_felt": {"id": "sticker_felt", "kind": "sticker", "name": "펠트 날씨 스티커 팩", "amount": 2700, "desc": "맑음·비·눈·천둥·무지개·미세먼지 등 바느질한 펠트 공예 느낌의 날씨 16종"},
+    "sticker_fruit": {"id": "sticker_fruit", "kind": "sticker", "name": "기분·마음 스티커 팩", "amount": 2700, "desc": "기쁨·설렘·피곤·불안·분노까지 오늘의 기분 — 스티커 44개"},
+    "sticker_felt": {"id": "sticker_felt", "kind": "sticker", "name": "날씨·계절 스티커 팩", "amount": 2700, "desc": "맑음·비·눈·미세먼지부터 봄 벚꽃·가을 단풍까지 — 스티커 36개"},
     "sticker_dday": {"id": "sticker_dday", "kind": "sticker", "name": "D-day 카운터 팩", "amount": 1350, "desc": "D-100·D-30·D-7·D-DAY·D+100·D+365 등 뜯는 달력·풍선·티켓·깃발 카운터 16종"},
     # 일정 모음(2026-11-06 사용자 요청): 피부관리·네일·병원·운동·모임·공부·여행·경조사까지 일상 일정 거의 전부를 한 팩에
-    "sticker_sched": {"id": "sticker_sched", "kind": "sticker", "name": "펜 일러스트 일정 스티커 팩", "amount": 2700, "desc": "갈색 펜 선과 마커 채색으로 그린 병원·운동·카페·공부·집안일·여행·기념일 등 일정 30종"},
+    "sticker_sched": {"id": "sticker_sched", "kind": "sticker", "name": "건강·병원 스티커 팩", "amount": 2700, "desc": "병원·약·검사·몸 관리까지 건강과 관련된 하루 — 스티커 30개"},
     # 화풍 더 섞기 4종(2026-11-06 사용자 요청): 낙서(삐뚤빼뚤 선), 말랑 3D(광택 입체), 손글씨 레터링(한글), 마커 표시
-    "sticker_doodle": {"id": "sticker_doodle", "kind": "sticker", "name": "낙서 스티커 팩", "amount": 2700, "desc": "삐뚤빼뚤 검은 선에 색이 살짝 어긋난 손그림 커피·고양이·자전거 등 16종"},
-    "sticker_glossy": {"id": "sticker_glossy", "kind": "sticker", "name": "말랑 3D 스티커 팩", "amount": 4050, "desc": "광택과 그림자가 있는 입체 하트·풍선·도넛·왕관·로켓 등 16종"},
+    "sticker_doodle": {"id": "sticker_doodle", "kind": "sticker", "name": "여행·이동 스티커 팩", "amount": 2700, "desc": "비행기·기차·캠핑·드라이브까지 떠나고 오가는 날 — 스티커 47개"},
+    "sticker_glossy": {"id": "sticker_glossy", "kind": "sticker", "name": "취미·여가 스티커 팩", "amount": 4050, "desc": "영화·게임·음악·그림·뜨개질까지 혼자서도 함께도 즐기는 시간 — 스티커 49개"},
     "sticker_letter": {"id": "sticker_letter", "kind": "sticker", "name": "손글씨 레터링 스티커 팩", "amount": 1350, "desc": "해냈다·파이팅·고마워·수고했어·힘내 등 한글 글자 스티커 16종"},
     "sticker_marker": {"id": "sticker_marker", "kind": "sticker", "name": "마커 표시 스티커 팩", "amount": 1350, "desc": "동그라미·체크·화살표·물결 밑줄·형광 박스 등 마커로 그은 표시 16종"},
+    # 일상 테마 확장(2026-11-09 사용자 요청): 쇼핑·미용·만남·식물 팩
+    "sticker_money": {"id": "sticker_money", "kind": "sticker", "name": "쇼핑·돈 스티커 팩", "amount": 2700, "desc": "장보기·온라인 쇼핑·저축·투자까지 돈과 소비 — 스티커 31개"},
+    "sticker_beauty": {"id": "sticker_beauty", "kind": "sticker", "name": "미용·패션 스티커 팩", "amount": 2700, "desc": "미용실·네일·스킨케어·옷 입기까지 가꾸는 시간 — 스티커 46개"},
+    "sticker_love": {"id": "sticker_love", "kind": "sticker", "name": "만남·사랑 스티커 팩", "amount": 2700, "desc": "친구·가족·연인과 만나고 마음을 나누는 날 — 스티커 47개"},
+    "sticker_plant": {"id": "sticker_plant", "kind": "sticker", "name": "식물·자연 스티커 팩", "amount": 1350, "desc": "새싹·화분·꽃·나무·산책길까지 초록과 자연 — 스티커 45개"},
     # 할 일 아이콘 스타일 팩(2026-11-04): 할 일 칸의 그림 25종을 다른 분위기로 바꾼다(그림은 화면 index.html 의 GLYPHS·ICON_PACKS, id 가 같아야 함). 가격은 임시값이다(근거 없음).
     # 메모지(2026-11-06 사용자 결정): 7종 한 묶음 대신 4종씩 두 번들. 예전에 «메모지 7종»(paper_pack)을 산 기록은 DB 에 남고 화면이 옛 7종 소유로 읽는다
     "paper_notes": {"id": "paper_notes", "kind": "paper", "name": "노트 메모지 4종 번들", "amount": 2700, "desc": "기록에 쓰는 줄 노트·모눈·점 격자·그리드 4가지 메모지"},

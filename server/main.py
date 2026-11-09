@@ -58,6 +58,23 @@ logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
 log = logging.getLogger("coach")
 
 app = FastAPI(title="루틴 도장")
+
+# 스티커 그림(stk/fx/*.png, Microsoft Fluent Emoji 3D, MIT)을 내보낸다. 파일 이름이 그림 이름이라 하루 동안 브라우저가 기억하게 한다.
+
+from fastapi.staticfiles import StaticFiles  # noqa: E402
+
+
+class CachedStatic(StaticFiles):
+    async def get_response(self, path, scope):
+        resp = await super().get_response(path, scope)
+        if resp.status_code == 200:
+            resp.headers["Cache-Control"] = "public, max-age=86400"
+        return resp
+
+
+STK_DIR = Path(__file__).resolve().parent.parent / "stk"
+if STK_DIR.is_dir():
+    app.mount("/stk", CachedStatic(directory=str(STK_DIR)), name="stk")
 BYOK_MODE = byok.parse_mode(os.environ.get("BYOK_MODE"))  # optional(기본) | required
 PROVIDER = os.environ.get("LLM_PROVIDER", "fake").strip().lower()
 _operator_key = os.environ.get("LLM_API_KEY", "").strip()

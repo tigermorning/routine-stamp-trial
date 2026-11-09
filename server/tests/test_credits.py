@@ -372,7 +372,7 @@ def test_unlock_purchase_grants_ownership_without_credits(env):
 # ---- 스티커 팩: 상품·소유, 화면의 그림 목록과 id 일치 ----
 def test_sticker_packs_are_items_and_match_the_screen_list():
     packs = [i for i in creditlib.ITEMS.values() if i["kind"] == "sticker"]
-    assert len(packs) == 18 and all(i["amount"] > 0 and i["desc"] for i in packs)
+    assert len(packs) == 22 and all(i["amount"] > 0 and i["desc"] for i in packs)  # 2026-11-09 일상 테마 확장: 18 + 새 4
     html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
     block = html[html.index("const STICKER_PACKS={"):html.index("const STICKERS_PER_DAY")]
     for i in packs:
@@ -615,6 +615,10 @@ def test_sticker_pack_sizes_ids_and_symbols():
     for s in seen:
         if s.startswith("sv:"):
             assert f'<symbol id="sv-{s[3:]}"' in html and f'"{s[3:]}":' in html  # 그림과 이름이 있어야 한다
+        elif s.startswith("fx:"):  # 외부 일러스트(Fluent Emoji 3D, MIT): 그림 파일과 한글 이름이 있어야 한다
+            png = Path(__file__).resolve().parent.parent.parent / "stk" / "fx" / f"{s[3:]}.png"
+            assert png.exists() and png.stat().st_size > 500, s
+            assert f'"{s[3:]}":' in html, s
         elif s.startswith("ig:"):  # 아이콘 팩 글리프(2026-11-06 아이콘·스티커 통합): 스타일과 글리프 키가 화면에 있어야 한다
             style, key = s[3:].split("_")
             assert style in ("cute", "simple", "pastel") and f"\n{key}:{{p:" in html, s
