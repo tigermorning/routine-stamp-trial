@@ -9,6 +9,7 @@
 import inspect
 import logging
 import os
+import time
 import re
 from datetime import datetime, timezone
 
@@ -130,9 +131,18 @@ def start_turn(byok=False):
 
 
 def flush(turn):
-    """Cloud Run 은 응답이 끝나면 CPU 를 줄이므로 기록을 모아 두었다 보내는 SDK 가 못 보낼 수 있다. 턴이 끝날 때 바로 보낸다."""
+    """Cloud Run 은 응답이 끝나면 CPU 를 줄이므로 기록을 모아 두었다 보내는 SDK 가 못 보낼 수 있다. 턴이 끝날 때 바로 보낸다.
+    진단(2026-11-09, 배포한 서버에서 45턴 중 24개만 Langfuse 에 보인 원인을 찾으려고): 보내는 데 걸린 시간과 «시간 안에 다 보냈는지»(provider_ok)를
+    트레이스 번호와 함께 로그에 남긴다. 원문·키는 남기지 않는다. provider_ok=False 면 시간 안에 못 보낸 것이다."""
     if turn.client is not None:
+        t0 = time.monotonic()
+        ok = None
         try:
+            provider = getattr(getattr(turn.client, "_resources", None), "tracer_provider", None)
+            force = getattr(provider, "force_flush", None)
+            if callable(force):
+                ok = force(timeout_millis=15000)
             turn.client.flush()
         except Exception as error:
             log.warning("tracing flush failed: %s", type(error).__name__)
+        log.info("tracing flush trace=%s provider_ok=%s ms=%d", getattr(turn.raw, "trace_id", None), ok, int((time.monotonic() - t0) * 1000))
