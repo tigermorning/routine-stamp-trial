@@ -263,6 +263,10 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 .rm-body b{font-size:15px}
 .rm-body small{display:block;color:var(--soft);font-size:13px;line-height:1.45}
 .rm-tag{display:inline-block;margin-left:6px;padding:0 8px;border-radius:999px;border:1px solid var(--line);font-size:11px;color:var(--soft);vertical-align:1px}
+.rm-tag.ok{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}.rm-tag.now{border-color:var(--accent);color:var(--ink);font-weight:700}
+.rm-body small.rm-goal{color:var(--ink);font-weight:700;margin-top:3px}.rm-body small.rm-rew{margin-top:2px}.rm-body small.rm-why{margin-top:4px;padding:5px 8px;border-radius:8px;background:var(--line);color:var(--ink)}.rm-cnt b{color:var(--ink)}
+.rm-node.next .rm-body{padding:8px 10px;margin:-4px 0 0;border:2px solid var(--accent);border-radius:12px;background:var(--card)}.rm-node.next .rm-bar{height:12px}
+.rm-soonbox{margin-top:4px;padding:10px 12px;border:2px dashed var(--line);border-radius:12px}.rm-soonbox small{display:block;color:var(--soft);font-size:13px;line-height:1.45;margin-top:3px}.rm-soonbox ul{margin:6px 0 0;padding-left:18px;font-size:13px;color:var(--soft)}.rm-soonbox li{margin:2px 0}.rm-soonbox li b{color:var(--ink)}
 .rm-bar{height:8px;border-radius:999px;background:var(--line);margin-top:6px;overflow:hidden}
 .rm-bar i{display:block;height:100%;background:var(--accent)}
 .rmhd{margin:14px 0 4px;font-size:15px}
@@ -486,7 +490,7 @@ mark.mh-yellow,.mhb.mh-yellow{--mh:rgba(254,240,138,.7)}mark.mh-pink,.mhb.mh-pin
     <button class="btn main" id="hintOk" type="button"></button>
   </section>
 
-  <section class="card roadstrip" id="roadStrip" aria-label="로드맵"></section>
+  <section class="card roadstrip" id="roadStrip" aria-label="퀘스트"></section>
 
   <section class="card" id="today"></section>
 
@@ -676,7 +680,7 @@ mark.mh-yellow,.mhb.mh-yellow{--mh:rgba(254,240,138,.7)}mark.mh-pink,.mhb.mh-pin
 <div id="pvBar" hidden role="status"><span id="pvTxt"></span><button class="btn" id="pvAlt" type="button" hidden></button><button class="btn main" id="pvBuy" type="button"></button><button class="btn" id="pvEnd" type="button">원래대로</button></div>
 
 <dialog id="roadDlg" aria-labelledby="rdTitle">
-  <h2 id="rdTitle">로드맵</h2>
+  <h2 id="rdTitle">퀘스트 지도</h2>
   <p class="stat" id="roadPhase"></p>
   <div id="roadmap" class="roadmap"></div>
   <div class="row" style="justify-content:flex-end;gap:8px"><button class="btn" id="rdShop" type="button">기능 바로 열기(상점)</button><button class="btn main" id="rdClose" type="button">닫기</button></div>
@@ -2129,6 +2133,10 @@ const SETTLE_DAYS=60;
 const FUTURE_STAGES=['시간 정하기','반복 일정','알림','일정 색 구분','여러 달력 합쳐 보기'];
 const STAGE_OPEN={3:'위쪽 «기록» 버튼에서 메모·일기를 하루·주간·5년으로 쓸 수 있어요.',28:'이제 칸을 원하는 만큼 늘릴 수 있어요. «할 일 칸 바꾸기»에서 더해 보세요.',60:'달력에서 지난 기록을 보고 날짜마다 할 일·일정을 적을 수 있어요.'};
 const RM_ICON={3:'📝',28:'🧩',60:'📅'};
+const RM_QUEST={3:'첫걸음 퀘스트',28:'4주 퀘스트',60:'자리 잡기 퀘스트'};
+const RM_WHY={3:'처음 3일은 «오늘 하나 찍기»만 해요. 쓸 말이 생기는 건 그다음이라서 기록은 3일째에 열려요.',28:'칸이 처음부터 많으면 못 지킨 칸이 쌓여 포기하기 쉬워요. 3칸을 4주(28일) 지켜 본 뒤에 늘려요.',60:'습관이 몸에 붙는 데 걸리는 시간의 중앙값이 59~66일이에요(Singh 2024). 루틴이 자리 잡은 뒤에 일정표를 키워요.'};
+const RM_NOW={60:'지금 가능: 날짜마다 일정을 글로 적고 지난 기록을 달력에서 봐요. 시간·반복·알림은 아래 «일정 꾸미기»에서 하나씩 더해 갈 예정이에요(아직 없어요).'};
+const RM_SOON_WHY='60일 달성으로 열리는 건 «날짜별 일정 적기»까지예요. 시간·반복·알림은 그 일정에 얹는 기능이라, 일정표가 열린 뒤에 하나씩 만들어요. 아직 만들지 않아서 열리는 날은 정하지 않았어요.';
 const RM_GIFT={3:'1달러',28:'2달러',60:'3달러'}; // 단계 선물 가격대(서버 GIFT_STAGE_TIER 와 같아야 한다): 오래 지속할수록 더 비싼 팩
 const RM_REWARD=Object.fromEntries([3,28,60].map(n=>[n,STAGE_OPEN[n]+' 🎁 도착 선물: '+RM_GIFT[n]+'짜리 꾸미기 팩 1개(무작위).']));
 const RM_FUTURE=[['시간 정하기','일정에 시작 시간을 정해요.'],['반복 일정','매일·매주 되풀이되는 일정을 한 번에 적어요.'],['알림','일정 전에 알려 줘요.'],['일정 색 구분','일정을 종류별 색으로 나눠 봐요.'],['여러 달력 합쳐 보기','여러 달력을 한 화면에서 봐요.']]; // 아직 만들지 않음: 열리는 날이 없다
@@ -3134,15 +3142,17 @@ function renderRoadmap(){
   const el=$('roadmap');if(!el)return;
   const total=stampDays(),next=UNLOCKS.find(x=>total<x);
   const node=(cls,dot,title,sub,extra)=>`<div class="rm-node ${cls}"><span class="rm-dot" aria-hidden="true">${dot}</span><div class="rm-body"><b>${title}</b><small>${esc(sub)}</small>${extra||''}</div></div>`;
-  let h=`<p class="stat rm-sum"><b>도장 ${total}일</b>${next?` · 다음 목표까지 ${next-total}일`:' · 지금 열 수 있는 단계를 모두 지났어요'}</p>`;
+  let h=`<p class="stat rm-sum"><b>도장 ${total}일</b>${next?` · 다음 퀘스트까지 ${next-total}일`:' · 모든 퀘스트를 깼어요!'}</p>`;
   h+=node('done','✔','시작','도장 칸 3개로 시작해요.');
   UNLOCKS.forEach(x=>{
     const got=total>=x,bought=!got&&opened(x),isNext=x===next;
-    const tag=got?'':bought?'<span class="rm-tag">바로 열어 둠</span>':'<span class="rm-tag">잠김</span>';
-    const bar=isNext?`<div class="rm-bar" aria-hidden="true"><i style="width:${Math.min(100,Math.round(total/x*100))}%"></i></div><small>${x-total}일 남았어요</small>`:'';
-    h+=node(got?'done':isNext?'next lock':'lock',got?'✔':bought?'🔓':'🔒',`${x}일 · ${RM_ICON[x]} ${esc(STAGE_WHAT[x])}${tag}`,RM_REWARD[x],bar);
+    const tag=got?'<span class="rm-tag ok">클리어</span>':bought?'<span class="rm-tag">바로 열어 둠</span>':isNext?'<span class="rm-tag now">진행 중</span>':'<span class="rm-tag">잠김</span>';
+    const pct=Math.min(100,Math.round(total/x*100));
+    const bar=got?'':`<div class="rm-bar" aria-hidden="true"><i style="width:${pct}%"></i></div><small class="rm-cnt">도장 찍은 날 <b>${Math.min(total,x)}/${x}</b>일${isNext?' · '+(x-total)+'일 남았어요':''}</small>`;
+    const body=`<small class="rm-goal">🎯 목표: 도장 찍은 날 ${x}일</small><small class="rm-rew">🔓 열리는 것: ${esc(STAGE_OPEN[x])}</small><small class="rm-rew">🎁 선물: ${RM_GIFT[x]}짜리 꾸미기 팩 1개(무작위)</small>${RM_NOW[x]?`<small class="rm-rew">ℹ️ ${esc(RM_NOW[x])}</small>`:''}<small class="rm-why">왜 ${x}일? ${esc(RM_WHY[x])}</small>${bar}`;
+    h+=`<div class="rm-node ${got?'done':isNext?'next lock':'lock'}"><span class="rm-dot" aria-hidden="true">${got?'✔':bought?'🔓':'🔒'}</span><div class="rm-body"><b>${esc(RM_QUEST[x])} · ${x}일 ${RM_ICON[x]} ${esc(STAGE_WHAT[x])}${tag}</b>${body}</div></div>`;
   });
-  RM_FUTURE.forEach(([n,d])=>{h+=node('soon lock','🔒',`${esc(n)}<span class="rm-tag">준비 중</span>`,d+' 열리는 날은 아직 정하지 않았어요.')});
+  h+=`<div class="rm-soonbox"><b>🛠 60일 뒤 이어질 «일정 꾸미기» <span class="rm-tag">개발 중</span></b><small>${esc(RM_SOON_WHY)}</small><ul>${RM_FUTURE.map(([n,d])=>`<li><b>${esc(n)}</b> — ${esc(d)}</li>`).join('')}</ul></div>`;
   el.innerHTML=h;
 }
 function roadSteps(){
@@ -3153,14 +3163,14 @@ function renderRoadStrip(){
   const el=$('roadStrip');if(!el)return;
   const {total,next}=roadSteps();
   const chip=(cls,dot,title,sub,bar)=>`<button type="button" class="rs-chip ${cls}" data-road="1"><span class="rm-dot" aria-hidden="true">${dot}</span><span><b>${title}</b><small>${esc(sub)}</small>${bar||''}</span></button>`;
-  let h=`<button type="button" class="rs-head" data-road="1"><b>로드맵</b><span class="tx">도장 ${total}일${next?' · 다음 목표까지 '+(next-total)+'일':' · 열 수 있는 단계를 모두 지났어요'}${S.gift&&total<=3?esc(t('giftTag')):''}</span><span class="go" aria-hidden="true">전체 보기 ›</span></button><div class="rs-row" id="rsRow">`;
+  let h=`<button type="button" class="rs-head" data-road="1"><b>퀘스트</b><span class="tx">도장 ${total}일${next?' · '+STAGE_SHORT[next]+'까지 '+(next-total)+'일':' · 모든 퀘스트 클리어!'}${S.gift&&total<=3?esc(t('giftTag')):''}</span><span class="go" aria-hidden="true">전체 보기 ›</span></button><div class="rs-row" id="rsRow">`;
   h+=chip('done','✔','시작','도장 칸 3개');
   UNLOCKS.forEach(x=>{
     const got=total>=x,bought=!got&&opened(x),isNext=x===next;
     const bar=isNext?`<div class="rs-bar" aria-hidden="true"><i style="width:${Math.min(100,Math.round(total/x*100))}%"></i></div>`:'';
-    h+=chip(got?'done':isNext?'next':'lock',got?'✔':bought?'🔓':'🔒',x+'일 · '+esc(STAGE_SHORT[x]),got?'달성':bought?'바로 열어 둠':(isNext?(x-total)+'일 남았어요':'잠김'),bar);
+    h+=chip(got?'done':isNext?'next':'lock',got?'✔':bought?'🔓':'🔒',x+'일 · '+esc(STAGE_SHORT[x]),got?'클리어':bought?'바로 열어 둠':(isNext?total+'/'+x+'일 · '+(x-total)+'일 남음':x+'일 달성하면 열려요'),bar);
   });
-  RM_FUTURE.forEach(([n])=>{h+=chip('soon','🔒',esc(n),'준비 중')});
+  h+=chip('soon','🛠','일정 꾸미기','시간·반복·알림 개발 중');
   h+='</div>';
   el.innerHTML=h;
   el.querySelectorAll('[data-road]').forEach(b=>{b.onclick=openRoad});
