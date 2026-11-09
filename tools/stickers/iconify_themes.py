@@ -1,0 +1,355 @@
+"""여행·취미 스티커 확장 목록(2026-11-09 사용자 요청: «구글 캘린더에 있는 기본 모양들 뿐이라 쓸 이유가 없다, 외부 도구로 가능한 최대한 다양한 디자인과 테마»).
+그림은 Iconify(https://iconify.design)의 오픈 아이콘 세트에서 모은다(import_iconify.py). 각 줄은 «영어 질의어=한글 이름».
+질의어마다 서로 다른 세트(스타일)에서 최대 2개를 골라 같은 주제도 모양이 다양하게 나오게 한다.
+허용 라이선스: MIT, Apache-2.0, CC BY 4.0(출처 표기 필요). 단색 아이콘(currentColor)은 제외한다."""
+
+# (팩 id, 팩 이름, 가격(원), 설명, 질의어 목록)
+THEMES2 = [
+("sticker_world", "세계 명소", 4050, "에펠탑·타지마할·만리장성·자유의 여신상까지 세계 곳곳의 명소와 풍경", """
+eiffel tower=에펠탑
+statue of liberty=자유의 여신상
+taj mahal=타지마할
+great wall=만리장성
+pyramid=피라미드
+sphinx=스핑크스
+pagoda=탑
+tokyo tower=도쿄타워
+mount fuji=후지산
+torii=도리이
+shinto shrine=신사
+castle=성
+japanese castle=일본 성
+clock tower=시계탑
+windmill=풍차
+lighthouse=등대
+moai=모아이
+opera house=오페라하우스
+bridge=다리
+suspension bridge=현수교
+ferris wheel=관람차
+cathedral=대성당
+church=교회
+mosque=모스크
+hindu temple=힌두 사원
+temple=사원
+fountain=분수
+volcano=화산
+waterfall=폭포
+canyon=협곡
+glacier=빙하
+iceberg=빙산
+aurora=오로라
+camel=낙타
+palm tree=야자수
+island=섬
+beach=해변
+snow mountain=설산
+hot spring=온천
+cable car=케이블카
+skyscraper=고층 빌딩
+cityscape=도시 야경
+hanok=한옥
+palace=궁궐
+gate=성문
+tower=타워
+ruins=유적
+stonehenge=스톤헨지
+colosseum=콜로세움
+big ben=빅벤
+sagrada familia=성당
+"""),
+("sticker_music", "음악·악기", 2700, "기타·피아노·바이올린·드럼부터 마이크·헤드폰·LP까지 음악 하는 시간", """
+guitar=기타
+electric guitar=일렉기타
+violin=바이올린
+piano=피아노
+musical keyboard=건반
+drum=드럼
+trumpet=트럼펫
+saxophone=색소폰
+accordion=아코디언
+flute=플루트
+harp=하프
+banjo=밴조
+microphone=마이크
+headphones=헤드폰
+musical note=음표
+musical notes=음악
+vinyl record=LP판
+gramophone=축음기
+radio=라디오
+cassette=카세트
+speaker=스피커
+music score=악보
+bell=종
+singer=노래
+karaoke=노래방
+concert=콘서트
+guitar pick=기타 피크
+metronome=메트로놈
+ukulele=우쿨렐레
+"""),
+("sticker_game", "게임·놀이", 2700, "게임기·보드게임·퍼즐·체스·카드까지 노는 시간", """
+video game=게임
+game controller=게임 패드
+joystick=조이스틱
+dice=주사위
+chess=체스
+puzzle=퍼즐
+jigsaw=조각 퍼즐
+playing cards=카드
+joker=조커
+bowling=볼링
+darts=다트
+billiards=당구
+pool ball=당구공
+teddy bear=곰인형
+kite=연
+yo-yo=요요
+balloon=풍선
+rubik cube=큐브
+building blocks=블록
+pinball=핀볼
+arcade=오락실
+board game=보드게임
+robot=로봇
+rocket=로켓
+ghost=유령
+alien=외계인
+crown=왕관
+sword=검
+shield=방패
+treasure chest=보물상자
+"""),
+("sticker_art", "그림·공예", 2700, "그림·뜨개질·도자기·종이접기까지 손으로 만드는 시간", """
+artist palette=팔레트
+paintbrush=붓
+crayon=크레용
+pencil=연필
+ruler=자
+scissors=가위
+yarn=털실
+knitting=뜨개질
+sewing machine=재봉틀
+sewing needle=바늘
+thread=실
+vase=도자기
+pottery=도예
+origami=종이접기
+paper crane=종이학
+calligraphy=서예
+framed picture=액자
+sketchbook=스케치북
+spray can=스프레이
+stamp=도장
+clay=점토
+paint bucket=물감
+watercolor=수채화
+easel=이젤
+sculpture=조각
+glue=풀
+tape=테이프
+button=단추
+ribbon=리본
+flower arrangement=꽃꽂이
+"""),
+("sticker_cinema", "영화·공연·전시", 2700, "영화관·연극·뮤지컬·미술관까지 보러 가는 날", """
+clapperboard=클래퍼보드
+film projector=영사기
+popcorn=팝콘
+ticket=티켓
+theater masks=연극
+movie camera=영화 카메라
+television=TV
+cinema=영화관
+curtain=커튼
+spotlight=조명
+museum=미술관
+painting=그림 감상
+ballet=발레
+opera=오페라
+circus=서커스
+fireworks=불꽃놀이
+stage=무대
+film strip=필름
+3d glasses=3D 안경
+magic hat=마술
+violin player=연주회
+dancer=춤
+trophy=시상식
+red carpet=레드카펫
+popcorn bucket=팝콘 통
+cinema seat=극장 좌석
+director chair=감독 의자
+megaphone=확성기
+award=수상
+camera=촬영
+"""),
+("sticker_read", "독서·글쓰기", 2700, "책·서점·일기·편지·타자기까지 읽고 쓰는 시간", """
+books=책
+open book=펼친 책
+bookmark=책갈피
+library=도서관
+newspaper=신문
+notebook=공책
+diary=일기
+pen=펜
+fountain pen=만년필
+typewriter=타자기
+letter=편지
+scroll=두루마리
+reading glasses=독서 안경
+reading lamp=독서 등
+bookshelf=책장
+coffee book=커피와 책
+bookstore=서점
+quill=깃펜
+ink=잉크
+envelope=봉투
+postcard=엽서
+stationery=문구
+sticky note=포스트잇
+highlighter=형광펜
+dictionary=사전
+magazine=잡지
+comic=만화
+poetry=시
+"""),
+("sticker_outdoor", "캠핑·낚시·등산", 2700, "텐트·모닥불·낚시·등산까지 밖에서 보내는 시간", """
+tent=텐트
+campfire=모닥불
+backpack=배낭
+hiking boot=등산화
+compass=나침반
+map=지도
+fishing rod=낚싯대
+fish=물고기
+canoe=카누
+kayak=카약
+binoculars=쌍안경
+lantern=랜턴
+sleeping bag=침낭
+mountain=산
+trail=등산로
+marshmallow=마시멜로
+thermos=보온병
+barbecue=바비큐
+grill=그릴
+picnic basket=피크닉
+hammock=해먹
+camping van=캠핑카
+swiss knife=칼
+flashlight=손전등
+pine tree=소나무
+bonfire=불멍
+walking stick=등산 스틱
+hat=모자
+sunscreen=선크림
+bug spray=벌레 퇴치
+"""),
+("sticker_garden", "정원·반려식물", 2700, "화분·새싹·물주기·텃밭까지 식물 가꾸는 시간", """
+potted plant=화분
+seedling=새싹
+watering can=물뿌리개
+sunflower=해바라기
+cactus=선인장
+bonsai=분재
+shovel=삽
+flower pot=꽃 화분
+tomato plant=토마토
+herb=허브
+greenhouse=온실
+bee=벌
+butterfly=나비
+ladybug=무당벌레
+mushroom=버섯
+tulip=튤립
+rose=장미
+lavender=라벤더
+carrot=당근
+strawberry=딸기
+vegetable garden=텃밭
+fertilizer=비료
+gloves=장갑
+rake=갈퀴
+wheelbarrow=수레
+leaf=잎
+four leaf clover=네잎클로버
+monstera=몬스테라
+succulent=다육이
+bouquet=꽃다발
+"""),
+("sticker_photo", "사진·영상·SNS", 2700, "사진·브이로그·라이브·해시태그까지 남기고 나누는 시간", """
+camera=카메라
+selfie=셀카
+tripod=삼각대
+film roll=필름
+photo frame=사진 액자
+video camera=캠코더
+drone=드론
+smartphone=스마트폰
+hashtag=해시태그
+heart=좋아요
+thumbs up=엄지척
+share=공유
+live=라이브
+podcast=팟캐스트
+laptop=노트북
+sparkles=반짝
+filter=필터
+polaroid=폴라로이드
+photo album=앨범
+photographer=사진작가
+flash=플래시
+lens=렌즈
+instagram=피드
+video call=영상통화
+chat bubble=댓글
+bookmark=저장
+star=별점
+trending=인기
+hundred points=100점
+"""),
+("sticker_cheer", "응원·스포츠 관람", 2700, "경기장·응원·메달·트로피까지 보고 응원하는 날", """
+trophy=트로피
+medal=메달
+stadium=경기장
+flag=깃발
+pennant=응원 깃발
+cheering=응원
+megaphone=응원 확성기
+jersey=유니폼
+soccer ball=축구공
+basketball=농구공
+baseball=야구공
+tennis=테니스
+volleyball=배구
+whistle=호루라기
+scoreboard=전광판
+stopwatch=스톱워치
+podium=시상대
+winner=우승
+goal=골
+referee=심판
+sneaker=운동화
+gym=헬스장
+yoga mat=요가 매트
+dumbbell=덤벨
+bicycle=자전거
+swimming=수영
+ski=스키
+skateboard=스케이트보드
+boxing=복싱
+archery=양궁
+"""),
+]
+
+
+def parse(block):
+    out = []
+    for line in block.strip().splitlines():
+        line = line.strip()
+        if line:
+            q, ko = line.split('=', 1)
+            out.append((q.strip(), ko.strip()))
+    return out

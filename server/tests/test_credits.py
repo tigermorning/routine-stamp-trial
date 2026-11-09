@@ -372,7 +372,7 @@ def test_unlock_purchase_grants_ownership_without_credits(env):
 # ---- 스티커 팩: 상품·소유, 화면의 그림 목록과 id 일치 ----
 def test_sticker_packs_are_items_and_match_the_screen_list():
     packs = [i for i in creditlib.ITEMS.values() if i["kind"] == "sticker"]
-    assert len(packs) == 25 and all(i["amount"] > 0 and i["desc"] for i in packs)  # 2026-11-09 일상 테마 확장 18 + 새 4, 아이콘 팩 3개를 스티커로 합침(사용자 결정)
+    assert len(packs) == 35 and all(i["amount"] > 0 and i["desc"] for i in packs)  # 2026-11-09 일상 테마 확장 18 + 새 4, 아이콘 팩 3개를 스티커로 합침(사용자 결정)
     html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
     block = html[html.index("const STICKER_PACKS={"):html.index("const STICKERS_PER_DAY")]
     for i in packs:
@@ -602,7 +602,8 @@ def test_unlock_items_do_not_mention_colors_and_stamp_shapes_are_gone():
 
 
 def test_sticker_pack_sizes_ids_and_symbols():
-    import re
+    import re, json
+    SOURCES = json.loads((Path(__file__).resolve().parent.parent.parent / "stk" / "fv" / "SOURCES.json").read_text(encoding="utf-8"))
     html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
     block = html[html.index("const STICKER_PACKS={"):html.index("const HL_NAMES")]
     seen = []
@@ -621,6 +622,11 @@ def test_sticker_pack_sizes_ids_and_symbols():
             png = Path(__file__).resolve().parent.parent.parent / "stk" / "fx" / f"{s[3:]}.png"
             assert png.exists() and png.stat().st_size > 500, s
             assert f'"{s[3:]}":' in html, s
+        elif s.startswith("fv:"):  # Iconify 오픈 아이콘 세트 그림(SVG): 그림 파일·한글 이름·출처 기록이 모두 있어야 한다
+            svg = Path(__file__).resolve().parent.parent.parent / "stk" / "fv" / f"{s[3:]}.svg"
+            assert svg.exists() and svg.stat().st_size > 200 and "currentColor" not in svg.read_text(encoding="utf-8"), s
+            assert f'"{s[3:]}":' in html, s
+            assert s[3:] in SOURCES["stickers"] and SOURCES["stickers"][s[3:]]["license"] in ("MIT", "Apache-2.0", "CC-BY-4.0", "CC0-1.0"), s
         elif s.startswith("ig:"):  # 아이콘 팩 글리프(2026-11-06 아이콘·스티커 통합): 스타일과 글리프 키가 화면에 있어야 한다
             style, key = s[3:].split("_")
             assert style in ("cute", "simple", "pastel") and f"\n{key}:{{p:" in html, s
@@ -644,8 +650,8 @@ def test_affirmations_cover_every_ui_language_and_api_uses_lang(env):
     # 2026-11-06 사용자 결정: 오늘의 한마디는 격언 대신 일상 응원 문장, 언어별로
     import quotes
     d = quotes.load_affirmations()
-    # 2026-11-09 사용자 결정: 한국어판이 완성될 때까지 한국어만 필수(60개 이상). 다른 9개 언어는 예전 일반 문장이 남아 있고, 있으면 겹치지 않기만 본다
-    assert len(d["ko"]) >= 60 and len(set(d["ko"])) == len(d["ko"])
+    # 2026-11-09 사용자 결정: 한국어판이 완성될 때까지 한국어만 필수(50개 이상, 공개 저장소 MIT 문장을 옮긴 것). 다른 9개 언어는 예전 일반 문장이 남아 있고, 있으면 겹치지 않기만 본다
+    assert len(d["ko"]) >= 50 and len(set(d["ko"])) == len(d["ko"])
     for lang in ("en", "zh-Hans", "zh-Hant", "yue", "id", "vi", "es", "fi", "sv"):
         assert len(set(d[lang])) == len(d[lang]), lang
     client, store, toss = env[0], env[1], env[2]

@@ -1,0 +1,2169 @@
+{
+ "sets": {
+  "flat-color-icons": {
+   "name": "Flat Color Icons",
+   "author": {
+    "name": "Icons8",
+    "url": "https://github.com/icons8/flat-Color-icons"
+   },
+   "license": {
+    "title": "MIT",
+    "spdx": "MIT"
+   }
+  },
+  "fluent-emoji-flat": {
+   "name": "Fluent Emoji Flat",
+   "author": {
+    "name": "Microsoft Corporation",
+    "url": "https://github.com/microsoft/fluentui-emoji"
+   },
+   "license": {
+    "title": "MIT",
+    "spdx": "MIT",
+    "url": "https://github.com/microsoft/fluentui-emoji/blob/main/LICENSE"
+   }
+  },
+  "fxemoji": {
+   "name": "Firefox OS Emoji",
+   "author": {
+    "name": "Mozilla",
+    "url": "https://github.com/mozilla/fxemoji"
+   },
+   "license": {
+    "title": "Apache 2.0",
+    "spdx": "Apache-2.0",
+    "url": "https://mozilla.github.io/fxemoji/LICENSE.md"
+   }
+  },
+  "icon-park": {
+   "name": "IconPark",
+   "author": {
+    "name": "ByteDance",
+    "url": "https://github.com/bytedance/IconPark"
+   },
+   "license": {
+    "title": "Apache 2.0",
+    "spdx": "Apache-2.0",
+    "url": "https://github.com/bytedance/IconPark/blob/master/LICENSE"
+   }
+  },
+  "noto": {
+   "name": "Noto Emoji",
+   "author": {
+    "name": "Google Inc",
+    "url": "https://github.com/googlefonts/noto-emoji"
+   },
+   "license": {
+    "title": "Apache 2.0",
+    "spdx": "Apache-2.0",
+    "url": "https://github.com/googlefonts/noto-emoji/blob/main/svg/LICENSE"
+   }
+  },
+  "streamline-emojis": {
+   "name": "Streamline Emojis",
+   "author": {
+    "name": "Streamline",
+    "url": "https://github.com/webalys-hq/streamline-vectors"
+   },
+   "license": {
+    "title": "CC BY 4.0",
+    "spdx": "CC-BY-4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   }
+  },
+  "streamline-flex-color": {
+   "name": "Flex color icons",
+   "author": {
+    "name": "Streamline",
+    "url": "https://github.com/webalys-hq/streamline-vectors"
+   },
+   "license": {
+    "title": "CC BY 4.0",
+    "spdx": "CC-BY-4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   }
+  },
+  "streamline-freehand-color": {
+   "name": "Freehand color icons",
+   "author": {
+    "name": "Streamline",
+    "url": "https://github.com/webalys-hq/streamline-vectors"
+   },
+   "license": {
+    "title": "CC BY 4.0",
+    "spdx": "CC-BY-4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   }
+  },
+  "streamline-kameleon-color": {
+   "name": "Kameleon color icons",
+   "author": {
+    "name": "Streamline",
+    "url": "https://github.com/webalys-hq/streamline-vectors"
+   },
+   "license": {
+    "title": "CC BY 4.0",
+    "spdx": "CC-BY-4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   }
+  },
+  "streamline-plump-color": {
+   "name": "Plump color icons",
+   "author": {
+    "name": "Streamline",
+    "url": "https://github.com/webalys-hq/streamline-vectors"
+   },
+   "license": {
+    "title": "CC BY 4.0",
+    "spdx": "CC-BY-4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   }
+  },
+  "streamline-ultimate-color": {
+   "name": "Ultimate color icons",
+   "author": {
+    "name": "Streamline",
+    "url": "https://github.com/webalys-hq/streamline-vectors"
+   },
+   "license": {
+    "title": "CC BY 4.0",
+    "spdx": "CC-BY-4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   }
+  },
+  "twemoji": {
+   "name": "Twitter Emoji",
+   "author": {
+    "name": "Twitter",
+    "url": "https://github.com/jdecked/twemoji"
+   },
+   "license": {
+    "title": "CC BY 4.0",
+    "spdx": "CC-BY-4.0",
+    "url": "https://creativecommons.org/licenses/by/4.0/"
+   }
+  }
+ },
+ "stickers": {
+  "flat_color_icons_clapperboard": {
+   "name": "클래퍼보드",
+   "from": "flat-color-icons:clapperboard",
+   "license": "MIT"
+  },
+  "flat_color_icons_library": {
+   "name": "도서관",
+   "from": "flat-color-icons:library",
+   "license": "MIT"
+  },
+  "flat_color_icons_podium_with_audience": {
+   "name": "시상대",
+   "from": "flat-color-icons:podium-with-audience",
+   "license": "MIT"
+  },
+  "flat_color_icons_puzzle": {
+   "name": "퍼즐",
+   "from": "flat-color-icons:puzzle",
+   "license": "MIT"
+  },
+  "flat_color_icons_video_call": {
+   "name": "영상통화",
+   "from": "flat-color-icons:video-call",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_accordion": {
+   "name": "아코디언",
+   "from": "fluent-emoji-flat:accordion",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_backpack": {
+   "name": "배낭",
+   "from": "fluent-emoji-flat:backpack",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_ballet_shoes": {
+   "name": "발레",
+   "from": "fluent-emoji-flat:ballet-shoes",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_banjo": {
+   "name": "밴조",
+   "from": "fluent-emoji-flat:banjo",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_books": {
+   "name": "책",
+   "from": "fluent-emoji-flat:books",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_bridge_at_night": {
+   "name": "다리",
+   "from": "fluent-emoji-flat:bridge-at-night",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_butterfly": {
+   "name": "나비",
+   "from": "fluent-emoji-flat:butterfly",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_cactus": {
+   "name": "선인장",
+   "from": "fluent-emoji-flat:cactus",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_camera": {
+   "name": "촬영",
+   "from": "fluent-emoji-flat:camera",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_canoe": {
+   "name": "카누",
+   "from": "fluent-emoji-flat:canoe",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_carrot": {
+   "name": "당근",
+   "from": "fluent-emoji-flat:carrot",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_church": {
+   "name": "교회",
+   "from": "fluent-emoji-flat:church",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_cinema": {
+   "name": "영화관",
+   "from": "fluent-emoji-flat:cinema",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_cityscape": {
+   "name": "도시 야경",
+   "from": "fluent-emoji-flat:cityscape",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_compass": {
+   "name": "나침반",
+   "from": "fluent-emoji-flat:compass",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_crayon": {
+   "name": "크레용",
+   "from": "fluent-emoji-flat:crayon",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_desert_island": {
+   "name": "섬",
+   "from": "fluent-emoji-flat:desert-island",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_drum": {
+   "name": "드럼",
+   "from": "fluent-emoji-flat:drum",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_envelope": {
+   "name": "봉투",
+   "from": "fluent-emoji-flat:envelope",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_film_projector": {
+   "name": "영사기",
+   "from": "fluent-emoji-flat:film-projector",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_fireworks": {
+   "name": "불꽃놀이",
+   "from": "fluent-emoji-flat:fireworks",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_flower_playing_cards": {
+   "name": "카드",
+   "from": "fluent-emoji-flat:flower-playing-cards",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_flute": {
+   "name": "플루트",
+   "from": "fluent-emoji-flat:flute",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_framed_picture": {
+   "name": "액자",
+   "from": "fluent-emoji-flat:framed-picture",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_gloves": {
+   "name": "장갑",
+   "from": "fluent-emoji-flat:gloves",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_goal_net": {
+   "name": "골",
+   "from": "fluent-emoji-flat:goal-net",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_hiking_boot": {
+   "name": "등산화",
+   "from": "fluent-emoji-flat:hiking-boot",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_hindu_temple": {
+   "name": "힌두 사원",
+   "from": "fluent-emoji-flat:hindu-temple",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_hundred_points": {
+   "name": "100점",
+   "from": "fluent-emoji-flat:hundred-points",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_japanese_castle": {
+   "name": "일본 성",
+   "from": "fluent-emoji-flat:japanese-castle",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_joystick": {
+   "name": "조이스틱",
+   "from": "fluent-emoji-flat:joystick",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_keycap_hashtag": {
+   "name": "해시태그",
+   "from": "fluent-emoji-flat:keycap-hashtag",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_kite": {
+   "name": "연",
+   "from": "fluent-emoji-flat:kite",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_megaphone": {
+   "name": "확성기",
+   "from": "fluent-emoji-flat:megaphone",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_mosque": {
+   "name": "모스크",
+   "from": "fluent-emoji-flat:mosque",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_mount_fuji": {
+   "name": "후지산",
+   "from": "fluent-emoji-flat:mount-fuji",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_mountain": {
+   "name": "산",
+   "from": "fluent-emoji-flat:mountain",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_movie_camera": {
+   "name": "영화 카메라",
+   "from": "fluent-emoji-flat:movie-camera",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_notebook": {
+   "name": "공책",
+   "from": "fluent-emoji-flat:notebook",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_olive": {
+   "name": "라이브",
+   "from": "fluent-emoji-flat:olive",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_paintbrush": {
+   "name": "붓",
+   "from": "fluent-emoji-flat:paintbrush",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_pen": {
+   "name": "펜",
+   "from": "fluent-emoji-flat:pen",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_pencil": {
+   "name": "연필",
+   "from": "fluent-emoji-flat:pencil",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_popcorn": {
+   "name": "팝콘",
+   "from": "fluent-emoji-flat:popcorn",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_potted_plant": {
+   "name": "화분",
+   "from": "fluent-emoji-flat:potted-plant",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_robot": {
+   "name": "로봇",
+   "from": "fluent-emoji-flat:robot",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_selfie": {
+   "name": "셀카",
+   "from": "fluent-emoji-flat:selfie",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_sewing_needle": {
+   "name": "바늘",
+   "from": "fluent-emoji-flat:sewing-needle",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_shield": {
+   "name": "방패",
+   "from": "fluent-emoji-flat:shield",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_shinto_shrine": {
+   "name": "신사",
+   "from": "fluent-emoji-flat:shinto-shrine",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_singer": {
+   "name": "노래",
+   "from": "fluent-emoji-flat:singer",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_skateboard": {
+   "name": "스케이트보드",
+   "from": "fluent-emoji-flat:skateboard",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_snow_capped_mountain": {
+   "name": "설산",
+   "from": "fluent-emoji-flat:snow-capped-mountain",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_soccer_ball": {
+   "name": "축구공",
+   "from": "fluent-emoji-flat:soccer-ball",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_stadium": {
+   "name": "경기장",
+   "from": "fluent-emoji-flat:stadium",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_star": {
+   "name": "별점",
+   "from": "fluent-emoji-flat:star",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_statue_of_liberty": {
+   "name": "자유의 여신상",
+   "from": "fluent-emoji-flat:statue-of-liberty",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_stopwatch": {
+   "name": "스톱워치",
+   "from": "fluent-emoji-flat:stopwatch",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_sunflower": {
+   "name": "해바라기",
+   "from": "fluent-emoji-flat:sunflower",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_teddy_bear": {
+   "name": "곰인형",
+   "from": "fluent-emoji-flat:teddy-bear",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_tennis": {
+   "name": "테니스",
+   "from": "fluent-emoji-flat:tennis",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_thread": {
+   "name": "실",
+   "from": "fluent-emoji-flat:thread",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_thumbs_up": {
+   "name": "엄지척",
+   "from": "fluent-emoji-flat:thumbs-up",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_ticket": {
+   "name": "티켓",
+   "from": "fluent-emoji-flat:ticket",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_tokyo_tower": {
+   "name": "도쿄타워",
+   "from": "fluent-emoji-flat:tokyo-tower",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_trophy": {
+   "name": "시상식",
+   "from": "fluent-emoji-flat:trophy",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_video_camera": {
+   "name": "캠코더",
+   "from": "fluent-emoji-flat:video-camera",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_video_game": {
+   "name": "게임",
+   "from": "fluent-emoji-flat:video-game",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_volcano": {
+   "name": "화산",
+   "from": "fluent-emoji-flat:volcano",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_volleyball": {
+   "name": "배구",
+   "from": "fluent-emoji-flat:volleyball",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_yarn": {
+   "name": "털실",
+   "from": "fluent-emoji-flat:yarn",
+   "license": "MIT"
+  },
+  "fluent_emoji_flat_yo_yo": {
+   "name": "요요",
+   "from": "fluent-emoji-flat:yo-yo",
+   "license": "MIT"
+  },
+  "fxemoji_billiards": {
+   "name": "당구",
+   "from": "fxemoji:billiards",
+   "license": "Apache-2.0"
+  },
+  "fxemoji_blackpennant": {
+   "name": "응원 깃발",
+   "from": "fxemoji:blackpennant",
+   "license": "Apache-2.0"
+  },
+  "fxemoji_clapperboard": {
+   "name": "클래퍼보드",
+   "from": "fxemoji:clapperboard",
+   "license": "Apache-2.0"
+  },
+  "fxemoji_dancer": {
+   "name": "춤",
+   "from": "fxemoji:dancer",
+   "license": "Apache-2.0"
+  },
+  "fxemoji_lightrail": {
+   "name": "등산로",
+   "from": "fxemoji:lightrail",
+   "license": "Apache-2.0"
+  },
+  "fxemoji_skiandskiboot": {
+   "name": "스키",
+   "from": "fxemoji:skiandskiboot",
+   "license": "Apache-2.0"
+  },
+  "fxemoji_speaker": {
+   "name": "스피커",
+   "from": "fxemoji:speaker",
+   "license": "Apache-2.0"
+  },
+  "fxemoji_swimming": {
+   "name": "수영",
+   "from": "fxemoji:swimming",
+   "license": "Apache-2.0"
+  },
+  "fxemoji_tapecartridge": {
+   "name": "테이프",
+   "from": "fxemoji:tapecartridge",
+   "license": "Apache-2.0"
+  },
+  "icon_park_archery": {
+   "name": "양궁",
+   "from": "icon-park:archery",
+   "license": "Apache-2.0"
+  },
+  "icon_park_barbecue": {
+   "name": "바비큐",
+   "from": "icon-park:barbecue",
+   "license": "Apache-2.0"
+  },
+  "icon_park_bee": {
+   "name": "벌",
+   "from": "icon-park:bee",
+   "license": "Apache-2.0"
+  },
+  "icon_park_bookshelf": {
+   "name": "책장",
+   "from": "icon-park:bookshelf",
+   "license": "Apache-2.0"
+  },
+  "icon_park_boxing": {
+   "name": "복싱",
+   "from": "icon-park:boxing",
+   "license": "Apache-2.0"
+  },
+  "icon_park_brake_pads": {
+   "name": "갈퀴",
+   "from": "icon-park:brake-pads",
+   "license": "Apache-2.0"
+  },
+  "icon_park_cable_car": {
+   "name": "케이블카",
+   "from": "icon-park:cable-car",
+   "license": "Apache-2.0"
+  },
+  "icon_park_chess": {
+   "name": "체스",
+   "from": "icon-park:chess",
+   "license": "Apache-2.0"
+  },
+  "icon_park_circus": {
+   "name": "서커스",
+   "from": "icon-park:circus",
+   "license": "Apache-2.0"
+  },
+  "icon_park_clock_tower": {
+   "name": "시계탑",
+   "from": "icon-park:clock-tower",
+   "license": "Apache-2.0"
+  },
+  "icon_park_drone": {
+   "name": "드론",
+   "from": "icon-park:drone",
+   "license": "Apache-2.0"
+  },
+  "icon_park_dumbbell": {
+   "name": "덤벨",
+   "from": "icon-park:dumbbell",
+   "license": "Apache-2.0"
+  },
+  "icon_park_eiffel_tower": {
+   "name": "에펠탑",
+   "from": "icon-park:eiffel-tower",
+   "license": "Apache-2.0"
+  },
+  "icon_park_filter": {
+   "name": "필터",
+   "from": "icon-park:filter",
+   "license": "Apache-2.0"
+  },
+  "icon_park_gate": {
+   "name": "성문",
+   "from": "icon-park:gate",
+   "license": "Apache-2.0"
+  },
+  "icon_park_great_wall": {
+   "name": "만리장성",
+   "from": "icon-park:great-wall",
+   "license": "Apache-2.0"
+  },
+  "icon_park_gymnastics": {
+   "name": "헬스장",
+   "from": "icon-park:gymnastics",
+   "license": "Apache-2.0"
+  },
+  "icon_park_hashtag_key": {
+   "name": "해시태그",
+   "from": "icon-park:hashtag-key",
+   "license": "Apache-2.0"
+  },
+  "icon_park_hat": {
+   "name": "모자",
+   "from": "icon-park:hat",
+   "license": "Apache-2.0"
+  },
+  "icon_park_heart": {
+   "name": "좋아요",
+   "from": "icon-park:heart",
+   "license": "Apache-2.0"
+  },
+  "icon_park_instagram": {
+   "name": "피드",
+   "from": "icon-park:instagram",
+   "license": "Apache-2.0"
+  },
+  "icon_park_leaf": {
+   "name": "잎",
+   "from": "icon-park:leaf",
+   "license": "Apache-2.0"
+  },
+  "icon_park_lens_alignment": {
+   "name": "렌즈",
+   "from": "icon-park:lens-alignment",
+   "license": "Apache-2.0"
+  },
+  "icon_park_magic_hat": {
+   "name": "마술",
+   "from": "icon-park:magic-hat",
+   "license": "Apache-2.0"
+  },
+  "icon_park_medal_one": {
+   "name": "메달",
+   "from": "icon-park:medal-one",
+   "license": "Apache-2.0"
+  },
+  "icon_park_museum_one": {
+   "name": "미술관",
+   "from": "icon-park:museum-one",
+   "license": "Apache-2.0"
+  },
+  "icon_park_pagoda": {
+   "name": "탑",
+   "from": "icon-park:pagoda",
+   "license": "Apache-2.0"
+  },
+  "icon_park_palace": {
+   "name": "궁궐",
+   "from": "icon-park:palace",
+   "license": "Apache-2.0"
+  },
+  "icon_park_pennant": {
+   "name": "응원 깃발",
+   "from": "icon-park:pennant",
+   "license": "Apache-2.0"
+  },
+  "icon_park_phone_video_call": {
+   "name": "영상통화",
+   "from": "icon-park:phone-video-call",
+   "license": "Apache-2.0"
+  },
+  "icon_park_piano": {
+   "name": "피아노",
+   "from": "icon-park:piano",
+   "license": "Apache-2.0"
+  },
+  "icon_park_puzzle": {
+   "name": "퍼즐",
+   "from": "icon-park:puzzle",
+   "license": "Apache-2.0"
+  },
+  "icon_park_pyramid": {
+   "name": "피라미드",
+   "from": "icon-park:pyramid",
+   "license": "Apache-2.0"
+  },
+  "icon_park_reverse_operation_in": {
+   "name": "오페라",
+   "from": "icon-park:reverse-operation-in",
+   "license": "Apache-2.0"
+  },
+  "icon_park_ruler": {
+   "name": "자",
+   "from": "icon-park:ruler",
+   "license": "Apache-2.0"
+  },
+  "icon_park_scoreboard": {
+   "name": "전광판",
+   "from": "icon-park:scoreboard",
+   "license": "Apache-2.0"
+  },
+  "icon_park_share": {
+   "name": "공유",
+   "from": "icon-park:share",
+   "license": "Apache-2.0"
+  },
+  "icon_park_speaker": {
+   "name": "스피커",
+   "from": "icon-park:speaker",
+   "license": "Apache-2.0"
+  },
+  "icon_park_stamp": {
+   "name": "도장",
+   "from": "icon-park:stamp",
+   "license": "Apache-2.0"
+  },
+  "icon_park_swimming_pool": {
+   "name": "수영",
+   "from": "icon-park:swimming-pool",
+   "license": "Apache-2.0"
+  },
+  "icon_park_taj_mahal": {
+   "name": "타지마할",
+   "from": "icon-park:taj-mahal",
+   "license": "Apache-2.0"
+  },
+  "icon_park_tape": {
+   "name": "테이프",
+   "from": "icon-park:tape",
+   "license": "Apache-2.0"
+  },
+  "icon_park_thermos_cup": {
+   "name": "보온병",
+   "from": "icon-park:thermos-cup",
+   "license": "Apache-2.0"
+  },
+  "icon_park_tower": {
+   "name": "타워",
+   "from": "icon-park:tower",
+   "license": "Apache-2.0"
+  },
+  "icon_park_trending_down": {
+   "name": "인기",
+   "from": "icon-park:trending-down",
+   "license": "Apache-2.0"
+  },
+  "icon_park_waterfalls_h": {
+   "name": "폭포",
+   "from": "icon-park:waterfalls-h",
+   "license": "Apache-2.0"
+  },
+  "icon_park_windmill": {
+   "name": "풍차",
+   "from": "icon-park:windmill",
+   "license": "Apache-2.0"
+  },
+  "noto_accordion": {
+   "name": "아코디언",
+   "from": "noto:accordion",
+   "license": "Apache-2.0"
+  },
+  "noto_artist_palette": {
+   "name": "팔레트",
+   "from": "noto:artist-palette",
+   "license": "Apache-2.0"
+  },
+  "noto_backpack": {
+   "name": "배낭",
+   "from": "noto:backpack",
+   "license": "Apache-2.0"
+  },
+  "noto_ballet_dancer": {
+   "name": "발레",
+   "from": "noto:ballet-dancer",
+   "license": "Apache-2.0"
+  },
+  "noto_banjo": {
+   "name": "밴조",
+   "from": "noto:banjo",
+   "license": "Apache-2.0"
+  },
+  "noto_baseball": {
+   "name": "야구공",
+   "from": "noto:baseball",
+   "license": "Apache-2.0"
+  },
+  "noto_basketball": {
+   "name": "농구공",
+   "from": "noto:basketball",
+   "license": "Apache-2.0"
+  },
+  "noto_beach_with_umbrella": {
+   "name": "해변",
+   "from": "noto:beach-with-umbrella",
+   "license": "Apache-2.0"
+  },
+  "noto_bicycle": {
+   "name": "자전거",
+   "from": "noto:bicycle",
+   "license": "Apache-2.0"
+  },
+  "noto_bookmark": {
+   "name": "책갈피",
+   "from": "noto:bookmark",
+   "license": "Apache-2.0"
+  },
+  "noto_books": {
+   "name": "책",
+   "from": "noto:books",
+   "license": "Apache-2.0"
+  },
+  "noto_bouquet": {
+   "name": "꽃다발",
+   "from": "noto:bouquet",
+   "license": "Apache-2.0"
+  },
+  "noto_bowling": {
+   "name": "볼링",
+   "from": "noto:bowling",
+   "license": "Apache-2.0"
+  },
+  "noto_boxing_glove": {
+   "name": "복싱",
+   "from": "noto:boxing-glove",
+   "license": "Apache-2.0"
+  },
+  "noto_bridge_at_night": {
+   "name": "다리",
+   "from": "noto:bridge-at-night",
+   "license": "Apache-2.0"
+  },
+  "noto_butterfly": {
+   "name": "나비",
+   "from": "noto:butterfly",
+   "license": "Apache-2.0"
+  },
+  "noto_cactus": {
+   "name": "선인장",
+   "from": "noto:cactus",
+   "license": "Apache-2.0"
+  },
+  "noto_camel": {
+   "name": "낙타",
+   "from": "noto:camel",
+   "license": "Apache-2.0"
+  },
+  "noto_camera": {
+   "name": "촬영",
+   "from": "noto:camera",
+   "license": "Apache-2.0"
+  },
+  "noto_canoe": {
+   "name": "카누",
+   "from": "noto:canoe",
+   "license": "Apache-2.0"
+  },
+  "noto_carrot": {
+   "name": "당근",
+   "from": "noto:carrot",
+   "license": "Apache-2.0"
+  },
+  "noto_castle": {
+   "name": "성",
+   "from": "noto:castle",
+   "license": "Apache-2.0"
+  },
+  "noto_church": {
+   "name": "교회",
+   "from": "noto:church",
+   "license": "Apache-2.0"
+  },
+  "noto_cinema": {
+   "name": "영화관",
+   "from": "noto:cinema",
+   "license": "Apache-2.0"
+  },
+  "noto_cityscape": {
+   "name": "도시 야경",
+   "from": "noto:cityscape",
+   "license": "Apache-2.0"
+  },
+  "noto_cl_button": {
+   "name": "단추",
+   "from": "noto:cl-button",
+   "license": "Apache-2.0"
+  },
+  "noto_compass": {
+   "name": "나침반",
+   "from": "noto:compass",
+   "license": "Apache-2.0"
+  },
+  "noto_crayon": {
+   "name": "크레용",
+   "from": "noto:crayon",
+   "license": "Apache-2.0"
+  },
+  "noto_crossed_swords": {
+   "name": "검",
+   "from": "noto:crossed-swords",
+   "license": "Apache-2.0"
+  },
+  "noto_crown": {
+   "name": "왕관",
+   "from": "noto:crown",
+   "license": "Apache-2.0"
+  },
+  "noto_desert_island": {
+   "name": "섬",
+   "from": "noto:desert-island",
+   "license": "Apache-2.0"
+  },
+  "noto_drum": {
+   "name": "드럼",
+   "from": "noto:drum",
+   "license": "Apache-2.0"
+  },
+  "noto_envelope": {
+   "name": "봉투",
+   "from": "noto:envelope",
+   "license": "Apache-2.0"
+  },
+  "noto_ferris_wheel": {
+   "name": "관람차",
+   "from": "noto:ferris-wheel",
+   "license": "Apache-2.0"
+  },
+  "noto_film_projector": {
+   "name": "영사기",
+   "from": "noto:film-projector",
+   "license": "Apache-2.0"
+  },
+  "noto_fireworks": {
+   "name": "불꽃놀이",
+   "from": "noto:fireworks",
+   "license": "Apache-2.0"
+  },
+  "noto_fish": {
+   "name": "물고기",
+   "from": "noto:fish",
+   "license": "Apache-2.0"
+  },
+  "noto_flower_playing_cards": {
+   "name": "카드",
+   "from": "noto:flower-playing-cards",
+   "license": "Apache-2.0"
+  },
+  "noto_flute": {
+   "name": "플루트",
+   "from": "noto:flute",
+   "license": "Apache-2.0"
+  },
+  "noto_fountain": {
+   "name": "분수",
+   "from": "noto:fountain",
+   "license": "Apache-2.0"
+  },
+  "noto_fountain_pen": {
+   "name": "만년필",
+   "from": "noto:fountain-pen",
+   "license": "Apache-2.0"
+  },
+  "noto_four_leaf_clover": {
+   "name": "네잎클로버",
+   "from": "noto:four-leaf-clover",
+   "license": "Apache-2.0"
+  },
+  "noto_framed_picture": {
+   "name": "액자",
+   "from": "noto:framed-picture",
+   "license": "Apache-2.0"
+  },
+  "noto_ghost": {
+   "name": "유령",
+   "from": "noto:ghost",
+   "license": "Apache-2.0"
+  },
+  "noto_gloves": {
+   "name": "장갑",
+   "from": "noto:gloves",
+   "license": "Apache-2.0"
+  },
+  "noto_goal_net": {
+   "name": "골",
+   "from": "noto:goal-net",
+   "license": "Apache-2.0"
+  },
+  "noto_guitar": {
+   "name": "기타",
+   "from": "noto:guitar",
+   "license": "Apache-2.0"
+  },
+  "noto_harp": {
+   "name": "하프",
+   "from": "noto:harp",
+   "license": "Apache-2.0"
+  },
+  "noto_herb": {
+   "name": "허브",
+   "from": "noto:herb",
+   "license": "Apache-2.0"
+  },
+  "noto_hiking_boot": {
+   "name": "등산화",
+   "from": "noto:hiking-boot",
+   "license": "Apache-2.0"
+  },
+  "noto_hindu_temple": {
+   "name": "힌두 사원",
+   "from": "noto:hindu-temple",
+   "license": "Apache-2.0"
+  },
+  "noto_hot_springs": {
+   "name": "온천",
+   "from": "noto:hot-springs",
+   "license": "Apache-2.0"
+  },
+  "noto_hundred_points": {
+   "name": "100점",
+   "from": "noto:hundred-points",
+   "license": "Apache-2.0"
+  },
+  "noto_jack_o_lantern": {
+   "name": "랜턴",
+   "from": "noto:jack-o-lantern",
+   "license": "Apache-2.0"
+  },
+  "noto_japanese_castle": {
+   "name": "일본 성",
+   "from": "noto:japanese-castle",
+   "license": "Apache-2.0"
+  },
+  "noto_jigsaw": {
+   "name": "조각 퍼즐",
+   "from": "noto:jigsaw",
+   "license": "Apache-2.0"
+  },
+  "noto_joker": {
+   "name": "조커",
+   "from": "noto:joker",
+   "license": "Apache-2.0"
+  },
+  "noto_joystick": {
+   "name": "조이스틱",
+   "from": "noto:joystick",
+   "license": "Apache-2.0"
+  },
+  "noto_kite": {
+   "name": "연",
+   "from": "noto:kite",
+   "license": "Apache-2.0"
+  },
+  "noto_laptop": {
+   "name": "노트북",
+   "from": "noto:laptop",
+   "license": "Apache-2.0"
+  },
+  "noto_letter_a": {
+   "name": "편지",
+   "from": "noto:letter-a",
+   "license": "Apache-2.0"
+  },
+  "noto_lighthouse": {
+   "name": "등대",
+   "from": "noto:lighthouse",
+   "license": "Apache-2.0"
+  },
+  "noto_megaphone": {
+   "name": "확성기",
+   "from": "noto:megaphone",
+   "license": "Apache-2.0"
+  },
+  "noto_microphone": {
+   "name": "마이크",
+   "from": "noto:microphone",
+   "license": "Apache-2.0"
+  },
+  "noto_moai": {
+   "name": "모아이",
+   "from": "noto:moai",
+   "license": "Apache-2.0"
+  },
+  "noto_mosque": {
+   "name": "모스크",
+   "from": "noto:mosque",
+   "license": "Apache-2.0"
+  },
+  "noto_mount_fuji": {
+   "name": "후지산",
+   "from": "noto:mount-fuji",
+   "license": "Apache-2.0"
+  },
+  "noto_mountain": {
+   "name": "산",
+   "from": "noto:mountain",
+   "license": "Apache-2.0"
+  },
+  "noto_movie_camera": {
+   "name": "영화 카메라",
+   "from": "noto:movie-camera",
+   "license": "Apache-2.0"
+  },
+  "noto_mushroom": {
+   "name": "버섯",
+   "from": "noto:mushroom",
+   "license": "Apache-2.0"
+  },
+  "noto_musical_keyboard": {
+   "name": "건반",
+   "from": "noto:musical-keyboard",
+   "license": "Apache-2.0"
+  },
+  "noto_musical_note": {
+   "name": "음표",
+   "from": "noto:musical-note",
+   "license": "Apache-2.0"
+  },
+  "noto_musical_notes": {
+   "name": "음악",
+   "from": "noto:musical-notes",
+   "license": "Apache-2.0"
+  },
+  "noto_newspaper": {
+   "name": "신문",
+   "from": "noto:newspaper",
+   "license": "Apache-2.0"
+  },
+  "noto_notebook": {
+   "name": "공책",
+   "from": "noto:notebook",
+   "license": "Apache-2.0"
+  },
+  "noto_olive": {
+   "name": "라이브",
+   "from": "noto:olive",
+   "license": "Apache-2.0"
+  },
+  "noto_open_book": {
+   "name": "펼친 책",
+   "from": "noto:open-book",
+   "license": "Apache-2.0"
+  },
+  "noto_paintbrush": {
+   "name": "붓",
+   "from": "noto:paintbrush",
+   "license": "Apache-2.0"
+  },
+  "noto_palm_tree": {
+   "name": "야자수",
+   "from": "noto:palm-tree",
+   "license": "Apache-2.0"
+  },
+  "noto_pen": {
+   "name": "펜",
+   "from": "noto:pen",
+   "license": "Apache-2.0"
+  },
+  "noto_pencil": {
+   "name": "연필",
+   "from": "noto:pencil",
+   "license": "Apache-2.0"
+  },
+  "noto_pool_8_ball": {
+   "name": "당구공",
+   "from": "noto:pool-8-ball",
+   "license": "Apache-2.0"
+  },
+  "noto_popcorn": {
+   "name": "팝콘",
+   "from": "noto:popcorn",
+   "license": "Apache-2.0"
+  },
+  "noto_potted_plant": {
+   "name": "화분",
+   "from": "noto:potted-plant",
+   "license": "Apache-2.0"
+  },
+  "noto_radio": {
+   "name": "라디오",
+   "from": "noto:radio",
+   "license": "Apache-2.0"
+  },
+  "noto_ribbon": {
+   "name": "리본",
+   "from": "noto:ribbon",
+   "license": "Apache-2.0"
+  },
+  "noto_robot": {
+   "name": "로봇",
+   "from": "noto:robot",
+   "license": "Apache-2.0"
+  },
+  "noto_rocket": {
+   "name": "로켓",
+   "from": "noto:rocket",
+   "license": "Apache-2.0"
+  },
+  "noto_rose": {
+   "name": "장미",
+   "from": "noto:rose",
+   "license": "Apache-2.0"
+  },
+  "noto_saxophone": {
+   "name": "색소폰",
+   "from": "noto:saxophone",
+   "license": "Apache-2.0"
+  },
+  "noto_scissors": {
+   "name": "가위",
+   "from": "noto:scissors",
+   "license": "Apache-2.0"
+  },
+  "noto_scroll": {
+   "name": "두루마리",
+   "from": "noto:scroll",
+   "license": "Apache-2.0"
+  },
+  "noto_seedling": {
+   "name": "새싹",
+   "from": "noto:seedling",
+   "license": "Apache-2.0"
+  },
+  "noto_selfie": {
+   "name": "셀카",
+   "from": "noto:selfie",
+   "license": "Apache-2.0"
+  },
+  "noto_sewing_needle": {
+   "name": "바늘",
+   "from": "noto:sewing-needle",
+   "license": "Apache-2.0"
+  },
+  "noto_shield": {
+   "name": "방패",
+   "from": "noto:shield",
+   "license": "Apache-2.0"
+  },
+  "noto_shinto_shrine": {
+   "name": "신사",
+   "from": "noto:shinto-shrine",
+   "license": "Apache-2.0"
+  },
+  "noto_shovel": {
+   "name": "삽",
+   "from": "noto:shovel",
+   "license": "Apache-2.0"
+  },
+  "noto_singer": {
+   "name": "노래",
+   "from": "noto:singer",
+   "license": "Apache-2.0"
+  },
+  "noto_skateboard": {
+   "name": "스케이트보드",
+   "from": "noto:skateboard",
+   "license": "Apache-2.0"
+  },
+  "noto_snow_capped_mountain": {
+   "name": "설산",
+   "from": "noto:snow-capped-mountain",
+   "license": "Apache-2.0"
+  },
+  "noto_soccer_ball": {
+   "name": "축구공",
+   "from": "noto:soccer-ball",
+   "license": "Apache-2.0"
+  },
+  "noto_sparkles": {
+   "name": "반짝",
+   "from": "noto:sparkles",
+   "license": "Apache-2.0"
+  },
+  "noto_stadium": {
+   "name": "경기장",
+   "from": "noto:stadium",
+   "license": "Apache-2.0"
+  },
+  "noto_star": {
+   "name": "별점",
+   "from": "noto:star",
+   "license": "Apache-2.0"
+  },
+  "noto_statue_of_liberty": {
+   "name": "자유의 여신상",
+   "from": "noto:statue-of-liberty",
+   "license": "Apache-2.0"
+  },
+  "noto_stopwatch": {
+   "name": "스톱워치",
+   "from": "noto:stopwatch",
+   "license": "Apache-2.0"
+  },
+  "noto_strawberry": {
+   "name": "딸기",
+   "from": "noto:strawberry",
+   "license": "Apache-2.0"
+  },
+  "noto_sunflower": {
+   "name": "해바라기",
+   "from": "noto:sunflower",
+   "license": "Apache-2.0"
+  },
+  "noto_teddy_bear": {
+   "name": "곰인형",
+   "from": "noto:teddy-bear",
+   "license": "Apache-2.0"
+  },
+  "noto_television": {
+   "name": "TV",
+   "from": "noto:television",
+   "license": "Apache-2.0"
+  },
+  "noto_tennis": {
+   "name": "테니스",
+   "from": "noto:tennis",
+   "license": "Apache-2.0"
+  },
+  "noto_tent": {
+   "name": "텐트",
+   "from": "noto:tent",
+   "license": "Apache-2.0"
+  },
+  "noto_thread": {
+   "name": "실",
+   "from": "noto:thread",
+   "license": "Apache-2.0"
+  },
+  "noto_thumbs_up": {
+   "name": "엄지척",
+   "from": "noto:thumbs-up",
+   "license": "Apache-2.0"
+  },
+  "noto_ticket": {
+   "name": "티켓",
+   "from": "noto:ticket",
+   "license": "Apache-2.0"
+  },
+  "noto_tokyo_tower": {
+   "name": "도쿄타워",
+   "from": "noto:tokyo-tower",
+   "license": "Apache-2.0"
+  },
+  "noto_treasure_chest": {
+   "name": "보물상자",
+   "from": "noto:treasure-chest",
+   "license": "Apache-2.0"
+  },
+  "noto_trophy": {
+   "name": "시상식",
+   "from": "noto:trophy",
+   "license": "Apache-2.0"
+  },
+  "noto_trumpet": {
+   "name": "트럼펫",
+   "from": "noto:trumpet",
+   "license": "Apache-2.0"
+  },
+  "noto_tulip": {
+   "name": "튤립",
+   "from": "noto:tulip",
+   "license": "Apache-2.0"
+  },
+  "noto_video_camera": {
+   "name": "캠코더",
+   "from": "noto:video-camera",
+   "license": "Apache-2.0"
+  },
+  "noto_video_game": {
+   "name": "게임",
+   "from": "noto:video-game",
+   "license": "Apache-2.0"
+  },
+  "noto_videocassette": {
+   "name": "카세트",
+   "from": "noto:videocassette",
+   "license": "Apache-2.0"
+  },
+  "noto_violin": {
+   "name": "바이올린",
+   "from": "noto:violin",
+   "license": "Apache-2.0"
+  },
+  "noto_volcano": {
+   "name": "화산",
+   "from": "noto:volcano",
+   "license": "Apache-2.0"
+  },
+  "noto_volleyball": {
+   "name": "배구",
+   "from": "noto:volleyball",
+   "license": "Apache-2.0"
+  },
+  "noto_yarn": {
+   "name": "털실",
+   "from": "noto:yarn",
+   "license": "Apache-2.0"
+  },
+  "noto_yo_yo": {
+   "name": "요요",
+   "from": "noto:yo-yo",
+   "license": "Apache-2.0"
+  },
+  "streamline_emojis_alien": {
+   "name": "외계인",
+   "from": "streamline-emojis:alien",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_artist_palette": {
+   "name": "팔레트",
+   "from": "streamline-emojis:artist-palette",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_balloon": {
+   "name": "풍선",
+   "from": "streamline-emojis:balloon",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_baseball": {
+   "name": "야구공",
+   "from": "streamline-emojis:baseball",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_basketball": {
+   "name": "농구공",
+   "from": "streamline-emojis:basketball",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_bell": {
+   "name": "종",
+   "from": "streamline-emojis:bell",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_bicycle": {
+   "name": "자전거",
+   "from": "streamline-emojis:bicycle",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_bouquet": {
+   "name": "꽃다발",
+   "from": "streamline-emojis:bouquet",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_bowling": {
+   "name": "볼링",
+   "from": "streamline-emojis:bowling",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_camel": {
+   "name": "낙타",
+   "from": "streamline-emojis:camel",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_castle": {
+   "name": "성",
+   "from": "streamline-emojis:castle",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_circus_tent": {
+   "name": "서커스",
+   "from": "streamline-emojis:circus-tent",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_crown": {
+   "name": "왕관",
+   "from": "streamline-emojis:crown",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_ferris_wheel": {
+   "name": "관람차",
+   "from": "streamline-emojis:ferris-wheel",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_flashlight": {
+   "name": "손전등",
+   "from": "streamline-emojis:flashlight",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_fountain": {
+   "name": "분수",
+   "from": "streamline-emojis:fountain",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_fountain_pen": {
+   "name": "만년필",
+   "from": "streamline-emojis:fountain-pen",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_four_leaf_clover": {
+   "name": "네잎클로버",
+   "from": "streamline-emojis:four-leaf-clover",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_ghost": {
+   "name": "유령",
+   "from": "streamline-emojis:ghost",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_guitar": {
+   "name": "기타",
+   "from": "streamline-emojis:guitar",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_hatching_chick_1": {
+   "name": "모자",
+   "from": "streamline-emojis:hatching-chick-1",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_herb": {
+   "name": "허브",
+   "from": "streamline-emojis:herb",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_jack_o_lantern": {
+   "name": "랜턴",
+   "from": "streamline-emojis:jack-o-lantern",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_joker": {
+   "name": "조커",
+   "from": "streamline-emojis:joker",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_microphone": {
+   "name": "마이크",
+   "from": "streamline-emojis:microphone",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_moai": {
+   "name": "모아이",
+   "from": "streamline-emojis:moai",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_mushroom": {
+   "name": "버섯",
+   "from": "streamline-emojis:mushroom",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_musical_keyboard": {
+   "name": "건반",
+   "from": "streamline-emojis:musical-keyboard",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_musical_note": {
+   "name": "음표",
+   "from": "streamline-emojis:musical-note",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_musical_notes": {
+   "name": "음악",
+   "from": "streamline-emojis:musical-notes",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_newspaper": {
+   "name": "신문",
+   "from": "streamline-emojis:newspaper",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_open_book": {
+   "name": "펼친 책",
+   "from": "streamline-emojis:open-book",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_palm_tree": {
+   "name": "야자수",
+   "from": "streamline-emojis:palm-tree",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_pool_8_ball": {
+   "name": "당구공",
+   "from": "streamline-emojis:pool-8-ball",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_radio": {
+   "name": "라디오",
+   "from": "streamline-emojis:radio",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_ribbon": {
+   "name": "리본",
+   "from": "streamline-emojis:ribbon",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_rocket": {
+   "name": "로켓",
+   "from": "streamline-emojis:rocket",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_rose": {
+   "name": "장미",
+   "from": "streamline-emojis:rose",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_saxophone": {
+   "name": "색소폰",
+   "from": "streamline-emojis:saxophone",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_scroll": {
+   "name": "두루마리",
+   "from": "streamline-emojis:scroll",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_seedling": {
+   "name": "새싹",
+   "from": "streamline-emojis:seedling",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_sparkles": {
+   "name": "반짝",
+   "from": "streamline-emojis:sparkles",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_television": {
+   "name": "TV",
+   "from": "streamline-emojis:television",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_tent": {
+   "name": "텐트",
+   "from": "streamline-emojis:tent",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_tropical_drink": {
+   "name": "잉크",
+   "from": "streamline-emojis:tropical-drink",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_trumpet": {
+   "name": "트럼펫",
+   "from": "streamline-emojis:trumpet",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_tulip": {
+   "name": "튤립",
+   "from": "streamline-emojis:tulip",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_videocassette": {
+   "name": "카세트",
+   "from": "streamline-emojis:videocassette",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_emojis_violin": {
+   "name": "바이올린",
+   "from": "streamline-emojis:violin",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_flex_color_binoculars": {
+   "name": "쌍안경",
+   "from": "streamline-flex-color:binoculars",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_flex_color_camera_tripod": {
+   "name": "삼각대",
+   "from": "streamline-flex-color:camera-tripod",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_flex_color_campfire": {
+   "name": "모닥불",
+   "from": "streamline-flex-color:campfire",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_flex_color_chat_bubble_square_phone": {
+   "name": "댓글",
+   "from": "streamline-flex-color:chat-bubble-square-phone",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_flex_color_dice_5": {
+   "name": "주사위",
+   "from": "streamline-flex-color:dice-5",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_flex_color_dictionary_language_book": {
+   "name": "사전",
+   "from": "streamline-flex-color:dictionary-language-book",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_flex_color_drone": {
+   "name": "드론",
+   "from": "streamline-flex-color:drone",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_flex_color_heart": {
+   "name": "좋아요",
+   "from": "streamline-flex-color:heart",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_flex_color_new_sticky_note": {
+   "name": "포스트잇",
+   "from": "streamline-flex-color:new-sticky-note",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_flex_color_pine_tree": {
+   "name": "소나무",
+   "from": "streamline-flex-color:pine-tree",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_flex_color_polaroid_four": {
+   "name": "폴라로이드",
+   "from": "streamline-flex-color:polaroid-four",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_flex_color_typewriter": {
+   "name": "타자기",
+   "from": "streamline-flex-color:typewriter",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_flex_color_windmill": {
+   "name": "풍차",
+   "from": "streamline-flex-color:windmill",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_freehand_color_board_game_chess_figures": {
+   "name": "보드게임",
+   "from": "streamline-freehand-color:board-game-chess-figures",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_freehand_color_book_library_shelf_1": {
+   "name": "도서관",
+   "from": "streamline-freehand-color:book-library-shelf-1",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_freehand_color_business_coaching_whistle": {
+   "name": "호루라기",
+   "from": "streamline-freehand-color:business-coaching-whistle",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_freehand_color_camera_tripod": {
+   "name": "삼각대",
+   "from": "streamline-freehand-color:camera-tripod",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_freehand_color_concert_couple_duet_1": {
+   "name": "콘서트",
+   "from": "streamline-freehand-color:concert-couple-duet-1",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_freehand_color_content_typewriter": {
+   "name": "타자기",
+   "from": "streamline-freehand-color:content-typewriter",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_freehand_color_design_tool_liquid_glue": {
+   "name": "풀",
+   "from": "streamline-freehand-color:design-tool-liquid-glue",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_freehand_color_design_tool_quill": {
+   "name": "깃펜",
+   "from": "streamline-freehand-color:design-tool-quill",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_freehand_color_headphones_1": {
+   "name": "헤드폰",
+   "from": "streamline-freehand-color:headphones-1",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_freehand_color_light_spotlight_1": {
+   "name": "조명",
+   "from": "streamline-freehand-color:light-spotlight-1",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_freehand_color_microphone_karaoke_1": {
+   "name": "노래방",
+   "from": "streamline-freehand-color:microphone-karaoke-1",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_freehand_color_module_building_blocks": {
+   "name": "블록",
+   "from": "streamline-freehand-color:module-building-blocks",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_freehand_color_music_metronome": {
+   "name": "메트로놈",
+   "from": "streamline-freehand-color:music-metronome",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_freehand_color_photo_frame_hang": {
+   "name": "사진 액자",
+   "from": "streamline-freehand-color:photo-frame-hang",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_freehand_color_podcast_microphone_international_1": {
+   "name": "팟캐스트",
+   "from": "streamline-freehand-color:podcast-microphone-international-1",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_freehand_color_smartphone_app_widget_add": {
+   "name": "스마트폰",
+   "from": "streamline-freehand-color:smartphone-app-widget-add",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_freehand_color_video_game_controller": {
+   "name": "게임 패드",
+   "from": "streamline-freehand-color:video-game-controller",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_freehand_color_vinyl_record_gramophone": {
+   "name": "LP판",
+   "from": "streamline-freehand-color:vinyl-record-gramophone",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_kameleon_color_cable_car": {
+   "name": "케이블카",
+   "from": "streamline-kameleon-color:cable-car",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_kameleon_color_filter": {
+   "name": "필터",
+   "from": "streamline-kameleon-color:filter",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_kameleon_color_ladybug": {
+   "name": "무당벌레",
+   "from": "streamline-kameleon-color:ladybug",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_kameleon_color_map": {
+   "name": "지도",
+   "from": "streamline-kameleon-color:map",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_kameleon_color_pine_tree": {
+   "name": "소나무",
+   "from": "streamline-kameleon-color:pine-tree",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_kameleon_color_podium": {
+   "name": "시상대",
+   "from": "streamline-kameleon-color:podium",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_kameleon_color_postcard": {
+   "name": "엽서",
+   "from": "streamline-kameleon-color:postcard",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_kameleon_color_quill_paper": {
+   "name": "깃펜",
+   "from": "streamline-kameleon-color:quill-paper",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_kameleon_color_smartphone": {
+   "name": "스마트폰",
+   "from": "streamline-kameleon-color:smartphone",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_kameleon_color_sneakers_3": {
+   "name": "운동화",
+   "from": "streamline-kameleon-color:sneakers-3",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_alien": {
+   "name": "외계인",
+   "from": "streamline-plump-color:alien",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_balloon": {
+   "name": "풍선",
+   "from": "streamline-plump-color:balloon",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_beach": {
+   "name": "해변",
+   "from": "streamline-plump-color:beach",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_beer_pitch": {
+   "name": "벌",
+   "from": "streamline-plump-color:beer-pitch",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_bell": {
+   "name": "종",
+   "from": "streamline-plump-color:bell",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_binoculars": {
+   "name": "쌍안경",
+   "from": "streamline-plump-color:binoculars",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_bookmark": {
+   "name": "책갈피",
+   "from": "streamline-plump-color:bookmark",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_broken_link_2": {
+   "name": "잉크",
+   "from": "streamline-plump-color:broken-link-2",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_chat_bubble_oval_notification": {
+   "name": "댓글",
+   "from": "streamline-plump-color:chat-bubble-oval-notification",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_chess_pawn": {
+   "name": "체스",
+   "from": "streamline-plump-color:chess-pawn",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_dices_entertainment_gaming_dices": {
+   "name": "주사위",
+   "from": "streamline-plump-color:dices-entertainment-gaming-dices",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_fish": {
+   "name": "물고기",
+   "from": "streamline-plump-color:fish",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_flash_1": {
+   "name": "플래시",
+   "from": "streamline-plump-color:flash-1",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_flashlight": {
+   "name": "손전등",
+   "from": "streamline-plump-color:flashlight",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_hot_spring": {
+   "name": "온천",
+   "from": "streamline-plump-color:hot-spring",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_laptop": {
+   "name": "노트북",
+   "from": "streamline-plump-color:laptop",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_leaf_protect": {
+   "name": "잎",
+   "from": "streamline-plump-color:leaf-protect",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_lens": {
+   "name": "렌즈",
+   "from": "streamline-plump-color:lens",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_map_fold": {
+   "name": "지도",
+   "from": "streamline-plump-color:map-fold",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_paint_bucket": {
+   "name": "물감",
+   "from": "streamline-plump-color:paint-bucket",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_painting_board": {
+   "name": "그림 감상",
+   "from": "streamline-plump-color:painting-board",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_password_lock": {
+   "name": "검",
+   "from": "streamline-plump-color:password-lock",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_polaroid": {
+   "name": "폴라로이드",
+   "from": "streamline-plump-color:polaroid",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_potted_flower": {
+   "name": "꽃 화분",
+   "from": "streamline-plump-color:potted-flower",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_pyramid_shape": {
+   "name": "피라미드",
+   "from": "streamline-plump-color:pyramid-shape",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_ruler": {
+   "name": "자",
+   "from": "streamline-plump-color:ruler",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_scissors": {
+   "name": "가위",
+   "from": "streamline-plump-color:scissors",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_stamp": {
+   "name": "도장",
+   "from": "streamline-plump-color:stamp",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_star_medal": {
+   "name": "메달",
+   "from": "streamline-plump-color:star-medal",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_strawberry": {
+   "name": "딸기",
+   "from": "streamline-plump-color:strawberry",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_treasure_chest": {
+   "name": "보물상자",
+   "from": "streamline-plump-color:treasure-chest",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_trending_content": {
+   "name": "인기",
+   "from": "streamline-plump-color:trending-content",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_plump_color_user_podcast": {
+   "name": "팟캐스트",
+   "from": "streamline-plump-color:user-podcast",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_ultimate_color_award_badge_star": {
+   "name": "수상",
+   "from": "streamline-ultimate-color:award-badge-star",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_ultimate_color_barbecue_grill": {
+   "name": "바비큐",
+   "from": "streamline-ultimate-color:barbecue-grill",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_ultimate_color_board_game_dice_1": {
+   "name": "보드게임",
+   "from": "streamline-ultimate-color:board-game-dice-1",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_ultimate_color_button_loop": {
+   "name": "단추",
+   "from": "streamline-ultimate-color:button-loop",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_ultimate_color_concert_dj": {
+   "name": "콘서트",
+   "from": "streamline-ultimate-color:concert-dj",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_ultimate_color_gymnastics_acrobatic_1": {
+   "name": "헬스장",
+   "from": "streamline-ultimate-color:gymnastics-acrobatic-1",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_ultimate_color_headphones_1": {
+   "name": "헤드폰",
+   "from": "streamline-ultimate-color:headphones-1",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_ultimate_color_instagram_logo": {
+   "name": "피드",
+   "from": "streamline-ultimate-color:instagram-logo",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_ultimate_color_instrument_classical_piano": {
+   "name": "피아노",
+   "from": "streamline-ultimate-color:instrument-classical-piano",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_ultimate_color_modern_music_electric_guitar": {
+   "name": "일렉기타",
+   "from": "streamline-ultimate-color:modern-music-electric-guitar",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_ultimate_color_rating_star_winner": {
+   "name": "우승",
+   "from": "streamline-ultimate-color:rating-star-winner",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_ultimate_color_share": {
+   "name": "공유",
+   "from": "streamline-ultimate-color:share",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_ultimate_color_show_theater_masks": {
+   "name": "연극",
+   "from": "streamline-ultimate-color:show-theater-masks",
+   "license": "CC-BY-4.0"
+  },
+  "streamline_ultimate_color_vinyl_record": {
+   "name": "LP판",
+   "from": "streamline-ultimate-color:vinyl-record",
+   "license": "CC-BY-4.0"
+  },
+  "twemoji_harp": {
+   "name": "하프",
+   "from": "twemoji:harp",
+   "license": "CC-BY-4.0"
+  },
+  "twemoji_jigsaw": {
+   "name": "조각 퍼즐",
+   "from": "twemoji:jigsaw",
+   "license": "CC-BY-4.0"
+  },
+  "twemoji_letter_a": {
+   "name": "편지",
+   "from": "twemoji:letter-a",
+   "license": "CC-BY-4.0"
+  },
+  "twemoji_shovel": {
+   "name": "삽",
+   "from": "twemoji:shovel",
+   "license": "CC-BY-4.0"
+  },
+  "twemoji_skier": {
+   "name": "스키",
+   "from": "twemoji:skier",
+   "license": "CC-BY-4.0"
+  }
+ }
+}

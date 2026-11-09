@@ -187,3 +187,21 @@ test('상점 탭은 스티커 하나뿐이고 아이콘 팩 구분이 없다', (
     assert.equal(w.eval("Object.keys(STICKER_PACKS).filter(id=>id.startsWith('icons_')).length"), 3);
   } finally { w.close(); }
 });
+
+test('Iconify 팩(fv:)의 그림 파일·이름·출처가 모두 있고 허용 라이선스만 쓴다', () => {
+  const { w } = open();
+  try {
+    const keys = [...w.eval(`Object.values(STICKER_PACKS).flatMap(p=>p.list).filter(e=>e.startsWith('fv:')).map(e=>e.slice(3))`)];
+    assert.ok(keys.length >= 350, '그림 수 ' + keys.length);
+    const sources = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'stk', 'fv', 'SOURCES.json'), 'utf8'));
+    for (const k of keys) {
+      assert.ok(fs.existsSync(path.join(__dirname, '..', 'stk', 'fv', k + '.svg')), '그림 파일 ' + k);
+      assert.ok(w.eval(`!!FV_NAMES[${JSON.stringify(k)}]`), '이름 ' + k);
+      assert.ok(['MIT', 'Apache-2.0', 'CC-BY-4.0', 'CC0-1.0'].includes((sources.stickers[k] || {}).license), '라이선스 ' + k);
+    }
+    assert.equal(new Set(keys).size, keys.length, '팩끼리 겹침');
+    const html = w.eval(`artSVG('fv:${keys[0]}','x')`);
+    assert.ok(html.includes('/stk/fv/' + keys[0] + '.svg'), '칸 그림으로도 그려진다');
+    assert.ok(w.eval(`stkFace('fv:${keys[0]}')`).includes('/stk/fv/'));
+  } finally { w.close(); }
+});

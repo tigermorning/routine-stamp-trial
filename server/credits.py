@@ -60,12 +60,12 @@ ITEMS = {
     "sticker_office": {"id": "sticker_office", "kind": "sticker", "name": "일·공부 스티커 팩", "amount": 2700, "desc": "출근·회의·보고서·시험·자격증까지 일과 배움 — 스티커 45개"},
     # 새 팩 3종(2026-11-06 사용자 요청: 네이버 캘린더처럼 화풍이 서로 다른 스티커. 네이버 그림은 베끼지 않고 화풍 구성만 참고한 이 앱 전용 그림)
     "sticker_dojang": {"id": "sticker_dojang", "kind": "sticker", "name": "사람들 일상 스티커 팩", "amount": 2700, "desc": "학생·직장인·요리사부터 인사·발표·아이고까지 사람이 사는 모습 — 스티커 46개"},
-    "sticker_seal": {"id": "sticker_seal", "kind": "sticker", "name": "참 잘했어요 도장 팩", "amount": 1350, "desc": "참 잘했어요·최고예요·100점·해냈다 등 잉크 도장 16종"},
-    "sticker_washi": {"id": "sticker_washi", "kind": "sticker", "name": "마스킹테이프 팩", "amount": 2700, "desc": "줄무늬·깅엄·별·하트·무지개 등 다이어리 꾸미기 테이프 16종"},
+    "sticker_seal": {"id": "sticker_seal", "kind": "sticker", "name": "참 잘했어요 도장 팩", "amount": 1350, "desc": "참 잘했어요·최고예요·100점·해냈다 등 잉크 도장 40종"},
+    "sticker_washi": {"id": "sticker_washi", "kind": "sticker", "name": "마스킹테이프 팩", "amount": 2700, "desc": "줄무늬·깅엄·별·하트·무지개 등 다이어리 꾸미기 테이프 40종"},
     # 감정·날씨·D-day 팩(2026-11-06 사용자 요청): 과일 캐릭터 감정, 펠트 바느질 날씨, 뜯는 달력·풍선·티켓·깃발 카운터
     "sticker_fruit": {"id": "sticker_fruit", "kind": "sticker", "name": "기분·마음 스티커 팩", "amount": 2700, "desc": "기쁨·설렘·피곤·불안·분노까지 오늘의 기분 — 스티커 44개"},
     "sticker_felt": {"id": "sticker_felt", "kind": "sticker", "name": "날씨·계절 스티커 팩", "amount": 2700, "desc": "맑음·비·눈·미세먼지부터 봄 벚꽃·가을 단풍까지 — 스티커 36개"},
-    "sticker_dday": {"id": "sticker_dday", "kind": "sticker", "name": "D-day 카운터 팩", "amount": 1350, "desc": "D-100·D-30·D-7·D-DAY·D+100·D+365 등 뜯는 달력·풍선·티켓·깃발 카운터 16종"},
+    "sticker_dday": {"id": "sticker_dday", "kind": "sticker", "name": "D-day 카운터 팩", "amount": 1350, "desc": "D-100·D-30·D-7·D-DAY·D+100·D+365 등 뜯는 달력·풍선·티켓·깃발 카운터 47종"},
     # 일정 모음(2026-11-06 사용자 요청): 피부관리·네일·병원·운동·모임·공부·여행·경조사까지 일상 일정 거의 전부를 한 팩에
     "sticker_sched": {"id": "sticker_sched", "kind": "sticker", "name": "건강·병원 스티커 팩", "amount": 2700, "desc": "병원·약·검사·몸 관리까지 건강과 관련된 하루 — 스티커 30개"},
     # 화풍 더 섞기 4종(2026-11-06 사용자 요청): 낙서(삐뚤빼뚤 선), 말랑 3D(광택 입체), 손글씨 레터링(한글), 마커 표시
@@ -78,6 +78,17 @@ ITEMS = {
     "sticker_beauty": {"id": "sticker_beauty", "kind": "sticker", "name": "미용·패션 스티커 팩", "amount": 2700, "desc": "미용실·네일·스킨케어·옷 입기까지 가꾸는 시간 — 스티커 46개"},
     "sticker_love": {"id": "sticker_love", "kind": "sticker", "name": "만남·사랑 스티커 팩", "amount": 2700, "desc": "친구·가족·연인과 만나고 마음을 나누는 날 — 스티커 47개"},
     "sticker_plant": {"id": "sticker_plant", "kind": "sticker", "name": "식물·자연 스티커 팩", "amount": 1350, "desc": "새싹·화분·꽃·나무·산책길까지 초록과 자연 — 스티커 45개"},
+    # 취미·여행 확장(2026-11-09 사용자 요청): 세계 명소·음악·게임·그림·영화·독서·캠핑·정원·사진·응원 팩(Iconify 오픈 아이콘 세트)
+    "sticker_world": {"id": "sticker_world", "kind": "sticker", "name": "세계 명소 스티커 팩", "amount": 4050, "desc": "에펠탑·타지마할·만리장성·자유의 여신상까지 세계 곳곳의 명소와 풍경 — 스티커 58개"},
+    "sticker_music": {"id": "sticker_music", "kind": "sticker", "name": "음악·악기 스티커 팩", "amount": 2700, "desc": "기타·피아노·바이올린·드럼부터 마이크·헤드폰·LP까지 음악 하는 시간 — 스티커 47개"},
+    "sticker_game": {"id": "sticker_game", "kind": "sticker", "name": "게임·놀이 스티커 팩", "amount": 2700, "desc": "게임기·보드게임·퍼즐·체스·카드까지 노는 시간 — 스티커 49개"},
+    "sticker_art": {"id": "sticker_art", "kind": "sticker", "name": "그림·공예 스티커 팩", "amount": 2700, "desc": "그림·뜨개질·도자기·종이접기까지 손으로 만드는 시간 — 스티커 30개"},
+    "sticker_cinema": {"id": "sticker_cinema", "kind": "sticker", "name": "영화·공연·전시 스티커 팩", "amount": 2700, "desc": "영화관·연극·뮤지컬·미술관까지 보러 가는 날 — 스티커 34개"},
+    "sticker_read": {"id": "sticker_read", "kind": "sticker", "name": "독서·글쓰기 스티커 팩", "amount": 2700, "desc": "책·서점·일기·편지·타자기까지 읽고 쓰는 시간 — 스티커 32개"},
+    "sticker_outdoor": {"id": "sticker_outdoor", "kind": "sticker", "name": "캠핑·낚시·등산 스티커 팩", "amount": 2700, "desc": "텐트·모닥불·낚시·등산까지 밖에서 보내는 시간 — 스티커 31개"},
+    "sticker_garden": {"id": "sticker_garden", "kind": "sticker", "name": "정원·반려식물 스티커 팩", "amount": 2700, "desc": "화분·새싹·물주기·텃밭까지 식물 가꾸는 시간 — 스티커 37개"},
+    "sticker_photo": {"id": "sticker_photo", "kind": "sticker", "name": "사진·영상·SNS 스티커 팩", "amount": 2700, "desc": "사진·브이로그·라이브·해시태그까지 남기고 나누는 시간 — 스티커 46개"},
+    "sticker_cheer": {"id": "sticker_cheer", "kind": "sticker", "name": "응원·스포츠 관람 스티커 팩", "amount": 2700, "desc": "경기장·응원·메달·트로피까지 보고 응원하는 날 — 스티커 40개"},
     # 할 일 아이콘 스타일 팩(2026-11-04): 할 일 칸의 그림 25종을 다른 분위기로 바꾼다(그림은 화면 index.html 의 GLYPHS·ICON_PACKS, id 가 같아야 함). 가격은 임시값이다(근거 없음).
     # 메모지(2026-11-06 사용자 결정): 7종 한 묶음 대신 4종씩 두 번들. 예전에 «메모지 7종»(paper_pack)을 산 기록은 DB 에 남고 화면이 옛 7종 소유로 읽는다
     "paper_notes": {"id": "paper_notes", "kind": "paper", "name": "노트 메모지 4종 번들", "amount": 2700, "desc": "기록에 쓰는 줄 노트·모눈·점 격자·그리드 4가지 메모지"},
