@@ -492,7 +492,7 @@ def test_diary_dialog_and_button_exist_in_page():
 def test_paper_bundles_are_two_of_four_and_css_for_each_paper():
     # 2026-11-06 사용자 결정: 메모지는 7종 한 묶음이 아니라 4종씩 두 번들
     assert "paper_pack" not in creditlib.ITEMS  # 옛 «7종»은 더 팔지 않는다(산 기록만 화면이 읽는다)
-    bundles = {"paper_notes": ("lined", "grid", "dot", "biggrid"), "paper_mood": ("kraft", "sticky", "letter", "wash")}
+    bundles = {"paper_notes": ("lined", "grid", "dot", "biggrid"), "paper_mood": ("kraft", "sticky", "oxford", "wash")}
     for bid in bundles:
         item = creditlib.ITEMS[bid]
         assert item["kind"] == "paper" and item["amount"] > 0 and item["desc"]

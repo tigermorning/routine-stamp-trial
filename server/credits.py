@@ -99,7 +99,7 @@ ITEMS = {
     # 할 일 아이콘 스타일 팩(2026-11-04): 할 일 칸의 그림 25종을 다른 분위기로 바꾼다(그림은 화면 index.html 의 GLYPHS·ICON_PACKS, id 가 같아야 함). 가격은 임시값이다(근거 없음).
     # 메모지(2026-11-06 사용자 결정): 7종 한 묶음 대신 4종씩 두 번들. 예전에 «메모지 7종»(paper_pack)을 산 기록은 DB 에 남고 화면이 옛 7종 소유로 읽는다
     "paper_notes": {"id": "paper_notes", "kind": "paper", "name": "노트 메모지 4종 번들", "amount": 2700, "desc": "기록에 쓰는 줄 노트·모눈·점 격자·그리드 4가지 메모지"},
-    "paper_mood": {"id": "paper_mood", "kind": "paper", "name": "감성 메모지 4종 번들", "amount": 2700, "desc": "기록에 쓰는 크라프트·노란 메모·편지지·수채 하늘 4가지 메모지"},
+    "paper_mood": {"id": "paper_mood", "kind": "paper", "name": "감성 메모지 4종 번들", "amount": 2700, "desc": "기록에 쓰는 크라프트·포스트잇·옥스포드 노트·수채 4가지 메모지"},
     "icons_cute": {"id": "icons_cute", "kind": "sticker", "name": "귀여운 표정 스티커 팩", "amount": 2700, "desc": "표정이 있는 귀여운 일상 그림 20개 — 스티커로도, 할 일 칸 그림으로도 써요"},
     "icons_simple": {"id": "icons_simple", "kind": "sticker", "name": "심플 선 스티커 팩", "amount": 2700, "desc": "깔끔한 선 그림 일상 스티커 20개 — 스티커로도, 할 일 칸 그림으로도 써요"},
     "icons_pastel": {"id": "icons_pastel", "kind": "sticker", "name": "파스텔 스티커 팩", "amount": 2700, "desc": "흰 테두리 파스텔 일상 스티커 20개 — 스티커로도, 할 일 칸 그림으로도 써요"},

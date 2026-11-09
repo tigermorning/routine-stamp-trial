@@ -85,7 +85,7 @@ test('형광펜 줄: 도장 27일에는 없고 28일에는 5색과 지우개가 
 test('메모지 속지 4종은 새 이름이고 기본이 아닌 속지에는 마스킹 테이프가 붙는다', () => {
   const { w } = open({ days: 30 });
   try {
-    assert.deepEqual([...w.eval("['lined','grid','dot','biggrid'].map(id=>PAPERS.find(p=>p.id===id).name)")], ['핑크 줄노트', '연노랑 모눈', '라벤더 도트', '민트 무지']);
+    assert.deepEqual([...w.eval("['lined','grid','dot','biggrid'].map(id=>PAPERS.find(p=>p.id===id).name)")], ['줄노트', '모눈', '도트', '큰 모눈']);
     w.eval("dyMode='day';renderDiary()");
     assert.equal(w.document.querySelector('.dyarea').classList.contains('taped'), false, '기본 속지는 테이프 없음');
     w.eval("OWNED.add('paper_notes');S.dyPaper='grid';renderDiary()");
@@ -131,7 +131,7 @@ test('배경색: 고른 색이 모든 속지 메모 칸에 적용되고 잘못�
   const { w } = open({ days: 30 });
   try {
     const run = (color, paper) => w.eval(`(()=>{S.dyBg=${JSON.stringify(color)};OWNED.add('paper_notes');OWNED.add('paper_mood');S.dyPaper=${JSON.stringify(paper)};dyMode='day';renderDiary();const ed=document.querySelector('.dyedit');return {cls:ed.className,style:ed.getAttribute('style')||''}})()`);
-    for (const paper of ['plain', 'lined', 'grid', 'dot', 'biggrid', 'kraft', 'sticky', 'letter', 'wash']) {
+    for (const paper of ['plain', 'lined', 'grid', 'dot', 'biggrid', 'kraft', 'sticky', 'oxford', 'wash']) {
       const r = run('#dbeeff', paper);
       assert.ok(r.cls.includes('paper-' + paper), paper);
       assert.ok(r.style.includes('--pbg') && r.style.includes('#dbeeff'), paper + ' ' + r.style);
@@ -156,11 +156,10 @@ test('배경색 색상표: 기본·12색·직접 고르기가 꾸미기 패널�
   } finally { w.close(); }
 });
 
-test('크라프트지는 색만이 아니라 섬유결·알갱이 질감 배경을 가진다', () => {
-  const rule = HTML.slice(HTML.indexOf('#dyBody .paper-kraft{'), HTML.indexOf('#dyBody .paper-kraft{') + 1400);
-  assert.ok(rule.includes('feTurbulence'), '질감 필터');
-  assert.ok((rule.match(/url\("data:image\/svg\+xml/g) || []).length >= 2, '섬유결과 알갱이 두 겹');
-  assert.ok(rule.includes('inset 0 0'), '가장자리 눌림');
+test('크라프트지는 질감 없이 색만 쓴다(질감은 나무처럼 보여 뺐다)', () => {
+  const rule = HTML.slice(HTML.indexOf('#dyBody .paper-kraft{'), HTML.indexOf('#dyBody .paper-kraft{') + 200);
+  assert.ok(!rule.includes('feTurbulence') && !rule.includes('url('), '질감 없음');
+  assert.ok(rule.includes('var(--pbg,#d8b88a)'), '크라프트 기본색');
 });
 
 test('모든 스티커를 할 일 칸 그림으로 고를 수 있다(외부 일러스트 포함, 하이라이트만 제외)', () => {
