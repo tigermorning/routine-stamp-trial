@@ -640,8 +640,10 @@ def test_affirmations_cover_every_ui_language_and_api_uses_lang(env):
     # 2026-11-06 사용자 결정: 오늘의 한마디는 격언 대신 일상 응원 문장, 언어별로
     import quotes
     d = quotes.load_affirmations()
-    for lang in ("ko", "en", "zh-Hans", "zh-Hant", "yue", "id", "vi", "es", "fi", "sv"):
-        assert len(d[lang]) >= 16 and len(set(d[lang])) == len(d[lang]), lang
+    # 2026-11-09 사용자 결정: 한국어판이 완성될 때까지 한국어만 필수(60개 이상). 다른 9개 언어는 예전 일반 문장이 남아 있고, 있으면 겹치지 않기만 본다
+    assert len(d["ko"]) >= 60 and len(set(d["ko"])) == len(d["ko"])
+    for lang in ("en", "zh-Hans", "zh-Hant", "yue", "id", "vi", "es", "fi", "sv"):
+        assert len(set(d[lang])) == len(d[lang]), lang
     client, store, toss = env[0], env[1], env[2]
     r = client.get("/api/quote/sample", params={"lang": "sv"}).json()
     assert r["text"] in d["sv"] and r["id"] >= 1

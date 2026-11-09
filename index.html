@@ -2043,6 +2043,7 @@ const LOCALE={ko:'ko-KR',en:'en-US','zh-Hans':'zh-CN','zh-Hant':'zh-TW',yue:'zh-
 function flat(o,p='',out={}){for(const [k,v] of Object.entries(o)){const key=p?p+'.'+k:k;if(typeof v==='string')out[key]=v;else flat(v,key,out)}return out}
 const T={};for(const l of LANGS)T[l]=flat(L[l]);
 let lang='ko';
+const KO_ONLY=true; // 2026-11-09 사용자 결정: 한국어판이 완성될 때까지 다른 언어(9개)를 숨긴다. 번역(T)·LANGS·언어 메뉴 코드는 그대로 두었다. 다시 켜려면 false 로 바꾼다
 const t=(k,v)=>{let s=T[lang][k]!==undefined?T[lang][k]:T.ko[k];if(v)for(const x in v)s=s.split('{'+x+'}').join(v[x]);return s};
 function guessLang(){
   const n=(navigator.language||'').toLowerCase();
@@ -2872,6 +2873,7 @@ $('delBtn').onclick=()=>{
 $('delCancel').onclick=()=>{delPending=false;renderDelete();$('delBtn').focus({preventScroll:true})};
 function renderSettings(){
   renderDelete();
+  $('langRow').hidden=KO_ONLY; // 언어 선택은 KO_ONLY 가 켜져 있는 동안 숨긴다(번역과 코드는 지우지 않았다)
   $('langPills').innerHTML=LANGS.map(l=>`<button type="button" class="opt" role="radio" aria-checked="${l===lang}" data-l="${l}">${esc(LANG_NAMES[l])}</button>`).join('');
   $('langPills').querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
     lang=b.dataset.l;S.lang=lang;save();$('fbMsg').textContent='';render();
@@ -3004,7 +3006,7 @@ setInterval(refreshToday,60000);
 
 persists=probe();
 if(persists) load();
-lang=LANGS.includes(S.lang)?S.lang:guessLang();
+lang=KO_ONLY?'ko':(LANGS.includes(S.lang)?S.lang:guessLang()); // 한국어판이 완성될 때까지 한국어로 고정(저장해 둔 언어·브라우저 언어는 무시)
 if(!persists) $('notice').hidden=false;
 $('fb').value=S.draft||'';
 render();
