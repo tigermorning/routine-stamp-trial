@@ -70,9 +70,13 @@ jobs:
           service: ${{ vars.SERVICE }}
           region: us-central1
           image: ${{ env.IMAGE }}
+          # CREDITS: 상점·스티커·결제(server/credits.py)는 staging 에서만 켠다(사용자 요청 2026-11-09). main 은 그대로 꺼 둔다.
+          # CREDIT_DB: 컨테이너에서 쓸 수 있는 곳(/tmp)에 둔 시험용 DB. 인스턴스가 바뀌면 지워진다. 토스 키는 넣지 않아 결제는 되지 않는다.
           env_vars: |
             COMMIT_SHA=${{ env.COMMIT }}
             ENV=${{ vars.ENV }}
+            CREDITS=${{ github.ref_name == 'main' && 'off' || 'on' }}
+            CREDIT_DB=/tmp/credit.db
           no_traffic: true
           tag: green
           # 스타트업 프로브: /health 가 200 이어야 이 리비전이 Ready 가 된다 (기본값은 포트만 열리면 통과)
