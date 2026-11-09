@@ -6,7 +6,7 @@
 
 > 먼저 밝혀 둘 것 네 가지
 > 1. **모델**: 이 실험의 도우미 모델은 `.env` 의 Claude(`claude-sonnet-5-5`, effort low)다. `docs/OBSERVABILITY.md` 가 운영 모델로 적은 gpt-4o-mini 에서도 같은 현상이 나는지는 **확인하지 못했다**(OpenAI 키가 이 PC에 없음).
-> 2. **«배포»**: 고친 코드는 `main` 에 들어 있다(PR #32 병합, 커밋 `9785697`). 실제 모델로 배포 뒤 확인을 한 곳은 **staging 서버**(Cloud Run `routine-stamp-trial-staging`)다(아래 6절). 운영 서비스(`routine-stamp-trial`)에는 리비전 `routine-stamp-trial-00014-tan` 이 배포됐다(2026-11-09 06:42 UTC, `production` 환경 사용자 승인). 운영에서 같은 새 대화 측정은 하지 않았다.
+> 2. **«배포»**: 고친 코드는 `main` 에 들어 있다(PR #32 병합, 커밋 `9785697`). 실제 모델로 배포 뒤 확인을 한 곳은 **staging 서버**(Cloud Run `routine-stamp-trial-staging`)다(아래 6절). 운영 서비스(`routine-stamp-trial`)는 사용자의 `production` 환경 승인으로 2026-11-09 에 두 차례 배포됐다(리비전 `routine-stamp-trial-00014-tan` 06:42 UTC, `routine-stamp-trial-00016-yex` 06:48 UTC). 이 보고서를 담은 마지막 배포는 승인 뒤에 반영된다. 지금 운영 리비전은 `gcloud run services describe routine-stamp-trial --region us-central1` 로 확인할 수 있다. 운영에서 같은 새 대화 측정은 하지 않았다.
 > 3. **PR**: 수정 [PR #32](https://github.com/tigermorning/routine-stamp-trial/pull/32)(기준 브랜치 `aiffel-wip`, 병합됨). staging 에 실제 모델을 연결한 [PR #34](https://github.com/tigermorning/routine-stamp-trial/pull/34)(병합됨).
 > 4. **staging 설정**: staging 은 원래 가짜 모델(`LLM_PROVIDER` 미설정 = fake)이라 수정 효과를 잴 수 없었다. 그래서 staging 에만 `LLM_PROVIDER=claude`·`LLM_MODEL=claude-sonnet-5-5`·Langfuse 를 연결했다(키는 Secret Manager, 대화 원문 수집은 꺼 둠).
 
@@ -198,7 +198,7 @@ LMS 루브릭 3개와 이 보고서 7개 절(1 로그 · 2 문제 후보 · 3 �
 | 보고서 3. 고른 문제 | 3절 | 선택 이유와 확인한 원인 | |
 | 보고서 4. 데이터셋과 기준 | 4절 | Langfuse 데이터셋 32개, 기준 문서 | |
 | 보고서 5. 바꾼 것과 전후 비교 | 5절 | PR #32(병합), 시험 259 passed | 시험 숫자는 main `663fffe` 기준 |
-| 보고서 6. 배포 뒤 확인 | 6절 | 위 루브릭 3 과 같음 | 운영 리비전 `routine-stamp-trial-00014-tan` 에 배포됨(2026-11-09 06:42 UTC, 사용자 승인) |
+| 보고서 6. 배포 뒤 확인 | 6절 | 위 루브릭 3 과 같음 | 운영 서비스는 사용자 승인으로 2026-11-09 에 두 차례 배포됨(리비전 `00014-tan`, `00016-yex`). 이 보고서를 담은 마지막 배포는 승인 뒤 반영 |
 | 보고서 7. 회고 | 7절 | 어려웠던 점, 모을 로그·피드백, 다음에 할 것 | |
 
 제출하지 않은 것: LMS 과제 제출 버튼과 URL 제출은 이 보고서를 쓰는 동안 하지 않았다(제출 후에는 수정할 수 없어 사용자 승인 뒤에 한다).
