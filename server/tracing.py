@@ -9,8 +9,15 @@
 import inspect
 import logging
 import os
+import time
 import re
+import threading
 from datetime import datetime, timezone
+
+try:
+    from opentelemetry import context as otel_context
+except Exception:  # opentelemetry 가 없으면 Langfuse 도 꺼져 있다
+    otel_context = None
 
 log = logging.getLogger("coach")
 
@@ -50,6 +57,7 @@ def get_client():
 
         _client = Langfuse(environment=os.environ.get("ENV", "local").strip().lower() or "local",
                            release=os.environ.get("K_REVISION", "local"), mask=mask if CAPTURE_TEXT else None)
+        _watch_export(_client)
     except Exception as error:  # 키 글자는 남기지 않고 오류 종류만 남긴다
         log.warning("tracing off: %s", type(error).__name__)
         _client = None
@@ -116,6 +124,25 @@ def text(value):
     return value if CAPTURE_TEXT else None
 
 
+def _span_facts(raw):
+    """진단: span 이 기록 대상인지(sampled·is_recording)와 부모가 있는지. raw 가 None 이면 «지금 문맥에 span 이 남아 있나»를 본다. 실패하면 None 들."""
+    out = {"ctx_valid": None, "sampled": None, "recording": None, "has_parent": None}
+    try:
+        from opentelemetry import trace as ot
+
+        if raw is None:
+            out["ctx_valid"] = ot.get_current_span().get_span_context().is_valid
+            return out
+        sp = getattr(raw, "_otel_span", None)
+        if sp is not None:
+            out["sampled"] = bool(sp.get_span_context().trace_flags.sampled)
+            out["recording"] = bool(sp.is_recording())
+            out["has_parent"] = getattr(sp, "parent", None) is not None
+    except Exception:
+        pass
+    return out
+
+
 def start_turn(byok=False):
     """한 턴의 트레이스(chat-turn)를 연다. 꺼져 있으면 아무 일도 하지 않는 Obs. 끝날 때 turn.end(...) 후 flush(turn)."""
     client = get_client()
@@ -123,16 +150,81 @@ def start_turn(byok=False):
         return Obs()
     try:
         # 한 턴의 흐름(듣기·조언·위기 등)을 모델이 고르므로 agent 종류로 둔다(Langfuse 에이전트 그래프에 한 마디로 보인다)
-        return Obs(client.start_observation(name="chat-turn", as_type="agent", metadata={"byok": bool(byok)}), client)
+        pre = _span_facts(None)  # 시작 전에 이 스레드의 OTel 문맥에 남은 span 이 있는지(있으면 새 턴이 그 아래로 들어간다)
+        # 수정(2026-11-09): 스레드 풀 스레드의 OTel 문맥에 앞 요청이 남긴 span 이 있으면 새 턴이 그 자식이 되고, 남은 span 이 «기록 안 함»이면
+        # 새 턴도 샘플러에 버려진다(Cloud Run 에서 짝수 턴이 Langfuse 에서 사라진 원인으로 보임). 그래서 빈 문맥에서 턴을 연다.
+        # attach 와 detach 는 같은 호출 안(같은 스레드)에서 끝내므로 스레드가 바뀌어도 새 문맥을 남기지 않는다.
+        token = otel_context.attach(otel_context.Context())
+        try:
+            raw = client.start_observation(name="chat-turn", as_type="agent", metadata={"byok": bool(byok)})
+        finally:
+            otel_context.detach(token)
+        obs = Obs(raw, client)
+        post = _span_facts(obs.raw)
+        log.info("tracing start trace=%s ctx_before_valid=%s sampled=%s recording=%s has_parent=%s thread=%s",
+                 getattr(obs.raw, "trace_id", None), pre["ctx_valid"], post["sampled"], post["recording"], post["has_parent"], threading.current_thread().name)
+        return obs
     except Exception as error:
         log.warning("tracing start failed: %s", type(error).__name__)
         return Obs()
 
 
-def flush(turn):
-    """Cloud Run 은 응답이 끝나면 CPU 를 줄이므로 기록을 모아 두었다 보내는 SDK 가 못 보낼 수 있다. 턴이 끝날 때 바로 보낸다."""
-    if turn.client is not None:
+def _batch(client):
+    """Langfuse 가 쓰는 OTel 일괄 처리기(BatchProcessor). 못 찾으면 None(진단용이라 실패해도 대화에는 영향 없다)."""
+    try:
+        provider = client._resources.tracer_provider
+        for proc in provider._active_span_processor._span_processors:
+            batch = getattr(proc, "_batch_processor", None)
+            if batch is not None:
+                return batch
+    except Exception:
+        return None
+    return None
+
+
+def _watch_export(client):
+    """진단: 내보내기 호출 한 번마다 «span 몇 개, 성공/실패, 걸린 시간»을 로그에 남긴다(내용 없음). 한 번만 건다."""
+    batch = _batch(client)
+    if batch is None or getattr(batch, "_coach_watched", False):
+        return
+    exporter = getattr(batch, "_exporter", None)
+    real = getattr(exporter, "export", None)
+    if real is None:
+        return
+
+    def export(spans, *a, **kw):
+        t0 = time.monotonic()
+        result = "error"
         try:
+            out = real(spans, *a, **kw)
+            result = getattr(out, "name", str(out))
+            return out
+        finally:
+            log.info("tracing export spans=%d result=%s ms=%d", len(spans), result, int((time.monotonic() - t0) * 1000))
+
+    try:
+        exporter.export = export
+        batch._coach_watched = True
+    except Exception:
+        pass
+
+
+def flush(turn):
+    """Cloud Run 은 응답이 끝나면 CPU 를 줄이므로 기록을 모아 두었다 보내는 SDK 가 못 보낼 수 있다. 턴이 끝날 때 바로 보낸다.
+    진단(2026-11-09, 배포한 서버에서 45턴 중 24개만 Langfuse 에 보인 원인을 찾으려고): 보내는 데 걸린 시간과 «시간 안에 다 보냈는지»(provider_ok)를
+    트레이스 번호와 함께 로그에 남긴다. 원문·키는 남기지 않는다. provider_ok=False 면 시간 안에 못 보낸 것이다."""
+    if turn.client is not None:
+        t0 = time.monotonic()
+        ok = None
+        batch = _batch(turn.client)
+        queued = len(getattr(batch, "_queue", ()) or ()) if batch is not None else None
+        worker = getattr(getattr(batch, "_worker_thread", None), "is_alive", lambda: None)() if batch is not None else None
+        try:
+            provider = getattr(getattr(turn.client, "_resources", None), "tracer_provider", None)
+            force = getattr(provider, "force_flush", None)
+            if callable(force):
+                ok = force(timeout_millis=15000)
             turn.client.flush()
         except Exception as error:
             log.warning("tracing flush failed: %s", type(error).__name__)
+        log.info("tracing flush trace=%s provider_ok=%s ms=%d queued_before=%s worker_alive=%s thread=%s", getattr(turn.raw, "trace_id", None), ok, int((time.monotonic() - t0) * 1000), queued, worker, threading.current_thread().name)

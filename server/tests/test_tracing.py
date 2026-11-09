@@ -173,3 +173,35 @@ def test_mask_patterns():
     s = tracing.mask(data={"a": ["연락 010-1234-5678 / a.b@x.co.kr / 4111 1111 1111 1111"]})["a"][0]
     assert "5678" not in s and "x.co.kr" not in s and "4111" not in s
     assert "[전화번호]" in s and "[이메일]" in s and "[카드번호]" in s
+
+
+def test_flush_logs_duration_and_trace_id_without_text(monkeypatch, caplog):
+    c = FakeClient()
+    use_tracing(monkeypatch, c)
+    with caplog.at_level("INFO", logger="coach"):
+        chat("어제 하루 빠졌어 fake:advise")
+    line = next(r.getMessage() for r in caplog.records if r.getMessage().startswith("tracing flush"))
+    assert "trace=" in line and "ms=" in line and "빠졌" not in line
+
+
+def test_turn_starts_in_a_clean_otel_context(monkeypatch):
+    """앞 요청이 스레드 문맥에 남긴 span 이 있어도 새 턴은 그 밑으로 들어가지 않는다(Cloud Run 에서 턴이 번갈아 Langfuse 에서 사라진 원인 수정)."""
+    from opentelemetry import context as oc, trace as ot
+    from opentelemetry.trace import NonRecordingSpan, SpanContext, TraceFlags
+
+    seen = {}
+
+    class Probe(FakeClient):
+        def start_observation(self, name, as_type="span", **kw):
+            seen["valid_inside"] = ot.get_current_span().get_span_context().is_valid
+            return super().start_observation(name, as_type, **kw)
+
+    use_tracing(monkeypatch, Probe())
+    stale = SpanContext(trace_id=0x1234567890ABCDEF1234567890ABCDEF, span_id=0x1234567890ABCDEF, is_remote=False, trace_flags=TraceFlags(TraceFlags.DEFAULT))
+    token = oc.attach(ot.set_span_in_context(NonRecordingSpan(stale)))
+    try:
+        tracing.start_turn()
+        assert seen["valid_inside"] is False  # 턴을 여는 동안은 빈 문맥
+        assert ot.get_current_span().get_span_context().is_valid  # 끝나면 원래 문맥을 그대로 돌려 둔다
+    finally:
+        oc.detach(token)
