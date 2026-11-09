@@ -4,10 +4,11 @@
 도구: Langfuse Cloud(us), 트레이스 읽기는 v2 observations API(옛 `/traces`·`/scores` 는 410 Gone — 2026-11-16 삭제 예고).
 대화 내용이 든 파일(`server/evals/quest08/run_*.json` 등)과 키(`.env`)는 저장소에 올리지 않는다(`.gitignore`).
 
-> 먼저 밝혀 둘 것 세 가지
+> 먼저 밝혀 둘 것 네 가지
 > 1. **모델**: 이 실험의 도우미 모델은 `.env` 의 Claude(`claude-sonnet-5-5`, effort low)다. `docs/OBSERVABILITY.md` 가 운영 모델로 적은 gpt-4o-mini 에서도 같은 현상이 나는지는 **확인하지 못했다**(OpenAI 키가 이 PC에 없음).
-> 2. **«배포»**: 운영 Cloud Run 에는 아직 올리지 않았다. 고친 코드를 로컬에서 `release=v2-fix` 라벨로 돌려 버전별로 비교했다(아래 5절). 운영 배포는 사용자 확인 뒤에 한다.
-> 3. **PR**: https://github.com/tigermorning/routine-stamp-trial/pull/32 (기준 브랜치 `aiffel-wip`, 아직 합치지 않음).
+> 2. **«배포»**: 고친 코드는 `main` 에 들어 있다(PR #32 병합, 커밋 `9785697`). 실제 모델로 배포 뒤 확인을 한 곳은 **staging 서버**(Cloud Run `routine-stamp-trial-staging`)다(아래 6절). 운영 서비스(`main` 배포)는 `deploy` 작업이 `production` 환경 승인 대기(`waiting`) 상태라 아직 올라가지 않았고, 승인은 사용자가 한다.
+> 3. **PR**: 수정 [PR #32](https://github.com/tigermorning/routine-stamp-trial/pull/32)(기준 브랜치 `aiffel-wip`, 병합됨). staging 에 실제 모델을 연결한 [PR #34](https://github.com/tigermorning/routine-stamp-trial/pull/34)(병합됨).
+> 4. **staging 설정**: staging 은 원래 가짜 모델(`LLM_PROVIDER` 미설정 = fake)이라 수정 효과를 잴 수 없었다. 그래서 staging 에만 `LLM_PROVIDER=claude`·`LLM_MODEL=claude-sonnet-5-5`·Langfuse 를 연결했다(키는 Secret Manager, 대화 원문 수집은 꺼 둠).
 
 ## 1. 로그
 
@@ -46,7 +47,7 @@
 | ④ 건강 질문 범위 | 낮음(3~6턴) | 작음 — 안내 문구라도 나감 | 중간 — 범위 정책(PRD) 결정이 먼저 | 보류 |
 | ⑤ 서식 새어 나옴 | 매우 낮음(1/67) | 중간 | 낮음 | 한 번뿐이라 지켜봄(2번 더 나오면 올림) |
 
-이유 한 줄: **«가장 자주 일어나고, 일어났을 때 사용자에게 가장 아프고, 고치는 데 가장 싼 것»이 ①이고, ②가 같은 원인이라 한 번 고치면 두 문제의 효과를 함께 볼 수 있다.**
+이유 한 줄: **«가장 자주 일어나고, 일어났을 때 사용자가 아무 답도 못 받아 피해가 가장 크고, 고치는 데 가장 싼 것»이 ①이고, ②가 같은 원인이라 한 번 고치면 두 문제의 효과를 함께 볼 수 있다.**
 
 ### 왜 이 원인이라고 보나 (확인한 것)
 - 빈 답 16개 모두 `generate-reply` 의 출력 토큰이 **정확히 450**(코드의 `REPLY_TOKENS`)이었고 `refused=false`, 오류 없음. 한도에 닿은 답은 32/60(빈 16 + 끊김 16).
@@ -94,7 +95,7 @@
 
 - 시험: `cd server && python -m pytest tests -q` → **210 passed**(이 브랜치 기준, 2026-11-09 실행).
 - 대안으로 버린 것: «빈 답이면 한 번 더 부르기» — 비용·지연이 두 배가 되고 원인(한도)은 그대로.
-- PR: https://github.com/tigermorning/routine-stamp-trial/pull/32 (합치기 전, 사용자 검토 대기).
+- PR: https://github.com/tigermorning/routine-stamp-trial/pull/32 (병합됨).
 
 ## 6. 배포 뒤 확인 (버전별, 새 대화)
 
@@ -110,7 +111,24 @@
 - 대가: 응답 시간 p90 5.9 → 7.1초(+20%), 한 턴 비용 $0.01422 → $0.01493(+5%) — 입력 토큰이 대부분이라 비용 차이는 작다.
 - 읽는 법과 한계: 대화마다 앞 답이 달라 두 버전이 **똑같은 입력**을 받은 것은 아니고(턴 수는 같음), 표본은 38턴이다. 빈 답 0 이 «앞으로 0»을 뜻하지는 않는다. 기준선 재생에서도 같은 입력이 13/16 만 비었던 것처럼 흔들림이 있다.
 - 새 대화에서도 ③ 퀘스트 빈칸은 그대로였다(`v2-fix` 의 퀘스트 5턴 중 5턴이 `___` 포함) — 이번에 고치지 않았으니 예상된 결과다.
-- 화면 캡처: 넣지 못했다(확인 못 함: Langfuse 화면을 열어 캡처하지 않았다). 위 표는 API(v2 observations)로 `environment=quest08`, `release` 별로 센 값이다. 제출 전에 Langfuse 에서 Release 로 거른 화면을 캡처해 붙이면 된다.
+
+### 배포된 staging 서버에서 다시 확인 (실제 Claude 모델, 새 대화)
+
+위 표는 내 PC 에서 같은 코드를 돌린 값이다. 실제로 **배포된 서버**에서도 확인하려고, PR #34 병합 뒤 staging 리비전 `routine-stamp-trial-staging-00065-fex`(커밋 `d3ae406`, `/version` 으로 확인)에 같은 새 대화 12개·45턴(`convs_c.json`)을 `POST /api/chat` 으로 보냈다(Cloud Run 인증은 내 gcloud 토큰, 대화마다 `x-client-id` 는 새 UUID).
+
+| 측정 위치 | 턴 | 답 생성 턴 | 빈 답 | 한도 도달(≥1500토큰) | 시간 p50 / p90 (초) | 한 턴 비용 평균 ($) |
+|---|---|---|---|---|---|---|
+| 클라이언트(보낸 쪽) 측정 | 45 | 38 (범위 밖 안내 7, 오류 0) | **0** (`done.ok=false` 도 0) | — | 5.75 / 7.4 | — |
+| Langfuse `environment=staging`, 리비전 `00065-fex` | 22 | 20 | **0** | **0** | 5.5 / 7.8 | 0.0172 |
+
+- 로컬 `v2-fix`(빈 답 0/38, p90 7.1초, 비용 $0.0149)와 같은 결과다. 고친 값이 배포된 서버에서도 빈 답을 막았다.
+- Langfuse 에 같은 `chat-turn` 이 24개(리비전 `00065-fex` 22개, `00067-peq` 2개)만 보였다. 45턴을 보냈으므로 나머지 트레이스가 왜 안 보이는지는 **확인하지 못했다**(수집 지연인지 인스턴스가 보내지 못한 것인지 모름). 그래서 Langfuse 쪽 표는 읽힌 22턴 기준이다.
+- **옛 코드(450토큰)를 같은 staging 에서 돌려 나란히 비교하지는 못했다.** 그러려면 배포 설정을 바꿔야 해서 하지 않았고, 옛 동작은 위 표의 로컬 `v1-newconv`(빈 답 9/38)를 쓴다.
+- 퀘스트 모드 응답 6턴은 18~22자로 아주 짧았다. ③ 퀘스트 빈칸이 아직 남은 것으로 보이며, 이번 문제가 아니라 다음 차례(7절)다. 응답 본문을 하나씩 읽어 확인하지는 않았다.
+
+**화면 캡처**: Langfuse 트레이스 화면에서 `environment=staging`, `name=chat-turn` 으로 거르고 왼쪽 **Release** 필터가 리비전별 건수(22 / 2)로 나뉜 모습이다. 이메일 등이 보이는 왼쪽 아래는 잘라 냈다.
+
+![Langfuse: staging 트레이스를 Release(리비전)별로 나눈 화면](docs/quest08-langfuse-staging-release.png)
 
 ## 7. 회고
 
