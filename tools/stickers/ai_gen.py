@@ -25,11 +25,11 @@ def key():
     raise SystemExit('.env 에 OPENAI_API_KEY 가 없다')
 
 
-def generate(style, subject, quality='low', model='gpt-image-1-mini', tries=4):
+def generate(style, subject, quality='low', model='gpt-image-1-mini', tries=4, raw=False, prompt=None, background='transparent', size='1024x1024'):
     """PNG 바이트와 사용량(dict)을 돌려준다. 한도(429)·일시 오류는 기다렸다 다시 부른다."""
-    prompt = f'{subject}. {STYLES.get(style, style)}. {COMMON}'
-    body = json.dumps({'model': model, 'prompt': prompt, 'size': '1024x1024', 'quality': quality,
-                       'background': 'transparent', 'output_format': 'png', 'n': 1}).encode()
+    prompt = prompt or f'{subject}. {STYLES.get(style, style)}. ' + ('transparent background, no text, no letters, no watermark, no logo, no brand, no real person, no existing character' if raw else COMMON)  # raw=True: 스티커 테두리 없이(메모지 장식용)
+    body = json.dumps({'model': model, 'prompt': prompt, 'size': size, 'quality': quality,
+                       'background': background, 'output_format': 'png', 'n': 1}).encode()
     for i in range(tries):
         req = urllib.request.Request('https://api.openai.com/v1/images/generations', body,
                                      {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + key()})

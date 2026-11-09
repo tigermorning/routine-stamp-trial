@@ -45,7 +45,7 @@ m = re.search(r"const STK_ORDER=(\[.*?\]);", s)
 order = json.loads(m.group(1))
 ids = [pk['id'] for pk in packs]
 base = [x for x in order if x not in ids]
-at = base.index('sticker_world') if 'sticker_world' in base else (base.index('sticker_dojang') + 1 if 'sticker_dojang' in base else len(base))
+at = len([x for x in base if x.startswith('ai_')])  # AI 팩 바로 뒤, 나머지 앞(사용자 2026-11-09)
 order = base[:at] + ids + base[at:]
 s = s[:m.start()] + 'const STK_ORDER=' + json.dumps(order) + ';' + s[m.end():]
 

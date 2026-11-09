@@ -105,8 +105,9 @@ ITEMS = {
     "ai_ink": {"id": "ai_ink", "kind": "sticker", "name": "잉크 여행 스티커 팩", "amount": 2700, "desc": "굵은 선과 평평한 색으로 찍은 레트로 탈것과 여행 — 스티커 18개"},
     # 할 일 아이콘 스타일 팩(2026-11-04): 할 일 칸의 그림 25종을 다른 분위기로 바꾼다(그림은 화면 index.html 의 GLYPHS·ICON_PACKS, id 가 같아야 함). 가격은 임시값이다(근거 없음).
     # 메모지(2026-11-06 사용자 결정): 7종 한 묶음 대신 4종씩 두 번들. 예전에 «메모지 7종»(paper_pack)을 산 기록은 DB 에 남고 화면이 옛 7종 소유로 읽는다
-    "paper_notes": {"id": "paper_notes", "kind": "paper", "name": "줄·격자 노트 4종 번들", "amount": 2700, "desc": "선과 격자가 그려진 노트 4가지 — 줄노트·모눈·도트·큰 모눈"},
-    "paper_mood": {"id": "paper_mood", "kind": "paper", "name": "감성 종이 4종 번들", "amount": 2700, "desc": "종이 느낌이 나는 메모지 4가지 — 크라프트(갈색 종이)·포스트잇·옥스포드 노트(붉은 여백선)·수채(번지는 색)"},
+    "paper_notes": {"id": "paper_notes", "kind": "paper", "name": "줄·격자 노트 5종 번들", "amount": 2700, "desc": "선과 격자가 그려진 노트 5가지 — 줄노트·모눈·도트·큰 모눈·옥스포드 노트(붉은 여백선)"},
+    "paper_mood": {"id": "paper_mood", "kind": "paper", "name": "감성 종이 · 분위기 6종 번들", "amount": 2700, "desc": "분위기 있는 종이 6가지 — 커피 자국(아이보리)·중세 양피지(갈색)·쪽빛 한지(연한 남빛)·서가(책등과 화분)·목가(파란 하늘 아래 언덕과 작은 집)·달밤(보랏빛 밤하늘)"},
+    "paper_nature": {"id": "paper_nature", "kind": "paper", "name": "감성 종이 · 자연 도감 5종 번들", "amount": 2700, "desc": "흰 종이 위에 손으로 그린 정밀 도판 같은 자연 5가지 — 식물도감(펜선)·버섯 한 송이·버섯 무리·들꽃 한 송이·들꽃 무리"},
     "icons_cute": {"id": "icons_cute", "kind": "sticker", "name": "귀여운 표정 스티커 팩", "amount": 2700, "desc": "표정이 있는 귀여운 일상 그림 20개 — 스티커로도, 할 일 칸 그림으로도 써요"},
     "icons_simple": {"id": "icons_simple", "kind": "sticker", "name": "심플 선 스티커 팩", "amount": 2700, "desc": "깔끔한 선 그림 일상 스티커 20개 — 스티커로도, 할 일 칸 그림으로도 써요"},
     "icons_pastel": {"id": "icons_pastel", "kind": "sticker", "name": "파스텔 스티커 팩", "amount": 2700, "desc": "흰 테두리 파스텔 일상 스티커 20개 — 스티커로도, 할 일 칸 그림으로도 써요"},

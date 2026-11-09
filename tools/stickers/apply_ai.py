@@ -50,7 +50,7 @@ m = re.search(r"const STK_ORDER=(\[.*?\]);", s)
 order = json.loads(m.group(1))
 ids = [pk['id'] for pk in packs]
 base = [x for x in order if x not in ids]
-at = base.index('st_pixel') if 'st_pixel' in base else (base.index('sticker_world') if 'sticker_world' in base else len(base))
+at = 0  # 가장 앞(사용자 2026-11-09: 개성 있는 새 팩이 먼저 보이게)
 order = base[:at] + ids + base[at:]
 s = s[:m.start()] + 'const STK_ORDER=' + json.dumps(order) + ';' + s[m.end():]
 

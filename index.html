@@ -307,10 +307,18 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 #dyBody .paper-grid{background-color:var(--pbg,#fcfff9);background-image:linear-gradient(#bfe0c8 1px,transparent 1px),linear-gradient(90deg,#bfe0c8 1px,transparent 1px);background-size:20px 20px;background-attachment:local}
 #dyBody .paper-biggrid{background-color:var(--pbg,#fbfdff);background-image:linear-gradient(#a9c4e0 1.5px,transparent 1.5px),linear-gradient(90deg,#a9c4e0 1.5px,transparent 1.5px);background-size:40px 40px;background-attachment:local;border-color:#a9c4e0}
 #dyBody .paper-dot{background:var(--pbg,#fffdf6) radial-gradient(circle,#c9b8a0 1.2px,transparent 1.6px) 0 0/18px 18px local}
-#dyBody .paper-kraft{background:var(--pbg,#d8b88a);border-color:#b8935f} /* 크라프트지: 색만(질감은 나무처럼 보여 뺐다, 사용자 2026-11-09) */
-#dyBody .paper-sticky{background:var(--pbg,#fff3a0);border-color:#e3cf5a}
 #dyBody .paper-oxford{background:linear-gradient(90deg,transparent 34px,#e58a8f 34px 35px,transparent 35px 39px,#e58a8f 39px 40px,transparent 40px) local,var(--pbg,#fffdf6) repeating-linear-gradient(transparent 0 27px,#8fb3d9 27px 28px) local;line-height:28px;padding-left:50px;border-color:#7d9cc4} /* 옥스포드 노트: 왼쪽 붉은 이중 여백선 + 파란 줄(사용자 2026-11-09, 편지지는 무지 노트와 구별되지 않아 뺌) */
-#dyBody .paper-wash{background:radial-gradient(circle at 18% 22%,rgba(255,255,255,.75),transparent 46%),radial-gradient(circle at 84% 74%,rgba(0,0,0,.07),transparent 52%),radial-gradient(circle at 60% 10%,rgba(255,255,255,.5),transparent 40%),var(--pbg,#e6f1fb);border-color:rgba(0,0,0,.18)} /* 수채: 한 가지 색이 번지는 느낌(파랑·분홍 섞임은 뺌, 사용자 2026-11-09) */
+#dyBody .paper-coffee{background-color:var(--pbg,#ffffff);background-image:linear-gradient(rgba(255,255,255,.12),rgba(255,255,255,.12)),url(/stk/paper/coffee.jpg);background-size:auto,cover;background-position:0 0,center;background-repeat:no-repeat;background-blend-mode:normal,multiply;border-color:#d9cfbe} /* 커피 자국: 아이보리 종이에 커피 잔 자국(배경색을 고르면 그 색이 곱해져 물든다) */
+#dyBody .paper-parchment{background-color:var(--pbg,#ffffff);background-image:linear-gradient(rgba(255,255,255,.18),rgba(255,255,255,.18)),url(/stk/paper/parchment.jpg);background-size:auto,cover;background-position:0 0,center;background-repeat:no-repeat;background-blend-mode:normal,multiply;border-color:#b98f55} /* 양피지: 중세 필사본처럼 얼룩진 갈색 종이 */
+#dyBody .paper-hanji{background-color:var(--pbg,#ffffff);background-image:linear-gradient(rgba(255,255,255,.2),rgba(255,255,255,.2)),url(/stk/paper/hanji.jpg);background-size:auto,cover;background-position:0 0,center;background-repeat:no-repeat;background-blend-mode:normal,multiply;border-color:#9fb2c8} /* 쪽빛 한지: 닥나무 섬유가 비치는 연한 남빛 종이 */
+#dyBody .paper-shelf{background-color:var(--pbg,#ffffff);background-image:linear-gradient(to bottom,rgba(255,253,248,.86) 0,rgba(255,253,248,.78) 50%,rgba(255,253,248,.3) 100%),url(/stk/paper/shelf.jpg);background-size:auto,cover;background-position:0 0,center bottom;background-repeat:no-repeat;background-blend-mode:normal,multiply;border-color:#a9b58f} /* 서가: 연두빛 벽 앞 책장의 책등·화분·촛불(아래쪽) */
+#dyBody .paper-botanical{background-color:var(--pbg,#ffffff);background-image:linear-gradient(rgba(255,255,255,.1),rgba(255,255,255,.1)),url(/stk/paper/botanical.jpg);background-size:auto,cover;background-position:0 0,left center;background-repeat:no-repeat;background-blend-mode:normal,multiply;border-color:#c9cdd0} /* 식물도감: 회백색 종이에 가는 펜선 야생화 도판(왼쪽) */
+#dyBody .paper-shroom1{background-color:var(--pbg,#ffffff);background-image:linear-gradient(rgba(255,255,255,.5),rgba(255,255,255,.5)),url(/stk/paper/shroom1.webp);background-size:auto,auto 100%;background-position:0 0,left center;background-repeat:no-repeat;background-blend-mode:normal,normal;border-color:#d8d8d8} /* 버섯 한 송이: 광대버섯 한 송이를 손으로 그린 정밀 도판으로(왼쪽, 흰 종이) */
+#dyBody .paper-shrooms{background-color:var(--pbg,#ffffff);background-image:linear-gradient(to bottom,rgba(255,255,255,.7) 0,rgba(255,255,255,.55) 55%,rgba(255,255,255,.2) 100%),url(/stk/paper/shrooms.webp);background-size:auto,cover;background-position:0 0,center bottom;background-repeat:no-repeat;background-blend-mode:normal,normal;border-color:#d8d8d8} /* 버섯 무리: 포르치니·살구버섯 등 여러 버섯을 손으로 그린 도판으로(아래쪽, 흰 종이) */
+#dyBody .paper-wild1{background-color:var(--pbg,#ffffff);background-image:linear-gradient(rgba(255,255,255,.5),rgba(255,255,255,.5)),url(/stk/paper/wild1.webp);background-size:auto,auto 100%;background-position:0 0,right center;background-repeat:no-repeat;background-blend-mode:normal,normal;border-color:#d8d8d8} /* 들꽃 한 송이: 수레국화 한 송이를 손으로 그린 정밀 도판으로(가운데, 흰 종이) */
+#dyBody .paper-wildflower{background-color:var(--pbg,#ffffff);background-image:linear-gradient(to bottom,rgba(255,255,255,.75) 0,rgba(255,255,255,.55) 50%,rgba(255,255,255,.15) 100%),url(/stk/paper/wildflower.webp);background-size:auto,cover;background-position:0 0,center bottom;background-repeat:no-repeat;background-blend-mode:normal,normal;border-color:#d8d8d8} /* 들꽃 무리: 개양귀비·수레국화·데이지·미나리아재비를 손으로 그린 들판 도판으로(아래쪽, 흰 종이) */
+#dyBody .paper-pastoral{background-color:var(--pbg,#ffffff);background-image:linear-gradient(to bottom,rgba(255,253,248,.2) 0,rgba(255,253,248,.55) 60%,rgba(255,253,248,.45) 100%),url(/stk/paper/pastoral.jpg);background-size:auto,cover;background-position:0 0,center bottom;background-repeat:no-repeat;background-blend-mode:normal,multiply;border-color:#b8cfa7} /* 목가: 파란 하늘 아래 언덕과 작은 집(아래쪽) */
+#dyBody .paper-moon{background-color:var(--pbg,#ece8fb);background-image:url(/stk/paper/moon_tr.png),radial-gradient(circle at 12% 22%,rgba(255,255,255,.95) 0 1.6px,transparent 2.2px),radial-gradient(circle at 32% 72%,rgba(255,255,255,.85) 0 1.6px,transparent 2.2px),radial-gradient(circle at 58% 34%,rgba(255,255,255,.9) 0 1.4px,transparent 2px),radial-gradient(circle at 82% 80%,rgba(255,255,255,.9) 0 1.8px,transparent 2.4px);background-size:64px auto,auto,auto,auto,auto;background-position:right 8px top 6px,0 0,0 0,0 0,0 0;background-repeat:no-repeat;border-color:#cbc4ef} /* 달밤: 보랏빛 밤하늘에 달과 별빛(달은 모서리에만) */
 /* 메몽식 떡메모지(사양서 3·4절). 기록 메모 칸은 이제 편집 영역(.dyedit)이고 속지 클래스(.paper-*)를 그대로 쓴다 */
 .dyedit{width:100%;box-sizing:border-box;border:2px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit;line-height:1.5;background:var(--pbg,var(--card));color:var(--ink);min-height:calc(var(--rows,3)*1.5em + 18px);max-height:48vh;overflow:auto;white-space:pre-wrap;word-break:break-word}
 .dyedit:empty::before{content:attr(data-ph);color:var(--soft)}
@@ -628,7 +636,7 @@ mark.mh-yellow,.mhb.mh-yellow{--mh:rgba(254,240,138,.7)}mark.mh-pink,.mhb.mh-pin
     <div id="shopTheme"></div>
   </div>
   <div class="shoppane" data-t="paper" role="tabpanel" hidden>
-    <p class="stat">기록에 쓰는 메모지예요. 4종씩 두 번들로 팔아요. 한 번 사면 계속 써요.</p>
+    <p class="stat">기록에 쓰는 메모지예요. 4~5종씩 세 번들로 팔아요. 한 번 사면 계속 써요.</p>
     <div id="shopPaper"></div>
   </div>
   <div class="shoppane" data-t="stk" role="tabpanel" hidden>
@@ -2378,9 +2386,9 @@ let dyMode='day',dyDate=todayStr;
 const dyAdd=(ds,n)=>{const d=new Date(ds+'T00:00');d.setDate(d.getDate()+n);return fmt(d)};
 const dyFmt=(ds,o)=>new Intl.DateTimeFormat(LOCALE[lang],o).format(new Date(ds+'T00:00'));
 function dySet(ds,v){if(!S.diary)S.diary={};if(v.trim())S.diary[ds]=v.slice(0,2000);else delete S.diary[ds];save()}
-const PAPERS=[{id:'plain',name:'기본'},{id:'lined',name:'줄노트'},{id:'grid',name:'모눈'},{id:'dot',name:'도트'},{id:'biggrid',name:'큰 모눈'},{id:'kraft',name:'크라프트'},{id:'sticky',name:'포스트잇'},{id:'oxford',name:'옥스포드 노트'},{id:'wash',name:'수채'}]; // plain 말고는 상점 메모지 번들 두 개(4종씩, 사용자 결정 2026-11-06)
-const PAPER_BUNDLES={paper_notes:['lined','grid','dot','biggrid'],paper_mood:['kraft','sticky','oxford','wash'],paper_pack:['lined','grid','dot','biggrid','kraft','sticky','oxford']}; // paper_pack 은 예전 «메모지 7종» 구매 기록(산 사람은 그 7종을 그대로 쓴다)
-const PAPER_BUNDLE_NAME={paper_notes:'줄·격자 노트 4종 번들',paper_mood:'감성 종이 4종 번들'}; // 두 번들이 구별되게: 노트=선·격자가 그려진 노트, 감성=종이 느낌·분위기(사용자 2026-11-09)
+const PAPERS=[{id:'plain',name:'기본'},{id:'lined',name:'줄노트'},{id:'grid',name:'모눈'},{id:'dot',name:'도트'},{id:'biggrid',name:'큰 모눈'},{id:'oxford',name:'옥스포드 노트'},{id:'coffee',name:'커피 자국'},{id:'parchment',name:'양피지'},{id:'hanji',name:'쪽빛 한지'},{id:'shelf',name:'서가'},{id:'pastoral',name:'목가'},{id:'moon',name:'달밤'},{id:'botanical',name:'식물도감'},{id:'shroom1',name:'버섯 한 송이'},{id:'shrooms',name:'버섯 무리'},{id:'wild1',name:'들꽃 한 송이'},{id:'wildflower',name:'들꽃 무리'}]; // plain 말고는 상점 메모지 번들 두 개(4종씩, 사용자 결정 2026-11-06)
+const PAPER_BUNDLES={paper_notes:['lined','grid','dot','biggrid','oxford'],paper_mood:['coffee','parchment','hanji','shelf','pastoral','moon'],paper_nature:['botanical','shroom1','shrooms','wild1','wildflower'],paper_pack:['lined','grid','dot','biggrid','oxford']}; // paper_pack 은 예전 «메모지 7종» 구매 기록(산 사람은 그 7종을 그대로 쓴다)
+const PAPER_BUNDLE_NAME={paper_notes:'줄·격자 노트 5종 번들',paper_mood:'감성 종이 · 분위기 6종 번들',paper_nature:'감성 종이 · 자연 도감 5종 번들'}; // 두 번들이 구별되게: 노트=선·격자가 그려진 노트, 감성=종이 느낌·분위기(사용자 2026-11-09)
 const ownsPaper=id=>id==='plain'||Object.keys(PAPER_BUNDLES).some(b=>OWNED.has(b)&&PAPER_BUNDLES[b].includes(id));
 const bundleOfPaper=id=>Object.keys(PAPER_BUNDLE_NAME).find(b=>PAPER_BUNDLES[b].includes(id));
 let SHOP_CACHE=null; // 서버 상품표(가격 정본). 가격은 1·2·3달러 세 가격대(1달러≈1,344원을 올림해 1,350원, 사용자 결정 2026-11-06)
@@ -2466,7 +2474,7 @@ function renderDyHl(){
   const h=document.createElement('span');h.id='dyHint';h.className='stat';h.setAttribute('role','status');bar.appendChild(h);
 }
 /* 스티커 테마 탭(네이버 캘린더식): 산 팩 하나가 탭 하나이고 «전체»는 산 팩의 모든 그림이다. 테마는 건강·운동·집안일·음식·일·기념일·여행·취미·날씨·동물·기분·쇼핑·미용·만남·식물·사람 등(tools/stickers/fluent_themes.py) */
-const STK_ORDER=["sticker_sched", "sticker_life", "sticker_daily", "sticker_cafe", "sticker_office", "sticker_party", "sticker_doodle", "sticker_glossy", "sticker_felt", "sticker_round", "sticker_fruit", "sticker_money", "sticker_beauty", "sticker_love", "sticker_plant", "sticker_dojang", "ai_clay", "ai_water", "ai_pixel", "ai_paper", "ai_crayon", "ai_ink", "st_pixel", "st_pop", "st_pencil", "st_duo", "st_badge", "st_jelly", "sticker_world", "sticker_music", "sticker_game", "sticker_art", "sticker_cinema", "sticker_read", "sticker_outdoor", "sticker_garden", "sticker_photo", "sticker_cheer", "sticker_seal", "sticker_washi", "sticker_dday", "sticker_letter", "sticker_marker", "sticker_highlight"]; // 탭 순서(건강→운동→생활→음식→일→기념일→여행→취미→날씨→동물→기분→쇼핑→미용→만남→식물→사람, 그다음 도장·테이프 같은 기능 팩)
+const STK_ORDER=["ai_clay", "ai_water", "ai_pixel", "ai_paper", "ai_crayon", "ai_ink", "st_pixel", "st_pop", "st_pencil", "st_duo", "st_badge", "st_jelly", "sticker_sched", "sticker_life", "sticker_daily", "sticker_cafe", "sticker_office", "sticker_party", "sticker_doodle", "sticker_glossy", "sticker_felt", "sticker_round", "sticker_fruit", "sticker_money", "sticker_beauty", "sticker_love", "sticker_plant", "sticker_dojang", "sticker_world", "sticker_music", "sticker_game", "sticker_art", "sticker_cinema", "sticker_read", "sticker_outdoor", "sticker_garden", "sticker_photo", "sticker_cheer", "sticker_seal", "sticker_washi", "sticker_dday", "sticker_letter", "sticker_marker", "sticker_highlight"]; // 탭 순서(건강→운동→생활→음식→일→기념일→여행→취미→날씨→동물→기분→쇼핑→미용→만남→식물→사람, 그다음 도장·테이프 같은 기능 팩)
 const stkRank=id=>{const i=STK_ORDER.indexOf(id);return i<0?999:i};
 let stkTab='all';
 const stkIn=(e,tab)=>tab==='all'||!!(STICKER_PACKS[tab]&&STICKER_PACKS[tab].list.includes(e));
@@ -3221,7 +3229,8 @@ async function renderShop(){
       b.onclick=()=>{S.theme=th.id;save();render();$('crDlg').close()};
       row.appendChild(b);boxes.color.appendChild(row);
     });
-    j.items.forEach(it=>{
+    const stkSorted=j.items.filter(i=>i.kind==='sticker').sort((a,b)=>stkRank(a.id)-stkRank(b.id));let stkAt=0;const shopItems=j.items.map(i=>i.kind==='sticker'?stkSorted[stkAt++]:i); // 개성 있는 새 스티커 팩(AI 일러스트·스타일 팩)을 앞에(사용자 2026-11-09)
+    shopItems.forEach(it=>{
       // 상점 상품은 루틴 성공 일수와 관계없이 항상 보인다(사용자 결정 2026-11-04: 유료 구매 고객 유치). 이미 열렸거나 아직 쓸 수 없는 것은 이유를 함께 보인다.
       const all=it.id==='unlock_all',unlockDone=it.kind==='unlock'&&(all?UNLOCKS.every(opened):opened(it.at));
       const partial=all&&!unlockDone&&UNLOCKS.some(opened); // 일부가 이미 열려 있으면 «모든 열림»이 남은 열림을 하나씩 사는 것보다 비쌀 수 있다

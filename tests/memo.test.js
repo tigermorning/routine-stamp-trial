@@ -130,8 +130,8 @@ test('외부 일러스트 팩의 그림 파일과 이름이 모두 있다', () =
 test('배경색: 고른 색이 모든 속지 메모 칸에 적용되고 잘못된 값은 무시한다', () => {
   const { w } = open({ days: 30 });
   try {
-    const run = (color, paper) => w.eval(`(()=>{S.dyBg=${JSON.stringify(color)};OWNED.add('paper_notes');OWNED.add('paper_mood');S.dyPaper=${JSON.stringify(paper)};dyMode='day';renderDiary();const ed=document.querySelector('.dyedit');return {cls:ed.className,style:ed.getAttribute('style')||''}})()`);
-    for (const paper of ['plain', 'lined', 'grid', 'dot', 'biggrid', 'kraft', 'sticky', 'oxford', 'wash']) {
+    const run = (color, paper) => w.eval(`(()=>{S.dyBg=${JSON.stringify(color)};OWNED.add('paper_notes');OWNED.add('paper_mood');OWNED.add('paper_nature');S.dyPaper=${JSON.stringify(paper)};dyMode='day';renderDiary();const ed=document.querySelector('.dyedit');return {cls:ed.className,style:ed.getAttribute('style')||''}})()`);
+    for (const paper of ['plain', 'lined', 'grid', 'dot', 'biggrid', 'oxford', 'coffee', 'parchment', 'hanji', 'shelf', 'pastoral', 'moon', 'botanical', 'shroom1', 'shrooms', 'wild1', 'wildflower']) {
       const r = run('#dbeeff', paper);
       assert.ok(r.cls.includes('paper-' + paper), paper);
       assert.ok(r.style.includes('--pbg') && r.style.includes('#dbeeff'), paper + ' ' + r.style);
@@ -156,10 +156,17 @@ test('배경색 색상표: 기본·12색·직접 고르기가 꾸미기 패널�
   } finally { w.close(); }
 });
 
-test('크라프트지는 질감 없이 색만 쓴다(질감은 나무처럼 보여 뺐다)', () => {
-  const rule = HTML.slice(HTML.indexOf('#dyBody .paper-kraft{'), HTML.indexOf('#dyBody .paper-kraft{') + 200);
-  assert.ok(!rule.includes('feTurbulence') && !rule.includes('url('), '질감 없음');
-  assert.ok(rule.includes('var(--pbg,#d8b88a)'), '크라프트 기본색');
+test('감성 종이 11종은 색이 아니라 그림으로 구별되고, 그림 파일이 모두 있고, 글자를 가리지 않게 덮개(veil)가 있다', () => {
+  const fs2 = require('node:fs');
+  const files = { coffee: 'coffee.jpg', parchment: 'parchment.jpg', hanji: 'hanji.jpg', shelf: 'shelf.jpg', pastoral: 'pastoral.jpg', moon: 'moon_tr.png', botanical: 'botanical.jpg', shroom1: 'shroom1.webp', shrooms: 'shrooms.webp', wild1: 'wild1.webp', wildflower: 'wildflower.webp' };
+  for (const [cls, file] of Object.entries(files)) {
+    const i = HTML.indexOf('#dyBody .paper-' + cls + '{');
+    assert.ok(i > 0, cls + ' CSS');
+    const rule = HTML.slice(i, HTML.indexOf('\n', i));
+    assert.ok(rule.includes('/stk/paper/' + file), cls + ' 그림');
+    assert.ok(fs2.existsSync(path.join(__dirname, '..', 'stk', 'paper', file)), file + ' 파일');
+    if (cls !== 'moon') assert.ok(rule.includes('linear-gradient(') && rule.includes('background-blend-mode'), cls + ' 글자 가독성 덮개');
+  }
 });
 
 test('모든 스티커를 할 일 칸 그림으로 고를 수 있다(외부 일러스트 포함, 하이라이트만 제외)', () => {
@@ -208,13 +215,13 @@ test('Iconify 팩(fv:)의 그림 파일·이름·출처가 모두 있고 허용 
 test('상점 번들 미리 보기 안에서는 그 번들의 메모지 4종만 보이고, «모든 메모지»로 돌아간다', () => {
   const { w, errors } = open({ days: 30 });
   try {
-    w.eval("dyDeco=true;dyBundlePv='paper_mood';dyPaperPv='kraft';renderDyDeco()");
+    w.eval("dyDeco=true;dyBundlePv='paper_mood';dyPaperPv='coffee';renderDyDeco()");
     const names = [...w.document.querySelectorAll('#dyPapers button')].map((b) => b.textContent.replace('🔒 ', ''));
-    assert.deepEqual(names, ['‹ 모든 메모지', '크라프트', '포스트잇', '옥스포드 노트', '수채']);
+    assert.deepEqual(names, ['‹ 모든 메모지', '커피 자국', '양피지', '쪽빛 한지', '서가', '목가', '달밤']);
     w.eval("dyBundlePv='paper_notes';dyPaperPv='lined';renderDyDeco()");
-    assert.deepEqual([...w.document.querySelectorAll('#dyPapers button')].map((b) => b.textContent.replace('🔒 ', '')), ['‹ 모든 메모지', '줄노트', '모눈', '도트', '큰 모눈']);
+    assert.deepEqual([...w.document.querySelectorAll('#dyPapers button')].map((b) => b.textContent.replace('🔒 ', '')), ['‹ 모든 메모지', '줄노트', '모눈', '도트', '큰 모눈', '옥스포드 노트']);
     w.document.querySelector('#dyPapers button').click();
-    assert.equal(w.document.querySelectorAll('#dyPapers button').length, 9);
+    assert.equal(w.document.querySelectorAll('#dyPapers button').length, 17);
     assert.deepEqual(errors, []);
   } finally { w.close(); }
 });
