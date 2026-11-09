@@ -393,14 +393,13 @@ mark.mh-yellow,.mhb.mh-yellow{--mh:rgba(254,240,138,.7)}mark.mh-pink,.mhb.mh-pin
 #cookieDlg.open #ckSlip{opacity:1;transform:none}
 #ckSlip p{margin:0}#ckSlip #ckText{font-size:17px;line-height:1.55;word-break:keep-all}#ckSlip .stat{color:#7a6a52;margin-top:6px}
 #ckCookie .brk{opacity:0;transition:opacity .3s .1s}#cookieDlg.open #ckCookie .brk{opacity:1}
-#ckCookie .tip{transition:opacity .2s}#cookieDlg.open #ckCookie .tip{opacity:0}
 #ckCookie .ps{opacity:0;transition:opacity .4s .2s}
 #cookieDlg.open #ckCookie .ps{opacity:1}
 #ckCookie .sh{transition:opacity .5s}#cookieDlg.open #ckCookie .sh{opacity:.08}
 @keyframes ckfloat{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-4px) rotate(1.5deg)}}
 #cookieDlg:not(.open) #ckCookie svg{animation:ckfloat 2.6s ease-in-out infinite}
 #ckCookie:hover svg,#ckCookie:focus-visible svg{filter:drop-shadow(0 3px 6px rgba(120,70,20,.3))}
-@media (prefers-reduced-motion:reduce){#ckCookie .hl,#ckCookie .hr,#ckSlip,#ckCookie .ps,#ckCookie .tip,#ckCookie .brk{transition:none}#cookieDlg:not(.open) #ckCookie svg{animation:none}}
+@media (prefers-reduced-motion:reduce){#ckCookie .hl,#ckCookie .hr,#ckSlip,#ckCookie .ps,#ckCookie .brk{transition:none}#cookieDlg:not(.open) #ckCookie svg{animation:none}}
 .dn{display:inline-block;line-height:1.25}
 .hl-marker{background:linear-gradient(transparent 50%,#fff176 50% 90%,transparent 90%)}
 .hl-wavy{text-decoration:underline wavy #ff6b6b;text-decoration-thickness:2px;text-underline-offset:3px}
@@ -651,7 +650,6 @@ mark.mh-yellow,.mhb.mh-yellow{--mh:rgba(254,240,138,.7)}mark.mh-pink,.mhb.mh-pin
           <clipPath id="ckcR"><path d="M92 -10H170V120H70L75 90L87 72L80 55L91 38L84 22Z"/></clipPath>
         </defs>
         <ellipse class="sh" cx="82" cy="102" rx="62" ry="5.5" fill="#5b3a2e" opacity=".14"/>
-        <g class="tip"><rect x="108" y="4" width="11" height="34" rx="1.5" fill="#f7f7f2" stroke="#c9c9c0" stroke-width="1.5" transform="rotate(22 113 30)"/></g>
         <g class="ps"><rect x="56" y="36" width="48" height="30" rx="2" fill="#fffdf5" stroke="#d9c9a3" stroke-width="1.5" transform="rotate(-5 80 51)"/><path d="M63 47h34M63 54h24" stroke="#d9c9a3" stroke-width="2" stroke-linecap="round" transform="rotate(-5 80 51)"/></g>
         <g class="hl">
           <g clip-path="url(#ckcL)">
