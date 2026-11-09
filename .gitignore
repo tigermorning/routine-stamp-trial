@@ -3,3 +3,7 @@ node_modules/
 __pycache__/
 *.pyc
 .env
+.pytest_cache/
+
+# 크레딧 로컬 시험 DB
+server/data/

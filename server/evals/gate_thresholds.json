@@ -1,0 +1,10 @@
+{
+  "_about": "평가 관문(eval_gate.py)의 바닥값. 2026-11-03 내보낸 버전(stamp-plan v2, stamp-listen-rule v3 + 문장 걸러 내기)의 실험 결과에서 두 실행 사이의 흔들림(1~2개)만큼 뺀 값이다. 실험: 모드 v2 20·20/21, 듣기 D 심사 셋 통과 8·9/12, 지어낸 숫자 없음 12·12, 되묻기 없음 4·4(/4), 질문 하나 12·12. 기준선(v1)은 모드 18·18, 듣기 심사 셋 6·5, 숫자 10·11, 되묻기 1·1, 질문 하나 6·6.",
+  "floors": {
+    "mode-correct": 19,
+    "all-judges": 7,
+    "no-invented-numbers": 11,
+    "no-repeat-question": 3,
+    "one-question": 11
+  }
+}

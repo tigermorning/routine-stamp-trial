@@ -12,3 +12,10 @@ tests/
 # Node 용 파일. 서버는 파이썬이라 올리면 빌드가 언어를 헷갈릴 수 있다
 package.json
 package-lock.json
+.pytest_cache/
+.claude/
+server/tests/
+server/requirements.txt
+PRD.md
+README.md
+routine-app-pain-points.md
