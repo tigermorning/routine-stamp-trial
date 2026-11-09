@@ -173,3 +173,12 @@ def test_mask_patterns():
     s = tracing.mask(data={"a": ["연락 010-1234-5678 / a.b@x.co.kr / 4111 1111 1111 1111"]})["a"][0]
     assert "5678" not in s and "x.co.kr" not in s and "4111" not in s
     assert "[전화번호]" in s and "[이메일]" in s and "[카드번호]" in s
+
+
+def test_flush_logs_duration_and_trace_id_without_text(monkeypatch, caplog):
+    c = FakeClient()
+    use_tracing(monkeypatch, c)
+    with caplog.at_level("INFO", logger="coach"):
+        chat("어제 하루 빠졌어 fake:advise")
+    line = next(r.getMessage() for r in caplog.records if r.getMessage().startswith("tracing flush"))
+    assert "trace=" in line and "ms=" in line and "빠졌" not in line
