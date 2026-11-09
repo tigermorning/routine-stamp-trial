@@ -96,6 +96,13 @@ ITEMS = {
     "st_duo": {"id": "st_duo", "kind": "sticker", "name": "파스텔 타일 스티커 팩", "amount": 2700, "desc": "부드러운 파스텔 타일에 두 겹 색으로 칠한 일상 — 스티커 40개"},
     "st_badge": {"id": "st_badge", "kind": "sticker", "name": "동그라미 배지 스티커 팩", "amount": 2700, "desc": "진한 색 동그라미 배지에 하얀 그림을 박은 일상 — 스티커 36개"},
     "st_jelly": {"id": "st_jelly", "kind": "sticker", "name": "젤리 글로시 스티커 팩", "amount": 2700, "desc": "반짝 광택이 도는 젤리처럼 볼록한 일상 — 스티커 32개"},
+    # AI 일러스트 팩(2026-11-09 사용자 요청: 팩마다 스타일이 다른 일러스트): 점토·수채·도트·종이접기·크레용·잉크
+    "ai_clay": {"id": "ai_clay", "kind": "sticker", "name": "점토 일상 스티커 팩", "amount": 2700, "desc": "말랑한 3D 점토로 빚은 하루 소품 — 스티커 18개"},
+    "ai_water": {"id": "ai_water", "kind": "sticker", "name": "수채 계절 스티커 팩", "amount": 2700, "desc": "물감이 번지는 수채화로 그린 계절과 자연 — 스티커 18개"},
+    "ai_pixel": {"id": "ai_pixel", "kind": "sticker", "name": "도트 간식 스티커 팩", "amount": 2700, "desc": "도트 한 칸씩 찍은 레트로 먹거리 — 스티커 18개"},
+    "ai_paper": {"id": "ai_paper", "kind": "sticker", "name": "종이접기 동물 스티커 팩", "amount": 2700, "desc": "겹겹이 오려 붙인 종이 공예 동물과 식물 — 스티커 18개"},
+    "ai_crayon": {"id": "ai_crayon", "kind": "sticker", "name": "크레용 놀이 스티커 팩", "amount": 2700, "desc": "크레용으로 쓱쓱 그린 신나는 하루 — 스티커 18개"},
+    "ai_ink": {"id": "ai_ink", "kind": "sticker", "name": "잉크 여행 스티커 팩", "amount": 2700, "desc": "굵은 선과 평평한 색으로 찍은 레트로 탈것과 여행 — 스티커 18개"},
     # 할 일 아이콘 스타일 팩(2026-11-04): 할 일 칸의 그림 25종을 다른 분위기로 바꾼다(그림은 화면 index.html 의 GLYPHS·ICON_PACKS, id 가 같아야 함). 가격은 임시값이다(근거 없음).
     # 메모지(2026-11-06 사용자 결정): 7종 한 묶음 대신 4종씩 두 번들. 예전에 «메모지 7종»(paper_pack)을 산 기록은 DB 에 남고 화면이 옛 7종 소유로 읽는다
     "paper_notes": {"id": "paper_notes", "kind": "paper", "name": "줄·격자 노트 4종 번들", "amount": 2700, "desc": "선과 격자가 그려진 노트 4가지 — 줄노트·모눈·도트·큰 모눈"},

@@ -44,3 +44,8 @@
   - `ph` — Phosphor, 만든 곳: Phosphor Icons (https://github.com/phosphor-icons/core), 라이선스: MIT https://github.com/phosphor-icons/core/blob/main/LICENSE
   - `pixelarticons` — Pixelarticons, 만든 곳: Gerrit Halfmann (https://github.com/halfmage/pixelarticons), 라이선스: MIT https://github.com/halfmage/pixelarticons/blob/master/LICENSE
   - `solar` — Solar, 만든 곳: 480 Design (https://www.figma.com/community/file/1166831539721848736), 라이선스: CC BY 4.0 https://creativecommons.org/licenses/by/4.0/
+
+## AI 일러스트 스티커(OpenAI 이미지 모델로 생성)
+- 팩 6개(`ai_clay`·`ai_water`·`ai_pixel`·`ai_paper`·`ai_crayon`·`ai_ink`, `stk/ai`). 모델 `gpt-image-1-mini`, 팩마다 스타일 문장 하나로 만들었다(`tools/stickers/ai_gen.py` 의 STYLES, 주제 목록은 `tools/stickers/ai_pack.py`).
+- 프롬프트에는 기존 캐릭터·브랜드·로고·실존 인물을 쓰지 않았고, 만든 뒤 사람이 확인했다. 생성 이미지는 AI 가 만든 것이다.
+- 권리: OpenAI 서비스 계약 4.1절은 «고객이 모든 출력물을 소유한다»고 한다. 다만 출력물이 고유하지 않을 수 있고(4.4절), 상업적 이용에 따른 상표 분쟁은 OpenAI 면책에서 빠질 수 있다(서비스 약관 1(a)). 키는 기관에서 받은 것이라 기관 정책 확인이 필요하다.
