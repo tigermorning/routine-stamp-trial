@@ -307,6 +307,29 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 #dyBody .paper-sticky{background:#fff3a0;border-color:#e3cf5a}
 #dyBody .paper-letter{background:#fff4f7;border:2px dashed #f0a0b8}
 #dyBody .paper-wash{background:radial-gradient(circle at 16% 20%,rgba(150,200,255,.55),transparent 46%),radial-gradient(circle at 84% 72%,rgba(255,185,210,.5),transparent 50%),radial-gradient(circle at 60% 12%,rgba(255,232,170,.45),transparent 40%),#fffaf3;border-color:#bcd3ea}
+/* 메몽식 떡메모지(사양서 3·4절). 기록 메모 칸은 이제 편집 영역(.dyedit)이고 속지 클래스(.paper-*)를 그대로 쓴다 */
+.dyedit{width:100%;box-sizing:border-box;border:2px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit;line-height:1.5;background:var(--card);color:var(--ink);min-height:calc(var(--rows,3)*1.5em + 18px);max-height:48vh;overflow:auto;white-space:pre-wrap;word-break:break-word}
+.dyedit:empty::before{content:attr(data-ph);color:var(--soft)}
+#dyBody.five .dyedit{height:56px;min-height:0}
+#dyBody .dyedit[class*="paper-"]:not(.paper-plain){color:#3b2f22;border-color:#c9b8a0;box-shadow:0 4px 12px rgba(91,58,46,.08)}
+#dyBody .paper-grid{background-color:#fefce8;background-image:linear-gradient(rgba(202,138,4,.15) 1px,transparent 1px),linear-gradient(90deg,rgba(202,138,4,.15) 1px,transparent 1px);background-size:18px 18px;background-attachment:local}
+#dyBody .paper-lined{background:#fff1f2 repeating-linear-gradient(transparent 0 21px,rgba(244,63,94,.18) 21px 22px) local;line-height:22px}
+#dyBody .paper-dot{background:#faf5ff radial-gradient(circle,rgba(167,139,250,.6) 1.1px,transparent 1.6px) 0 0/20px 20px local}
+#dyBody .paper-biggrid{background:linear-gradient(315deg,rgba(91,58,46,.22) 0 13px,transparent 13px) no-repeat,#f0fdf4}
+.dyarea.taped{margin-top:12px}
+.dyarea.taped::before{content:"";position:absolute;z-index:2;pointer-events:none;top:-10px;left:50%;width:84px;height:20px;margin-left:-42px;background:rgba(254,215,170,.78);transform:rotate(-1.5deg);clip-path:polygon(0 0,100% 0,98% 25%,100% 50%,98% 75%,100% 100%,0 100%,2% 75%,0 50%,2% 25%)}
+#dyBody.five .dyarea.taped::before{width:44px;height:12px;margin-left:-22px;top:-6px}
+mark.mh{background:linear-gradient(180deg,transparent 35%,var(--mh,rgba(254,240,138,.7)) 35%);color:inherit;border-radius:2px;padding:0 3px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+mark.mh-yellow,.mhb.mh-yellow{--mh:rgba(254,240,138,.7)}mark.mh-pink,.mhb.mh-pink{--mh:rgba(254,205,211,.7)}mark.mh-mint,.mhb.mh-mint{--mh:rgba(187,247,208,.7)}mark.mh-blue,.mhb.mh-blue{--mh:rgba(186,230,253,.7)}mark.mh-purple,.mhb.mh-purple{--mh:rgba(233,213,255,.7)}
+#dyHl{align-items:center}#dyHl .mhb{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);padding:0;cursor:pointer;background:var(--mh)}#dyHl .mhe{width:auto;border-radius:999px;padding:0 10px;background:var(--card);color:var(--ink);font:inherit;font-size:14px;height:30px}
+/* 네이버 캘린더식 카테고리 탭과 격자 피커(사양서 2절) */
+.stkchips{display:flex;gap:6px;overflow-x:auto;margin:0 0 6px;padding-bottom:2px;scrollbar-width:none}.stkchips::-webkit-scrollbar{display:none}
+.stkchip{flex:none;border:2px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);padding:2px 12px;font:inherit;font-size:14px;cursor:pointer}
+.stkchip[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.stkgrid{display:grid!important;grid-template-columns:repeat(5,1fr);gap:6px}.stkgrid .stkbtn,.stkgrid .btn{width:100%;display:flex;justify-content:center;padding:4px 0}
+.stkgrid .stat{grid-column:1/-1}
+@keyframes stkfade{from{opacity:0}to{opacity:1}}.stkfade{animation:stkfade .15s}
+@media (prefers-reduced-motion:reduce){.stkfade{animation:none}}
 .dyrow{margin:0 0 8px}.dyrow label{display:block;font-size:13px;color:var(--soft);margin-bottom:2px}.dyrow.today label{color:var(--accent);font-weight:700}
 #dyBody textarea{width:100%;box-sizing:border-box;border:2px solid var(--line);border-radius:10px;padding:6px 8px;font:inherit;background:var(--card);color:var(--ink);resize:vertical}
 .hcal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin:12px 0 6px;text-align:center}
@@ -642,9 +665,11 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
   <div class="dytabs" role="tablist"><button type="button" class="btn" data-m="day">하루</button><button type="button" class="btn" data-m="week">주간</button><button type="button" class="btn" data-m="five">5년</button></div>
   <div class="dynav"><button type="button" class="btn" id="dyPrev" aria-label="이전">‹</button><input type="date" id="dyPick" aria-label="날짜 고르기"><button type="button" class="btn" id="dyNext" aria-label="다음">›</button><button type="button" class="btn" id="dyToday">오늘</button></div>
   <p class="stat" id="dyCap" style="margin:0 0 8px;text-align:center"></p>
+  <div class="dychips" id="dyHl" role="toolbar" aria-label="형광펜" hidden></div>
   <div id="dyBody"></div>
   <div id="dyDeco" hidden>
     <div class="dychips" id="dyPapers" aria-label="메모지 종류"></div>
+    <div class="stkchips" id="dyStkTabs" role="tablist" aria-label="스티커 분류" hidden></div>
     <div class="dychips" id="dyTray" aria-label="스티커"></div>
     <p class="stat" id="dyPv" hidden><span id="dyPvTxt"></span> <button class="btn main" id="dyBuy" type="button"></button></p>
   </div>
@@ -661,6 +686,7 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
   <div id="histStk" hidden>
     <p class="stat" id="histStkCap">스티커 붙이기 (하루 최대 3개, 붙인 것을 누르면 떼요)</p>
     <div class="stkrow" id="histStkOn"></div>
+    <div class="stkchips" id="histStkTabs" role="tablist" aria-label="스티커 분류" hidden></div>
     <div class="stkrow" id="histStkPick"></div>
   </div>
   <p class="stat" id="histStat"></p>
@@ -2277,8 +2303,8 @@ let histSel=null;
 let dyMode='day',dyDate=todayStr;
 const dyAdd=(ds,n)=>{const d=new Date(ds+'T00:00');d.setDate(d.getDate()+n);return fmt(d)};
 const dyFmt=(ds,o)=>new Intl.DateTimeFormat(LOCALE[lang],o).format(new Date(ds+'T00:00'));
-function dySet(ds,v){if(!S.diary)S.diary={};if(v.trim())S.diary[ds]=v.slice(0,1000);else delete S.diary[ds];save()}
-const PAPERS=[{id:'plain',name:'기본'},{id:'lined',name:'줄 노트'},{id:'grid',name:'모눈'},{id:'dot',name:'점 격자'},{id:'biggrid',name:'그리드'},{id:'kraft',name:'크라프트'},{id:'sticky',name:'노란 메모'},{id:'letter',name:'편지지'},{id:'wash',name:'수채 하늘'}]; // plain 말고는 상점 메모지 번들 두 개(4종씩, 사용자 결정 2026-11-06)
+function dySet(ds,v){if(!S.diary)S.diary={};if(v.trim())S.diary[ds]=v.slice(0,2000);else delete S.diary[ds];save()}
+const PAPERS=[{id:'plain',name:'기본'},{id:'lined',name:'핑크 줄노트'},{id:'grid',name:'연노랑 모눈'},{id:'dot',name:'라벤더 도트'},{id:'biggrid',name:'민트 무지'},{id:'kraft',name:'크라프트'},{id:'sticky',name:'노란 메모'},{id:'letter',name:'편지지'},{id:'wash',name:'수채 하늘'}]; // plain 말고는 상점 메모지 번들 두 개(4종씩, 사용자 결정 2026-11-06)
 const PAPER_BUNDLES={paper_notes:['lined','grid','dot','biggrid'],paper_mood:['kraft','sticky','letter','wash'],paper_pack:['lined','grid','dot','biggrid','kraft','sticky','letter']}; // paper_pack 은 예전 «메모지 7종» 구매 기록(산 사람은 그 7종을 그대로 쓴다)
 const PAPER_BUNDLE_NAME={paper_notes:'노트 메모지 4종 번들',paper_mood:'감성 메모지 4종 번들'};
 const ownsPaper=id=>id==='plain'||Object.keys(PAPER_BUNDLES).some(b=>OWNED.has(b)&&PAPER_BUNDLES[b].includes(id));
@@ -2288,12 +2314,96 @@ async function ensureShopCache(){if(SHOP_CACHE)return;try{const r=await fetch('/
 const priceTxt=id=>SHOP_CACHE&&SHOP_CACHE[id]?SHOP_CACHE[id].amount.toLocaleString('ko-KR')+'원':'';
 let dyDeco=false,dyPaperPv=null,dySel=-1;
 const dyPaper=()=>dyPaperPv||(ownsPaper(S.dyPaper)&&PAPERS.some(x=>x.id===S.dyPaper)?S.dyPaper:'plain');
+/* 메모 형광펜(사양서 4절). 글은 지금처럼 문자열 하나(S.diary[날짜])로 두고, 칠한 글자만 ==글자== (노랑) 또는 ==색:글자== (p 분홍·m 민트·b 하늘·v 보라)로 감싸 저장한다. 평문 메모는 그대로 읽힌다.
+   사양서의 클래스 이름 .hl-pink 등은 달력 날짜 하이라이트(.hl-pink·.hl-blue)와 겹쳐서 메모 쪽은 mark.mh-* 로 썼다. 형광펜 도구는 누적 28일 또는 «먼저 열기»에서 열린다(점진적 해금, 기존 해금 일정 유지). */
+const MH=['','y','p','m','b','v'],MH_CLS=['','yellow','pink','mint','blue','purple'],MH_NAME=['지우개','노랑 형광펜','분홍 형광펜','민트 형광펜','하늘 형광펜','보라 형광펜'],MH_MAX=1000;
+function mhParse(src){ // 저장 글 → 글자 목록과 글자마다 색(0 없음, 1~5 색)
+  const t=[],c=[],re=/==(?:([ypmbv]):)?((?:(?!==)[\s\S])+?)==/g;let last=0,m;
+  const push=(x,k)=>{for(let i=0;i<x.length;i++){t.push(x[i]);c.push(k)}};
+  while((m=re.exec(src))){push(src.slice(last,m.index),0);push(m[2],m[1]?MH.indexOf(m[1]):1);last=m.index+m[0].length}
+  push(src.slice(last),0);return {t:t.join(''),c};
+}
+function mhPack(t,c){ // 글자 목록 → 저장 글. 글자 속 ==는 보이지 않는 글자를 끼워 표시와 헷갈리지 않게 한다
+  const safe=x=>x.replace(/==/g,'=​=').replace(/=$/,'=​');let out='',i=0;
+  while(i<t.length){let j=i;while(j<t.length&&c[j]===c[i])j++;const seg=safe(t.slice(i,j));out+=c[i]?'=='+(c[i]===1?'':MH[c[i]]+':')+seg+'==':seg;i=j}
+  return out;
+}
+function mhRender(ed,src){
+  const {t,c}=mhParse(src);ed.textContent='';let i=0;
+  while(i<t.length){let j=i;while(j<t.length&&c[j]===c[i])j++;const seg=t.slice(i,j);
+    if(c[i]){const m=document.createElement('mark');m.className='mh mh-'+MH_CLS[c[i]];m.textContent=seg;ed.appendChild(m)}else ed.appendChild(document.createTextNode(seg));i=j}
+  if(t.endsWith('\n')) ed.appendChild(document.createElement('br')); // 끝 줄바꿈은 자리 표시 br 이 있어야 빈 줄이 보인다
+}
+function mhRead(node,dropTrail){ // 화면에 있는 내용 → 글자 목록과 색. 브라우저가 넣는 div·br 도 줄바꿈으로 읽는다
+  const t=[],c=[];
+  (function walk(n,k){
+    n.childNodes.forEach((ch,idx)=>{
+      if(ch.nodeType===3){for(let i=0;i<ch.data.length;i++){t.push(ch.data[i]);c.push(k)}}
+      else if(ch.nodeName==='BR'){if(dropTrail&&n===node&&idx===n.childNodes.length-1)return;t.push('\n');c.push(k)}
+      else if(ch.nodeName==='MARK'){const m=/mh-(\w+)/.exec(ch.className||'');const q=m?MH_CLS.indexOf(m[1]):1;walk(ch,q>0?q:1)}
+      else{if(t.length&&t[t.length-1]!=='\n'){t.push('\n');c.push(0)}walk(ch,k)}
+    });
+  })(node,0);
+  return {t:t.join(''),c};
+}
+function mhOff(ed,node,off){const r=document.createRange();r.selectNodeContents(ed);r.setEnd(node,off);return mhRead(r.cloneContents(),false).t.length}
+function mhPos(ed,n){ // 글자 번호 → 화면 위치(선택 영역 복원용)
+  let acc=0;
+  function walk(p){for(let i=0;i<p.childNodes.length;i++){const ch=p.childNodes[i];
+    if(ch.nodeType===3){if(n<=acc+ch.data.length)return [ch,n-acc];acc+=ch.data.length}
+    else if(ch.nodeName==='BR'){if(n<=acc)return [p,i];acc+=1}
+    else{const r=walk(ch);if(r)return r}}return null}
+  return walk(ed)||[ed,ed.childNodes.length];
+}
+let dyFocus=null; // 마지막으로 글을 쓰거나 고른 칸 {ed,ds,s,e}
+function mhWire(ed,ds){
+  const save1=()=>{const {t,c}=mhRead(ed,true);let tt=t,cc=c;
+    if(tt.length>MH_MAX){tt=tt.slice(0,MH_MAX);cc=cc.slice(0,MH_MAX);mhRender(ed,mhPack(tt,cc));const [n,o]=mhPos(ed,tt.length),r=document.createRange();r.setStart(n,o);r.collapse(true);const sl=getSelection();sl.removeAllRanges();sl.addRange(r)}
+    dySet(ds,mhPack(tt,cc))};
+  ed.addEventListener('input',save1);
+  ed.addEventListener('beforeinput',e=>{if(e.inputType==='insertParagraph'){e.preventDefault();document.execCommand('insertLineBreak')}}); // 브라우저마다 다른 줄바꿈을 br 하나로 맞춘다
+  ed.addEventListener('paste',e=>{e.preventDefault();document.execCommand('insertText',false,((e.clipboardData||window.clipboardData).getData('text/plain')||'').replace(/\r/g,''))}); // 붙여 넣은 서식은 버린다
+  ed.addEventListener('drop',e=>e.preventDefault());
+  ed.addEventListener('focus',()=>{dyFocus={ed,ds,s:0,e:0}});
+  ed._ds=ds;
+}
+document.addEventListener('selectionchange',()=>{
+  const sl=getSelection();if(!sl||!sl.rangeCount)return;
+  const r=sl.getRangeAt(0),a=r.commonAncestorContainer,el=a.nodeType===1?a:a.parentElement,ed=el&&el.closest?el.closest('.dyedit'):null;
+  if(!ed||!ed.isConnected)return;dyFocus={ed,ds:ed._ds,s:mhOff(ed,r.startContainer,r.startOffset),e:mhOff(ed,r.endContainer,r.endOffset)};
+});
+function mhApply(k){ // 고른 글자에 색 k(0 이면 지우개)
+  const f=dyFocus;if(!f||!f.ed.isConnected)return false;
+  if(f.s===f.e){$('dyHint').textContent='먼저 칠할 글자를 끌어서 골라요.';return false}
+  const {ed}=f,{t,c}=mhRead(ed,true);for(let i=f.s;i<f.e&&i<c.length;i++)c[i]=k;
+  const packed=mhPack(t,c);dySet(f.ds,packed);mhRender(ed,packed);
+  const [n1,o1]=mhPos(ed,f.s),[n2,o2]=mhPos(ed,f.e),r=document.createRange();r.setStart(n1,o1);r.setEnd(n2,o2);const sl=getSelection();sl.removeAllRanges();sl.addRange(r);
+  $('dyHint').textContent='';return true;
+}
+function renderDyHl(){
+  const bar=$('dyHl'),on=opened(3)&&opened(28);bar.hidden=!on;bar.textContent='';if(!on)return;
+  for(let k=1;k<=5;k++){const b=document.createElement('button');b.type='button';b.className='mhb mh-'+MH_CLS[k];b.setAttribute('aria-label',MH_NAME[k]);b.title=MH_NAME[k];b.onpointerdown=e=>e.preventDefault();b.onclick=()=>mhApply(k);bar.appendChild(b)}
+  const e=document.createElement('button');e.type='button';e.className='btn mhe';e.textContent='⌫ 지우개';e.setAttribute('aria-label',MH_NAME[0]);e.onpointerdown=ev=>ev.preventDefault();e.onclick=()=>mhApply(0);bar.appendChild(e);
+  const h=document.createElement('span');h.id='dyHint';h.className='stat';h.setAttribute('role','status');bar.appendChild(h);
+}
+/* 스티커 카테고리 탭(사양서 2절, 네이버 캘린더식). 산 팩들의 그림을 한 줄로 모아 일상·약속·운동·공부·날씨로 나눠 본다. 분류에 안 맞는 하이라이트는 «전체»에만 나온다 */
+const STK_CATS=[['all','전체'],['daily','일상'],['schedule','약속'],['health','운동'],['study','공부'],['weather','날씨']];
+const TOPIC_CAT={hospital:'schedule',dentist:'schedule',pill:'schedule',skin:'schedule',nail:'schedule',salon:'schedule',meal:'schedule',cafe:'schedule',drinks:'schedule',date:'schedule',meeting:'schedule',trip:'schedule',clean:'schedule',laundry:'schedule',grocery:'schedule',parcel:'schedule',bank:'schedule',travel:'schedule',movie:'schedule',gym:'health',run:'health',yoga:'health',swim:'health',study:'study',class:'study',read:'study',birthday:'daily',pet:'daily',anniversary:'daily',rest:'daily'};
+const PACK_CAT={round:'daily',party:'daily',dojang:'daily',seal:'daily',washi:'daily',fruit:'daily',glossy:'daily',letter:'daily',doodle:'daily',marker:'daily',cafe:'daily',felt:'weather',dday:'study',office:'study',highlight:'deco'};
+const stkCat=e=>{const m=/^sv:(?:pn|cp|wc)_(\w+)$/.exec(e);if(m&&TOPIC_CAT[m[1]])return TOPIC_CAT[m[1]];return PACK_CAT[PK_OF[e]]||'daily'};
+let stkTab='all';
+function stkTabsDraw(box,pool,redraw){ // 탭 줄을 그린다. 고른 분류에 그림이 없으면 «전체»로 돌아간다
+  const has=id=>id==='all'||pool.some(e=>stkCat(e)===id);if(!has(stkTab))stkTab='all';
+  box.hidden=pool.length<2;box.innerHTML=STK_CATS.filter(([id])=>has(id)).map(([id,n])=>`<button type="button" role="tab" class="stkchip" data-c="${id}" aria-selected="${stkTab===id}">${n}</button>`).join('');
+  box.querySelectorAll('button').forEach(b=>b.onclick=()=>{stkTab=b.dataset.c;redraw()});
+}
+const stkFadeIn=el=>{el.classList.remove('stkfade');void el.offsetWidth;el.classList.add('stkfade')};
 function dyRow(ds,label,rows,withStk){
   const d=document.createElement('div');d.className='dyrow'+(ds===todayStr?' today':'');
   const l=document.createElement('label');if(withStk&&S.dyHl&&S.dyHl[ds]){l.innerHTML=`<span class="dn hl-${esc(S.dyHl[ds].slice(3))}">${esc(label)}</span>`}else l.textContent=label;
-  const area=document.createElement('div');area.className='dyarea';const ta=document.createElement('textarea');
-  ta.rows=rows;ta.maxLength=1000;ta.value=(S.diary&&S.diary[ds])||'';ta.setAttribute('aria-label',label);ta.className='paper-'+dyPaper();
-  ta.oninput=()=>dySet(ds,ta.value);area.appendChild(ta);d.appendChild(l);d.appendChild(area);
+  const area=document.createElement('div');area.className='dyarea'+(dyPaper()==='plain'?'':' taped');const ed=document.createElement('div');
+  ed.className='dyedit paper-'+dyPaper();ed.contentEditable='true';ed.setAttribute('role','textbox');ed.setAttribute('aria-multiline','true');ed.setAttribute('aria-label',label);ed.dataset.ph=label;ed.style.setProperty('--rows',rows);
+  mhRender(ed,(S.diary&&S.diary[ds])||'');mhWire(ed,ds);area.appendChild(ed);d.appendChild(l);d.appendChild(area);
   if(withStk) dyStickers(area,ds);
   return d;
 }
@@ -2321,11 +2431,13 @@ function renderDyDeco(){
   });
   const pv=$('dyPv');pv.hidden=!dyPaperPv;
   if(dyPaperPv){$('dyPvTxt').textContent='“'+PAPERS.find(x=>x.id===dyPaperPv).name+'” 메모지 미리 보는 중 — «'+PAPER_BUNDLE_NAME[bundleOfPaper(dyPaperPv)]+'»에 들어 있어요.';$('dyBuy').textContent=(priceTxt(bundleOfPaper(dyPaperPv))||'')+'에 사기';if(!SHOP_CACHE)ensureShopCache().then(()=>{if(dyPaperPv)renderDiary()});$('dyBuy').onclick=()=>{$('diaryDlg').close();buyCredits(bundleOfPaper(dyPaperPv))}}
-  const tray=$('dyTray');tray.textContent='';
+  const tray=$('dyTray');tray.textContent='';tray.classList.remove('stkgrid');$('dyStkTabs').hidden=true;
   const packs=Object.keys(STICKER_PACKS).filter(id=>OWNED.has(id)),dayMode=dyMode==='day';
   if(!packs.length){tray.innerHTML='<span class="stat">스티커 팩이 있으면 기록에도 붙일 수 있어요. </span>';const sb=document.createElement('button');sb.type='button';sb.className='btn';sb.textContent='상점 보기';sb.onclick=()=>{$('diaryDlg').close();openCredits()};tray.appendChild(sb);return}
   if(!dayMode){tray.innerHTML='<span class="stat">스티커는 «하루» 탭에서 붙여요.</span>';return}
+  const trayPool=packs.flatMap(id=>STICKER_PACKS[id].list);stkTabsDraw($('dyStkTabs'),trayPool,renderDyDeco);tray.classList.add('stkgrid');stkFadeIn(tray);
   packs.forEach(id=>STICKER_PACKS[id].list.forEach(e=>{
+    if(stkTab!=='all'&&stkCat(e)!==stkTab)return;
     const b=document.createElement('button');b.type='button';b.className='btn';
     if(e.startsWith('hl:')){b.innerHTML=stkFace(e);b.title='날짜에 '+stkName(e);b.setAttribute('aria-pressed',String(!!(S.dyHl&&S.dyHl[dyDate]===e)));b.onclick=()=>{S.dyHl=S.dyHl||{};if(S.dyHl[dyDate]===e)delete S.dyHl[dyDate];else S.dyHl[dyDate]=e;save();renderDiary()}}
     else{b.innerHTML=stkFace(e);b.setAttribute('aria-label',stkName(e)+' 붙이기');b.title=stkName(e);b.onclick=()=>{S.dyDeco=S.dyDeco||{};const l=S.dyDeco[dyDate]=S.dyDeco[dyDate]||[];if(l.length>=12)return;l.push({e,x:20+Math.round(Math.random()*60),y:20+Math.round(Math.random()*60)});dySel=l.length-1;save();renderDiary()}}
@@ -2355,6 +2467,7 @@ function renderDiary(){
     $('dyCap').textContent=dyFmt(dyDate,{month:'long',day:'numeric'})+' · '+(d.getFullYear()-4)+'~'+d.getFullYear()+'년';
     for(let y=d.getFullYear();y>d.getFullYear()-5;y--){const ds=`${y}-${md}`;body.appendChild(dyRow(ds,y+'년',2))}
   }
+  renderDyHl();
   renderDyDeco();
 }
 function openDiary(opt){dyDate=todayStr;dyMode='day';dySel=-1;dyPaperPv=null;dyDeco=!!(opt&&opt.deco);renderDiary();if(!$('diaryDlg').open)$('diaryDlg').showModal();loadCredits()} // 열 때 소유를 한 번 더 읽어, 방금 산 «기록 바로 열기»가 바로 반영되게 한다
@@ -2414,8 +2527,9 @@ function renderStk(show){
   box.hidden=!(show&&pool.length);
   if(box.hidden) return;
   const cur=(S.stickers&&S.stickers[histSel])||[];
+  const shown=pool.filter(e=>stkTab==='all'||stkCat(e)===stkTab);stkTabsDraw($('histStkTabs'),pool,()=>renderStk(show));
   $('histStkOn').innerHTML=cur.map((e,i)=>`<button type="button" class="stkbtn on" data-i="${i}" aria-label="${esc(stkName(e))} 떼기">${stkFace(e)}</button>`).join('');
-  $('histStkPick').innerHTML=pool.map(e=>`<button type="button" class="stkbtn" data-e="${esc(e)}"${cur.length>=STICKERS_PER_DAY?' disabled':''} aria-label="${esc(stkName(e))} 붙이기" title="${esc(stkName(e))}">${stkFace(e)}</button>`).join('');
+  $('histStkPick').innerHTML=shown.map(e=>`<button type="button" class="stkbtn" data-e="${esc(e)}"${cur.length>=STICKERS_PER_DAY?' disabled':''} aria-label="${esc(stkName(e))} 붙이기" title="${esc(stkName(e))}">${stkFace(e)}</button>`).join('');
   const put=arr=>{S.stickers=Object.assign({},S.stickers);if(arr.length) S.stickers[histSel]=arr;else delete S.stickers[histSel];save();renderHist()};
   $('histStkOn').querySelectorAll('button').forEach(b=>b.onclick=()=>put(cur.filter((_,i)=>i!==+b.dataset.i)));
   $('histStkPick').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(cur.length<STICKERS_PER_DAY) put(cur.concat(b.dataset.e))});
