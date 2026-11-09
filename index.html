@@ -299,26 +299,29 @@ textarea{width:100%;min-height:96px;font:inherit;border:2px solid var(--line);bo
 .dyarea{position:relative}.dystk{position:absolute;font-size:40px;line-height:1;touch-action:none;user-select:none;cursor:grab;transform:translate(-50%,-50%)}
 .dystk.sel{outline:2px dashed var(--accent);outline-offset:2px;border-radius:6px}.dystk .x{position:absolute;right:-12px;top:-14px;width:20px;height:20px;border-radius:50%;border:0;background:var(--accent);color:var(--accent-ink);font-size:12px;line-height:20px;padding:0;cursor:pointer}
 #dyBody textarea[class*="paper-"]:not(.paper-plain){color:#3b2f22;border-color:#c9b8a0}
-#dyBody .paper-lined{background:#fffdf6 repeating-linear-gradient(transparent 0 27px,#9ec5e8 27px 28px) local;line-height:28px}
-#dyBody .paper-grid{background-color:#fcfff9;background-image:linear-gradient(#bfe0c8 1px,transparent 1px),linear-gradient(90deg,#bfe0c8 1px,transparent 1px);background-size:20px 20px;background-attachment:local}
-#dyBody .paper-biggrid{background-color:#fbfdff;background-image:linear-gradient(#a9c4e0 1.5px,transparent 1.5px),linear-gradient(90deg,#a9c4e0 1.5px,transparent 1.5px);background-size:40px 40px;background-attachment:local;border-color:#a9c4e0}
-#dyBody .paper-dot{background:#fffdf6 radial-gradient(circle,#c9b8a0 1.2px,transparent 1.6px) 0 0/18px 18px local}
-#dyBody .paper-kraft{background:#dcc09a;border-color:#a98558}
-#dyBody .paper-sticky{background:#fff3a0;border-color:#e3cf5a}
-#dyBody .paper-letter{background:#fff4f7;border:2px dashed #f0a0b8}
-#dyBody .paper-wash{background:radial-gradient(circle at 16% 20%,rgba(150,200,255,.55),transparent 46%),radial-gradient(circle at 84% 72%,rgba(255,185,210,.5),transparent 50%),radial-gradient(circle at 60% 12%,rgba(255,232,170,.45),transparent 40%),#fffaf3;border-color:#bcd3ea}
+#dyBody .paper-lined{background:var(--pbg,#fffdf6) repeating-linear-gradient(transparent 0 27px,#9ec5e8 27px 28px) local;line-height:28px}
+#dyBody .paper-grid{background-color:var(--pbg,#fcfff9);background-image:linear-gradient(#bfe0c8 1px,transparent 1px),linear-gradient(90deg,#bfe0c8 1px,transparent 1px);background-size:20px 20px;background-attachment:local}
+#dyBody .paper-biggrid{background-color:var(--pbg,#fbfdff);background-image:linear-gradient(#a9c4e0 1.5px,transparent 1.5px),linear-gradient(90deg,#a9c4e0 1.5px,transparent 1.5px);background-size:40px 40px;background-attachment:local;border-color:#a9c4e0}
+#dyBody .paper-dot{background:var(--pbg,#fffdf6) radial-gradient(circle,#c9b8a0 1.2px,transparent 1.6px) 0 0/18px 18px local}
+#dyBody .paper-kraft{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='f' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.014 .6' numOctaves='3' seed='4' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .36 0 0 0 0 .23 0 0 0 0 .1 0 0 0 1.7 -.58'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23f)'/%3E%3C/svg%3E") local,url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='9' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .3 0 0 0 0 .19 0 0 0 0 .08 0 0 0 2.6 -1.42'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)'/%3E%3C/svg%3E") local,var(--pbg,#d6b88c);border-color:#a98558;box-shadow:inset 0 0 22px rgba(96,62,28,.38),0 4px 12px rgba(91,58,46,.14)} /* 크라프트지: 가로로 긴 섬유결 + 잔 알갱이 + 가장자리가 눌린 느낌 */
+#dyBody .paper-sticky{background:var(--pbg,#fff3a0);border-color:#e3cf5a}
+#dyBody .paper-letter{background:var(--pbg,#fff4f7);border:2px dashed #f0a0b8}
+#dyBody .paper-wash{background:radial-gradient(circle at 16% 20%,rgba(150,200,255,.55),transparent 46%),radial-gradient(circle at 84% 72%,rgba(255,185,210,.5),transparent 50%),radial-gradient(circle at 60% 12%,rgba(255,232,170,.45),transparent 40%),var(--pbg,#fffaf3);border-color:#bcd3ea}
 /* 메몽식 떡메모지(사양서 3·4절). 기록 메모 칸은 이제 편집 영역(.dyedit)이고 속지 클래스(.paper-*)를 그대로 쓴다 */
-.dyedit{width:100%;box-sizing:border-box;border:2px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit;line-height:1.5;background:var(--card);color:var(--ink);min-height:calc(var(--rows,3)*1.5em + 18px);max-height:48vh;overflow:auto;white-space:pre-wrap;word-break:break-word}
+.dyedit{width:100%;box-sizing:border-box;border:2px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit;line-height:1.5;background:var(--pbg,var(--card));color:var(--ink);min-height:calc(var(--rows,3)*1.5em + 18px);max-height:48vh;overflow:auto;white-space:pre-wrap;word-break:break-word}
 .dyedit:empty::before{content:attr(data-ph);color:var(--soft)}
 #dyBody.five .dyedit{height:56px;min-height:0}
 #dyBody .dyedit[class*="paper-"]:not(.paper-plain){color:#3b2f22;border-color:#c9b8a0;box-shadow:0 4px 12px rgba(91,58,46,.08)}
-#dyBody .paper-grid{background-color:#fefce8;background-image:linear-gradient(rgba(202,138,4,.15) 1px,transparent 1px),linear-gradient(90deg,rgba(202,138,4,.15) 1px,transparent 1px);background-size:18px 18px;background-attachment:local}
-#dyBody .paper-lined{background:#fff1f2 repeating-linear-gradient(transparent 0 21px,rgba(244,63,94,.22) 21px 22px) 0 8px local;line-height:22px} /* 줄을 위쪽 안쪽 여백(8px)만큼 내려 글이 줄 위에 앉게 한다 */
-#dyBody .paper-dot{background:#faf5ff radial-gradient(circle,rgba(167,139,250,.6) 1.1px,transparent 1.6px) 0 0/20px 20px local}
-#dyBody .paper-biggrid{background:linear-gradient(315deg,rgba(91,58,46,.22) 0 13px,transparent 13px) no-repeat,#f0fdf4}
+#dyBody .paper-grid{background-color:var(--pbg,#fefce8);background-image:linear-gradient(rgba(202,138,4,.15) 1px,transparent 1px),linear-gradient(90deg,rgba(202,138,4,.15) 1px,transparent 1px);background-size:18px 18px;background-attachment:local}
+#dyBody .paper-lined{background:var(--pbg,#fff1f2) repeating-linear-gradient(transparent 0 21px,rgba(244,63,94,.22) 21px 22px) 0 8px local;line-height:22px} /* 줄을 위쪽 안쪽 여백(8px)만큼 내려 글이 줄 위에 앉게 한다 */
+#dyBody .paper-dot{background:var(--pbg,#faf5ff) radial-gradient(circle,rgba(167,139,250,.6) 1.1px,transparent 1.6px) 0 0/20px 20px local}
+#dyBody .paper-biggrid{background:linear-gradient(315deg,rgba(91,58,46,.22) 0 13px,transparent 13px) no-repeat,var(--pbg,#f0fdf4)}
 .dyarea.taped{margin-top:12px}
 .dyarea.taped::before{content:"";position:absolute;z-index:2;pointer-events:none;top:-10px;left:50%;width:84px;height:20px;margin-left:-42px;background:rgba(254,215,170,.78);transform:rotate(-1.5deg);clip-path:polygon(0 0,100% 0,98% 25%,100% 50%,98% 75%,100% 100%,0 100%,2% 75%,0 50%,2% 25%)}
 #dyBody.five .dyarea.taped::before{width:44px;height:12px;margin-left:-22px;top:-6px}
+.dybg{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);padding:0;cursor:pointer}.dybg[aria-pressed="true"]{outline:3px solid var(--accent);outline-offset:1px}
+.dybg.none{background:repeating-linear-gradient(45deg,#fff 0 4px,#e9e9e9 4px 8px)}#dyBgIn{width:34px;height:30px;padding:0;border:2px solid var(--line);border-radius:8px;background:none;cursor:pointer}
+#dyBg{align-items:center}#dyBg .lbl{font-size:13px;color:var(--soft)}
 mark.mh{background:linear-gradient(180deg,transparent 35%,var(--mh,rgba(254,240,138,.7)) 35%);color:inherit;border-radius:2px;padding:0 3px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
 mark.mh-yellow,.mhb.mh-yellow{--mh:rgba(254,240,138,.7)}mark.mh-pink,.mhb.mh-pink{--mh:rgba(254,205,211,.7)}mark.mh-mint,.mhb.mh-mint{--mh:rgba(187,247,208,.7)}mark.mh-blue,.mhb.mh-blue{--mh:rgba(186,230,253,.7)}mark.mh-purple,.mhb.mh-purple{--mh:rgba(233,213,255,.7)}
 #dyHl{align-items:center}#dyHl .mhb{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);padding:0;cursor:pointer;background:var(--mh)}#dyHl .mhe{width:auto;border-radius:999px;padding:0 10px;background:var(--card);color:var(--ink);font:inherit;font-size:14px;height:30px}
@@ -685,6 +688,7 @@ mark.mh-yellow,.mhb.mh-yellow{--mh:rgba(254,240,138,.7)}mark.mh-pink,.mhb.mh-pin
   <div id="dyBody"></div>
   <div id="dyDeco" hidden>
     <div class="dychips" id="dyPapers" aria-label="메모지 종류"></div>
+    <div class="dychips" id="dyBg" aria-label="메모지 배경색"></div>
     <div class="stkchips" id="dyStkTabs" role="tablist" aria-label="스티커 분류" hidden></div>
     <div class="dychips" id="dyTray" aria-label="스티커"></div>
     <p class="stat" id="dyPv" hidden><span id="dyPvTxt"></span> <button class="btn main" id="dyBuy" type="button"></button></p>
@@ -2336,6 +2340,11 @@ async function ensureShopCache(){if(SHOP_CACHE)return;try{const r=await fetch('/
 const priceTxt=id=>SHOP_CACHE&&SHOP_CACHE[id]?SHOP_CACHE[id].amount.toLocaleString('ko-KR')+'원':'';
 let dyDeco=false,dyPaperPv=null,dySel=-1;
 const dyPaper=()=>dyPaperPv||(ownsPaper(S.dyPaper)&&PAPERS.some(x=>x.id===S.dyPaper)?S.dyPaper:'plain');
+/* 메모지 배경색(2026-11-09 사용자 요청): 모든 속지에서 무료. 고른 색은 S.dyBg(#rrggbb), 없으면 속지마다 정해 둔 색. 어두운 색이면 글자를 밝게 바꾼다 */
+const DY_BG=[['#fffdf6','크림'],['#fff3a0','레몬'],['#ffe3e8','분홍'],['#ffe7d1','살구'],['#e4f7e1','연두'],['#d9f2ee','민트'],['#dbeeff','하늘'],['#e9e0ff','연보라'],['#f0f0f0','연회색'],['#ffffff','흰색'],['#d6b88c','크라프트'],['#39404f','밤색 남']];
+const dyBgColor=()=>/^#[0-9a-f]{6}$/i.test(S.dyBg||'')?S.dyBg.toLowerCase():'';
+const dyDark=h=>{const n=parseInt(h.slice(1),16),r=n>>16,g=(n>>8)&255,b=n&255;return (0.299*r+0.587*g+0.114*b)/255<0.5};
+function dyApplyBg(ed){const c=dyBgColor();if(c){ed.style.setProperty('--pbg',c);ed.style.color=dyDark(c)?'#fff8ee':''}else{ed.style.removeProperty('--pbg');ed.style.color=''}}
 /* 메모 형광펜(사양서 4절). 글은 지금처럼 문자열 하나(S.diary[날짜])로 두고, 칠한 글자만 ==글자== (노랑) 또는 ==색:글자== (p 분홍·m 민트·b 하늘·v 보라)로 감싸 저장한다. 평문 메모는 그대로 읽힌다.
    사양서의 클래스 이름 .hl-pink 등은 달력 날짜 하이라이트(.hl-pink·.hl-blue)와 겹쳐서 메모 쪽은 mark.mh-* 로 썼다. 형광펜 도구는 누적 28일 또는 «먼저 열기»에서 열린다(점진적 해금, 기존 해금 일정 유지). */
 const MH=['','y','p','m','b','v'],MH_CLS=['','yellow','pink','mint','blue','purple'],MH_NAME=['지우개','노랑 형광펜','분홍 형광펜','민트 형광펜','하늘 형광펜','보라 형광펜'],MH_MAX=1000;
@@ -2425,7 +2434,7 @@ function dyRow(ds,label,rows,withStk){
   const d=document.createElement('div');d.className='dyrow'+(ds===todayStr?' today':'');
   const l=document.createElement('label');if(withStk&&S.dyHl&&S.dyHl[ds]){l.innerHTML=`<span class="dn hl-${esc(S.dyHl[ds].slice(3))}">${esc(label)}</span>`}else l.textContent=label;
   const area=document.createElement('div');area.className='dyarea'+(dyPaper()==='plain'?'':' taped');const ed=document.createElement('div');
-  ed.className='dyedit paper-'+dyPaper();ed.contentEditable='true';ed.setAttribute('role','textbox');ed.setAttribute('aria-multiline','true');ed.setAttribute('aria-label',label);ed.dataset.ph=label;ed.style.setProperty('--rows',rows);
+  ed.className='dyedit paper-'+dyPaper();ed.contentEditable='true';ed.setAttribute('role','textbox');ed.setAttribute('aria-multiline','true');ed.setAttribute('aria-label',label);ed.dataset.ph=label;ed.style.setProperty('--rows',rows);dyApplyBg(ed);
   mhRender(ed,(S.diary&&S.diary[ds])||'');mhWire(ed,ds);area.appendChild(ed);d.appendChild(l);d.appendChild(area);
   if(withStk) dyStickers(area,ds);
   return d;
@@ -2452,6 +2461,12 @@ function renderDyDeco(){
     b.onclick=()=>{if(ownsPaper(p.id)){dyPaperPv=null;S.dyPaper=p.id;save()}else dyPaperPv=p.id;renderDiary()};
     pp.appendChild(b);
   });
+  const bgBox=$('dyBg');bgBox.textContent='';
+  const bl=document.createElement('span');bl.className='lbl';bl.textContent='배경색';bgBox.appendChild(bl);
+  const cur=dyBgColor(),setBg=c=>{if(c)S.dyBg=c;else delete S.dyBg;save();document.querySelectorAll('.dyedit').forEach(dyApplyBg)};
+  const none=document.createElement('button');none.type='button';none.className='dybg none';none.title='기본색';none.setAttribute('aria-label','배경색 기본');none.setAttribute('aria-pressed',String(!cur));none.onclick=()=>{setBg('');renderDyDeco()};bgBox.appendChild(none);
+  DY_BG.forEach(([c,n])=>{const b=document.createElement('button');b.type='button';b.className='dybg';b.style.background=c;b.title=n;b.setAttribute('aria-label','배경색 '+n);b.setAttribute('aria-pressed',String(cur===c));b.onclick=()=>{setBg(c);renderDyDeco()};bgBox.appendChild(b)});
+  const pick=document.createElement('input');pick.type='color';pick.id='dyBgIn';pick.value=cur||'#fffdf6';pick.title='직접 고르기';pick.setAttribute('aria-label','배경색 직접 고르기');pick.oninput=()=>setBg(pick.value);pick.onchange=()=>renderDyDeco();bgBox.appendChild(pick);
   const pv=$('dyPv');pv.hidden=!dyPaperPv;
   if(dyPaperPv){$('dyPvTxt').textContent='“'+PAPERS.find(x=>x.id===dyPaperPv).name+'” 메모지 미리 보는 중 — «'+PAPER_BUNDLE_NAME[bundleOfPaper(dyPaperPv)]+'»에 들어 있어요.';$('dyBuy').textContent=(priceTxt(bundleOfPaper(dyPaperPv))||'')+'에 사기';if(!SHOP_CACHE)ensureShopCache().then(()=>{if(dyPaperPv)renderDiary()});$('dyBuy').onclick=()=>{$('diaryDlg').close();buyCredits(bundleOfPaper(dyPaperPv))}}
   const tray=$('dyTray');tray.textContent='';tray.classList.remove('stkgrid');$('dyStkTabs').hidden=true;

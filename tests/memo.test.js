@@ -126,3 +126,39 @@ test('외부 일러스트 팩의 그림 파일과 이름이 모두 있다', () =
     assert.equal(new Set(keys).size, keys.length, '팩끼리 같은 그림이 겹침');
   } finally { w.close(); }
 });
+
+test('배경색: 고른 색이 모든 속지 메모 칸에 적용되고 잘못된 값은 무시한다', () => {
+  const { w } = open({ days: 30 });
+  try {
+    const run = (color, paper) => w.eval(`(()=>{S.dyBg=${JSON.stringify(color)};OWNED.add('paper_notes');OWNED.add('paper_mood');S.dyPaper=${JSON.stringify(paper)};dyMode='day';renderDiary();const ed=document.querySelector('.dyedit');return {cls:ed.className,style:ed.getAttribute('style')||''}})()`);
+    for (const paper of ['plain', 'lined', 'grid', 'dot', 'biggrid', 'kraft', 'sticky', 'letter', 'wash']) {
+      const r = run('#dbeeff', paper);
+      assert.ok(r.cls.includes('paper-' + paper), paper);
+      assert.ok(r.style.includes('--pbg') && r.style.includes('#dbeeff'), paper + ' ' + r.style);
+    }
+    assert.ok(!run('red', 'lined').style.includes('--pbg'), '잘못된 색은 무시');
+    assert.ok(run('#10131a', 'grid').style.includes('color'), '어두운 색은 글자를 밝게');
+  } finally { w.close(); }
+});
+
+test('배경색 색상표: 기본·12색·직접 고르기가 꾸미기 패널에 있고 고르면 저장된다', () => {
+  const { w } = open({ days: 30 });
+  try {
+    w.eval("dyDeco=true;dyMode='day';renderDiary()");
+    const doc = w.document;
+    assert.equal(doc.querySelectorAll('#dyBg .dybg').length, 13);
+    assert.ok(doc.getElementById('dyBgIn'));
+    doc.querySelectorAll('#dyBg .dybg')[8].click();
+    assert.equal(w.eval('S.dyBg'), '#e9e0ff');
+    assert.ok((doc.querySelector('.dyedit').getAttribute('style') || '').includes('#e9e0ff'));
+    doc.querySelector('#dyBg .dybg.none').click();
+    assert.equal(w.eval("S.dyBg===undefined"), true);
+  } finally { w.close(); }
+});
+
+test('크라프트지는 색만이 아니라 섬유결·알갱이 질감 배경을 가진다', () => {
+  const rule = HTML.slice(HTML.indexOf('#dyBody .paper-kraft{'), HTML.indexOf('#dyBody .paper-kraft{') + 1400);
+  assert.ok(rule.includes('feTurbulence'), '질감 필터');
+  assert.ok((rule.match(/url\("data:image\/svg\+xml/g) || []).length >= 2, '섬유결과 알갱이 두 겹');
+  assert.ok(rule.includes('inset 0 0'), '가장자리 눌림');
+});
