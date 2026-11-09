@@ -14,6 +14,11 @@ import re
 import threading
 from datetime import datetime, timezone
 
+try:
+    from opentelemetry import context as otel_context
+except Exception:  # opentelemetry 가 없으면 Langfuse 도 꺼져 있다
+    otel_context = None
+
 log = logging.getLogger("coach")
 
 CAPTURE_TEXT = os.environ.get("LANGFUSE_CAPTURE_TEXT", "off").strip().lower() == "on"
@@ -146,7 +151,15 @@ def start_turn(byok=False):
     try:
         # 한 턴의 흐름(듣기·조언·위기 등)을 모델이 고르므로 agent 종류로 둔다(Langfuse 에이전트 그래프에 한 마디로 보인다)
         pre = _span_facts(None)  # 시작 전에 이 스레드의 OTel 문맥에 남은 span 이 있는지(있으면 새 턴이 그 아래로 들어간다)
-        obs = Obs(client.start_observation(name="chat-turn", as_type="agent", metadata={"byok": bool(byok)}), client)
+        # 수정(2026-11-09): 스레드 풀 스레드의 OTel 문맥에 앞 요청이 남긴 span 이 있으면 새 턴이 그 자식이 되고, 남은 span 이 «기록 안 함»이면
+        # 새 턴도 샘플러에 버려진다(Cloud Run 에서 짝수 턴이 Langfuse 에서 사라진 원인으로 보임). 그래서 빈 문맥에서 턴을 연다.
+        # attach 와 detach 는 같은 호출 안(같은 스레드)에서 끝내므로 스레드가 바뀌어도 새 문맥을 남기지 않는다.
+        token = otel_context.attach(otel_context.Context())
+        try:
+            raw = client.start_observation(name="chat-turn", as_type="agent", metadata={"byok": bool(byok)})
+        finally:
+            otel_context.detach(token)
+        obs = Obs(raw, client)
         post = _span_facts(obs.raw)
         log.info("tracing start trace=%s ctx_before_valid=%s sampled=%s recording=%s has_parent=%s thread=%s",
                  getattr(obs.raw, "trace_id", None), pre["ctx_valid"], post["sampled"], post["recording"], post["has_parent"], threading.current_thread().name)
