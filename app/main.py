@@ -1,5 +1,6 @@
 """루틴도장 연습용 서버. index.html 을 내보내고, 켜 두면 사진에서 칸 이름 후보를 읽어 준다. (Docker 실습용)"""
 import os
+import sys
 import time
 from pathlib import Path
 
@@ -9,6 +10,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from app import ocr
 
 ROOT = Path(__file__).resolve().parent.parent
+SERVER_DIR = ROOT / "server"
 
 app = FastAPI()
 
@@ -62,3 +64,12 @@ async def read_photo(photo: UploadFile):
         return {"lines": lines, "text": "\n".join(lines)}
     except ocr.OcrError as error:
         raise HTTPException(500, str(error)) from error
+
+
+# 도우미·크레딧·상점·결제·의견 보내기(server/main.py)를 같은 주소 아래에 붙인다.
+# 위에서 정한 경로(/, /health, /version, /api/ocr)가 먼저 맞고, 나머지(/api/chat, /api/shop, /pay 등)는 server 앱이 받는다.
+# server 안의 모듈은 서로 `import byok` 처럼 이름만 써서 불러오므로 server 폴더를 모듈 찾는 길에 넣는다.
+sys.path.insert(0, str(SERVER_DIR))
+import main as _server_main  # noqa: E402  (server/main.py)
+
+app.mount("/", _server_main.app)

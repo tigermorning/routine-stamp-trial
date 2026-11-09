@@ -1,0 +1,647 @@
+[
+  {
+    "ko": "산을 쌓다가 흙 한 삼태기가 모자라 멈추는 것도 내가 멈추는 것이고, 평지에 겨우 한 삼태기를 부었어도 나아가는 것은 내가 나아가는 것이다.",
+    "original": "譬如爲山，未成一簣，止，吾止也！譬如平地，雖覆一簣，進，吾往也！",
+    "author": "공자와 제자들(논어)",
+    "source": "논어 子罕(九之十九)",
+    "source_url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E5%AD%90%E7%BD%95%E7%AC%AC%E4%B9%9D",
+    "category": "시작하기",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 논어 해당 장)"
+  },
+  {
+    "ko": "군자의 잘못은 일식이나 월식 같아서, 잘못할 때는 모두가 보지만 고치면 모두가 우러러본다.",
+    "original": "君子之過也，如日月之食焉。過也，人皆見之；更也，人皆仰之。",
+    "author": "자공(논어)",
+    "source": "논어 子張(十九之二一, 자공의 말)",
+    "source_url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E5%AD%90%E5%BC%B5%E7%AC%AC%E5%8D%81%E4%B9%9D",
+    "category": "실패 뒤 다시 일어서기",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 논어 해당 장)"
+  },
+  {
+    "ko": "흘러가는 것이 이 강물과 같구나. 밤낮을 가리지 않고 흐르는구나.",
+    "original": "子在川上曰：「逝者如斯夫！不舍晝夜。」",
+    "author": "공자와 제자들(논어)",
+    "source": "논어 子罕(九之十七)",
+    "source_url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E5%AD%90%E7%BD%95%E7%AC%AC%E4%B9%9D",
+    "category": "하루를 소중히",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 논어 해당 장)"
+  },
+  {
+    "ko": "거친 밥을 먹고 물을 마시며 팔을 굽혀 베고 누워도, 즐거움은 그 가운데 있다.",
+    "original": "飯疏食，飮水，曲肱而枕之，樂亦在其中矣。",
+    "author": "공자와 제자들(논어)",
+    "source": "논어 述而(七之十五)",
+    "source_url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E8%BF%B0%E8%80%8C%E7%AC%AC%E4%B8%83",
+    "category": "쉬어 가기·휴식",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 논어 해당 장)"
+  },
+  {
+    "ko": "날이 추워진 뒤에야 소나무와 잣나무가 늦게 시든다는 것을 안다.",
+    "original": "歲寒，然後知松柏之後凋也。",
+    "author": "공자와 제자들(논어)",
+    "source": "논어 子罕(九之二八)",
+    "source_url": "https://zh.wikisource.org/wiki/%E8%AB%96%E8%AA%9E/%E5%AD%90%E7%BD%95%E7%AC%AC%E4%B9%9D",
+    "category": "용기",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 논어 해당 장)"
+  },
+  {
+    "ko": "아름드리나무도 터럭 끝 같은 싹에서 자라고, 아홉 층 누대도 한 줌 흙에서 시작되며, 천 리 길도 발밑 한 걸음에서 시작된다.",
+    "original": "合抱之木，生於毫末；九層之臺，起於累土；千里之行，始於足下。",
+    "author": "노자(도덕경)",
+    "source": "도덕경 64장",
+    "source_url": "https://zh.wikisource.org/wiki/%E9%81%93%E5%BE%B7%E7%B6%93_%28%E7%8E%8B%E5%BC%BC%E6%9C%AC%29",
+    "category": "작은 걸음",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 왕필본)"
+  },
+  {
+    "ko": "큰 그릇은 늦게 이루어진다.",
+    "original": "大器晚成",
+    "author": "노자(도덕경)",
+    "source": "도덕경 41장",
+    "source_url": "https://zh.wikisource.org/wiki/%E9%81%93%E5%BE%B7%E7%B6%93_%28%E7%8E%8B%E5%BC%BC%E6%9C%AC%29",
+    "category": "꾸준함",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 왕필본)"
+  },
+  {
+    "ko": "굽으면 온전해지고, 휘면 곧아지고, 패면 채워지고, 낡으면 새로워진다.",
+    "original": "曲則全，枉則直，窪則盈，敝則新",
+    "author": "노자(도덕경)",
+    "source": "도덕경 22장",
+    "source_url": "https://zh.wikisource.org/wiki/%E9%81%93%E5%BE%B7%E7%B6%93_%28%E7%8E%8B%E5%BC%BC%E6%9C%AC%29",
+    "category": "실패 뒤 다시 일어서기",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 왕필본)"
+  },
+  {
+    "ko": "누가 흐린 것을 가만히 두어 서서히 맑게 할 수 있는가? 누가 오래 편안히 있다가 천천히 움직여 생기를 일으킬 수 있는가?",
+    "original": "孰能濁以靜之徐清？孰能安以久動之徐生？",
+    "author": "노자(도덕경)",
+    "source": "도덕경 15장",
+    "source_url": "https://zh.wikisource.org/wiki/%E9%81%93%E5%BE%B7%E7%B6%93_%28%E7%8E%8B%E5%BC%BC%E6%9C%AC%29",
+    "category": "쉬어 가기·휴식",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 왕필본)"
+  },
+  {
+    "ko": "재앙에는 복이 기대어 있고, 복에는 재앙이 숨어 있다.",
+    "original": "禍兮福之所倚，福兮禍之所伏。",
+    "author": "노자(도덕경)",
+    "source": "도덕경 58장",
+    "source_url": "https://zh.wikisource.org/wiki/%E9%81%93%E5%BE%B7%E7%B6%93_%28%E7%8E%8B%E5%BC%BC%E6%9C%AC%29",
+    "category": "실패 뒤 다시 일어서기",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 왕필본)"
+  },
+  {
+    "ko": "마음을 흔들고 성질을 참게 하여 해내지 못하던 일을 더 해낼 수 있게 한다. 사람은 늘 잘못을 겪은 뒤에야 고칠 수 있다.",
+    "original": "所以動心忍性，曾益其所不能。人恒過，然後能改。",
+    "author": "맹자",
+    "source": "맹자 告子下 15장",
+    "source_url": "https://zh.wikisource.org/wiki/%E5%AD%9F%E5%AD%90/%E5%91%8A%E5%AD%90%E4%B8%8B",
+    "category": "실패 뒤 다시 일어서기",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 맹자 해당 편)"
+  },
+  {
+    "ko": "하루 햇볕을 쬐고 열흘을 차게 두면, 자라나는 것이 없다.",
+    "original": "一日暴之，十日寒之，未有能生者也。",
+    "author": "맹자",
+    "source": "맹자 告子上 9장",
+    "source_url": "https://zh.wikisource.org/wiki/%E5%AD%9F%E5%AD%90/%E5%91%8A%E5%AD%90%E4%B8%8A",
+    "category": "꾸준함",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 맹자 해당 편)"
+  },
+  {
+    "ko": "샘물은 솟구치며 밤낮을 쉬지 않고, 웅덩이를 채운 뒤에 나아가 마침내 사해에 이른다.",
+    "original": "源泉混混，不舍晝夜，盈科而後進，放乎四海",
+    "author": "맹자",
+    "source": "맹자 離婁下 18장",
+    "source_url": "https://zh.wikisource.org/wiki/%E5%AD%9F%E5%AD%90/%E9%9B%A2%E5%A9%81%E4%B8%8B",
+    "category": "작은 걸음",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 맹자 해당 편)"
+  },
+  {
+    "ko": "오곡은 좋은 씨앗이지만 여물지 못하면 피만 못하다. 무엇이든 무르익게 하는 데 달려 있다.",
+    "original": "五穀者，種之美者也。茍為不熟，不如荑稗。夫仁，亦在乎熟之而已矣。",
+    "author": "맹자",
+    "source": "맹자 告子上 19장",
+    "source_url": "https://zh.wikisource.org/wiki/%E5%AD%9F%E5%AD%90/%E5%91%8A%E5%AD%90%E4%B8%8A",
+    "category": "꾸준함",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 맹자 해당 편)"
+  },
+  {
+    "ko": "하지 않는 것이 있은 뒤에야 해낼 수 있는 일이 있다.",
+    "original": "人有不為也，而後可以有為。",
+    "author": "맹자",
+    "source": "맹자 離婁下 8장",
+    "source_url": "https://zh.wikisource.org/wiki/%E5%AD%9F%E5%AD%90/%E9%9B%A2%E5%A9%81%E4%B8%8B",
+    "category": "쉬어 가기·휴식",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 맹자 해당 편)"
+  },
+  {
+    "ko": "반걸음씩 쌓지 않으면 천 리에 이를 수 없고, 작은 물줄기를 모으지 않으면 강과 바다를 이룰 수 없다.",
+    "original": "不積跬步，無以至千里；不積小流，無以成江海。",
+    "author": "순자",
+    "source": "순자 勸學篇",
+    "source_url": "https://zh.wikisource.org/wiki/%E8%8D%80%E5%AD%90/%E5%8B%B8%E5%AD%B8%E7%AF%87",
+    "category": "작은 걸음",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 순자 권학편)"
+  },
+  {
+    "ko": "준마가 한 번 뛰어도 열 걸음을 넘지 못하지만, 둔한 말도 열 번 수레를 끌면 따라간다. 성과는 멈추지 않는 데 있다.",
+    "original": "騏驥一躍，不能十步；駑馬十駕，功在不舍。",
+    "author": "순자",
+    "source": "순자 勸學篇",
+    "source_url": "https://zh.wikisource.org/wiki/%E8%8D%80%E5%AD%90/%E5%8B%B8%E5%AD%B8%E7%AF%87",
+    "category": "꾸준함",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 순자 권학편)"
+  },
+  {
+    "ko": "새기다 말면 썩은 나무도 꺾지 못하고, 새기기를 멈추지 않으면 쇠와 돌에도 조각할 수 있다.",
+    "original": "鍥而舍之，朽木不折；鍥而不舍，金石可鏤。",
+    "author": "순자",
+    "source": "순자 勸學篇",
+    "source_url": "https://zh.wikisource.org/wiki/%E8%8D%80%E5%AD%90/%E5%8B%B8%E5%AD%B8%E7%AF%87",
+    "category": "꾸준함",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 순자 권학편)"
+  },
+  {
+    "ko": "하늘과 땅은 만고에 이어지나 이 몸은 다시 얻을 수 없고, 인생은 겨우 백 년이라 오늘 하루가 가장 쉽게 지나간다.",
+    "original": "天地有萬古，此身不再得；人生只百年，此日最易過。",
+    "author": "홍응명(채근담)",
+    "source": "채근담 前集",
+    "source_url": "https://zh.wikisource.org/wiki/%E8%8F%9C%E6%A0%B9%E8%AD%9A/%E6%98%8E%E5%88%BB%E6%9C%AC",
+    "category": "하루를 소중히",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 채근담 前集)"
+  },
+  {
+    "ko": "총애와 모욕에 놀라지 않고 뜰 앞의 꽃이 피고 지는 것을 한가로이 바라보며, 가고 머묾에 뜻을 두지 않고 하늘 밖 구름이 말리고 펴지는 대로 맡겨 둔다.",
+    "original": "寵辱不驚，閒看庭前花開花落。去留無意，漫随天外雲卷雲舒。",
+    "author": "홍응명(채근담)",
+    "source": "채근담 前集",
+    "source_url": "https://zh.wikisource.org/wiki/%E8%8F%9C%E6%A0%B9%E8%AD%9A/%E6%98%8E%E5%88%BB%E6%9C%AC",
+    "category": "쉬어 가기·휴식",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 채근담 前集)"
+  },
+  {
+    "ko": "바람이 성긴 대숲에 불어도 지나가면 대는 소리를 남기지 않고, 기러기가 차가운 못을 건너도 가고 나면 못은 그림자를 남기지 않는다.",
+    "original": "風來疏竹，風過而竹不留聲；雁度寒潭，雁去而潭不留影。",
+    "author": "홍응명(채근담)",
+    "source": "채근담 前集",
+    "source_url": "https://zh.wikisource.org/wiki/%E8%8F%9C%E6%A0%B9%E8%AD%9A",
+    "category": "자기 자신에게 너그러워지기",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 채근담 前集)"
+  },
+  {
+    "ko": "새끼줄 톱질도 나무를 끊고, 물방울도 돌을 뚫는다.",
+    "original": "繩鋸木斷、水滴石穿。",
+    "author": "홍응명(채근담)",
+    "source": "채근담 前集",
+    "source_url": "https://zh.wikisource.org/wiki/%E8%8F%9C%E6%A0%B9%E8%AD%9A",
+    "category": "꾸준함",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 채근담 前集)"
+  },
+  {
+    "ko": "바쁜 가운데 짬을 내려면, 먼저 한가할 때 마음 붙들 자리를 마련해 두어야 한다.",
+    "original": "忙裏要偷閑，須先向閑時討個把柄",
+    "author": "홍응명(채근담)",
+    "source": "채근담 前集",
+    "source_url": "https://zh.wikisource.org/wiki/%E8%8F%9C%E6%A0%B9%E8%AD%9A",
+    "category": "쉬어 가기·휴식",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 채근담 前集)"
+  },
+  {
+    "ko": "부지런함은 값을 매길 수 없는 보배이고, 삼가는 마음은 몸을 지켜 주는 부적이다.",
+    "original": "勤為無價之寶，慎是護身之符。",
+    "author": "명심보감(인용: 태공)",
+    "source": "명심보감(태공의 말로 인용됨)",
+    "source_url": "https://zh.wikisource.org/wiki/%E6%98%8E%E5%BF%83%E5%AF%B6%E9%91%91",
+    "category": "꾸준함",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 명심보감)"
+  },
+  {
+    "ko": "한 가지 일을 겪지 않으면 한 가지 지혜도 자라지 않는다.",
+    "original": "不經一事，不長一智。",
+    "author": "명심보감",
+    "source": "명심보감",
+    "source_url": "https://zh.wikisource.org/wiki/%E6%98%8E%E5%BF%83%E5%AF%B6%E9%91%91",
+    "category": "실패 뒤 다시 일어서기",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 명심보감)"
+  },
+  {
+    "ko": "적은 것도 모이면 많아지고, 물방울도 모이면 강이 된다.",
+    "original": "聚少成多，滴水成河。",
+    "author": "명심보감",
+    "source": "명심보감",
+    "source_url": "https://zh.wikisource.org/wiki/%E6%98%8E%E5%BF%83%E5%AF%B6%E9%91%91",
+    "category": "작은 걸음",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 명심보감)"
+  },
+  {
+    "ko": "만족할 줄 아는 사람은 가난해도 즐겁고, 만족하지 못하는 사람은 부유해도 근심한다.",
+    "original": "知足者貧賤亦樂，不知足者富貴亦憂。",
+    "author": "명심보감",
+    "source": "명심보감",
+    "source_url": "https://zh.wikisource.org/wiki/%E6%98%8E%E5%BF%83%E5%AF%B6%E9%91%91",
+    "category": "자기 자신에게 너그러워지기",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 명심보감)"
+  },
+  {
+    "ko": "나쁜 일은 작다고 해서 하지 말고, 좋은 일은 작다고 해서 미루지 마라.",
+    "original": "勿以惡小而為之，勿以善小而不為。",
+    "author": "명심보감(인용: 한 소열제)",
+    "source": "명심보감(촉한 소열제의 유훈으로 인용됨)",
+    "source_url": "https://zh.wikisource.org/wiki/%E6%98%8E%E5%BF%83%E5%AF%B6%E9%91%91",
+    "category": "작은 걸음",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 명심보감)"
+  },
+  {
+    "ko": "하늘의 운행은 굳세니, 군자는 이를 본받아 스스로 힘써 쉬지 않는다.",
+    "original": "天行健，君子以自強不息。",
+    "author": "주역",
+    "source": "주역 乾卦 象傳",
+    "source_url": "https://zh.wikisource.org/wiki/%E5%91%A8%E6%98%93/%E4%B9%BE",
+    "category": "꾸준함",
+    "verified": true,
+    "checked_range": "원문 확인(위키문헌 주역 건괘)"
+  },
+  {
+    "ko": "아침에 일어나기 싫을 때는 이렇게 생각하라. 나는 사람으로서 해야 할 일을 하러 일어난다.",
+    "original": "In the morning, when you find yourself unwilling to rise, have this thought at hand: I arise to the proper business of man",
+    "author": "마르쿠스 아우렐리우스",
+    "source": "명상록 5권 1절",
+    "source_url": "https://www.gutenberg.org/ebooks/55317",
+    "category": "시작하기",
+    "verified": true,
+    "checked_range": "번역 대조(Gutenberg #55317 Chrystal 영역 본문을 읽고 뜻을 한국어로 옮김)"
+  },
+  {
+    "ko": "인생 전체를 한꺼번에 떠올려 스스로를 어지럽히지 마라. 어려움이 닥칠 때마다 하나씩 물어보라. 이 안에 정말 견딜 수 없는 것이 있는가?",
+    "original": "Do not confound yourself by considering the whole of life ... As each presents itself ask yourself: Is there anything intolerable and insufferable",
+    "author": "마르쿠스 아우렐리우스",
+    "source": "명상록 8권 36절",
+    "source_url": "https://www.gutenberg.org/ebooks/55317",
+    "category": "자기 자신에게 너그러워지기",
+    "verified": true,
+    "checked_range": "번역 대조(Gutenberg #55317 Chrystal 영역 본문을 읽고 뜻을 한국어로 옮김)"
+  },
+  {
+    "ko": "안을 들여다보라. 안에 선함의 샘이 있다. 계속 파 내려가면 샘물은 마르지 않고 솟아난다.",
+    "original": "Look inward. Within is the fountain of Good. Dig constantly and it will ever well forth.",
+    "author": "마르쿠스 아우렐리우스",
+    "source": "명상록 7권 59절",
+    "source_url": "https://www.gutenberg.org/ebooks/55317",
+    "category": "꾸준함",
+    "verified": true,
+    "checked_range": "번역 대조(Gutenberg #55317 Chrystal 영역 본문을 읽고 뜻을 한국어로 옮김)"
+  },
+  {
+    "ko": "사람은 지금 살고 있는 삶 말고 다른 삶을 잃지 않으며, 지금 잃고 있는 삶 말고 다른 삶을 살지도 않는다. 우리가 가진 것은 지금 이 순간이다.",
+    "original": "no man loses any other life than that which now lives, nor lives any other than that which he is now losing",
+    "author": "마르쿠스 아우렐리우스",
+    "source": "명상록 2권 14절",
+    "source_url": "https://www.gutenberg.org/ebooks/55317",
+    "category": "하루를 소중히",
+    "verified": true,
+    "checked_range": "번역 대조(Gutenberg #55317 Chrystal 영역 본문을 읽고 뜻을 한국어로 옮김)"
+  },
+  {
+    "ko": "파도가 끊임없이 부서져도 굳건히 서서 주변의 거친 물결을 가라앉히는 곶처럼 되어라.",
+    "original": "Be like a promontory against which the waves are always breaking. It stands fast, and stills the waters that rage around it.",
+    "author": "마르쿠스 아우렐리우스",
+    "source": "명상록 4권 49절",
+    "source_url": "https://www.gutenberg.org/ebooks/55317",
+    "category": "용기",
+    "verified": true,
+    "checked_range": "번역 대조(Gutenberg #55317 Chrystal 영역 본문을 읽고 뜻을 한국어로 옮김)"
+  },
+  {
+    "ko": "매 시간을 놓치지 말고 붙잡아라. 오늘의 일을 붙잡으면 내일에 덜 기대어도 된다.",
+    "original": "hold every hour in your grasp. Lay hold of to-day's task, and you will not need to depend so much upon to-morrow's.",
+    "author": "세네카",
+    "source": "루킬리우스에게 보내는 편지 1",
+    "source_url": "https://en.wikisource.org/wiki/Moral_letters_to_Lucilius/Letter_1",
+    "category": "하루를 소중히",
+    "verified": true,
+    "checked_range": "번역 대조(위키문헌 Gummere 영역 해당 편지를 읽고 뜻을 한국어로 옮김)"
+  },
+  {
+    "ko": "우리를 짓누르는 것보다 겁먹게 하는 것이 더 많다. 우리는 현실보다 상상 속에서 더 자주 괴로워한다.",
+    "original": "There are more things, Lucilius, likely to frighten us than there are to crush us; we suffer more often in imagination than in reality.",
+    "author": "세네카",
+    "source": "루킬리우스에게 보내는 편지 13.4",
+    "source_url": "https://en.wikisource.org/wiki/Moral_letters_to_Lucilius/Letter_13",
+    "category": "용기",
+    "verified": true,
+    "checked_range": "번역 대조(위키문헌 Gummere 영역 해당 편지를 읽고 뜻을 한국어로 옮김)"
+  },
+  {
+    "ko": "앞서간 사람이 많이 보이거든, 뒤에 있는 사람이 얼마나 많은지도 생각하라.",
+    "original": "When you see many ahead of you, think how many are behind!",
+    "author": "세네카",
+    "source": "루킬리우스에게 보내는 편지 15.10",
+    "source_url": "https://en.wikisource.org/wiki/Moral_letters_to_Lucilius/Letter_15",
+    "category": "자기 자신에게 너그러워지기",
+    "verified": true,
+    "checked_range": "번역 대조(위키문헌 Gummere 영역 해당 편지를 읽고 뜻을 한국어로 옮김)"
+  },
+  {
+    "ko": "마음에는 쉼이 필요하다. 쉬고 나면 마음은 더 낫고 더 활기차게 일어선다.",
+    "original": "Men’s minds ought to have relaxation: they rise up better and more vigorous after rest.",
+    "author": "세네카",
+    "source": "마음의 평온에 관하여 17장",
+    "source_url": "https://www.gutenberg.org/ebooks/64576",
+    "category": "쉬어 가기·휴식",
+    "verified": true,
+    "checked_range": "번역 대조(Gutenberg #64576 Stewart 영역을 읽고 뜻을 한국어로 옮김)"
+  },
+  {
+    "ko": "우리가 받은 삶은 짧지 않다. 우리가 짧게 쓰고 있을 뿐이다.",
+    "original": "we do not receive a short life, but we make it a short one",
+    "author": "세네카",
+    "source": "삶의 짧음에 관하여 1장",
+    "source_url": "https://www.gutenberg.org/ebooks/64576",
+    "category": "하루를 소중히",
+    "verified": true,
+    "checked_range": "번역 대조(Gutenberg #64576 Stewart 영역을 읽고 뜻을 한국어로 옮김)"
+  },
+  {
+    "ko": "어떤 일이 닥치든 먼저 나 자신에게 돌아와, 이 일을 다룰 힘이 내게 있는지 물어라.",
+    "original": "Upon every accident, remember to turn toward yourself and inquire what faculty you have for its use.",
+    "author": "에픽테토스",
+    "source": "엥케이리디온 10",
+    "source_url": "https://www.gutenberg.org/ebooks/45109",
+    "category": "용기",
+    "verified": true,
+    "checked_range": "번역 대조(Gutenberg #45109 Higginson 영역 엥케이리디온을 읽고 뜻을 한국어로 옮김)"
+  },
+  {
+    "ko": "나아지고 싶다면, 바깥일에서는 어리석고 둔해 보이는 것을 기꺼이 받아들여라.",
+    "original": "If you would improve, be content to be thought foolish and dull with regard to externals.",
+    "author": "에픽테토스",
+    "source": "엥케이리디온 13",
+    "source_url": "https://www.gutenberg.org/ebooks/45109",
+    "category": "자기 자신에게 너그러워지기",
+    "verified": true,
+    "checked_range": "번역 대조(Gutenberg #45109 Higginson 영역 엥케이리디온을 읽고 뜻을 한국어로 옮김)"
+  },
+  {
+    "ko": "당신은 작가가 정한 극의 배우임을 기억하라. 맡은 배역을 잘 해내는 것이 당신의 몫이다.",
+    "original": "Remember that you are an actor in a drama of such sort as the Author chooses",
+    "author": "에픽테토스",
+    "source": "엥케이리디온 17",
+    "source_url": "https://www.gutenberg.org/ebooks/45109",
+    "category": "용기",
+    "verified": true,
+    "checked_range": "번역 대조(Gutenberg #45109 Higginson 영역 엥케이리디온을 읽고 뜻을 한국어로 옮김)"
+  },
+  {
+    "ko": "모든 일에는 손잡이가 두 개 있다. 하나는 들 수 있게 잡는 손잡이고, 다른 하나는 들 수 없게 잡는 손잡이다.",
+    "original": "Everything has two handles: one by which it may be borne, another by which it cannot.",
+    "author": "에픽테토스",
+    "source": "엥케이리디온 43",
+    "source_url": "https://www.gutenberg.org/ebooks/45109",
+    "category": "시작하기",
+    "verified": true,
+    "checked_range": "번역 대조(Gutenberg #45109 Higginson 영역 엥케이리디온을 읽고 뜻을 한국어로 옮김)"
+  },
+  {
+    "ko": "꿈이 향하는 쪽으로 자신 있게 나아가며 마음에 그려 온 삶을 살려고 애쓰는 사람은, 평소에는 생각지 못한 성공을 만난다.",
+    "original": "if one advances confidently in the direction of his dreams, and endeavors to live the life which he has imagined, he will meet with a success unexpected in common hours",
+    "author": "헨리 데이비드 소로",
+    "source": "월든 「맺음말(Conclusion)」",
+    "source_url": "https://www.gutenberg.org/ebooks/205",
+    "category": "시작하기",
+    "verified": true,
+    "checked_range": "원문 확인(Gutenberg #205 영어 원문 해당 대목)"
+  },
+  {
+    "ko": "아침이란 내가 깨어 있고 내 안에 새벽이 밝아 오는 때다.",
+    "original": "Morning is when I am awake and there is a dawn in me.",
+    "author": "헨리 데이비드 소로",
+    "source": "월든 「나는 어디서 어떻게 살았나(Where I Lived, and What I Lived For)」",
+    "source_url": "https://www.gutenberg.org/ebooks/205",
+    "category": "시작하기",
+    "verified": true,
+    "checked_range": "원문 확인(Gutenberg #205 영어 원문 해당 대목)"
+  },
+  {
+    "ko": "길을 잃은 뒤에야, 곧 세상을 잃은 뒤에야 우리는 비로소 자신을 찾기 시작한다.",
+    "original": "Not till we are lost, in other words not till we have lost the world, do we begin to find ourselves",
+    "author": "헨리 데이비드 소로",
+    "source": "월든 「마을(The Village)」",
+    "source_url": "https://www.gutenberg.org/ebooks/205",
+    "category": "실패 뒤 다시 일어서기",
+    "verified": true,
+    "checked_range": "원문 확인(Gutenberg #205 영어 원문 해당 대목)"
+  },
+  {
+    "ko": "하루의 질에 영향을 주는 것, 그것이 가장 높은 예술이다.",
+    "original": "To affect the quality of the day, that is the highest of arts.",
+    "author": "헨리 데이비드 소로",
+    "source": "월든 「나는 어디서 어떻게 살았나」",
+    "source_url": "https://www.gutenberg.org/ebooks/205",
+    "category": "하루를 소중히",
+    "verified": true,
+    "checked_range": "원문 확인(Gutenberg #205 영어 원문 해당 대목)"
+  },
+  {
+    "ko": "나는 하루에 적어도 네 시간, 세상의 모든 일에서 벗어나 숲과 언덕과 들을 거닐지 않으면 건강과 기운을 지킬 수 없다고 생각한다.",
+    "original": "I think that I cannot preserve my health and spirits, unless I spend four hours a day at least ... sauntering through the woods and over the hills and fields, absolutely free from all worldly engagements.",
+    "author": "헨리 데이비드 소로",
+    "source": "산책(Walking)",
+    "source_url": "https://www.gutenberg.org/ebooks/1022",
+    "category": "쉬어 가기·휴식",
+    "verified": true,
+    "checked_range": "원문 확인(Gutenberg #1022 영어 원문 해당 대목)"
+  },
+  {
+    "ko": "인간은 애쓰는 동안은 헤매게 마련이다.",
+    "original": "Es irrt der Mensch so lang er strebt.",
+    "author": "요한 볼프강 폰 괴테",
+    "source": "파우스트 1부 「천상의 서곡」",
+    "source_url": "https://www.gutenberg.org/ebooks/2229",
+    "category": "실패 뒤 다시 일어서기",
+    "verified": true,
+    "checked_range": "원문 확인(Gutenberg #2229 독일어 원문 해당 대목)"
+  },
+  {
+    "ko": "태초에 행동이 있었다.",
+    "original": "Im Anfang war die Tat!",
+    "author": "요한 볼프강 폰 괴테",
+    "source": "파우스트 1부 「서재」",
+    "source_url": "https://www.gutenberg.org/ebooks/2229",
+    "category": "시작하기",
+    "verified": true,
+    "checked_range": "원문 확인(Gutenberg #2229 독일어 원문 해당 대목)"
+  },
+  {
+    "ko": "늘 애써 노력하는 사람을 우리는 구원할 수 있다.",
+    "original": "Wer immer strebend sich bemüht, Den können wir erlösen.",
+    "author": "요한 볼프강 폰 괴테",
+    "source": "파우스트 2부 「산골짜기」(천사들의 노래)",
+    "source_url": "https://www.gutenberg.org/ebooks/2230",
+    "category": "꾸준함",
+    "verified": true,
+    "checked_range": "원문 확인(Gutenberg #2230 독일어 원문 해당 대목)"
+  },
+  {
+    "ko": "시작이 반이다",
+    "author": "한국 속담",
+    "source": "표준국어대사전 속담 항목",
+    "source_url": "https://stdict.korean.go.kr/search/contentView.do?word_no=202301&searchKeywordTo=3",
+    "category": "시작하기",
+    "verified": true,
+    "checked_range": "원문 확인(표준국어대사전 해당 표제어 페이지의 속담 항목과 뜻풀이)"
+  },
+  {
+    "ko": "티끌 모아 태산",
+    "author": "한국 속담",
+    "source": "표준국어대사전 속담 항목",
+    "source_url": "https://stdict.korean.go.kr/search/contentView.do?word_no=498364&searchKeywordTo=3",
+    "category": "작은 걸음",
+    "verified": true,
+    "checked_range": "원문 확인(표준국어대사전 해당 표제어 페이지의 속담 항목과 뜻풀이)"
+  },
+  {
+    "ko": "낙숫물이 댓돌을 뚫는다",
+    "author": "한국 속담",
+    "source": "표준국어대사전 속담 항목",
+    "source_url": "https://stdict.korean.go.kr/search/contentView.do?word_no=406777&searchKeywordTo=3",
+    "category": "꾸준함",
+    "verified": true,
+    "checked_range": "원문 확인(표준국어대사전 해당 표제어 페이지의 속담 항목과 뜻풀이)"
+  },
+  {
+    "ko": "쥐구멍에도 볕 들 날 있다",
+    "author": "한국 속담",
+    "source": "표준국어대사전 속담 항목",
+    "source_url": "https://stdict.korean.go.kr/search/contentView.do?word_no=311448&searchKeywordTo=3",
+    "category": "실패 뒤 다시 일어서기",
+    "verified": true,
+    "checked_range": "원문 확인(표준국어대사전 해당 표제어 페이지의 속담 항목과 뜻풀이)"
+  },
+  {
+    "ko": "지성이면 감천",
+    "author": "한국 속담",
+    "source": "표준국어대사전 속담 항목",
+    "source_url": "https://stdict.korean.go.kr/search/contentView.do?word_no=310002&searchKeywordTo=3",
+    "category": "꾸준함",
+    "verified": true,
+    "checked_range": "원문 확인(표준국어대사전 해당 표제어 페이지의 속담 항목과 뜻풀이)"
+  },
+  {
+    "ko": "가랑비에 옷 젖는 줄 모른다",
+    "author": "한국 속담",
+    "source": "표준국어대사전 속담 항목",
+    "source_url": "https://stdict.korean.go.kr/search/contentView.do?word_no=385043&searchKeywordTo=3",
+    "category": "작은 걸음",
+    "verified": true,
+    "checked_range": "원문 확인(표준국어대사전 해당 표제어 페이지의 속담 항목과 뜻풀이)"
+  },
+  {
+    "ko": "고생 끝에 낙이 온다",
+    "author": "한국 속담",
+    "source": "표준국어대사전 속담 항목",
+    "source_url": "https://stdict.korean.go.kr/search/contentView.do?word_no=396212&searchKeywordTo=3",
+    "category": "실패 뒤 다시 일어서기",
+    "verified": true,
+    "checked_range": "원문 확인(표준국어대사전 해당 표제어 페이지의 속담 항목과 뜻풀이)"
+  },
+  {
+    "ko": "하늘이 무너져도 솟아날 구멍이 있다",
+    "author": "한국 속담",
+    "source": "표준국어대사전 속담 항목",
+    "source_url": "https://stdict.korean.go.kr/search/contentView.do?word_no=503497&searchKeywordTo=3",
+    "category": "실패 뒤 다시 일어서기",
+    "verified": true,
+    "checked_range": "원문 확인(표준국어대사전 해당 표제어 페이지의 속담 항목과 뜻풀이)"
+  },
+  {
+    "ko": "공든 탑이 무너지랴",
+    "author": "한국 속담",
+    "source": "표준국어대사전 속담 항목",
+    "source_url": "https://stdict.korean.go.kr/search/contentView.do?word_no=29277&searchKeywordTo=3",
+    "category": "꾸준함",
+    "verified": true,
+    "checked_range": "원문 확인(표준국어대사전 해당 표제어 페이지의 속담 항목과 뜻풀이)"
+  },
+  {
+    "ko": "무쇠도 갈면 바늘 된다",
+    "author": "한국 속담",
+    "source": "표준국어대사전 속담 항목",
+    "source_url": "https://stdict.korean.go.kr/search/contentView.do?word_no=122851&searchKeywordTo=3",
+    "category": "꾸준함",
+    "verified": true,
+    "checked_range": "원문 확인(표준국어대사전 해당 표제어 페이지의 속담 항목과 뜻풀이)"
+  },
+  {
+    "ko": "원숭이도 나무에서 떨어진다",
+    "author": "한국 속담",
+    "source": "표준국어대사전 속담 항목",
+    "source_url": "https://stdict.korean.go.kr/search/contentView.do?word_no=465436&searchKeywordTo=3",
+    "category": "자기 자신에게 너그러워지기",
+    "verified": true,
+    "checked_range": "원문 확인(표준국어대사전 해당 표제어 페이지의 속담 항목과 뜻풀이)"
+  },
+  {
+    "ko": "개똥밭에 굴러도 이승이 좋다",
+    "author": "한국 속담",
+    "source": "표준국어대사전 속담 항목",
+    "source_url": "https://stdict.korean.go.kr/search/contentView.do?word_no=10609&searchKeywordTo=3",
+    "category": "하루를 소중히",
+    "verified": true,
+    "checked_range": "원문 확인(표준국어대사전 해당 표제어 페이지의 속담 항목과 뜻풀이)"
+  },
+  {
+    "ko": "호랑이에게 물려 가도 정신만 차리면 산다",
+    "author": "한국 속담",
+    "source": "표준국어대사전 속담 항목",
+    "source_url": "https://stdict.korean.go.kr/search/contentView.do?word_no=504865&searchKeywordTo=3",
+    "category": "용기",
+    "verified": true,
+    "checked_range": "원문 확인(표준국어대사전 해당 표제어 페이지의 속담 항목과 뜻풀이)"
+  },
+  {
+    "ko": "호랑이 굴에 가야 호랑이 새끼를 잡는다",
+    "author": "한국 속담",
+    "source": "표준국어대사전 속담 항목",
+    "source_url": "https://stdict.korean.go.kr/search/contentView.do?word_no=504865&searchKeywordTo=3",
+    "category": "용기",
+    "verified": true,
+    "checked_range": "원문 확인(표준국어대사전 해당 표제어 페이지의 속담 항목과 뜻풀이)"
+  },
+  {
+    "ko": "구슬이 서 말이라도 꿰어야 보배",
+    "author": "한국 속담",
+    "source": "표준국어대사전 속담 항목",
+    "source_url": "https://stdict.korean.go.kr/search/contentView.do?word_no=400009&searchKeywordTo=3",
+    "category": "시작하기",
+    "verified": true,
+    "checked_range": "원문 확인(표준국어대사전 해당 표제어 페이지의 속담 항목과 뜻풀이)"
+  }
+]

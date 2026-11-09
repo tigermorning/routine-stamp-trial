@@ -1,0 +1,111 @@
+{
+  "_about": "근거 카드 초안(2026-10-21, Claude 작성, 사용자 검수 전). 출처·확인 수준은 side-session-notes/local_3547f8c3…/evidence2-*.md 의 '선별 결과' 표에 적힌 것을 그대로 옮겼다. level: full(원문 확인) / partial(원문 일부) / abstract(초록만). numbers 는 level 이 full 인 카드에만 둔다. 도우미는 방법을 말할 때 이 카드에 적힌 것만 쓴다.",
+  "cards": [
+    {
+      "id": "missed-one-day",
+      "topics": ["하루 놓침", "빠진 날", "접고 싶음", "다시 시작"],
+      "summary": "12주 동안 하루에 한 가지 행동을 하며 기록한 96명을 본 연구에서, 하루 한 번 놓친 것은 습관이 만들어지는 과정에 실질적인 영향을 주지 않았다고 보고했다.",
+      "can_say": ["하루 한 번 빠진 것만으로 그동안 쌓은 게 무너지지는 않는다고 연구에서 보고했다. 다음 날 다시 하면 된다."],
+      "limits": "'한 번' 놓친 경우만 다뤘다. 며칠 연달아 놓친 경우는 이 초록만으로 알 수 없다. 이 연구는 질이 낮은 편이라고 후속 고찰(Singh 2024)이 평가했다.",
+      "numbers": [],
+      "level": "abstract",
+      "sources": [{"short": "Lally 외 2010", "title": "How are habits formed: Modelling habit formation in the real world", "doi": "10.1002/ejsp.674", "checked": "abstract"}]
+    },
+    {
+      "id": "keep-repeating",
+      "topics": ["반복", "완벽하게 못함", "자주 하기", "꾸준함"],
+      "summary": "84일 동안 192명을 본 무작위 시험에서, 계획한 행동을 실제로 반복해서 한 정도가 습관처럼 자동으로 하게 되는 정도를 가장 잘 예측했다. 단서를 루틴에 붙인 경우와 시간에 붙인 경우 차이는 없었다.",
+      "can_say": ["완벽하게 하는 것보다, 계획한 행동을 자주 반복해서 하는 쪽이 자동으로 하게 되는 데 중요하다고 보고했다."],
+      "limits": "한 번에 얼마나 해야 하는지, 몇 번 빠져도 되는지는 알려 주지 않는다. 초록만 확인했다.",
+      "numbers": [],
+      "level": "abstract",
+      "sources": [{"short": "Keller 외 2021", "title": "Habit formation following routine-based versus time-based cue planning: A randomized controlled trial", "doi": "10.1111/bjhp.12504", "checked": "abstract"}]
+    },
+    {
+      "id": "takes-time",
+      "topics": ["오래 걸림", "며칠 만에 안 됨", "자책", "습관이 안 됨", "개인차"],
+      "summary": "습관을 다룬 연구 20편을 모은 분석(2601명)에서, 습관은 대략 두 달 안에 만들어지기 시작하지만 사람마다 크게 다르다고 정리했다. 기간을 보고한 4편에서는 중앙값이 59~66일이었고 개인 범위는 4~335일이었다.",
+      "can_say": ["습관이 되는 데는 보통 두 달쯤 걸리고 사람마다 차이가 아주 크다. 며칠 만에 자리 잡지 않았다고 자신을 탓할 일이 아니다."],
+      "limits": "포함된 연구 상당수가 질이 낮다고 평가됐다(20편 중 11편이 편향 위험 높음). 2주 안에 습관이 완성된다는 주장은 이 분석에서 찾을 수 없었다.",
+      "numbers": ["59", "66", "4", "335", "20", "2601"],
+      "level": "full",
+      "sources": [{"short": "Singh 외 2024", "title": "Time to Form a Habit: A Systematic Review and Meta-Analysis of Health Behaviour Habit Formation and Its Determinants", "doi": "10.3390/healthcare12232488", "checked": "full"}]
+    },
+    {
+      "id": "self-kindness",
+      "topics": ["자책", "실패 뒤", "죄책감", "다시 시도", "스스로에게 가혹함"],
+      "summary": "실험실 실험 4개에서, 실패한 뒤 자신에게 친절하게 대한(자기 연민) 사람이 그렇지 않은 사람보다 잘못을 만회하려는 동기와 다시 공부하는 시간이 더 컸다.",
+      "can_say": ["못 한 날 자신을 몰아세우는 것보다 '그럴 수 있지' 하고 받아들인 사람들이 다시 해 보려는 동기가 더 컸다고 보고했다."],
+      "limits": "실험실 과제이고 앱이나 생활 습관을 시험한 것이 아니다. 표본 크기는 초록에 없었다. 초록만 확인했다.",
+      "numbers": [],
+      "level": "abstract",
+      "sources": [{"short": "Breines & Chen 2012", "title": "Self-compassion increases self-improvement motivation", "doi": "10.1177/0146167212445599", "checked": "abstract"}]
+    },
+    {
+      "id": "expect-slips",
+      "topics": ["놓친 뒤 무너짐", "한 번 어기면 다 포기", "미리 대비", "실패 예상"],
+      "summary": "식이·미루기 상황의 실험 2개에서, '실패는 일어날 수 있다'고 미리 알려 주고 실패를 상황 탓으로 돌려 보게 하자 이후 며칠 동안 실패가 줄고 스스로 성공했다고 느끼는 정도가 높아졌다.",
+      "can_say": ["놓치는 날이 생길 수 있다고 미리 생각해 두고, 놓친 날은 그날 상황 때문이었다고 보는 연습이 도움이 됐다고 보고했다."],
+      "limits": "표본이 작고 인용이 적으며 다시 확인된 적이 알려지지 않았다. 식이·미루기 상황이라 다른 습관에도 맞는지는 모른다. 초록만 확인했다.",
+      "numbers": [],
+      "level": "abstract",
+      "sources": [{"short": "Adriaanse 외 2022", "title": "Beyond prevention: Regulating responses to self-regulation failure to avoid a set-back effect", "doi": "10.1111/aphw.12302", "checked": "abstract"}]
+    },
+    {
+      "id": "if-then",
+      "topics": ["시작이 안 됨", "언제 할지", "계획", "만약 ~하면", "미루게 됨"],
+      "summary": "'만약 ~하면 ~한다'처럼 언제 무엇을 할지 짝지어 정해 두는 계획이 건강 행동에서 쓰여 왔고, 서술 고찰은 사용자가 스스로 정하는 것보다 안내를 받아 정하는 쪽이 낫다고 제안했다. 다만 효과는 연구마다 크게 다르고 실제 행동을 객관적으로 잰 무작위 시험은 적다.",
+      "can_say": ["'만약 [어떤 때]가 되면 [이 행동]을 한다' 한 문장으로 짝지어 적어 두는 방법이 있다. 연구마다 효과 차이가 크다."],
+      "limits": "서술 고찰 초록 수준이다. 이런 계획이 상황이 바뀔 때 유연하게 대응하는 것을 떨어뜨릴 수 있다는 실험실 연구(van Timmeren 2022, 초록만)도 있다. 효과 크기는 말하지 않는다.",
+      "numbers": [],
+      "level": "abstract",
+      "sources": [
+        {"short": "Hagger & Luszczynska 2014", "title": "Implementation intention and action planning interventions in health contexts: State of the research and proposals for the way forward", "doi": "10.1111/aphw.12017", "checked": "abstract"},
+        {"short": "van Timmeren 외 2022", "title": "Instant habits versus flexible tenacity: How if-then planning affects learning", "doi": "10.1177/17470218221147024", "checked": "abstract"}
+      ]
+    },
+    {
+      "id": "streak-pressure",
+      "topics": ["연속 기록", "끊김", "연속이 끊겨서 속상", "연속 집착"],
+      "summary": "100일 넘게 매일 달리다 멈춘 17명을 면담한 연구에서, 일부는 다쳐도 연속을 잇기 위해 달렸고 멈춘 뒤 슬픔·분노·실망이 있었으며 수 주~수 개월 '애도'를 겪었다. 연속에 대한 애착이 클수록 부정적인 결과가 컸다. 모두 이후에도 규칙적으로 달렸다.",
+      "can_say": ["연속 기록이 끊겼을 때 속상한 건 흔한 반응이고, 그런 마음이 연구에서도 보고됐다."],
+      "limits": "연속 100일 이상을 스스로 택해 한 러너 17명의 질적 연구라 일반화하기 어렵다. 연속 기록이 계속할 동기가 된다는 방향의 연구도 있다(Weathers & Poehlman 2023, 제목만 확인). 초록만 확인했다.",
+      "numbers": [],
+      "level": "abstract",
+      "sources": [{"short": "Ingalls 외 2026", "title": "The dark side of streaking", "doi": "10.1371/journal.pone.0317254", "checked": "abstract"}]
+    },
+    {
+      "id": "apps-quit-common",
+      "topics": ["앱을 금방 그만둠", "계속 실패", "나만 이래", "초기 이탈"],
+      "summary": "설치가 1만 번 넘는 정신건강 앱 93개의 실제 사용 기록에서, 설치 15일 뒤에도 쓰는 사람의 비율은 중앙값이 3.9%였다.",
+      "can_say": ["앱을 금방 놓게 되는 건 흔한 일이다. 다시 돌아와 시작해도 된다."],
+      "limits": "정신건강 앱의 기록이라 루틴 앱에 그대로 맞지 않는다. 돌아온 사람이 다시 이어 갔는지는 이 연구가 다루지 않았다.",
+      "numbers": ["3.9", "15", "93"],
+      "level": "full",
+      "sources": [{"short": "Baumel 외 2019", "title": "Objective user engagement with mental health apps: Systematic search and panel-based usage analysis", "doi": "10.2196/14567", "checked": "full"}]
+    },
+    {
+      "id": "guided-goal-writing",
+      "topics": ["막막함", "뭐부터 해야 할지", "목표가 흐릿함", "구체적으로 적기"],
+      "summary": "AI 챗봇이 안내와 피드백을 주며 목표를 정하게 도왔을 때 사람들이 목표를 더 구체적으로, 실행 계획의 질을 높여 적었다(사전 등록 실험, 543명). 즉석에서 제안만 해 주는 방식은 효과가 약했다.",
+      "can_say": ["하고 싶은 일을 '언제, 무엇을'까지 구체적으로 적어 보면 목표의 질이 올라간다고 보고했다."],
+      "limits": "목표를 적은 글의 질만 쟀고 실제 행동이나 목표 달성은 재지 않았다. 확인한 것은 공개된 사전 공개본이며 게재본은 확인하지 못했다.",
+      "numbers": ["543"],
+      "level": "full",
+      "sources": [{"short": "Schimpf 외 2026", "title": "Supporting effective goal setting with LLM-based chatbots", "doi": "10.1145/3772318.3791064", "checked": "full (사전 공개본 arXiv 2602.08636)"}]
+    },
+    {
+      "id": "chatbot-limits",
+      "topics": ["AI 코칭이 효과 있나", "이 도우미 믿어도 되나"],
+      "summary": "챗봇으로 생활 습관을 돕는 시험들을 모은 분석에서 신체활동 등에 작거나 중간 정도의 효과가 보였지만, 시험의 질이 낮은 경우가 많고(약 4분의 3) 대부분 최근의 대화형 AI 이전 챗봇이라 결론을 확정하지 못한다고 정리했다.",
+      "can_say": ["이 도우미 같은 AI 코칭이 루틴을 이어 가게 돕는지는 아직 확실히 증명되지 않았다."],
+      "limits": "원문의 일부만 확인했다. 지금 쓰는 대화형 AI(LLM)의 효과를 시험한 분석은 찾지 못했다.",
+      "numbers": [],
+      "level": "partial",
+      "sources": [
+        {"short": "Singh 외 2023", "title": "Systematic review and meta-analysis of the effectiveness of chatbots on lifestyle behaviours", "doi": "10.1038/s41746-023-00856-1", "checked": "partial"},
+        {"short": "Oh 외 2021", "title": "A systematic review of artificial intelligence chatbots for promoting physical activity, healthy diet, and weight loss", "doi": "10.1186/s12966-021-01224-6", "checked": "full"}
+      ]
+    }
+  ]
+}
