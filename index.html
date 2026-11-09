@@ -384,7 +384,7 @@ mark.mh-yellow,.mhb.mh-yellow{--mh:rgba(254,240,138,.7)}mark.mh-pink,.mhb.mh-pin
 #cookieDlg{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);width:min(380px,calc(100vw - 32px));padding:18px;box-shadow:var(--shadow)}
 #cookieDlg::backdrop{background:rgba(0,0,0,.35)}
 #ckStage{display:flex;flex-direction:column;align-items:center;gap:8px;min-height:190px}
-#ckCookie{background:none;border:0;cursor:pointer;padding:0;width:190px}
+#ckCookie{background:none;border:0;cursor:pointer;padding:0;width:230px}
 #ckCookie svg{width:100%;height:auto;overflow:visible}
 #ckCookie .hl,#ckCookie .hr{transform-origin:80px 70px;transition:transform .55s cubic-bezier(.2,1.4,.4,1)}
 #cookieDlg.open #ckCookie .hl{transform:translate(-22px,8px) rotate(-16deg)}
@@ -392,7 +392,13 @@ mark.mh-yellow,.mhb.mh-yellow{--mh:rgba(254,240,138,.7)}mark.mh-pink,.mhb.mh-pin
 #ckSlip{width:100%;background:#fffdf5;color:#3a2f22;border:1px dashed #d9c9a3;border-radius:6px;padding:12px 14px;text-align:center;opacity:0;transform:translateY(-12px);transition:opacity .5s .15s,transform .5s .15s}
 #cookieDlg.open #ckSlip{opacity:1;transform:none}
 #ckSlip p{margin:0}#ckSlip #ckText{font-size:17px;line-height:1.55;word-break:keep-all}#ckSlip .stat{color:#7a6a52;margin-top:6px}
-@media (prefers-reduced-motion:reduce){#ckCookie .hl,#ckCookie .hr,#ckSlip{transition:none}}
+#ckCookie .ps{opacity:0;transition:opacity .4s .2s}
+#cookieDlg.open #ckCookie .ps{opacity:1}
+#ckCookie .sh{transition:opacity .5s}#cookieDlg.open #ckCookie .sh{opacity:.08}
+@keyframes ckfloat{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-4px) rotate(1.5deg)}}
+#cookieDlg:not(.open) #ckCookie svg{animation:ckfloat 2.6s ease-in-out infinite}
+#ckCookie:hover svg,#ckCookie:focus-visible svg{filter:drop-shadow(0 3px 6px rgba(120,70,20,.3))}
+@media (prefers-reduced-motion:reduce){#ckCookie .hl,#ckCookie .hr,#ckSlip,#ckCookie .ps{transition:none}#cookieDlg:not(.open) #ckCookie svg{animation:none}}
 .dn{display:inline-block;line-height:1.25}
 .hl-marker{background:linear-gradient(transparent 50%,#fff176 50% 90%,transparent 90%)}
 .hl-wavy{text-decoration:underline wavy #ff6b6b;text-decoration-thickness:2px;text-underline-offset:3px}
@@ -635,8 +641,28 @@ mark.mh-yellow,.mhb.mh-yellow{--mh:rgba(254,240,138,.7)}mark.mh-pink,.mhb.mh-pin
   <div id="ckStage">
     <button type="button" id="ckCookie" aria-label="포춘쿠키 열기">
       <svg viewBox="0 0 160 110" aria-hidden="true">
-        <g class="hl"><path d="M80 28C50 20 20 36 16 66c22 22 46 26 64 16z" fill="#f3c66f" stroke="#b9782a" stroke-width="3" stroke-linejoin="round"/><path d="M80 28C64 40 60 64 80 82" fill="none" stroke="#d99a45" stroke-width="3" stroke-linecap="round"/></g>
-        <g class="hr"><path d="M80 28c30-8 60 8 64 38-22 22-46 26-64 16z" fill="#f6cf82" stroke="#b9782a" stroke-width="3" stroke-linejoin="round"/><path d="M80 28c16 12 20 36 0 54" fill="none" stroke="#d99a45" stroke-width="3" stroke-linecap="round"/></g>
+        <defs>
+          <linearGradient id="ckgL" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe6ad"/><stop offset=".55" stop-color="#f5c56c"/><stop offset="1" stop-color="#e3a043"/></linearGradient>
+          <linearGradient id="ckgR" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffeabb"/><stop offset=".55" stop-color="#f8cd78"/><stop offset="1" stop-color="#e8a94c"/></linearGradient>
+        </defs>
+        <ellipse class="sh" cx="80" cy="98" rx="62" ry="6" fill="#5b3a2e" opacity=".14"/>
+        <g class="ps"><rect x="58" y="36" width="44" height="30" rx="2" fill="#fffdf5" stroke="#d9c9a3" stroke-width="1.5" transform="rotate(-5 80 51)"/><path d="M65 47h30M65 54h22" stroke="#d9c9a3" stroke-width="2" stroke-linecap="round" transform="rotate(-5 80 51)"/></g>
+        <g class="hl">
+          <path d="M80 20C40 20 8 40 10 70C12 84 30 90 48 84C60 80 68 70 80 70C74 55 74 35 80 20Z" fill="url(#ckgL)" stroke="#a8661f" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M80 20C74 35 74 55 80 70" fill="none" stroke="#8f5518" stroke-width="5" stroke-linecap="round" opacity=".3"/>
+          <path d="M30 46C38 38 52 33 66 32M24 62C26 56 28 52 31 48" fill="none" stroke="#d9993f" stroke-width="2" stroke-linecap="round" opacity=".6"/>
+          <path d="M16 74C26 86 44 90 58 82" fill="none" stroke="#c2832f" stroke-width="2.5" stroke-linecap="round" opacity=".55"/>
+          <path d="M20 56C23 44 36 33 54 28" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"/>
+          <circle cx="26" cy="64" r="1.5" fill="#b9732a" opacity=".5"/><circle cx="58" cy="46" r="1.5" fill="#b9732a" opacity=".5"/><circle cx="44" cy="74" r="1.5" fill="#b9732a" opacity=".5"/><circle cx="36" cy="52" r="1.5" fill="#b9732a" opacity=".5"/>
+        </g>
+        <g class="hr">
+          <path d="M80 20C120 20 152 40 150 70C148 84 130 90 112 84C100 80 92 70 80 70C86 55 86 35 80 20Z" fill="url(#ckgR)" stroke="#a8661f" stroke-width="3" stroke-linejoin="round"/>
+          <path d="M80 20C86 35 86 55 80 70" fill="none" stroke="#8f5518" stroke-width="5" stroke-linecap="round" opacity=".3"/>
+          <path d="M130 46C122 38 108 33 94 32M136 62C134 56 132 52 129 48" fill="none" stroke="#d9993f" stroke-width="2" stroke-linecap="round" opacity=".6"/>
+          <path d="M144 74C134 86 116 90 102 82" fill="none" stroke="#c2832f" stroke-width="2.5" stroke-linecap="round" opacity=".55"/>
+          <path d="M140 56C137 44 124 33 106 28" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".6"/>
+          <circle cx="134" cy="64" r="1.5" fill="#b9732a" opacity=".5"/><circle cx="102" cy="46" r="1.5" fill="#b9732a" opacity=".5"/><circle cx="116" cy="74" r="1.5" fill="#b9732a" opacity=".5"/><circle cx="124" cy="52" r="1.5" fill="#b9732a" opacity=".5"/>
+        </g>
       </svg>
     </button>
     <div id="ckSlip" hidden><p id="ckText"></p><p class="stat" id="ckBy"></p></div>
