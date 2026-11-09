@@ -7,7 +7,7 @@
 > 먼저 밝혀 둘 것 세 가지
 > 1. **모델**: 이 실험의 도우미 모델은 `.env` 의 Claude(`claude-sonnet-5-5`, effort low)다. `docs/OBSERVABILITY.md` 가 운영 모델로 적은 gpt-4o-mini 에서도 같은 현상이 나는지는 **확인하지 못했다**(OpenAI 키가 이 PC에 없음).
 > 2. **«배포»**: 운영 Cloud Run 에는 아직 올리지 않았다. 고친 코드를 로컬에서 `release=v2-fix` 라벨로 돌려 버전별로 비교했다(아래 5절). 운영 배포는 사용자 확인 뒤에 한다.
-> 3. **PR 링크**: 아직 PR 을 만들지 않았다(변경은 `aiffel-wip` 브랜치 작업 트리에 있고 커밋 전). 만든 뒤 아래 4절에 링크를 넣는다.
+> 3. **PR**: https://github.com/tigermorning/routine-stamp-trial/pull/32 (기준 브랜치 `aiffel-wip`, 아직 합치지 않음).
 
 ## 1. 로그
 
@@ -94,7 +94,7 @@
 
 - 시험: `cd server && python -m pytest tests -q` → **210 passed**(이 브랜치 기준, 2026-11-09 실행).
 - 대안으로 버린 것: «빈 답이면 한 번 더 부르기» — 비용·지연이 두 배가 되고 원인(한도)은 그대로.
-- PR: **아직 만들지 않음**(사용자 확인 대기).
+- PR: https://github.com/tigermorning/routine-stamp-trial/pull/32 (합치기 전, 사용자 검토 대기).
 
 ## 6. 배포 뒤 확인 (버전별, 새 대화)
 
