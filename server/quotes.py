@@ -23,3 +23,29 @@ def load_quotes(path=None):
     except Exception:
         return []
     return [i for i in data if valid(i)] if isinstance(data, list) else []
+
+
+AFFIRM_FILE = Path(__file__).resolve().parent / "affirmations.json"
+
+
+def load_affirmations(path=None):
+    """언어별 일상 응원 문장({언어: [문장…]}). 2026-11-06 사용자 결정으로 격언 대신 쓴다(직접 쓴 짧은 문장, 외부 문구를 가져오지 않는다)."""
+    p = Path(path) if path else AFFIRM_FILE
+    try:
+        d = json.loads(p.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    return {k: [t for t in v if isinstance(t, str) and t.strip()] for k, v in d.items() if isinstance(v, list)} if isinstance(d, dict) else {}
+
+
+def pick_affirmation(lang, exclude=()):
+    """lang 문장 중 최근에 본 번호(exclude, 1부터)를 피해 무작위 하나. 모르는 언어는 영어. {id,text,author,source,source_url,category}"""
+    import random
+    d = load_affirmations()
+    items = d.get(lang) or d.get("en") or []
+    if not items:
+        return None
+    ex = {int(x) for x in exclude}
+    ids = [i for i in range(1, len(items) + 1) if i not in ex] or list(range(1, len(items) + 1))
+    i = random.choice(ids)
+    return {"id": i, "text": items[i - 1], "author": "", "source": "", "source_url": "", "category": "affirmation"}
