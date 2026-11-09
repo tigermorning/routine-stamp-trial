@@ -35,7 +35,7 @@ fail() { printf '  ✗ %s\n' "$*" >&2; exit 1; }
 
 # ---- 1. 배포 전 점검(DEPLOY.md 의 점검 목록) ----
 step "1. 점검"
-for f in index.html Procfile requirements.txt .gcloudignore server/main.py server/requirements.txt; do
+for f in index.html pay.html .gcloudignore server/main.py server/requirements.txt stk/fx/hospital.png stk/fx/LICENSE-fluent-emoji.txt; do
   [ -f "$HERE/$f" ] || fail "파일이 없어요: $f"
 done
 ok "올릴 파일이 있어요"
@@ -84,8 +84,13 @@ fi
 step "2. 스냅샷"
 SNAP="$(mktemp -d)/snap"
 mkdir -p "$SNAP"
-cp "$HERE/index.html" "$HERE/Procfile" "$HERE/requirements.txt" "$HERE/.gcloudignore" "$SNAP/"
+cp "$HERE/index.html" "$HERE/pay.html" "$HERE/.gcloudignore" "$SNAP/"
 cp -r "$HERE/server" "$SNAP/server"
+cp -r "$HERE/stk" "$SNAP/stk"   # 스티커 그림(Fluent Emoji 3D, MIT). server/main.py 가 /stk 로 내보낸다
+# routine-coach 는 이 폴더의 server/main.py 앱 하나로 뜬다. 저장소 루트의 Procfile·requirements.txt 는 GitHub Actions 쪽(app/main.py, Dockerfile, 사진 글자 읽기 의존성)용이라
+# 그대로 올리면 app/ 이 없어 서버가 뜨지 않으므로, 스냅샷에는 server 전용 실행 명령과 server/requirements.txt 를 넣는다(2026-11-09 배포 경로가 둘임을 확인).
+printf 'web: uvicorn main:app --app-dir server --host 0.0.0.0 --port $PORT\n' > "$SNAP/Procfile"
+cp "$HERE/server/requirements.txt" "$SNAP/requirements.txt"
 find "$SNAP" \( -name __pycache__ -o -name .pytest_cache \) -prune -exec rm -rf {} +
 ok "스냅샷: $SNAP"
 
