@@ -119,6 +119,25 @@ def text(value):
     return value if CAPTURE_TEXT else None
 
 
+def _span_facts(raw):
+    """진단: span 이 기록 대상인지(sampled·is_recording)와 부모가 있는지. raw 가 None 이면 «지금 문맥에 span 이 남아 있나»를 본다. 실패하면 None 들."""
+    out = {"ctx_valid": None, "sampled": None, "recording": None, "has_parent": None}
+    try:
+        from opentelemetry import trace as ot
+
+        if raw is None:
+            out["ctx_valid"] = ot.get_current_span().get_span_context().is_valid
+            return out
+        sp = getattr(raw, "_otel_span", None)
+        if sp is not None:
+            out["sampled"] = bool(sp.get_span_context().trace_flags.sampled)
+            out["recording"] = bool(sp.is_recording())
+            out["has_parent"] = getattr(sp, "parent", None) is not None
+    except Exception:
+        pass
+    return out
+
+
 def start_turn(byok=False):
     """한 턴의 트레이스(chat-turn)를 연다. 꺼져 있으면 아무 일도 하지 않는 Obs. 끝날 때 turn.end(...) 후 flush(turn)."""
     client = get_client()
@@ -126,7 +145,12 @@ def start_turn(byok=False):
         return Obs()
     try:
         # 한 턴의 흐름(듣기·조언·위기 등)을 모델이 고르므로 agent 종류로 둔다(Langfuse 에이전트 그래프에 한 마디로 보인다)
-        return Obs(client.start_observation(name="chat-turn", as_type="agent", metadata={"byok": bool(byok)}), client)
+        pre = _span_facts(None)  # 시작 전에 이 스레드의 OTel 문맥에 남은 span 이 있는지(있으면 새 턴이 그 아래로 들어간다)
+        obs = Obs(client.start_observation(name="chat-turn", as_type="agent", metadata={"byok": bool(byok)}), client)
+        post = _span_facts(obs.raw)
+        log.info("tracing start trace=%s ctx_before_valid=%s sampled=%s recording=%s has_parent=%s thread=%s",
+                 getattr(obs.raw, "trace_id", None), pre["ctx_valid"], post["sampled"], post["recording"], post["has_parent"], threading.current_thread().name)
+        return obs
     except Exception as error:
         log.warning("tracing start failed: %s", type(error).__name__)
         return Obs()
