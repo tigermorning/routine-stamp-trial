@@ -3,6 +3,7 @@
 OpenAI 와 Gemini 는 같은 OpenAI SDK 로, Claude 는 Anthropic SDK 로 부른다. 메시지는 OpenAI 형식이다.
 fake 는 키 없이 화면과 흐름을 확인하거나 테스트할 때 쓰는 가짜 응답이다(진짜 모델 경로는 이 PC에서 실행해 보지 않았다).
 """
+import os
 import json
 import re
 import time
@@ -10,6 +11,9 @@ import time
 TIMEOUT = 25  # 초
 PLAN_TOKENS = 120
 REPLY_TOKENS = 450
+# Claude(Sonnet 5.5, effort low)는 답하기 전 숨은 생각이 max_tokens 를 함께 쓴다. 450 으로 두면 답이 비거나(26.7%) 문장 중간에서 끊겼다(Main Quest 08, docs/REPORT.md).
+# 실험에서 1500 이면 빈 답 0 이었다. 환경변수 CLAUDE_REPLY_TOKENS 로 바꿀 수 있다(450 으로 두면 옛 동작).
+CLAUDE_REPLY_TOKENS = int(os.environ.get("CLAUDE_REPLY_TOKENS", "1500"))
 SVG_TOKENS = 2500
 
 
@@ -75,8 +79,11 @@ class ClaudeLLM:
         self.model = model
 
     def _request(self, system, turns, max_tokens):
-        return dict(model=self.model, max_tokens=max_tokens, system=system, messages=turns,
-                    output_config=self.OUTPUT_CONFIG, betas=self.BETAS, fallbacks="default")
+        req = dict(model=self.model, max_tokens=max_tokens, system=system, messages=turns,
+                   output_config=self.OUTPUT_CONFIG, betas=self.BETAS, fallbacks="default")
+        if os.environ.get("CLAUDE_THINKING", "default") == "off":  # Main Quest 08 실험: 답하기 전 생각을 끈다(숨은 생각이 max_tokens 를 먹어 답이 비던 문제)
+            req["thinking"] = {"type": "between_tools"}
+        return req
 
     def complete_json(self, system, user, usage=None):
         system = system + "\n\n반드시 JSON 객체 하나만 출력한다. 설명이나 코드 블록 표시는 붙이지 않는다."
@@ -97,7 +104,7 @@ class ClaudeLLM:
     def chat_stream(self, messages, usage=None):
         system = "\n\n".join(m["content"] for m in messages if m["role"] == "system")
         turns = [m for m in messages if m["role"] != "system"]
-        with self.client.beta.messages.stream(**self._request(system, turns, REPLY_TOKENS)) as stream:
+        with self.client.beta.messages.stream(**self._request(system, turns, CLAUDE_REPLY_TOKENS)) as stream:
             sent = False
             for text in stream.text_stream:
                 sent = True
