@@ -11,6 +11,7 @@ import logging
 import os
 import time
 import re
+import threading
 from datetime import datetime, timezone
 
 log = logging.getLogger("coach")
@@ -51,6 +52,7 @@ def get_client():
 
         _client = Langfuse(environment=os.environ.get("ENV", "local").strip().lower() or "local",
                            release=os.environ.get("K_REVISION", "local"), mask=mask if CAPTURE_TEXT else None)
+        _watch_export(_client)
     except Exception as error:  # 키 글자는 남기지 않고 오류 종류만 남긴다
         log.warning("tracing off: %s", type(error).__name__)
         _client = None
@@ -130,6 +132,46 @@ def start_turn(byok=False):
         return Obs()
 
 
+def _batch(client):
+    """Langfuse 가 쓰는 OTel 일괄 처리기(BatchProcessor). 못 찾으면 None(진단용이라 실패해도 대화에는 영향 없다)."""
+    try:
+        provider = client._resources.tracer_provider
+        for proc in provider._active_span_processor._span_processors:
+            batch = getattr(proc, "_batch_processor", None)
+            if batch is not None:
+                return batch
+    except Exception:
+        return None
+    return None
+
+
+def _watch_export(client):
+    """진단: 내보내기 호출 한 번마다 «span 몇 개, 성공/실패, 걸린 시간»을 로그에 남긴다(내용 없음). 한 번만 건다."""
+    batch = _batch(client)
+    if batch is None or getattr(batch, "_coach_watched", False):
+        return
+    exporter = getattr(batch, "_exporter", None)
+    real = getattr(exporter, "export", None)
+    if real is None:
+        return
+
+    def export(spans, *a, **kw):
+        t0 = time.monotonic()
+        result = "error"
+        try:
+            out = real(spans, *a, **kw)
+            result = getattr(out, "name", str(out))
+            return out
+        finally:
+            log.info("tracing export spans=%d result=%s ms=%d", len(spans), result, int((time.monotonic() - t0) * 1000))
+
+    try:
+        exporter.export = export
+        batch._coach_watched = True
+    except Exception:
+        pass
+
+
 def flush(turn):
     """Cloud Run 은 응답이 끝나면 CPU 를 줄이므로 기록을 모아 두었다 보내는 SDK 가 못 보낼 수 있다. 턴이 끝날 때 바로 보낸다.
     진단(2026-11-09, 배포한 서버에서 45턴 중 24개만 Langfuse 에 보인 원인을 찾으려고): 보내는 데 걸린 시간과 «시간 안에 다 보냈는지»(provider_ok)를
@@ -137,6 +179,9 @@ def flush(turn):
     if turn.client is not None:
         t0 = time.monotonic()
         ok = None
+        batch = _batch(turn.client)
+        queued = len(getattr(batch, "_queue", ()) or ()) if batch is not None else None
+        worker = getattr(getattr(batch, "_worker_thread", None), "is_alive", lambda: None)() if batch is not None else None
         try:
             provider = getattr(getattr(turn.client, "_resources", None), "tracer_provider", None)
             force = getattr(provider, "force_flush", None)
@@ -145,4 +190,4 @@ def flush(turn):
             turn.client.flush()
         except Exception as error:
             log.warning("tracing flush failed: %s", type(error).__name__)
-        log.info("tracing flush trace=%s provider_ok=%s ms=%d", getattr(turn.raw, "trace_id", None), ok, int((time.monotonic() - t0) * 1000))
+        log.info("tracing flush trace=%s provider_ok=%s ms=%d queued_before=%s worker_alive=%s thread=%s", getattr(turn.raw, "trace_id", None), ok, int((time.monotonic() - t0) * 1000), queued, worker, threading.current_thread().name)
