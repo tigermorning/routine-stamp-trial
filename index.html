@@ -329,7 +329,7 @@ mark.mh-yellow,.mhb.mh-yellow{--mh:rgba(254,240,138,.7)}mark.mh-pink,.mhb.mh-pin
 .stkchips{display:flex;gap:6px;overflow-x:auto;margin:0 0 6px;padding-bottom:2px;scrollbar-width:none}.stkchips::-webkit-scrollbar{display:none}
 .stkchip{flex:none;border:2px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);padding:2px 12px;font:inherit;font-size:14px;cursor:pointer}
 .stkchip[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
-.sv.fx{object-fit:contain}.stkgrid .sv.fx{width:36px;height:36px}
+.sv.fx{object-fit:contain}.pk.pka img{width:34px;height:34px;object-fit:contain;display:block;margin:auto}.art-tabs{grid-column:1/-1;margin:6px 0}.stkgrid .sv.fx{width:36px;height:36px}
 .stkgrid{display:grid!important;grid-template-columns:repeat(5,1fr);gap:6px}.stkgrid .stkbtn,.stkgrid .btn{width:100%;display:flex;justify-content:center;padding:4px 0}
 .stkgrid .stat{grid-column:1/-1}
 @keyframes stkfade{from{opacity:0}to{opacity:1}}.stkfade{animation:stkfade .15s}
@@ -593,7 +593,7 @@ mark.mh-yellow,.mhb.mh-yellow{--mh:rgba(254,240,138,.7)}mark.mh-pink,.mhb.mh-pin
     <button type="button" role="tab" data-t="color">배경 색</button>
     <button type="button" role="tab" data-t="theme">배경 디자인</button>
     <button type="button" role="tab" data-t="paper">메모지</button>
-    <button type="button" role="tab" data-t="stk">스티커·아이콘</button>
+    <button type="button" role="tab" data-t="stk">스티커</button>
     <button type="button" role="tab" data-t="feat">추가 기능</button>
     <button type="button" role="tab" data-t="unlock">기능 바로 열기</button>
     <button type="button" role="tab" data-t="chat">대화권</button>
@@ -611,12 +611,10 @@ mark.mh-yellow,.mhb.mh-yellow{--mh:rgba(254,240,138,.7)}mark.mh-pink,.mhb.mh-pin
     <div id="shopPaper"></div>
   </div>
   <div class="shoppane" data-t="stk" role="tabpanel" hidden>
-    <h3 class="rmhd">붙이는 스티커</h3>
-    <p class="stat">달력 날짜와 기록에 붙이는 장식이에요. 할 일 칸 그림으로도 쓸 수 있어요(할 일 칸 바꾸기에서 그림을 눌러 고르기). 한 번 사면 계속 써요. <small>스티커 그림: Microsoft Fluent Emoji 3D (MIT)</small></p>
+    <h3 class="rmhd">스티커</h3>
+    <p class="stat">달력 날짜와 기록에 붙이고, 모든 스티커는 할 일 칸 그림으로도 쓸 수 있어요(할 일 칸 바꾸기에서 그림을 눌러 고르기). 한 번 사면 계속 써요. <small>스티커 그림: Microsoft Fluent Emoji 3D (MIT)</small></p>
     <div id="shopStk"></div>
-    <h3 class="rmhd">아이콘 팩 (스티커로도, 칸 그림으로도)</h3>
-    <p class="stat">붙이는 스티커로도 쓰고, «쓰기»를 누르면 기본 칸 그림 전체가 이 모습으로 바뀌어요. 한 번 사면 계속 써요.</p>
-    <div id="shopIcon"></div>
+    <div id="shopIcon" hidden></div>
   </div>
   <div class="shoppane" data-t="feat" role="tabpanel" hidden>
     <p class="stat">쓸 수 있는 기능이에요. 한 번 사면 계속 써요.</p>
@@ -2143,7 +2141,7 @@ function dayStatus(date){
 }
 const GL_KEYS=['wake','meal','water','walkrun','walk','strength','yoga','read','study','diary','sleep','clean','tooth','pill','plan','music','code','climb','orig','origwin'];
 /* 스티커·아이콘 그림 한 개를 칸 그림이나 선택 단추로 그린다. e 는 'sv:이름'(48칸 스티커) 또는 'ig:스타일_키'(아이콘 팩 글리프, 64칸) */
-const artSVG=(e,cls)=>{if(e.startsWith('ig:')){const [st,k]=e.slice(3).split('_');return (GLYPHS[k]&&['cute','simple','pastel'].includes(st))?`<svg class="${cls}" viewBox="0 0 64 64" aria-hidden="true">${glyphSVG(GLYPHS[k],st)}</svg>`:''}if(e.startsWith('sv:'))return `<svg class="${cls}" viewBox="0 0 48 48" aria-hidden="true"><use href="#sv-${esc(e.slice(3))}"/></svg>`;return ''};
+const artSVG=(e,cls)=>{if(e.startsWith('ig:')){const [st,k]=e.slice(3).split('_');return (GLYPHS[k]&&['cute','simple','pastel'].includes(st))?`<svg class="${cls}" viewBox="0 0 64 64" aria-hidden="true">${glyphSVG(GLYPHS[k],st)}</svg>`:''}if(e.startsWith('fx:'))return `<img class="${cls}" src="/stk/fx/${esc(e.slice(3))}.png" alt="" decoding="async">`;if(e.startsWith('sv:'))return `<svg class="${cls}" viewBox="0 0 48 48" aria-hidden="true"><use href="#sv-${esc(e.slice(3))}"/></svg>`;return ''};
 const iconOf=s=>{
   if(s.art){const a=artSVG(s.art,'ico svslot');if(a) return a}
   if(s.img&&String(s.img).startsWith('data:image/')) return `<img class="ico photo" src="${esc(s.img)}" alt="">`;
@@ -2299,9 +2297,9 @@ const STICKER_PACKS={
   sticker_fruit:{name:'기분·마음',list:['fx:grinning_face','fx:smiling_face_with_smiling_eyes','fx:beaming_face_with_smiling_eyes','fx:face_with_tears_of_joy','fx:smiling_face_with_heart_eyes','fx:star_struck','fx:smiling_face_with_sunglasses','fx:smiling_face_with_tear','fx:loudly_crying_face','fx:crying_face','fx:pleading_face','fx:face_holding_back_tears','fx:disappointed_face','fx:worried_face','fx:anxious_face_with_sweat','fx:fearful_face','fx:weary_face','fx:tired_face','fx:yawning_face','fx:sleeping_face','fx:pensive_face','fx:persevering_face','fx:angry_face','fx:pouting_face','fx:face_with_steam_from_nose','fx:exploding_head','fx:face_with_spiral_eyes','fx:woozy_face','fx:thinking_face','fx:nerd_face','fx:winking_face','fx:relieved_face','fx:melting_face','fx:face_with_rolling_eyes','fx:neutral_face','fx:expressionless_face','fx:shushing_face','fx:saluting_face','fx:flexed_biceps','fx:ok_hand','fx:crossed_fingers','fx:victory_hand','fx:broken_heart','fx:mending_heart']},
   sticker_felt:{name:'날씨·계절',list:['fx:sun','fx:sun_behind_small_cloud','fx:sun_behind_large_cloud','fx:cloud','fx:cloud_with_rain','fx:cloud_with_lightning_and_rain','fx:cloud_with_snow','fx:snowflake','fx:umbrella_with_rain_drops','fx:closed_umbrella','fx:wind_face','fx:dashing_away','fx:tornado','fx:cyclone','fx:fog','fx:foggy','fx:thermometer','fx:hot_face','fx:cold_face','fx:sun_with_face','fx:full_moon','fx:crescent_moon','fx:night_with_stars','fx:shooting_star','fx:star','fx:comet','fx:milky_way','fx:watermelon','fx:ice','fx:chestnut','fx:sled','fx:sunrise','fx:face_with_medical_mask','fx:wind_chime','fx:fire','fx:beach_with_umbrella']},
   sticker_dday:{name:'D-day',list:['sv:dd_m100','sv:dd_m50','sv:dd_m30','sv:dd_m14','sv:dd_m7','sv:dd_m3','sv:dd_m1','sv:dd_day','sv:dd_p1','sv:dd_p7','sv:dd_p30','sv:dd_p100','sv:dd_p200','sv:dd_p365','sv:dd_exam','sv:dd_trip']},
-  icons_cute:{name:'귀여운 아이콘',list:['ig:cute_wake','ig:cute_meal','ig:cute_water','ig:cute_walkrun','ig:cute_walk','ig:cute_strength','ig:cute_yoga','ig:cute_read','ig:cute_study','ig:cute_diary','ig:cute_sleep','ig:cute_clean','ig:cute_tooth','ig:cute_pill','ig:cute_plan','ig:cute_music','ig:cute_code','ig:cute_climb','ig:cute_orig','ig:cute_origwin']},
-  icons_simple:{name:'심플 선 아이콘',list:['ig:simple_wake','ig:simple_meal','ig:simple_water','ig:simple_walkrun','ig:simple_walk','ig:simple_strength','ig:simple_yoga','ig:simple_read','ig:simple_study','ig:simple_diary','ig:simple_sleep','ig:simple_clean','ig:simple_tooth','ig:simple_pill','ig:simple_plan','ig:simple_music','ig:simple_code','ig:simple_climb','ig:simple_orig','ig:simple_origwin']},
-  icons_pastel:{name:'파스텔 스티커 아이콘',list:['ig:pastel_wake','ig:pastel_meal','ig:pastel_water','ig:pastel_walkrun','ig:pastel_walk','ig:pastel_strength','ig:pastel_yoga','ig:pastel_read','ig:pastel_study','ig:pastel_diary','ig:pastel_sleep','ig:pastel_clean','ig:pastel_tooth','ig:pastel_pill','ig:pastel_plan','ig:pastel_music','ig:pastel_code','ig:pastel_climb','ig:pastel_orig','ig:pastel_origwin']},
+  icons_cute:{name:'귀여운 표정',list:['ig:cute_wake','ig:cute_meal','ig:cute_water','ig:cute_walkrun','ig:cute_walk','ig:cute_strength','ig:cute_yoga','ig:cute_read','ig:cute_study','ig:cute_diary','ig:cute_sleep','ig:cute_clean','ig:cute_tooth','ig:cute_pill','ig:cute_plan','ig:cute_music','ig:cute_code','ig:cute_climb','ig:cute_orig','ig:cute_origwin']},
+  icons_simple:{name:'심플 선',list:['ig:simple_wake','ig:simple_meal','ig:simple_water','ig:simple_walkrun','ig:simple_walk','ig:simple_strength','ig:simple_yoga','ig:simple_read','ig:simple_study','ig:simple_diary','ig:simple_sleep','ig:simple_clean','ig:simple_tooth','ig:simple_pill','ig:simple_plan','ig:simple_music','ig:simple_code','ig:simple_climb','ig:simple_orig','ig:simple_origwin']},
+  icons_pastel:{name:'파스텔',list:['ig:pastel_wake','ig:pastel_meal','ig:pastel_water','ig:pastel_walkrun','ig:pastel_walk','ig:pastel_strength','ig:pastel_yoga','ig:pastel_read','ig:pastel_study','ig:pastel_diary','ig:pastel_sleep','ig:pastel_clean','ig:pastel_tooth','ig:pastel_pill','ig:pastel_plan','ig:pastel_music','ig:pastel_code','ig:pastel_climb','ig:pastel_orig','ig:pastel_origwin']},
   sticker_doodle:{name:'여행·이동',list:['fx:airplane','fx:airplane_departure','fx:airplane_arrival','fx:helicopter','fx:luggage','fx:passport_control','fx:baggage_claim','fx:hotel','fx:tent','fx:desert_island','fx:snow_capped_mountain','fx:volcano','fx:national_park','fx:world_map','fx:compass','fx:globe_showing_asia_australia','fx:statue_of_liberty','fx:castle','fx:bridge_at_night','fx:cityscape','fx:ferris_wheel','fx:roller_coaster','fx:carousel_horse','fx:hot_springs','fx:bus','fx:bus_stop','fx:train','fx:high_speed_train','fx:metro','fx:light_rail','fx:taxi','fx:automobile','fx:sport_utility_vehicle','fx:motorcycle','fx:motor_scooter','fx:ship','fx:ferry','fx:sailboat','fx:canoe','fx:fuel_pump','fx:motorway','fx:station','fx:admission_tickets','fx:footprints','fx:seat','fx:left_luggage','fx:moai']},
   sticker_glossy:{name:'취미·여가',list:['fx:clapper_board','fx:film_projector','fx:movie_camera','fx:television','fx:popcorn','fx:video_game','fx:joystick','fx:game_die','fx:puzzle_piece','fx:chess_pawn','fx:joker','fx:flower_playing_cards','fx:yo_yo','fx:kite','fx:musical_note','fx:musical_notes','fx:headphone','fx:microphone','fx:studio_microphone','fx:guitar','fx:violin','fx:musical_keyboard','fx:drum','fx:trumpet','fx:saxophone','fx:accordion','fx:flute','fx:artist_palette','fx:paintbrush','fx:crayon','fx:framed_picture','fx:performing_arts','fx:mirror_ball','fx:video_camera','fx:notebook_with_decorative_cover','fx:yarn','fx:sewing_needle','fx:telescope','fx:fishing_pole','fx:bubbles','fx:pool_8_ball','fx:bullseye','fx:magic_wand','fx:crystal_ball','fx:fortune_cookie','fx:radio','fx:mahjong_red_dragon','fx:books','fx:laptop']},
   sticker_letter:{name:'손글씨 레터링',list:['sv:lt_did','sv:lt_fight','sv:lt_thanks','sv:lt_congrats','sv:lt_good','sv:lt_best','sv:lt_rest','sv:lt_slow','sv:lt_ok','sv:lt_love','sv:lt_cheer','sv:lt_birth','sv:lt_done','sv:lt_again','sv:lt_wow','sv:lt_noway']},
@@ -2430,6 +2428,13 @@ function stkTabsDraw(box,pool,redraw){ // 탭 줄을 그린다. 산 팩이 둘 �
   box.querySelectorAll('button').forEach(bt=>bt.onclick=()=>{stkTab=bt.dataset.c;redraw()});
 }
 const stkFadeIn=el=>{el.classList.remove('stkfade');void el.offsetWidth;el.classList.add('stkfade')};
+
+function stkTabsHtml(pool){ // 칸 그림 고르기 안에 넣는 팩 탭 줄(문자열). 산 팩이 둘 이상일 때만
+  const ids=Object.keys(STICKER_PACKS).filter(id=>OWNED.has(id)&&STICKER_PACKS[id].list.some(e=>pool.includes(e))).sort((a,b)=>stkRank(a)-stkRank(b));
+  if(stkTab!=='all'&&!ids.includes(stkTab))stkTab='all';
+  if(ids.length<2)return '';
+  return '<div class="stkchips art-tabs" role="tablist">'+[['all','전체']].concat(ids.map(id=>[id,STICKER_PACKS[id].name])).map(([id,n])=>`<button type="button" role="tab" class="stkchip" data-c="${id}" aria-selected="${stkTab===id}">${esc(n)}</button>`).join('')+'</div>';
+}
 function dyRow(ds,label,rows,withStk){
   const d=document.createElement('div');d.className='dyrow'+(ds===todayStr?' today':'');
   const l=document.createElement('label');if(withStk&&S.dyHl&&S.dyHl[ds]){l.innerHTML=`<span class="dn hl-${esc(S.dyHl[ds].slice(3))}">${esc(label)}</span>`}else l.textContent=label;
@@ -2599,7 +2604,8 @@ function renderEdit(){
   $('aiRow').hidden=pickFor<0;$('aiGo').textContent=t('picAi');$('aiStop').textContent=t('aiStop');
   { const sg=pickFor>=0&&S.slots[pickFor]?suggestEmoji(slotLabel(S.slots[pickFor])):'';
     $('sugBtn').hidden=!sg;$('sugBtn').dataset.e=sg;$('sugBtn').textContent=sg?t('picSuggest')+' '+sg:''; }
-  $('picker').innerHTML=pickFor>=0?Object.keys(ICONS).map(k=>{const nm=esc(T[lang]['icons.'+k]||T.en['icons.'+k]||k);return `<button class="pk ${S.slots[pickFor]&&S.slots[pickFor].icon===k?'on':''}" data-k="${k}" aria-label="${nm}" title="${nm}" type="button"><svg viewBox="0 0 64 64">${ICONS[k]}</svg></button>`}).join('')+(()=>{const own=ownedStickers().filter(e=>e.startsWith('sv:')||e.startsWith('ig:'));if(!own.length)return '';const cur=S.slots[pickFor]&&S.slots[pickFor].art;return '<div class="pkhd">내 스티커·아이콘 (산 것만, 칸 그림으로 쓸 수 있어요)</div>'+own.map(e=>{const nm=esc(stkName(e));return `<button class="pk pka ${cur===e?'on':''}" data-a="${esc(e)}" aria-label="${nm}" title="${nm}" type="button">${artSVG(e,'')}</button>`}).join('')})():'';
+  $('picker').innerHTML=pickFor>=0?Object.keys(ICONS).map(k=>{const nm=esc(T[lang]['icons.'+k]||T.en['icons.'+k]||k);return `<button class="pk ${S.slots[pickFor]&&S.slots[pickFor].icon===k?'on':''}" data-k="${k}" aria-label="${nm}" title="${nm}" type="button"><svg viewBox="0 0 64 64">${ICONS[k]}</svg></button>`}).join('')+(()=>{const own0=ownedStickers().filter(e=>!e.startsWith('hl:'));if(!own0.length)return '';const own=own0.filter(e=>stkIn(e,stkTab));const cur=S.slots[pickFor]&&S.slots[pickFor].art;return stkTabsHtml(own0)+'<div class="pkhd">내 스티커·아이콘 (산 것만, 칸 그림으로 쓸 수 있어요)</div>'+own.map(e=>{const nm=esc(stkName(e));return `<button class="pk pka ${cur===e?'on':''}" data-a="${esc(e)}" aria-label="${nm}" title="${nm}" type="button">${artSVG(e,'')}</button>`}).join('')})():'';
+  $('picker').querySelectorAll('.art-tabs button').forEach(bt=>bt.onclick=()=>{stkTab=bt.dataset.c;renderEdit()});
   $('slots').querySelectorAll('.iconbtn').forEach(b=>b.onclick=()=>{pickFor=pickFor===+b.dataset.i?-1:+b.dataset.i;renderEdit()});
   $('slots').querySelectorAll('input').forEach(inp=>inp.onchange=()=>{
     const s=S.slots[+inp.dataset.i];if(!s) return;

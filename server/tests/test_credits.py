@@ -372,7 +372,7 @@ def test_unlock_purchase_grants_ownership_without_credits(env):
 # ---- 스티커 팩: 상품·소유, 화면의 그림 목록과 id 일치 ----
 def test_sticker_packs_are_items_and_match_the_screen_list():
     packs = [i for i in creditlib.ITEMS.values() if i["kind"] == "sticker"]
-    assert len(packs) == 22 and all(i["amount"] > 0 and i["desc"] for i in packs)  # 2026-11-09 일상 테마 확장: 18 + 새 4
+    assert len(packs) == 25 and all(i["amount"] > 0 and i["desc"] for i in packs)  # 2026-11-09 일상 테마 확장 18 + 새 4, 아이콘 팩 3개를 스티커로 합침(사용자 결정)
     html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
     block = html[html.index("const STICKER_PACKS={"):html.index("const STICKERS_PER_DAY")]
     for i in packs:
@@ -447,8 +447,10 @@ def test_no_tickets_left_stops_again(env, monkeypatch):
 
 # ---- 할 일 아이콘 스타일 팩: 상품과 화면 id 일치, 그림 모양 정의 ----
 def test_icon_packs_are_items_and_match_the_screen():
-    packs = [i for i in creditlib.ITEMS.values() if i["kind"] == "iconpack"]
-    assert len(packs) == 3 and all(i["amount"] > 0 and i["desc"] for i in packs)
+    # 2026-11-09 사용자 결정: 아이콘 팩과 스티커 팩을 나누지 않는다. 예전 아이콘 팩 3개(상품 id 유지)는 이제 스티커 상품이다
+    assert not [i for i in creditlib.ITEMS.values() if i["kind"] == "iconpack"]
+    packs = [creditlib.ITEMS[k] for k in ("icons_cute", "icons_simple", "icons_pastel")]
+    assert all(i["kind"] == "sticker" and i["amount"] > 0 and "스티커" in i["name"] and "칸 그림" in i["desc"] for i in packs)
     html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
     block = html[html.index("const ICON_PACKS={"):html.index("const ICON_PREVIEW")]
     for i in packs:
@@ -631,8 +633,10 @@ def test_icon_and_sticker_are_merged_in_the_screen():
     html = (Path(__file__).resolve().parent.parent.parent / "index.html").read_text(encoding="utf-8")
     block = html[html.index("const STICKER_PACKS={"):html.index("const STICKERS_PER_DAY")]
     for pid in ("icons_cute", "icons_simple", "icons_pastel"):
-        assert pid + ":" in block and creditlib.ITEMS[pid]["kind"] == "iconpack"  # 기존 아이콘 팩 상품과 같은 id 라 산 사람은 그대로 스티커로도 쓴다
-    assert "if(b.dataset.a){s.art=b.dataset.a" in html and "내 스티커·아이콘" in html  # 칸 그림 고르기에 산 그림이 나온다
+        assert pid + ":" in block and creditlib.ITEMS[pid]["kind"] == "sticker"  # 기존 아이콘 팩 상품과 같은 id 라 산 사람은 그대로 쓴다. 이제 스티커 상품이다
+    assert "if(b.dataset.a){s.art=b.dataset.a" in html and "내 스티커" in html  # 칸 그림 고르기에 산 그림이 나온다
+    assert "const own0=ownedStickers().filter(e=>!e.startsWith('hl:'))" in html  # 하이라이트만 빼고 산 스티커 전부를 칸 그림으로 고를 수 있다(fx:·sv:·ig:)
+    assert "if(e.startsWith('fx:'))return `<img" in html  # 외부 일러스트도 칸 그림으로 그린다
     assert "if(s.art){const a=artSVG(s.art" in html  # 칸 그림이 s.art 를 그린다
 
 

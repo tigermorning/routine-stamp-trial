@@ -162,3 +162,28 @@ test('크라프트지는 색만이 아니라 섬유결·알갱이 질감 배경�
   assert.ok((rule.match(/url\("data:image\/svg\+xml/g) || []).length >= 2, '섬유결과 알갱이 두 겹');
   assert.ok(rule.includes('inset 0 0'), '가장자리 눌림');
 });
+
+test('모든 스티커를 할 일 칸 그림으로 고를 수 있다(외부 일러스트 포함, 하이라이트만 제외)', () => {
+  const { w } = open({ days: 30 });
+  try {
+    const r = w.eval(`(()=>{['sticker_sched','sticker_highlight','icons_cute'].forEach(x=>OWNED.add(x));stkTab='all';editOpen=true;pickFor=0;renderEdit();
+      const btns=[...document.querySelectorAll('#picker .pka')];const keys=btns.map(b=>b.dataset.a);
+      const fx=btns.find(b=>b.dataset.a==='fx:hospital');if(fx)fx.click();
+      const art=S.slots[0].art;const icon=iconOf(S.slots[0]);
+      return {keys:keys.length,hasFx:keys.some(k=>k.startsWith('fx:')),hasIg:keys.some(k=>k.startsWith('ig:')),hasHl:keys.some(k=>k.startsWith('hl:')),art,icon}})()`);
+    assert.equal(r.hasFx, true, '외부 일러스트가 고르기에 나온다');
+    assert.equal(r.hasIg, true, '예전 아이콘 글리프도 나온다');
+    assert.equal(r.hasHl, false, '날짜 하이라이트는 그림이 아니라서 뺀다');
+    assert.equal(r.art, 'fx:hospital');
+    assert.ok(r.icon.includes('<img') && r.icon.includes('/stk/fx/hospital.png'), '칸 그림이 외부 일러스트 그림 파일을 그린다: ' + r.icon);
+  } finally { w.close(); }
+});
+
+test('상점 탭은 스티커 하나뿐이고 아이콘 팩 구분이 없다', () => {
+  const { w } = open();
+  try {
+    const tabs = [...w.document.querySelectorAll('#shopTabs button')].map((b) => b.textContent);
+    assert.ok(tabs.includes('스티커') && !tabs.some((x) => x.includes('아이콘')), tabs.join(','));
+    assert.equal(w.eval("Object.keys(STICKER_PACKS).filter(id=>id.startsWith('icons_')).length"), 3);
+  } finally { w.close(); }
+});
