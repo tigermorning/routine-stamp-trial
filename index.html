@@ -384,11 +384,11 @@ mark.mh-yellow,.mhb.mh-yellow{--mh:rgba(254,240,138,.7)}mark.mh-pink,.mhb.mh-pin
 #cookieDlg{border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);width:min(380px,calc(100vw - 32px));padding:18px;box-shadow:var(--shadow)}
 #cookieDlg::backdrop{background:rgba(0,0,0,.35)}
 #ckStage{display:flex;flex-direction:column;align-items:center;gap:8px;min-height:190px}
-#ckCookie{background:none;border:0;cursor:pointer;padding:0;width:230px}
+#ckCookie{background:none;border:0;cursor:pointer;padding:0;width:180px}
 #ckCookie svg{width:100%;height:auto;overflow:visible}
-#ckCookie .hl,#ckCookie .hr{transform-origin:80px 70px;transition:transform .55s cubic-bezier(.2,1.4,.4,1)}
-#cookieDlg.open #ckCookie .hl{transform:translate(-22px,8px) rotate(-16deg)}
-#cookieDlg.open #ckCookie .hr{transform:translate(22px,8px) rotate(16deg)}
+#ckCookie .hl,#ckCookie .hr{transform-origin:17px 20px;transition:transform .55s cubic-bezier(.2,1.4,.4,1)}
+#cookieDlg.open #ckCookie .hl{transform:translate(-4.5px,1.5px) rotate(-12deg)}
+#cookieDlg.open #ckCookie .hr{transform:translate(4.5px,1.5px) rotate(12deg)}
 #ckSlip{width:100%;background:#fffdf5;color:#3a2f22;border:1px dashed #d9c9a3;border-radius:6px;padding:12px 14px;text-align:center;opacity:0;transform:translateY(-12px);transition:opacity .5s .15s,transform .5s .15s}
 #cookieDlg.open #ckSlip{opacity:1;transform:none}
 #ckSlip p{margin:0}#ckSlip #ckText{font-size:17px;line-height:1.55;word-break:keep-all}#ckSlip .stat{color:#7a6a52;margin-top:6px}
@@ -641,40 +641,19 @@ mark.mh-yellow,.mhb.mh-yellow{--mh:rgba(254,240,138,.7)}mark.mh-pink,.mhb.mh-pin
   <p class="stat" id="ckHint"></p>
   <div id="ckStage">
     <button type="button" id="ckCookie" aria-label="포춘쿠키 열기">
-      <svg viewBox="0 0 160 110" aria-hidden="true">
+      <svg viewBox="0 0 36 36" aria-hidden="true">
+        <!-- 그림: Twemoji 🥠 (c) Twitter, Inc and other contributors, CC-BY 4.0 (https://creativecommons.org/licenses/by/4.0/). 종이쪽지 부분을 빼고 틈을 따라 두 조각으로 나눠 썼다. -->
         <defs>
-          <linearGradient id="ckgB" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffe7a8"/><stop offset=".5" stop-color="#f6c562"/><stop offset="1" stop-color="#e49a33"/></linearGradient>
-          <linearGradient id="ckgM" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d98a2c"/><stop offset="1" stop-color="#b86a1c"/></linearGradient>
-          <clipPath id="ckcBody"><path d="M12 52C28 24 90 14 134 34C152 44 154 72 134 86C112 102 60 100 30 90C18 86 10 78 14 72C36 74 54 68 66 58C50 58 30 56 12 52Z"/></clipPath>
-          <clipPath id="ckcL"><path d="M-10 -10H92L84 22L91 38L80 55L87 72L75 90L70 120H-10Z"/></clipPath>
-          <clipPath id="ckcR"><path d="M92 -10H170V120H70L75 90L87 72L80 55L91 38L84 22Z"/></clipPath>
+          <clipPath id="ckcL"><path d="M-5 -5H24L22.5 5L19 10L16.5 17L15 22L12.5 27L11 40H-5Z"/></clipPath>
+          <clipPath id="ckcR"><path d="M24 -5H45V40H11L12.5 27L15 22L16.5 17L19 10L22.5 5Z"/></clipPath>
         </defs>
-        <ellipse class="sh" cx="82" cy="102" rx="62" ry="5.5" fill="#5b3a2e" opacity=".14"/>
-        <g class="ps"><rect x="56" y="36" width="48" height="30" rx="2" fill="#fffdf5" stroke="#d9c9a3" stroke-width="1.5" transform="rotate(-5 80 51)"/><path d="M63 47h34M63 54h24" stroke="#d9c9a3" stroke-width="2" stroke-linecap="round" transform="rotate(-5 80 51)"/></g>
-        <g class="hl">
-          <g clip-path="url(#ckcL)">
-            <path d="M12 52C28 24 90 14 134 34C152 44 154 72 134 86C112 102 60 100 30 90C18 86 10 78 14 72C36 74 54 68 66 58C50 58 30 56 12 52Z" fill="url(#ckgB)" stroke="#b5772a" stroke-width="3" stroke-linejoin="round"/>
-            <path d="M12 52C30 56 50 58 66 58C54 68 36 74 14 72C16 64 14 58 12 52Z" fill="url(#ckgM)" stroke="#b5772a" stroke-width="3" stroke-linejoin="round"/>
-            <path d="M66 58C88 53 112 45 134 34" fill="none" stroke="#c9822b" stroke-width="3" stroke-linecap="round" opacity=".55"/>
-            <path d="M26 44C48 28 88 22 124 34" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" opacity=".55"/>
-            <path d="M44 88C72 96 108 94 128 80" fill="none" stroke="#d79534" stroke-width="3" stroke-linecap="round" opacity=".5"/>
-            <circle cx="104" cy="62" r="1.6" fill="#b5772a" opacity=".45"/><circle cx="124" cy="70" r="1.5" fill="#b5772a" opacity=".45"/><circle cx="86" cy="76" r="1.5" fill="#b5772a" opacity=".45"/><circle cx="52" cy="80" r="1.4" fill="#b5772a" opacity=".45"/>
-            <g class="brk" clip-path="url(#ckcBody)"><path d="M92 -4L84 22L91 38L80 55L87 72L75 90L70 112" fill="none" stroke="#c07322" stroke-width="7" stroke-linejoin="round" opacity=".42"/></g>
-          </g>
-        </g>
-        <g class="hr">
-          <g clip-path="url(#ckcR)">
-            <path d="M12 52C28 24 90 14 134 34C152 44 154 72 134 86C112 102 60 100 30 90C18 86 10 78 14 72C36 74 54 68 66 58C50 58 30 56 12 52Z" fill="url(#ckgB)" stroke="#b5772a" stroke-width="3" stroke-linejoin="round"/>
-            <path d="M12 52C30 56 50 58 66 58C54 68 36 74 14 72C16 64 14 58 12 52Z" fill="url(#ckgM)" stroke="#b5772a" stroke-width="3" stroke-linejoin="round"/>
-            <path d="M66 58C88 53 112 45 134 34" fill="none" stroke="#c9822b" stroke-width="3" stroke-linecap="round" opacity=".55"/>
-            <path d="M26 44C48 28 88 22 124 34" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" opacity=".55"/>
-            <path d="M44 88C72 96 108 94 128 80" fill="none" stroke="#d79534" stroke-width="3" stroke-linecap="round" opacity=".5"/>
-            <circle cx="104" cy="62" r="1.6" fill="#b5772a" opacity=".45"/><circle cx="124" cy="70" r="1.5" fill="#b5772a" opacity=".45"/><circle cx="86" cy="76" r="1.5" fill="#b5772a" opacity=".45"/><circle cx="52" cy="80" r="1.4" fill="#b5772a" opacity=".45"/>
-            <g class="brk" clip-path="url(#ckcBody)"><path d="M92 -4L84 22L91 38L80 55L87 72L75 90L70 112" fill="none" stroke="#c07322" stroke-width="7" stroke-linejoin="round" opacity=".42"/></g>
-          </g>
-        </g>
+        <ellipse class="sh" cx="20" cy="35.2" rx="13" ry="1" fill="#5b3a2e" opacity=".18"/>
+        <g class="ps"><rect x="9" y="11" width="15" height="10" rx=".8" fill="#fffdf5" stroke="#d9c9a3" stroke-width=".5" transform="rotate(-8 16.5 16)"/><path d="M11 14.5h11M11 17.5h8" stroke="#d9c9a3" stroke-width=".7" stroke-linecap="round" transform="rotate(-8 16.5 16)"/></g>
+        <g class="hl" clip-path="url(#ckcL)"><path fill="#FCAB40" d="M15 22s-1.15 2.749-2.15 4.749-1.666 5.227.325 6.245c3.033 1.553 8.578.574 11.825-.994 2.724-1.316 5.179-3.085 7-6 1.746-2.794 3-6 3-8s-.147-3.591-.862-5.71c-.53-1.57-1.392-3.463-2.94-5.077-1.819-1.896-2.635-3.805-3.582-5.158C26.806.896 26 0 24 0s-7 3-10 4-7 2-10 6-3 8-3 10 .062 4.885 2 6c2.305 1.327 5.575-1.634 8.045-2.356C13.392 22.958 15 22 15 22z"/><path fill="#F4900C" d="M33.717 21.334s-2.613 3.554-4.048 4.478c-.774.498-1.62 1.01-2.703 1.515-.694.324-3.792 1.55-4.621 1.805-1.408.433-3.285.83-4.26.866-.975.036-1.805-.004-3.223.179-.872.112-2.156.615-2.192 1.193-.036.578 1.011 1.625 3.105 1.733 2.094.108 5.997-.177 8.375-1.227 3.321-1.467 5.307-3.285 6.282-4.44.974-1.156 2.707-4.008 3.285-6.102z"/><path fill="#BF6952" d="M33.717 21.334s-1.733 2.166-3.149 3.353c-.936.785-2.937 2.181-4.396 2.893-1.48.722-4.315 1.651-6.318 1.949-1.697.253-4.345.526-5.235.722-.859.189-1.287.458-1.047.758.362.452 1.236.34 2.563.172 3.114-.394 5.932-.988 8.337-1.977 2.457-1.011 4.876-2.274 5.851-3.43s2.35-2.455 3.394-4.44z"/><path fill="#F4900C" d="M22.85 3.969c-.681 1.36-2.713 4.517-3.85 6.426-1.353 2.271-3.117 5.018-4.074 7.605-.295.798-.935 3.768-.819 4.466.56-.271.893-.466.893-.466s1.172-2.255 2.182-3.807c1.011-1.552 4.404-7.473 5.668-9.567 1.264-2.094 1.763-4.16 1.588-5.218-.252-1.535-1.086-.441-1.588.561z"/><path fill="#BF6952" d="M22.886 5.738c-.714 1.489-2.711 4.657-3.637 6.426-.926 1.769-3.42 6.148-4.413 8.664-.177.449-.359.977-.43 1.489C14.819 22.11 15 22 15 22s1.172-2.255 2.182-3.807c1.011-1.552 4.404-7.473 5.668-9.567.974-1.614 1.489-3.206 1.596-4.337-.287-1.312-1.089.467-1.56 1.449z"/><path class="brk" d="M24 0L22.5 5L19 10L16.5 17L15 22L12.5 27" fill="none" stroke="#BF6952" stroke-width="1.2" stroke-linecap="round"/></g>
+        <g class="hr" clip-path="url(#ckcR)"><path fill="#FCAB40" d="M15 22s-1.15 2.749-2.15 4.749-1.666 5.227.325 6.245c3.033 1.553 8.578.574 11.825-.994 2.724-1.316 5.179-3.085 7-6 1.746-2.794 3-6 3-8s-.147-3.591-.862-5.71c-.53-1.57-1.392-3.463-2.94-5.077-1.819-1.896-2.635-3.805-3.582-5.158C26.806.896 26 0 24 0s-7 3-10 4-7 2-10 6-3 8-3 10 .062 4.885 2 6c2.305 1.327 5.575-1.634 8.045-2.356C13.392 22.958 15 22 15 22z"/><path fill="#F4900C" d="M33.717 21.334s-2.613 3.554-4.048 4.478c-.774.498-1.62 1.01-2.703 1.515-.694.324-3.792 1.55-4.621 1.805-1.408.433-3.285.83-4.26.866-.975.036-1.805-.004-3.223.179-.872.112-2.156.615-2.192 1.193-.036.578 1.011 1.625 3.105 1.733 2.094.108 5.997-.177 8.375-1.227 3.321-1.467 5.307-3.285 6.282-4.44.974-1.156 2.707-4.008 3.285-6.102z"/><path fill="#BF6952" d="M33.717 21.334s-1.733 2.166-3.149 3.353c-.936.785-2.937 2.181-4.396 2.893-1.48.722-4.315 1.651-6.318 1.949-1.697.253-4.345.526-5.235.722-.859.189-1.287.458-1.047.758.362.452 1.236.34 2.563.172 3.114-.394 5.932-.988 8.337-1.977 2.457-1.011 4.876-2.274 5.851-3.43s2.35-2.455 3.394-4.44z"/><path fill="#F4900C" d="M22.85 3.969c-.681 1.36-2.713 4.517-3.85 6.426-1.353 2.271-3.117 5.018-4.074 7.605-.295.798-.935 3.768-.819 4.466.56-.271.893-.466.893-.466s1.172-2.255 2.182-3.807c1.011-1.552 4.404-7.473 5.668-9.567 1.264-2.094 1.763-4.16 1.588-5.218-.252-1.535-1.086-.441-1.588.561z"/><path fill="#BF6952" d="M22.886 5.738c-.714 1.489-2.711 4.657-3.637 6.426-.926 1.769-3.42 6.148-4.413 8.664-.177.449-.359.977-.43 1.489C14.819 22.11 15 22 15 22s1.172-2.255 2.182-3.807c1.011-1.552 4.404-7.473 5.668-9.567.974-1.614 1.489-3.206 1.596-4.337-.287-1.312-1.089.467-1.56 1.449z"/><path class="brk" d="M24 0L22.5 5L19 10L16.5 17L15 22L12.5 27" fill="none" stroke="#BF6952" stroke-width="1.2" stroke-linecap="round"/></g>
       </svg>
     </button>
+    <p class="stat" style="font-size:11px;margin:4px 0 0;text-align:center">쿠키 그림: Twemoji (CC-BY 4.0)</p>
     <div id="ckSlip" hidden><p id="ckText"></p><p class="stat" id="ckBy"></p></div>
   </div>
   <div class="row" style="justify-content:flex-end;gap:8px"><button class="btn" id="ckAgain" type="button" hidden>🥠 다시 뽑기</button><button class="btn main" id="ckBuy" type="button" hidden></button><button class="btn" id="ckClose" type="button">닫기</button></div>
